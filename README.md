@@ -1,6 +1,6 @@
 # Danny Varghese — Portfolio
 
-Coded portfolio inspired by the structure of [rachelchen.tech](https://www.rachelchen.tech/) and [madhurima.me](https://www.madhurima.me/), curated down from the Framer archive at [dannyvr.framer.ai](https://dannyvr.framer.ai/).
+Product design portfolio, curated from the Framer archive at [dannyvr.framer.ai](https://dannyvr.framer.ai/).
 
 ## Run
 
