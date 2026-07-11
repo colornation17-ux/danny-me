@@ -109,10 +109,10 @@ export default function CompetitorWatchMotion() {
           ))}
         </div>
 
-        <div key={beat.id} className="cw-live__flash" aria-hidden />
+        <div key={`${beat.id}-flash`} className="cw-live__flash" aria-hidden />
         <div className="cw-live__vignette" aria-hidden />
 
-        <div key={beat.id} className="cw-live__chrome">
+        <div key={`${beat.id}-chrome`} className="cw-live__chrome">
           <span className="cw-live__counter">{beatNum} / {beatTotal}</span>
           <span className="cw-live__label">{beat.label}</span>
           <span className="cw-live__caption">{beat.proof.join(' · ')}</span>
@@ -129,13 +129,15 @@ export default function CompetitorWatchMotion() {
         {!ready && !reduceMotion && <div className="cw-live__loading">Loading preview…</div>}
       </div>
 
-      <div className="cw-live__dots" aria-hidden>
+      <div className="cw-live__dots" role="tablist" aria-label="Product beats">
         {CW_GALLERY_CLIPS.map((b, i) => (
           <button
             key={b.id}
             type="button"
+            role="tab"
+            aria-selected={i === index}
+            aria-label={`${b.n} ${b.label}`}
             className={`cw-live__dot${i === index ? ' cw-live__dot--active' : ''}`}
-            tabIndex={-1}
             onClick={() => setIndex(i)}
           />
         ))}

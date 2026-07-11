@@ -143,6 +143,9 @@ function ModuleIcon({ name }) {
   el.scrollIntoView({ behavior: 'smooth', block: 'center' })
   el.classList.add('cw-feature--flash')
   window.history.replaceState(null, '', `#cw-feature-${id}`)
+  // Move focus, not just scroll — keyboard/screen-reader users get a signal
+  // the click actually did something, not just sighted mouse users.
+  el.focus({ preventScroll: true })
   window.setTimeout(() => el.classList.remove('cw-feature--flash'), 1200)
 }
 

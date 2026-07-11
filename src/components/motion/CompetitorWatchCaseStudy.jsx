@@ -6,6 +6,7 @@ import { SITE } from '../../data/site'
 
 const TOC = [
   { id: 'cw-brief', label: 'Problem' },
+  { id: 'cw-foundation', label: 'Foundation' },
   { id: 'cw-product', label: 'Product' },
   { id: 'cw-proof', label: 'Proof' },
   { id: 'cw-impact', label: 'Impact' },
@@ -16,22 +17,30 @@ const BRIEF_PROBLEM = [
   {
     n: '01',
     title: 'Blind vs the chains',
-    body: 'Thursday ads rewrite the weekend. Without a live competitor view, the owner prices and features meat by gut — while mainstream and Latino chains set the floor.',
+    body: 'Thursday ads rewrite the weekend. Without a live competitor view, the owner prices and features meat by gut — while mainstream and Latino chains set the floor, and the store finds out it was wrong on Saturday.',
+    user: 'Know in one glance if pricing and features are competitive — before the ad window closes.',
+    business: "Turn Thursday's chain ads into same-day pricing calls, not gut instinct.",
   },
   {
     n: '02',
     title: 'Weather without a playbook',
     body: 'Rain and heat move caldo, hot food, and grill demand. Forecasts existed; nothing turned them into push/skip category calls before the order window.',
+    user: 'Get a plain push-or-skip call for the weekend, not another weather chart to interpret.',
+    business: 'Convert rain/heat forecasts into category actions the floor can execute same-day.',
   },
   {
     n: '03',
     title: 'Pulse stuck in exports',
-    body: 'Sales lived in CSVs and back-office reports. No single screen answered: is this week good, and what should we feature next?',
+    body: "Sales lived in CSVs and back-office reports. No single screen answered: is this week good, and what should we feature next?",
+    user: 'See if this week was actually good without pulling a CSV.',
+    business: 'Make the weekly pulse a 10-second habit instead of a report-pull chore.',
   },
   {
     n: '04',
     title: 'Outreach without proof',
     body: 'Loyalty and WhatsApp could already reach shoppers (Lola + campaigns). The gap was proving which messages drove a register visit — not building CRM from scratch.',
+    user: 'Know which WhatsApp message actually got someone back in the store.',
+    business: 'Prove outreach as POS visits, not send/read counts — justify the continued spend.',
   },
 ]
 
@@ -79,6 +88,19 @@ const IMPACT = [
   { value: '277', label: 'Shoppers due to return' },
   { value: '144', label: 'Live ads indexed' },
 ]
+
+function ImpactStats({ compact = false }) {
+  return (
+    <div className={`cs-metrics${compact ? ' cs-metrics--hook' : ''}`}>
+      {IMPACT.map((m) => (
+        <div className="cs-metric" key={m.label}>
+          <div className="cs-metric__value">{m.value}</div>
+          <div className="cs-metric__label">{m.label}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 function ProofList({ proof }) {
   return (
@@ -129,6 +151,9 @@ function BriefToggle() {
   const [tab, setTab] = useState('problem')
   const items = tab === 'problem' ? BRIEF_PROBLEM : BRIEF_SOLUTION
   const labelId = useId()
+  const panelId = useId()
+  const problemTabId = useId()
+  const solutionTabId = useId()
 
   return (
     <section className="cs-section cw-cs__brief" id="cw-brief">
@@ -141,6 +166,8 @@ function BriefToggle() {
         stack; attribution closes the loop with the engagement layer already in market.
       </p>
 
+      <ImpactStats compact />
+
       <div className="cw-brief">
         <div className="cw-brief__tabs" role="tablist" aria-labelledby={labelId}>
           <span id={labelId} className="sr-only">
@@ -148,8 +175,10 @@ function BriefToggle() {
           </span>
           <button
             type="button"
+            id={problemTabId}
             role="tab"
             aria-selected={tab === 'problem'}
+            aria-controls={panelId}
             className={`cw-brief__tab${tab === 'problem' ? ' cw-brief__tab--active cw-brief__tab--problem' : ''}`}
             onClick={() => setTab('problem')}
           >
@@ -157,8 +186,10 @@ function BriefToggle() {
           </button>
           <button
             type="button"
+            id={solutionTabId}
             role="tab"
             aria-selected={tab === 'solution'}
+            aria-controls={panelId}
             className={`cw-brief__tab${tab === 'solution' ? ' cw-brief__tab--active cw-brief__tab--solution' : ''}`}
             onClick={() => setTab('solution')}
           >
@@ -166,12 +197,70 @@ function BriefToggle() {
           </button>
         </div>
 
-        <div className="cw-brief__grid" role="tabpanel">
+        <div
+          className="cw-brief__grid"
+          role="tabpanel"
+          id={panelId}
+          aria-labelledby={tab === 'problem' ? problemTabId : solutionTabId}
+          tabIndex={0}
+        >
           {items.map((item) => (
             <article key={item.n} className={`cw-brief__card cw-brief__card--${tab}`}>
               <span className="cw-brief__n">{item.n}</span>
               <h3>{item.title}</h3>
               <p>{item.body}</p>
+              {tab === 'problem' && (
+                <div className="cw-brief__goals">
+                  <p>
+                    <span className="cw-goals__tag cw-goals__tag--user">User</span>
+                    {item.user}
+                  </p>
+                  <p>
+                    <span className="cw-goals__tag cw-goals__tag--business">Business</span>
+                    {item.business}
+                  </p>
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function FoundationSection() {
+  return (
+    <section className="cs-section cw-cs__story" id="cw-foundation">
+      <p className="cs-section__eyebrow">Foundation</p>
+      <h2>Two weeks, one builder, five tabs of IA</h2>
+      <p>
+        I started with the Thursday window — the twelve minutes between the chains&apos; ad drop and
+        La Bodega&apos;s order call — and mapped every question the owner needed answered inside it:
+        what are they advertising, what should we push, will we sell it, who&apos;s slipping, did the
+        outreach land. That became the IA: five tabs, one story each.
+      </p>
+      <p>
+        Solo build, React frontend + Python backend (StatsForecast ensemble), MVP to production in
+        two weeks. The hard calls weren&apos;t visual — they were legibility: making avg-vs-floor
+        pricing readable in seconds, keeping the guest view honest without gating the owner&apos;s
+        real numbers, and drawing a hard line between engagement (already owned by loyalty/Lola) and
+        decision support (this product) so Competitor Watch never turned into a second CRM.
+      </p>
+      <p>
+        Designing with a constraint: the demand-forecast model got disabled in production before
+        launch. Rather than cut the surface, I built it for the model&apos;s real output shape — buy /
+        hold / reduce plus bands, not a fake-precise single number — so forecasting drops back in
+        cleanly whenever it&apos;s re-enabled.
+      </p>
+
+      <div className="cw-cs__decisions-block">
+        <h3>Three product calls that shaped the system</h3>
+        <div className="cw-decisions">
+          {DECISIONS.map((d) => (
+            <article key={d.title}>
+              <h4>{d.title}</h4>
+              <p>{d.body}</p>
             </article>
           ))}
         </div>
@@ -198,6 +287,7 @@ function CapabilityProof({ clip, index }) {
     <section
       className={`cw-cs__deep${index % 2 === 1 ? ' cw-cs__deep--flip' : ''}`}
       id={`cw-feature-${clip.id}`}
+      tabIndex={-1}
     >
       <div className="cw-cs__deep-copy">
         <p className="cw-cs__eyebrow">Proof · {clip.n}</p>
@@ -237,7 +327,10 @@ export default function CompetitorWatchCaseStudy() {
     <div className="cw-cs">
       <CaseToc />
 
+      <div className="cw-cs__body">
       <BriefToggle />
+
+      <FoundationSection />
 
       <section className="cs-section cw-cs__system" id="cw-product">
         <p className="cs-section__eyebrow">Product</p>
@@ -267,32 +360,7 @@ export default function CompetitorWatchCaseStudy() {
           Success is twofold: operators can see competitor and demand signal before the weekend, and
           outreach is measured as register visits — not send counts alone.
         </p>
-        <div className="cs-metrics">
-          {IMPACT.map((m) => (
-            <div className="cs-metric" key={m.label}>
-              <div className="cs-metric__value">{m.value}</div>
-              <div className="cs-metric__label">{m.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="cw-cs__decisions-block">
-          <h3>Three product calls that shaped the system</h3>
-          <div className="cw-decisions">
-            {DECISIONS.map((d) => (
-              <article key={d.title}>
-                <h4>{d.title}</h4>
-                <p>{d.body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        <p className="cw-cs__reflect">
-          Solo build in two weeks — research on the Thursday window, IA across five tabs, and the
-          React/Python stack. Hardest UX: make avg-vs-floor pricing legible in minutes, keep guest vs
-          owner honest, and treat attribution as the bridge to loyalty/Lola — not a second CRM.
-        </p>
+        <ImpactStats />
       </section>
 
       <section className="cw-cs__close" id="cw-close">
@@ -316,6 +384,7 @@ export default function CompetitorWatchCaseStudy() {
           </a>
         </div>
       </section>
+      </div>
     </div>
   )
 }

@@ -1114,13 +1114,16 @@
 .cw-live__dots {
   display: flex;
   justify-content: center;
-  gap: 0.28rem;
+  /* Wide enough that each dot's expanded ::after hit area (below) doesn't
+     overlap its neighbor's. */
+  gap: 1.15rem;
   margin-top: 0.45rem;
   flex-wrap: wrap;
   padding: 0 0.5rem 0.35rem;
 }
 
 .cw-live__dot {
+  position: relative;
   width: 0.38rem;
   height: 0.38rem;
   border-radius: 999px;
@@ -1130,9 +1133,22 @@
   cursor: pointer;
 }
 
+/* Visible dot stays tiny; actual tap target grows to ~24x24px (WCAG 2.2 AA
+   minimum) via an invisible expanded hit area. */
+.cw-live__dot::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
+}
+
 .cw-live__dot--active {
   background: #166534;
   transform: scale(1.15);
+}
+
+.cw-live__dot:focus-visible {
+  outline: 2px solid #166534;
+  outline-offset: 3px;
 }
 
 .motion-preview--hero .cw-live {

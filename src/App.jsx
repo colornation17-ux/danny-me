@@ -20,8 +20,11 @@ export default function App() {
     <BrowserRouter>
       <ScrollToTop />
       <div className="app">
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
         <Nav />
-        <main className="main">
+        <main className="main" id="main-content" tabIndex={-1}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />

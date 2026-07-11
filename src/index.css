@@ -1,14 +1,20 @@
 ﻿:root {
-  --bg: #fafcfd;
+  --bg: #fdfdfd;
   --bg-elevated: #ffffff;
-  --ink: #32404f;
-  --muted: #647484;
+  --ink: #0d0d0d;
+  /* Reference: #807e7e measured off madhurima.me — only 3.97:1 on this bg,
+     fails AA. Darkened to #747272 (4.70:1), same warm-neutral hue/character. */
+  --muted: #747272;
   --line: #e4e9ee;
   --accent: #e65f2e;
   --accent-soft: #fde8df;
+  /* Same hue as --accent, darkened to clear WCAG AA 4.5:1 as text/icon color
+     (--accent itself only hits ~3.5:1 on white — fine for fills/borders/large
+     text, not for small text). */
+  --accent-text: #cd4919;
   --ok: #2f9b7a;
   --font-display: "Season Mix TRIAL", sans-serif;
-  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "DM Mono", ui-monospace, monospace;
   --max: 72rem;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
@@ -45,7 +51,8 @@ body {
   min-height: 100vh;
   font-family: var(--font-sans);
   font-size: 1rem;
-  line-height: 1.55;
+  font-weight: 500;
+  line-height: 1.44;
   color: var(--ink);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -123,7 +130,7 @@ button {
 }
 
 .nav-brand span {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .nav-links {
@@ -152,7 +159,7 @@ button {
 }
 
 .nav-links a.active {
-  color: var(--accent);
+  color: var(--accent-text);
   background: transparent;
   box-shadow: none;
 }
@@ -167,7 +174,7 @@ button {
   border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-text);
   transition: background 0.2s var(--ease);
 }
 
@@ -270,7 +277,7 @@ button {
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .experience-item__role {
@@ -313,7 +320,7 @@ button {
 }
 
 .section__head a:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ── Project cards ───────────────────────────────── */
@@ -457,7 +464,7 @@ button {
   padding: 0.28rem 0.6rem;
   border-radius: 999px;
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ── Play grid ───────────────────────────────────── */
@@ -624,7 +631,7 @@ button {
 
 .btn--ghost:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ── Case study ──────────────────────────────────── */
@@ -640,7 +647,7 @@ button {
 }
 
 .cs-back:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .cs-hero {
@@ -824,7 +831,7 @@ button {
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-text);
   margin-bottom: 0.65rem;
 }
 
@@ -916,7 +923,7 @@ button {
 }
 
 .cs-next a:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 .cs-missing {
@@ -949,7 +956,7 @@ button {
 }
 
 .site-footer a:hover {
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* ── Home close CTA ──────────────────────────────── */
@@ -1019,6 +1026,32 @@ button {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 999;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: top 0.15s var(--ease);
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+}
+
+.main:focus-visible {
+  outline: none;
 }
 
 /* ── Competitor Watch case study (reel + deep-dives) ─ */
@@ -1154,6 +1187,7 @@ button {
 }
 
 .cw-hero-chapters__dot {
+  position: relative;
   width: 0.45rem;
   height: 0.45rem;
   padding: 0;
@@ -1161,6 +1195,14 @@ button {
   border-radius: 50%;
   background: color-mix(in srgb, var(--ink) 18%, transparent);
   cursor: pointer;
+}
+
+/* Visible dot stays tiny; actual tap target grows to the WCAG 2.2 AA
+   24x24px minimum via an invisible expanded hit area. */
+.cw-hero-chapters__dot::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
 }
 
 .cw-hero-chapters__dot--active {
@@ -1225,6 +1267,121 @@ button {
 .cw-toc__link:focus-visible {
   outline: 2px solid var(--cs-accent, #166534);
   outline-offset: 2px;
+}
+
+/* Real reserved sidebar column — not an overlay, so it works at normal
+   laptop widths instead of requiring an ultrawide monitor. Below this
+   breakpoint .cw-toc stays the horizontal sticky pill bar (base styles). */
+@media (min-width: 1040px) {
+  .cw-cs {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .cw-toc {
+    position: sticky;
+    top: 1.5rem;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 0.8rem;
+    width: auto;
+    max-width: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+    border-radius: 0;
+  }
+
+  .cw-toc__link {
+    padding: 0.5rem 0;
+    min-height: 1.5rem;
+    display: flex;
+    align-items: center;
+    border-radius: 0;
+    font-size: 0.7rem;
+  }
+
+  .cw-toc__link--active {
+    background: none;
+    color: var(--cs-accent, #166534);
+    font-weight: 700;
+  }
+}
+
+/* Compact stat row used as the top-of-page hook, right under the pitch —
+   numbers first, detail earned later (repeated in full at Impact). */
+.cs-metrics--hook {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+  margin-top: 1.1rem;
+}
+
+.cs-metrics--hook .cs-metric {
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+.cs-metrics--hook .cs-metric__value {
+  color: var(--cs-accent, #166534);
+}
+
+/* Problem card footer — merged user/business goal, replaces the old
+   separate Goals section so the page doesn't repeat the same 4 items twice. */
+.cw-brief__goals {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cw-brief__goals p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.4;
+  max-width: none;
+}
+
+.cw-goals__tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.cw-goals__tag--user {
+  /* Darkened from --accent (#e65f2e, 3.5:1 on white) to clear WCAG AA 4.5:1 */
+  color: #cd4919;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.cw-goals__tag--business {
+  color: var(--cs-accent, #166534);
+  background: color-mix(in srgb, var(--cs-accent, #166534) 12%, transparent);
+}
+
+/* Foundation — process narrative */
+.cw-cs__story p {
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+  margin: 0 0 1rem;
 }
 
 .cw-cs__deep-media .cw-vframe__stage {
