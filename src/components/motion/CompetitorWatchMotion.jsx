@@ -99,7 +99,7 @@ export default function CompetitorWatchMotion() {
                   poster={b.poster}
                   muted
                   playsInline
-                  preload={i === 0 ? 'auto' : 'metadata'}
+                  preload={i === index ? 'auto' : 'metadata'}
                   onLoadedData={() => {
                     if (i === 0) setReady(true)
                   }}

@@ -2,7 +2,7 @@
   --bg: #fafcfd;
   --bg-elevated: #ffffff;
   --ink: #32404f;
-  --muted: #6b7a8a;
+  --muted: #647484;
   --line: #e4e9ee;
   --accent: #e65f2e;
   --accent-soft: #fde8df;
@@ -141,7 +141,7 @@ button {
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.4rem 0.7rem;
+  padding: 0.55rem 0.7rem;
   border-radius: 0;
   color: var(--muted);
   transition: color 0.2s var(--ease);
@@ -158,15 +158,37 @@ button {
 }
 
 .nav-cta {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--accent);
+  transition: background 0.2s var(--ease);
+}
+
+.nav-cta:hover {
+  background: var(--accent-soft);
+}
+
+.nav-cta__label {
+  display: none;
 }
 
 @media (min-width: 720px) {
   .nav-cta {
-    display: inline-flex;
+    width: auto;
+    height: auto;
+    border-radius: var(--radius);
+    padding: 0.4rem 0.1rem;
+  }
+
+  .nav-cta__label {
+    display: inline;
   }
 }
 
