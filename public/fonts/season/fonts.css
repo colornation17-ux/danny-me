@@ -1,0 +1,32 @@
+/* Season Mix TRIAL — display (Displaay trial — personal/test use only) */
+@font-face {
+  font-family: "Season Mix TRIAL";
+  src: url("/fonts/season/SeasonMix-TRIAL-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Season Mix TRIAL";
+  src: url("/fonts/season/SeasonMix-TRIAL-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Season Mix TRIAL";
+  src: url("/fonts/season/SeasonMix-TRIAL-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Season Mix TRIAL";
+  src: url("/fonts/season/SeasonMix-TRIAL-RegularItalic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
