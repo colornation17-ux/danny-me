@@ -1029,8 +1029,11 @@ button {
 }
 
 .skip-link {
-  position: absolute;
-  top: -100%;
+  /* fixed, not absolute — .app is a full-page-height flex container, so an
+     absolute "top: -100%" resolves against thousands of px, not the
+     viewport, and never comes back on screen when focused. */
+  position: fixed;
+  top: -3.5rem;
   left: 1rem;
   z-index: 999;
   padding: 0.6rem 1rem;
