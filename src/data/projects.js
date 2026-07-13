@@ -3,14 +3,15 @@
 export const work = [
   {
     slug: 'lola',
-    outcome: 'WhatsApp AI that runs a weekly shop',
+    outcome: 'WhatsApp AI that runs the weekly shop',
     title: 'Lola',
     meta: 'La Bodega · Shipped 2026',
     status: 'Shipped',
     year: '2026',
     domain: 'Conversational AI',
+    layer: 'Engagement layer',
     blurb:
-      'Bilingual assistant on the thread ~1,200 loyalty families already use — flyer Q&A, voice + text, pickup orders, staff handoff.',
+      'Bilingual assistant on the thread ~1,200 loyalty families already use — flyer Q&A, voice + text, pickup orders, and staff handoff. The channel Competitor Watch later attributes.',
     role: 'Design technologist',
     timeline: 'May – Jun 2026',
     team: 'Solo design & build',
@@ -27,8 +28,8 @@ export const work = [
     sections: [
       {
         eyebrow: 'Overview',
-        title: 'A bilingual WhatsApp assistant for the weekly shop',
-        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Its weekly WhatsApp flyer reaches ~1,200 loyalty families, but replies turn into English, Spanish, voice notes, SNAP questions, and pickup lists inside one staff inbox.',
+        title: 'Engagement on the thread families already use',
+        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Its weekly WhatsApp flyer reaches ~1,200 loyalty families, but replies turn into English, Spanish, voice notes, SNAP questions, and pickup lists inside one staff inbox. Lola is the engagement layer — converse, order, hand off — not the planning dashboard.',
       },
       {
         eyebrow: 'Problem',
@@ -48,7 +49,7 @@ export const work = [
       {
         eyebrow: 'Outcomes',
         title: 'Live in production with a staff dashboard',
-        body: 'Families stay on the weekly thread. Repeat questions (hours, SNAP, deals) resolve in chat. Pickup lists reach staff before the customer walks in. Voice works like text.',
+        body: 'Families stay on the weekly thread. Repeat questions (hours, SNAP, deals) resolve in chat. Pickup lists reach staff before the customer walks in. Voice works like text. Competitor Watch later closes the loop by attributing visits to this same channel.',
         metrics: [
           { value: '~1,200', label: 'Loyalty families on the blast' },
           { value: 'EN / ES', label: 'One language per reply' },
@@ -70,8 +71,9 @@ export const work = [
     status: 'Shipped',
     year: '2026',
     domain: 'Retail ops',
+    layer: 'Intelligence layer',
     blurb:
-      'Internal dashboard that combines competitor benchmarks, weather signals, and sales forecasts so one store can plan weekend promos like a chain — then prove outreach with visit attribution.',
+      'Competitor benchmarks, weather playbooks, and demand forecasts in one place — so one store plans weekend promos like a chain, then proves WhatsApp outreach with visit attribution.',
     role: 'Product design · UX/IA · Full-stack',
     timeline: '2 weeks · MVP → production',
     team: 'Solo',

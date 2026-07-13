@@ -29,7 +29,14 @@ export default function ProjectCard({ project }) {
         <span className="project-card__badge">{project.status}</span>
       </div>
       <div className="project-card__body">
-        <p className="project-card__meta">{project.meta}</p>
+        <p className="project-card__meta">
+          <span className="project-card__name">{project.title}</span>
+          <span aria-hidden="true"> · </span>
+          {project.meta}
+        </p>
+        {project.layer && (
+          <p className="project-card__layer">{project.layer}</p>
+        )}
         <h3 className="project-card__title">{project.outcome}</h3>
         <p className="project-card__blurb">{project.blurb}</p>
         <span className="project-card__status">{project.domain}</span>
