@@ -1032,22 +1032,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 }
 
 .cs-game-skip {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  color: var(--muted);
-  background: none;
-  border: none;
-  border-bottom: 1px solid currentColor;
-  padding: 0 0 1px;
-  cursor: pointer;
-  letter-spacing: 0.05em;
-  transition: color 0.2s;
-  white-space: nowrap;
-  z-index: 60;
+  display: none;
 }
 .cs-game-skip:hover { color: var(--ink); }
 
@@ -1056,6 +1041,14 @@ body.game-embed .main { padding: 0; overflow: visible; }
   margin: 0 auto;
   padding: 4rem 1.5rem 2rem;
   background: #FCC834;
+  position: relative;
+}
+
+.cs--game .cs-back {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  margin: 0;
 }
 
 .cs-next {
