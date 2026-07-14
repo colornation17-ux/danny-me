@@ -335,11 +335,14 @@ export default function Home() {
 
           <article className="rec-card">
             <div className="rec-card__header">
-              <div className="rec-card__avatar" aria-hidden="true">
-                <img src="/work/code19/hero.jpg" alt="" />
+              <div className="rec-card__avatar">
+                <img
+                  src="/recs/lawrence-walter.jpg"
+                  alt="Lawrence Walter"
+                />
               </div>
               <div className="rec-card__meta">
-                <strong className="rec-card__name">Lawrence W.</strong>
+                <strong className="rec-card__name">Lawrence Walter</strong>
                 <span className="rec-card__role">CEO · Code19 Racing</span>
               </div>
               {/* LinkedIn bird */}
