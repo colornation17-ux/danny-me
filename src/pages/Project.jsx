@@ -105,6 +105,16 @@ export default function Project() {
                   ))}
                 </div>
               )}
+              {section.mobileGallery && section.mobileGallery.length > 0 && (
+                <div className="cs-mobile-gallery">
+                  {section.mobileGallery.map((item) => (
+                    <figure key={item.src} className="cs-mobile-mockup">
+                      <img src={item.src} alt={item.caption || ''} />
+                      {item.caption && <figcaption>{item.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              )}
               {section.image && (
                 <figure className="cs-inline-shot">
                   <img src={section.image} alt="" />

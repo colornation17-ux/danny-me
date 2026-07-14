@@ -140,15 +140,15 @@ export const work = [
         eyebrow: 'The scanner app',
         title: 'Built and deployed in 24 hours. Still in use.',
         body: 'The tool had to work within the existing POS infrastructure — not replace it. Mobile web, browser-based, no install, no login, no engineering dependencies. Staff used existing phones. Product name and description auto-populated on scan — zero manual entry. Competitor price benchmarked per UPC against nearby stores and online listings. Batch CSV formatted for direct POS import: one action, export → import. 24 hours from design to live deployment. Active post-engagement. Staff trained staff on Day 3 without designer involvement.',
-        image: '/work/bodega-ops/scanner-app-1.jpg',
-        caption: 'Scanner app — mobile web, barcode input, UPC API lookup, competitor price, CSV export',
+        mobileGallery: [
+          { src: '/work/bodega-ops/scanner-app-1.jpg', caption: 'Barcode input & UPC lookup' },
+          { src: '/work/bodega-ops/scanner-app-2.jpg', caption: 'Competitor pricing & CSV export' }
+        ]
       },
       {
         eyebrow: 'Pricing correction',
         title: 'Prices were being set on a wrong cost basis with no market reference',
         body: 'A fixed markup was never feasible — margin varies by product, vendor, and category. Two compounding errors: wrong unit cost (invoice price pulled from case total, not normalized per item) and no competitor benchmark. A price could appear internally valid while above market or below cost — neither detectable. Correction: normalize unit cost per vendor invoice, source competitor price for same UPC, set competitive market price individually. No formula applied uniformly. Grocery, restaurant, and produce each benchmarked against equivalent market items. Price disputes at checkout dropped significantly once shelf pricing was validated during onboarding.',
-        image: '/work/bodega-ops/scanner-app-2.jpg',
-        caption: 'Pricing model — unit cost normalized, competitor-benchmarked, set before shelving',
       },
       {
         eyebrow: 'Org & behavioral change',
