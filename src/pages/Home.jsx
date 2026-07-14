@@ -337,7 +337,7 @@ export default function Home() {
             <div className="rec-card__header">
               <div className="rec-card__avatar">
                 <img
-                  src="/recs/lawrence-walter.jpg"
+                  src="/recs/lawrence-walter.png"
                   alt="Lawrence Walter"
                 />
               </div>

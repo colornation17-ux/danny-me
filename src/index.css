@@ -3571,8 +3571,8 @@ body:has(.folio--fullgrid) .app {
 }
 
 .rec-card__avatar {
-  width: 42px;
-  height: 42px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
@@ -3585,6 +3585,9 @@ body:has(.folio--fullgrid) .app {
   height: 100%;
   object-fit: cover;
   object-position: 55% 18%;
+  /* Keep faces/photos crisp — no browser resampling blur */
+  image-rendering: auto;
+  -webkit-backface-visibility: hidden;
 }
 
 .rec-card__meta {
@@ -5495,7 +5498,11 @@ body:has(.folio--fullgrid) .site-footer {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: #0a0a0a;
+  /* Match folder fill — no black video letterbox / frame stroke */
+  background: var(--folder-fill, transparent);
+  border: 0;
+  outline: none;
+  box-shadow: none;
   border-radius: 0.15rem;
 }
 
@@ -5516,6 +5523,9 @@ body:has(.folio--fullgrid) .site-footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border: 0;
+  outline: none;
+  background: transparent;
 }
 
 .folder-card__image--portrait {
@@ -5535,7 +5545,11 @@ body:has(.folio--fullgrid) .site-footer {
   aspect-ratio: 9 / 16;
   flex-shrink: 0;
   overflow: hidden;
+  border: 0;
+  outline: none;
+  box-shadow: none;
   border-radius: 0.15rem;
+  background: transparent;
 }
 
 .folder-card__portrait-wrap video {
@@ -5544,6 +5558,9 @@ body:has(.folio--fullgrid) .site-footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border: 0;
+  outline: none;
+  background: transparent;
 }
 
 .folder-card__corners {
@@ -5557,9 +5574,9 @@ body:has(.folio--fullgrid) .site-footer {
   position: absolute;
   width: 1.1rem;
   height: 1.1rem;
-  border: 2px solid var(--folder-ink, #fff);
-  /* Shadow ensures visibility against any video content */
-  filter: drop-shadow(0 0 2px rgba(0,0,0,0.6));
+  /* Always white — never inherit dark folder ink (e.g. Checkout ops) */
+  border: 2px solid #ffffff;
+  filter: none;
 }
 
 .folder-card__corners span:nth-child(1) {
