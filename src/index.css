@@ -2696,7 +2696,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .folio--fullgrid {
   --folio-paper: #ffffff;
-  --folio-grid-light: #e8ecf2;
+  --folio-grid-light: #e2e7ee;
   width: 100vw;
   max-width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -2704,12 +2704,12 @@ body.game-embed .main { padding: 0; overflow: visible; }
   padding-inline: clamp(0.75rem, 3vw, 2rem);
   border-inline: 0;
   min-height: 100vh;
-  /* Opaque cell fill (not transparent) so body/section tints can’t show
-     through and create uneven horizontal bands behind the grid. */
+  /* Graph paper: line layers use transparent cells so both axes show.
+     Paper color comes only from background-color (keeps fill uniform). */
   background-color: var(--folio-paper);
   background-image:
-    linear-gradient(var(--folio-grid-light) 1px, var(--folio-paper) 1px),
-    linear-gradient(90deg, var(--folio-grid-light) 1px, var(--folio-paper) 1px);
+    linear-gradient(to bottom, var(--folio-grid-light) 1px, transparent 1px),
+    linear-gradient(to right, var(--folio-grid-light) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
