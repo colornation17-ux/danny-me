@@ -952,26 +952,23 @@ button {
 
 /* ── Game embed layout (bodega-ops) ────────────────────────────── */
 .cs--game { padding: 0; }
-/* hide portfolio chrome while game is fullscreen */
+/* hide portfolio chrome during game, restore on case study scroll */
 body.game-embed nav,
 body.game-embed footer { display: none !important; }
-body.game-embed,
-body.game-embed .main { overflow: hidden; padding: 0; }
+body.game-embed .main { padding: 0; overflow: visible; }
 
-/* break fully out of all containers — true full-viewport */
+/* game frame flows naturally — scroll down to reveal case study */
 .cs-game-frame {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
+  position: relative;
+  width: 100%;
   height: 100vh;
-  z-index: 50;
   background: #fdfdfd;
   overflow: hidden;
 }
 
 /* top-left attribution badge — clickable link back to home */
 .cs-game-badge {
-  position: fixed;
+  position: absolute;
   top: 1.25rem;
   left: 1.5rem;
   z-index: 60;
@@ -998,7 +995,7 @@ body.game-embed .main { overflow: hidden; padding: 0; }
 }
 
 .cs-game-skip {
-  position: fixed;
+  position: absolute;
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
