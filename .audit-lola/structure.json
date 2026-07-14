@@ -1,0 +1,154 @@
+{
+  "headings": [
+    "H1: Designing Lola:\nA Bilingual WhatsApp Assistant for La Bodega",
+    "H2: Designing Lola for a Neighborhood Grocery",
+    "H3: One loop, not a new app",
+    "H2: From real threads",
+    "H2: The weekly shop service loop",
+    "H3: Flyer prep",
+    "H3: Meta broadcast",
+    "H3: Shopper thread",
+    "H3: Quote & confirm",
+    "H3: Counter alert",
+    "H3: Pickup in store",
+    "H2: One WhatsApp thread, six controlled flows",
+    "H3: One loop. Three beats.",
+    "H3: The other half of the loop — ops that close pickup",
+    "H3: How guest conversations stay on-rails",
+    "H3: Voice hits the same grounded path as text",
+    "H2: Proof & impact",
+    "H3: What I'd carry into the next store",
+    "H2: Reference appendix"
+  ],
+  "links": [
+    {
+      "text": "Skip to flows",
+      "href": "http://127.0.0.1:4202/#develop/flows/broadcast"
+    },
+    {
+      "text": "Skip to phases",
+      "href": "http://127.0.0.1:4202/#main-content"
+    },
+    {
+      "text": "← Work",
+      "href": "https://dannyvr.framer.ai/"
+    },
+    {
+      "text": "La Bodega\n·\nLola",
+      "href": "http://127.0.0.1:4202/#prologue"
+    },
+    {
+      "text": "1Discover",
+      "href": "http://127.0.0.1:4202/#discover"
+    },
+    {
+      "text": "2Define",
+      "href": "http://127.0.0.1:4202/#define"
+    },
+    {
+      "text": "3Develop",
+      "href": "http://127.0.0.1:4202/#develop"
+    },
+    {
+      "text": "4Deliver",
+      "href": "http://127.0.0.1:4202/#deliver"
+    },
+    {
+      "text": "Explore the order flow",
+      "href": "http://127.0.0.1:4202/#develop/flows/pickup"
+    },
+    {
+      "text": "See Lola on WhatsApp",
+      "href": "https://wa.me/14043238325?text=Hi%20Lola"
+    },
+    {
+      "text": "Flows",
+      "href": "http://127.0.0.1:4202/#develop-flows"
+    },
+    {
+      "text": "Staff",
+      "href": "http://127.0.0.1:4202/#develop-staff-ops"
+    },
+    {
+      "text": "Craft",
+      "href": "http://127.0.0.1:4202/#develop-craft"
+    },
+    {
+      "text": "Lola Connect ↗",
+      "href": "https://wacrm-i9f2.vercel.app/"
+    },
+    {
+      "text": "(404) 323-8325 · Calhoun, GA",
+      "href": "https://wa.me/14043238325?text=Hi%20Lola"
+    },
+    {
+      "text": "← Back to work",
+      "href": "https://dannyvr.framer.ai/"
+    },
+    {
+      "text": "See Lola on WhatsApp",
+      "href": "https://wa.me/14043238325?text=Hi%20Lola"
+    },
+    {
+      "text": "LinkedIn",
+      "href": "https://www.linkedin.com/in/dannvarg/"
+    },
+    {
+      "text": "Email",
+      "href": "mailto:dannyvr172@gmail.com"
+    }
+  ],
+  "buttons": [
+    "4 / 4 · Deliver",
+    "Play · sound on",
+    "Inbox",
+    "Journey",
+    "Methods",
+    "Shopper voice · EN",
+    "Product request · ES",
+    "Order follow-up · ES",
+    "Hot counter · EN",
+    "Broadcast",
+    "Greeting",
+    "Pickup order",
+    "Reminder",
+    "Confused",
+    "Staff handoff",
+    "Before Lola",
+    "After Lola",
+    "See specials",
+    "Store hours",
+    "Place order",
+    "Show next turn",
+    "Restart",
+    "EN",
+    "ES",
+    "Play · sound on",
+    "Play · sound on",
+    "Play · sound on",
+    "Inbox",
+    "Orders",
+    "Tickets",
+    "Home",
+    "Play · sound on",
+    "Play · sound on",
+    "Play · sound on",
+    "▶\n■\nPlay English voice",
+    "▶\n■\nPlay Spanish voice",
+    "Open full reference"
+  ],
+  "imgs": [
+    {
+      "alt": "La Bodega store interior — Lola welcomes shoppers in the weekly broadcast",
+      "w": 1024,
+      "h": 376,
+      "src": "http://127.0.0.1:4202/broadcast-header-store.png"
+    },
+    {
+      "alt": "",
+      "w": 1004,
+      "h": 1024,
+      "src": "http://127.0.0.1:4202/lola-connect-app-icon.png"
+    }
+  ]
+}

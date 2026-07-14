@@ -1,0 +1,666 @@
+Designing Lola · WhatsApp AI Assistant · Case Study
+
+Skip to flows
+Skip to phases
+← Back to work
+La Bodega
+·
+Lola
+1
+Discover
+2
+Define
+3
+Develop
+4
+Deliver
+
+CASE STUDY · LA BODEGA · LOLA · LIVE PILOT
+
+Designing Lola:
+A Bilingual WhatsApp Assistant for La Bodega
+
+A bilingual WhatsApp assistant that closed 96.3% of guest conversations without staff. I designed the flows and built Lola Connect solo.
+
+Explore the order flow
+See Lola on WhatsApp
+Play · sound on
+Lola in motion
+Guest WhatsApp + Lola Connect — one pickup loop
+ROLE
+Design Technologist
+TEAM
+Solo Design & Build
+SKILLS
+Conversational UX & Architecture
+Service & Operations Design
+Full-Stack Development
+Bilingual Localization (EN/ES)
+
+OVERVIEW
+
+Designing Lola for a Neighborhood Grocery
+
+La Bodega’s weekly deals blast worked. The responses didn’t. Inquiries regarding hours, SNAP benefits, voice notes, and complex pickup lists flooded a single inbox during rush hours.
+
+To solve this, I analyzed 180 live flyer threads (310 customer messages) to map the friction points before designing a single flow. I then designed the conversational guest flows and single-handedly built Lola Connect.
+
+CLIENT
+La Bodega Supermarket · Calhoun, GA
+TIMELINE
+May – July 2026 (6-Week Live Pilot)
+DELIVERABLES
+6 Conversational Flows: Fully localized (EN/ES) interactions supporting both voice and text inputs.
+Lola Connect Backend: Custom live middleware handling automation routing, data logging, and live staff handoffs.
+
+SCOPE
+
+One loop, not a new app
+
+Hard constraints going in: no shopper app, same flyer thread, staff keeps control, pickup-ready output. Lola is the guest face; Lola Connect closes the list.
+
+01
+
+Same thread families already use
+
+No new channel to teach — reply handling on the weekly blast.
+
+02
+
+Staff knowledge before imagination
+
+Approved hours, deals, and FAQ — never invented prices or policy.
+
+03
+
+Six flows, one thread
+
+Broadcast, pickup, reminders, coach, and staff handoff — EN/ES, text or voice.
+
+04
+
+Buttons before commands
+
+Tap targets for defined actions — not #order keywords to memorize.
+
+05
+
+Staff finishes in Lola Connect
+
+Inbox · Orders · Tickets · WhatsApp + dashboard alerts before walk-in.
+
+1
+
+EVIDENCE
+
+From real threads
+
+~6 weeks inbox review · patterns behind the flows.
+
+Inbox
+Journey
+Methods
+
+Six weeks reading real threads — not a survey, the actual inbox. That’s where the product shape came from.
+
+Shopper voice · EN
+Product request · ES
+Order follow-up · ES
+Hot counter · EN
+
+Loyalty question by voice note — easier than calling during dinner rush.
+
+TRANSCRIPTION
+
+“I signed up for the loyalty program two weeks back, but I've been purchasing from your store since the beginning. Can you add those purchases to my points?”
+
+…
+Customer
+online
+▶
+0:22
+7:18 PM
+2
+
+SCOPE
+
+The weekly shop service loop
+
+Lola was not designed as a separate app. She was placed inside the store's existing weekly flyer, WhatsApp replies, staff quoting, and pickup workflow.
+
+Flyer prep
+
+Store ops prepares the weekly deals and flyer image.
+
+STORE OPS
+→
+Meta broadcast
+
+The flyer goes out to loyalty members through the existing WhatsApp broadcast flow.
+
+STORE OPS
+→
+Shopper thread
+
+Customers reply in the same WhatsApp thread with questions, voice notes, or pickup lists.
+
+DESIGNED
+→
+Quote & confirm
+
+Staff prices the list, Lola keeps the customer in a simple confirm-or-edit loop.
+
+STAFF + LOLA
+→
+Counter alert
+
+Confirmed pickup lists trigger staff WhatsApp and dashboard alerts.
+
+STAFF + LOLA
+→
+Pickup in store
+
+The customer pays at the register and picks up the prepared order.
+
+PICKUP
+
+CONSTRAINTS
+
+No shopper app
+Same WhatsApp thread
+Staff keeps control
+Pickup-ready workflow
+3
+
+SOLUTION
+
+One WhatsApp thread, six controlled flows
+
+Instead of asking customers to download an app, Lola turns weekly flyer replies into structured conversations for questions, orders, reminders, and staff handoff.
+
+1 of 3 · Flows
+
+Flows
+Staff
+Craft
+
+Pick a flow — watch the thread change.
+
+CONVERSATION FLOW
+
+Broadcast
+Greeting
+Pickup order
+Reminder
+Confused
+Staff handoff
+
+COMPARE ERAS
+
+Before Lola
+After Lola
+
+After · Lola tap buttons
+
+L
+Lola
+· La Bodega
+online
+Fri 9:00
+Hi María! This week's specials are in the flyer above.
+
+I'm Lola — tap below or ask in English or Spanish.
+See specials
+Store hours
+Place order
+Fri 9:01
+
+The store's weekly WhatsApp flyer blast.
+
+Before Lola — Replies hit one inbox — staff read, translated, sorted, and quoted by hand.
+
+After Lola — Same thread becomes six guided flows — tap buttons, bilingual memory, voice on the same path, staff handoff when needed.
+
+Show next turn
+Restart
+Turn 1 of 5
+
+Current turn:
+Template image + Lola tap buttons
+
+DEMO LANGUAGE
+
+EN
+ES
+
+DEVELOP · MOTION
+
+One loop. Three beats.
+
+Scroll — text and devices stay in sync. Tap once for sound.
+
+01 · GUEST
+
+Ask on the flyer thread
+
+Tap-first orders and reminders — same weekly thread guests already open.
+
+02 · ORDERS
+
+Lists become ops work
+
+Quote, confirm, ready — shopping lists on a board, not buried in chats.
+
+03 · STAFF
+
+Counter gets the ping
+
+Confirmed lists buzz the floor before walk-in — one loop, closed.
+
+01
+Guest
+02
+Orders
+03
+Staff
+Enable sound
+GUEST
+ORDERS
+STAFF
+
+STAFF PRODUCT · LOLA CONNECT
+
+The other half of the loop — ops that close pickup
+
+I built Lola Connect so confirmed lists land before walk-in — Inbox, Orders, Tickets, shift alerts. The full walkthrough is below; the live app stays behind staff login.
+
+Customer sends list
+→
+Staff quotes
+→
+Customer confirms
+→
+Staff receives alert
+→
+Pickup prepared
+Staff WhatsApp alert
+L
+La Bodega · Staff
+online
+
+🛒 New pickup list
+
+María García
+
+(404) 555-0142
+
+2 lb chicken breast, tortillas, dozen eggs, milk
+
+Friday 5:00 PM pickup
+
+Review in dashboard →
+
+9:06
+Dashboard alert
+Alert repeats until dismissed
+L
+Lola Connect
+Home
+Inbox
+Orders
+Tickets
+Reminders
+🛍
+
+Orders
+
+Today — 3 pending · 12 completed · 1 cancelled
+
+Illustrative sample — not live pilot volume
+
+Refresh
+Today
+All dates
+Pending (3)
+Completed (12)
+Cancelled (1)
+All
+3 orders need a quote or next step today.
+CUSTOMER
+STATUS
+Ana Ruiz
+LB-20250622-0038
+
+rice, beans, cilantro
+
+Ready
+María García
+LB-20250622-0042
+
+chicken, tortillas, eggs…
+
+Quote sent
+James T.
+LB-20250622-0035
+
+ground beef, onions
+
+New list
+Carmen L.
+LB-20250621-0091
+
+plantains, oil, soda
+
+Picked up
+
+ORDER CONFIRMED
+
+Guest replied YES
+
+🛒 New pickup list
+
+María García
+
+LB-20250622-0042
+
+2 lb chicken breast, tortillas, dozen eggs, milk
+
+Friday 5:00 PM pickup
+
+INSIDE THE STAFF DASHBOARD
+
+This is the real Lola Connect interface, not a mock — Inbox, Orders, Tickets, Home. It runs behind staff login because it holds real customer names and order data; what's shown across these four tabs is the complete picture.
+
+Inbox
+Orders
+Tickets
+Home
+Play · sound on
+
+Lola
+Connect
+
+La Bodega WhatsApp
+
+WORK
+
+Home
+Inbox
+Orders
+Tickets
+1
+Reminders
+A
+Ana · Counter
+
+Inbox
+
+M
+María García
+2m
+
+YES
+
+A
+Ana Ruiz
+18m
+
+¿Todavía hay pollo?
+
+J
+James T.
+1h
+
+Thanks!
+
+Ready for pickup
+
+LB-20250622-0042 · Confirmed — Mark ready when bagged
+
+Mark ready
+
+Total $28.40 — reply YES to confirm
+
+YES
+
+Got it — order LB-20250622-0042 is confirmed. We’ll text when it’s ready.
+
+Thread + Ready-for-pickup bar — Mark ready when bagged
+
+How guest conversations stay on-rails
+
+Three craft rules below — then hear Lola, then the product decisions that made them stick. Customer acts first — Lola never initiates outside the flyer broadcast. Open asks use store tools first; staff handoff when knowledge runs out.
+
+Play · sound on
+Voice greeting
+Tap Play to hear Lola — same store knowledge as text.
+Play · sound on
+Voice notes
+Spoken asks land on the same grounded path as typed ones.
+
+Bilingual by thread
+
+Lola detects English or Spanish and keeps the reply language consistent within the thread.
+
+Buttons before commands
+
+Customers should not need to remember commands like #order. Key actions use tap buttons.
+
+Staff knowledge before imagination
+
+Hours, prices, menu items, and deals come from staff-approved knowledge. If Lola does not know, she routes to staff instead of inventing.
+
+VOICE LANE
+
+Voice hits the same grounded path as text
+
+Customers can speak instead of type — Lola transcribes, then answers from the same staff-approved knowledge, in the right language.
+
+EN
+
+Store hours
+
+▶
+■
+Play English voice
+“We're open 9 AM to 9 PM, seven days a week. Hot food and restaurant counter inside. SNAP and EBT welcome.”
+ES
+
+Horario
+
+▶
+■
+Play Spanish voice
+“Abrimos de 9 de la mañana a 9 de la noche, todos los días. Tenemos comida caliente y mostrador adentro. Aceptamos SNAP y EBT.”
+
+Voice replies use the same staff-approved knowledge as text replies.
+
+ARCHITECTURE
+
+Store tools on open asks
+
+Hours, FAQ, and deals resolve through store tools first — the agent never invents prices or stock.
+
+OPERATIONS
+
+Staff quote the list
+
+Shopping lists get a human quote and confirm — Lola does not price an order on her own.
+
+ALERTS
+
+Two-tier staff alerts
+
+WhatsApp alerts catch attention; dashboard alerts support fulfillment.
+
+CONSENT
+
+Customer acts first
+
+Lola responds after a customer taps, texts, or sends a voice note.
+
+4
+
+DELIVER
+
+Proof & impact
+
+Outcomes, voices, takeaways, what’s next.
+
+PILOT OUTCOMES
+
+Live data · Jun 2 – Jul 12 2026 · ~6 weeks
+
+97.7% first reply < 2 min
+
+Lola bot · median ~4 sec · n=353 on the live flyer thread.
+
+96.3% closed without staff
+
+14 of 380 conversations escalated — the rest didn’t loop in chat.
+
+988 Vitest tests
+
+Routing, language, tone, and safety — ship changes without babysitting deploys.
+
+Voice on the same path
+
+Spoken asks transcribe, then hit the same grounded logic as text.
+
+PRODUCT SCOPE
+
+~1,200
+
+Loyalty reach
+
+Weekly flyer list
+
+6
+
+Guest flows
+
+Broadcast → staff help
+
+5
+
+Staff surfaces
+
+Home · Inbox · Orders · Tickets · Reminders
+
+988
+
+Regression
+
+Passing Vitest · 103 files
+
+STILL MEASURING
+
+Pickup before walk-in
+One real order completed in the study window — the rest were my own test runs. Too early to report a lead time.
+MEASURING
+Escalation resolution
+Ticket sample includes internal test traffic (at least 9 of a 14-ticket sample were mine). Re-pulling with test traffic filtered before reporting a solve/expire rate.
+MEASURING
+
+“We used to find out about orders when someone walked in. Now the phone buzzes when the list comes in.”
+
+COUNTER STAFF, PARAPHRASED
+
+“I used the voice note because I didn't want to call the store while I was cooking dinner.”
+
+REGULAR SHOPPER, PARAPHRASED
+What I'd carry into the next store
+
+TAKEAWAYS
+
+1
+
+Start from the channel that already exists
+
+The CRM broadcast already reached the loyalty list. The opportunity was reply handling, not app downloads.
+
+2
+
+Bilingual is architecture, not translation
+
+Language preference, templates, and handoff rules need to be designed into the system.
+
+3
+
+Mascot builds warmth; facts build trust
+
+Lola can feel friendly, but prices, hours, and policies must come from approved store knowledge.
+
+4
+
+Design the weekly shop, not the chatbot
+
+The strongest flows are practical: ask, plan, order, confirm, remind, and pickup.
+
+FUTURE SCOPE
+
+1
+
+Pickup lead-time & POS match
+
+Wire reliable pickup_at + POS-matched completion so “lists before walk-in” and revenue become claimable metrics.
+
+2
+
+Language-tagged broadcasts
+
+Send English and Spanish segments separately instead of one bilingual reply wall.
+
+3
+
+Expanded store knowledge
+
+Add more grounded FAQ, deal, product, and staff-help patterns.
+
+4
+
+In-store kiosk later
+
+Reuse the same ask, order, and remind logic for walk-in customers.
+
+WHERE THIS STANDS
+
+Six weeks, 380 real conversations, 96.3% closed without staff. Escalation solve/expire rates stay in Still Measuring until test traffic is filtered from the ticket sample — same honesty bar as pickup lead time.
+
+“I used the voice note because I didn't want to call the store while I was cooking dinner.”
+
+REGULAR SHOPPER, PARAPHRASED
+REFERENCE
+
+ENG & HANDOFF DEPTH
+
+Reference appendix
+
+Routing, safety, and eng handoff — for reviewers who want the full system picture.
+
+Guest channel — WhatsApp (404) 323-8325
+Staff CRM — Lola Connect ↗
+Regression — 988 Vitest tests
+Open full reference
+
+La Bodega — Lola
+
+Conversational design · staff dashboard · grounded AI · EN/ES copy
+
+Staff tool
+Lola Connect ↗ · staff login required — full walkthrough is in Develop above
+Store
+(404) 323-8325 · Calhoun, GA
+
+Danny
+
+Design technologist
+
+Open to senior design technologist, product design, and conversational AI roles
+
+← Back to work
+See Lola on WhatsApp
+LinkedIn
+Email
+
+Written by Danny · Case study · La Bodega pilot · 2026

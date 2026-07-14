@@ -1,0 +1,115 @@
+<script>
+(function () {
+  var CV = "https://drive.google.com/file/d/1Fhpqx5Nx1nKdousHbYyuHGWYLE9XnRmZ/view?usp=sharing";
+  var CALENDLY = "https://calendly.com/dannyvr172/new-meeting";
+
+  function labelOf(a) {
+    return (a.textContent || "").trim().split("\n")[0].trim();
+  }
+
+  function byExactText(re) {
+    return Array.prototype.filter.call(
+      document.querySelectorAll("a,button,div,p,span"),
+      function (el) {
+        return (
+          re.test((el.textContent || "").trim()) &&
+          (el.textContent || "").trim().length < 40
+        );
+      }
+    );
+  }
+
+  function fixLinks() {
+    byExactText(/^Read My CV$/i).forEach(function (el) {
+      var a = el.closest("a") || (el.tagName === "A" ? el : null);
+      if (!a) return;
+      a.setAttribute("href", CV);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+      a.setAttribute("aria-label", "Read my CV");
+    });
+
+    byExactText(/^Start a Project$/i).forEach(function (el) {
+      var a = el.closest("a") || (el.tagName === "A" ? el : null);
+      if (!a) return;
+      a.setAttribute("href", CALENDLY);
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+    });
+
+    Array.prototype.forEach.call(
+      document.querySelectorAll('a[href*="mailto"]'),
+      function (a) {
+        a.setAttribute(
+          "href",
+          (a.getAttribute("href") || "").replace(/\s+/g, "")
+        );
+      }
+    );
+
+    Array.prototype.forEach.call(
+      document.querySelectorAll('a[href*="linkedin.com"]'),
+      function (a) {
+        if (!labelOf(a)) a.setAttribute("aria-label", "LinkedIn profile");
+      }
+    );
+
+    Array.prototype.forEach.call(
+      document.querySelectorAll('a[href*="drive.google.com"]'),
+      function (a) {
+        if (!labelOf(a)) a.setAttribute("aria-label", "Download CV");
+      }
+    );
+
+    Array.prototype.forEach.call(document.querySelectorAll("a"), function (a) {
+      if (/^404 Page$/i.test(labelOf(a))) a.style.display = "none";
+      var href = a.getAttribute("href") || "";
+      if (href === "./contact" || href === "/contact") {
+        a.setAttribute("href", "./#contact");
+      }
+    });
+  }
+
+  function spy() {
+    var sections = ["home", "projects", "about", "contact"];
+    var links = Array.prototype.filter.call(
+      document.querySelectorAll("a"),
+      function (a) {
+        return /^(Home|About|Projects|Contact)$/i.test(labelOf(a));
+      }
+    );
+
+    function onScroll() {
+      var current = "home";
+      for (var i = 0; i < sections.length; i++) {
+        var el = document.getElementById(sections[i]);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top <= window.innerHeight * 0.35) {
+          current = sections[i];
+        }
+      }
+      links.forEach(function (a) {
+        var active = labelOf(a).toLowerCase() === current;
+        a.setAttribute("data-active", active ? "true" : "false");
+        a.setAttribute("aria-current", active ? "true" : "false");
+      });
+    }
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
+  function run() {
+    fixLinks();
+    spy();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+  setTimeout(fixLinks, 800);
+  setTimeout(fixLinks, 2000);
+})();
+</script>
