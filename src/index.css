@@ -950,6 +950,11 @@ button {
 
 /* ── Game embed layout (bodega-ops) ────────────────────────────── */
 .cs--game { padding: 0; }
+/* hide portfolio chrome while game is fullscreen */
+body.game-embed .nav,
+body.game-embed nav,
+body.game-embed footer { display: none !important; }
+body.game-embed .main { padding: 0; }
 
 .cs-game-frame {
   position: relative;

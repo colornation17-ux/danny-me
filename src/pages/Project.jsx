@@ -1,4 +1,5 @@
 ﻿import { Link, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
 import { getProjectBySlug, work } from '../data/projects'
 import { SITE } from '../data/site'
 import ProjectMotionPreview, { hasMotionPreview } from '../components/motion/ProjectMotionPreview'
@@ -31,12 +32,19 @@ export default function Project() {
   const isGameCase = project.slug === 'bodega-ops'
   const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)
 
+  useEffect(() => {
+    if (isGameCase) {
+      document.body.classList.add('game-embed')
+      return () => document.body.classList.remove('game-embed')
+    }
+  }, [isGameCase])
+
   if (isGameCase) {
     return (
       <article className="cs cs--game" style={{ '--cs-accent': project.accent }}>
         <div className="cs-game-frame">
           <iframe
-            src="https://mattjr21.github.io/La-Bodega-game/"
+            src="https://mattjr21.github.io/La-Bodega-game/?embed=1"
             title="La Bodega Interactive Case Study"
             className="cs-game-iframe"
             allowFullScreen
