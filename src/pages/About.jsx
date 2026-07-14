@@ -79,24 +79,41 @@ export default function About() {
 
       <section className="about-solo-trips">
         <p className="about-section__eyebrow">Street photography, solo</p>
-        <div className="solo-trips__grid">
-          {SOLO_SHOTS.map((shot) => (
-            <figure key={shot.src}>
-              <img src={shot.src} alt={shot.alt} loading="lazy" />
-              <figcaption>{shot.caption}</figcaption>
-            </figure>
-          ))}
+        <div className="about-solo-trips__layout">
+          <div className="solo-trips__grid">
+            {SOLO_SHOTS.map((shot) => (
+              <figure key={shot.src}>
+                <div className="solo-trips__frame">
+                  <img src={shot.src} alt={shot.alt} loading="lazy" />
+                </div>
+                <figcaption>{shot.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+          <a className="solo-trips__photobook" href="#photobook">
+            <span className="solo-trips__photobook-label">photobook.photography</span>
+            <span className="solo-trips__photobook-sub">Browse the archive below →</span>
+          </a>
         </div>
       </section>
 
-      <section className="about-photobook">
-        <p className="about-photobook__label">photobook.photography</p>
-        <iframe
-          className="about-photobook__frame"
-          src="https://dannyphoto.framer.website/"
-          title="Danny's photography portfolio"
-          loading="lazy"
-        />
+      <section className="about-photobook" id="photobook" aria-label="Photography archive">
+        <div className="about-photobook__frame-wrap">
+          <iframe
+            className="about-photobook__frame"
+            src="https://dannyphoto.framer.website/"
+            title="Danny's photography portfolio"
+            loading="lazy"
+          />
+        </div>
+        <a
+          className="about-photobook__external"
+          href="https://dannyphoto.framer.website/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open photobook.photography ↗
+        </a>
       </section>
     </div>
   )

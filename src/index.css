@@ -845,6 +845,7 @@ button {
   border-radius: 3px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
   transform: rotate(-3deg);
+  overflow: hidden;
 }
 
 .road-trip__polaroid img {
@@ -852,6 +853,8 @@ button {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  object-position: center;
+  background: #f0f2f5; /* never letterbox onto black */
 }
 
 .road-trip__panel-text {
@@ -915,7 +918,16 @@ button {
 /* ── About: solo city trips ──────────────────────────────────────── */
 .about-solo-trips {
   margin-top: 3rem;
-  padding-bottom: 3rem;
+  padding: 0 clamp(0.75rem, 3vw, 2rem) 2rem;
+  max-width: 1100px;
+  margin-inline: auto;
+}
+
+.about-solo-trips__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
 }
 
 .solo-trips__grid {
@@ -929,12 +941,20 @@ button {
   margin: 0;
 }
 
+.solo-trips__frame {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--folio-line, #d5dde5);
+  background: #f0f2f5;
+}
+
 .solo-trips__grid img {
+  display: block;
   width: 100%;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid var(--folio-line, #d5dde5);
+  object-position: center;
+  background: #f0f2f5;
 }
 
 .solo-trips__grid figcaption {
@@ -946,25 +966,103 @@ button {
   color: var(--muted);
 }
 
-.about-photobook {
-  margin-top: 3rem;
-  padding-bottom: 3rem;
+/* Desktop / laptop / tablet: photobook callout fills the right blank */
+.solo-trips__photobook {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.65rem;
+  min-height: 12rem;
+  padding: 1.75rem 1.5rem;
+  border: 1px solid var(--folio-line, #d5dde5);
+  border-radius: 10px;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-.about-photobook__label {
+.solo-trips__photobook:hover {
+  border-color: #111212;
+  transform: translateY(-2px);
+}
+
+.solo-trips__photobook-label {
   font-family: 'Just Me Again Down Here', cursive;
-  font-size: 1.6rem;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.05;
   color: #111212;
-  margin-bottom: 0.75rem;
+}
+
+.solo-trips__photobook-sub {
+  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted, #747272);
+}
+
+@media (min-width: 768px) {
+  .about-solo-trips__layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+
+  .solo-trips__grid {
+    max-width: none;
+  }
+
+  .solo-trips__photobook {
+    display: flex;
+    min-height: 100%;
+    align-self: stretch;
+  }
+}
+
+@media (max-width: 767px) {
+  .solo-trips__photobook {
+    display: flex;
+    min-height: 0;
+  }
+}
+
+.about-photobook {
+  margin: 1rem auto 0;
+  padding: 0 clamp(0.75rem, 3vw, 2rem) 3.5rem;
+  max-width: 1100px;
+}
+
+.about-photobook__frame-wrap {
+  border: 1px solid var(--folio-line, #d5dde5);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
 }
 
 .about-photobook__frame {
   display: block;
   width: 100%;
-  max-width: 960px;
-  height: 640px;
-  border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 8px;
+  height: min(70vh, 720px);
+  border: 0;
+  background: #fff;
+}
+
+.about-photobook__external {
+  display: inline-flex;
+  margin-top: 0.85rem;
+  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #747272);
+  text-decoration: none;
+}
+
+.about-photobook__external:hover {
+  color: #111212;
 }
 
 @media (max-width: 700px) {
