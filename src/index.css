@@ -2988,8 +2988,8 @@ body:has(.folio--fullgrid) .app {
   font-weight: 400;
   letter-spacing: 0.01em;
   text-transform: none;
-  /* #444 on white = 9.7:1 — passes WCAG AA + AAA */
-  color: #444;
+  /* Grey on white — mono nav */
+  color: #555;
   transition: background 0.2s var(--ease), color 0.2s var(--ease);
   text-decoration: none;
 }
@@ -2997,14 +2997,13 @@ body:has(.folio--fullgrid) .app {
 .nav-tab:hover,
 .nav-tab:focus-visible {
   color: #111212;
-  background: #f0f4f8;
-  outline: 2px solid #4f7cff;
+  background: #ececec;
+  outline: 2px solid #111212;
   outline-offset: 2px;
 }
 
 .nav-tab.active,
 .nav-links--folio a.nav-tab.active {
-  /* #111212 on white in the pill = 19:1 — passes WCAG AAA */
   color: #fff !important;
   background: #111212 !important;
   box-shadow: none;
@@ -3887,8 +3886,8 @@ body:has(.folio--fullgrid) .app {
 
 .nav-mobile-link:hover,
 .nav-mobile-link.active {
-  color: #4f7cff;
-  background: #f5f7ff;
+  color: #111212;
+  background: #ececec;
 }
 
 /* Fix text CTAs at all sizes — override base .nav-cta circle */

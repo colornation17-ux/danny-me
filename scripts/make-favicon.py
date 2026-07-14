@@ -17,14 +17,15 @@ def make(size: int, radius_ratio: float = 0.18) -> Image.Image:
     img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     r = max(2, int(size * radius_ratio))
-    d.rounded_rectangle((0, 0, size - 1, size - 1), radius=r, fill=(11, 18, 32, 255))
+    # Black tile, light grey DV — mono mark for browser tabs
+    d.rounded_rectangle((0, 0, size - 1, size - 1), radius=r, fill=(17, 18, 18, 255))
     fs = int(size * 0.58)
     font = ImageFont.truetype(str(FONT), fs)
     bbox = d.textbbox((0, 0), "DV", font=font)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
     x = (size - tw) / 2 - bbox[0]
     y = (size - th) / 2 - bbox[1] + size * 0.02
-    d.text((x, y), "DV", font=font, fill=(255, 77, 26, 255))
+    d.text((x, y), "DV", font=font, fill=(236, 236, 236, 255))
     return img
 
 
