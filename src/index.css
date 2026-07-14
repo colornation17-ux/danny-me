@@ -2695,6 +2695,8 @@ body.game-embed .main { padding: 0; overflow: visible; }
 }
 
 .folio--fullgrid {
+  --folio-paper: #ffffff;
+  --folio-grid-light: #e8ecf2;
   width: 100vw;
   max-width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -2702,11 +2704,20 @@ body.game-embed .main { padding: 0; overflow: visible; }
   padding-inline: clamp(0.75rem, 3vw, 2rem);
   border-inline: 0;
   min-height: 100vh;
-  background-color: #ffffff;
+  /* Opaque cell fill (not transparent) so body/section tints can’t show
+     through and create uneven horizontal bands behind the grid. */
+  background-color: var(--folio-paper);
   background-image:
-    linear-gradient(var(--folio-grid-light, #e2e7ee) 1px, transparent 1px),
-    linear-gradient(90deg, var(--folio-grid-light, #e2e7ee) 1px, transparent 1px);
+    linear-gradient(var(--folio-grid-light) 1px, var(--folio-paper) 1px),
+    linear-gradient(90deg, var(--folio-grid-light) 1px, var(--folio-paper) 1px);
   background-size: 56px 56px;
+}
+
+/* Keep page chrome the same paper white as the grid — no #fdfdfd / #f4f7fa seams */
+html:has(.folio--fullgrid),
+body:has(.folio--fullgrid),
+body:has(.folio--fullgrid) .app {
+  background: #ffffff;
 }
 
 /* Let folder strip use the full viewport width inside .main */
@@ -2714,11 +2725,12 @@ body.game-embed .main { padding: 0; overflow: visible; }
   max-width: none;
   padding-inline: 0;
   overflow: visible;
+  background: #ffffff;
 }
 
 .site-nav--folio {
   border-bottom: 1px solid var(--folio-line);
-  background: color-mix(in srgb, #f7f9fb 88%, transparent);
+  background: #ffffff;
 }
 
 .site-nav--folio .site-nav__inner {
