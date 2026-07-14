@@ -2,6 +2,7 @@
 import { useEffect } from 'react'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
+import Seo from './components/Seo'
 import Home from './pages/Home'
 import About from './pages/About'
 import Play from './pages/Play'
@@ -19,6 +20,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <Seo />
       <div className="app">
         <a className="skip-link" href="#main-content">
           Skip to content

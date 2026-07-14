@@ -1,6 +1,8 @@
 export const SITE = {
   name: 'Danny Varghese',
   shortName: 'Danny',
+  /** Canonical production origin (no trailing slash). Update when custom domain ships. */
+  url: 'https://danny-me-rho.vercel.app',
   email: 'dannyvr172@gmail.com',
   linkedIn: 'https://www.linkedin.com/in/dannvarg/',
   resume: '/resume/danny-varghese-resume.pdf',
