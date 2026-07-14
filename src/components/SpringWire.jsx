@@ -8,10 +8,11 @@ const BASE_Y = VIEW_H / 2
 const HINT_FROM = 0.72
 
 function restY(i, seed) {
+  // Slightly taller wave so the pencil reads as a drawn rule, not a hairline
   const n =
-    Math.sin(i * 1.7 + seed * 2.1) * 1.15 +
-    Math.sin(i * 0.55 + seed) * 0.55 +
-    Math.cos(i * 3.1 + seed * 0.7) * 0.35
+    Math.sin(i * 1.7 + seed * 2.1) * 2.1 +
+    Math.sin(i * 0.55 + seed) * 1.05 +
+    Math.cos(i * 3.1 + seed * 0.7) * 0.55
   return BASE_Y + n
 }
 
