@@ -28,7 +28,7 @@ export default function Project() {
   const layout = project.layout || 'default'
   const motion = hasMotionPreview(project.slug)
   const isCwCase = project.caseStudyBody === 'competitor-watch'
-  const hasMedia = Boolean(project.hero || project.cover || motion || isCwCase)
+  const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)
 
   return (
     <article
@@ -111,6 +111,15 @@ export default function Project() {
               <CwHeroChapters />
             ) : motion ? (
               <ProjectMotionPreview slug={project.slug} size="hero" />
+            ) : project.reel ? (
+              <video
+                src={project.reel}
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             ) : (
               <img
                 src={project.hero || project.cover}
@@ -149,6 +158,20 @@ export default function Project() {
           )}
         </section>
       ))}
+
+      {project.gallery && project.gallery.length > 0 && (
+        <section className="cs-gallery">
+          <p className="cs-section__eyebrow">Gallery</p>
+          <div className="cs-gallery__grid">
+            {project.gallery.map((item) => (
+              <figure key={item.src} className="cs-gallery__item">
+                <img src={item.src} alt={item.caption || ''} loading="lazy" />
+                {item.caption && <figcaption>{item.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
 
       <aside className="cs-next">
         <div>
