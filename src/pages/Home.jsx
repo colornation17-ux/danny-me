@@ -1,56 +1,451 @@
-﻿import { Link } from 'react-router-dom'
+﻿import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SITE } from '../data/site'
-import { work } from '../data/projects'
-import ProjectCard from '../components/ProjectCard'
+import { featured } from '../data/featured'
+import FolderStack from '../components/FolderStack'
+import { SketchStroke } from '../components/SketchStroke'
+import CareerPath from '../components/CareerPath'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const SKILLS = [
+  { label: 'Interaction Design', tone: 'amber', icon: 'grid' },
+  { label: 'Conversational AI', tone: 'mint', icon: 'chat' },
+  { label: 'User Research', tone: 'pink', icon: 'eye' },
+  { label: 'Motion Design', tone: 'sky', icon: 'dots' },
+]
+
+function SkillIcon({ type }) {
+  if (type === 'chat') {
+    return (
+      <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+        <path fill="currentColor" d="M3 4h14v9H8l-5 4V4Z" />
+      </svg>
+    )
+  }
+  if (type === 'eye') {
+    return (
+      <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M10 4c4 0 7.5 3 9 6-1.5 3-5 6-9 6s-7.5-3-9-6c1.5-3 5-6 9-6Zm0 3a3 3 0 1 0 .01 6.01A3 3 0 0 0 10 7Z"
+        />
+      </svg>
+    )
+  }
+  if (type === 'dots') {
+    return (
+      <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+        <circle cx="5" cy="10" r="2" fill="currentColor" />
+        <circle cx="10" cy="7" r="2.4" fill="currentColor" />
+        <circle cx="15" cy="11" r="1.8" fill="currentColor" />
+      </svg>
+    )
+  }
+  return (
+    <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+      <rect x="2" y="2" width="7" height="7" rx="1.5" fill="currentColor" />
+      <rect x="11" y="2" width="7" height="7" rx="1.5" fill="currentColor" opacity=".55" />
+      <rect x="2" y="11" width="7" height="7" rx="1.5" fill="currentColor" opacity=".55" />
+      <rect x="11" y="11" width="7" height="7" rx="1.5" fill="currentColor" />
+    </svg>
+  )
+}
+
 
 export default function Home() {
+  const pageRef = useRef(null)
+
+  // Run GSAP animations once the page is visible
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // ── Hero sequence ────────────────────────────────────────────────
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+      // Split display name into characters and stagger them in
+      const nameEl = document.querySelector('.folio-hero__name--display')
+      if (nameEl) {
+        const raw = nameEl.textContent.trim()
+        nameEl.innerHTML = raw
+          .split('')
+          .map((c) => `<span class="gs-char" style="display:inline-block">${c}</span>`)
+          .join('')
+        tl.from('.folio-hero__name--display .gs-char', {
+          opacity: 0,
+          y: 48,
+          rotateX: -80,
+          transformOrigin: '50% 100%',
+          stagger: 0.04,
+          duration: 0.55,
+        })
+      }
+
+      tl.from(
+        '.folio-hero__kicker',
+        { opacity: 0, x: -20, duration: 0.4 },
+        '<+0.1',
+      )
+        .from(
+          '.folio-hero__avail',
+          { opacity: 0, y: 12, duration: 0.35 },
+          '-=0.2',
+        )
+        .from(
+          '.folio-sticker',
+          {
+            opacity: 0,
+            scale: 0.6,
+            rotation: -20,
+            stagger: 0.08,
+            duration: 0.45,
+            ease: 'back.out(2)',
+          },
+          '-=0.25',
+        )
+        .from(
+          '.folio-hero__lead',
+          { opacity: 0, y: 18, duration: 0.4 },
+          '-=0.15',
+        )
+        .from(
+          '.folio-btn--contact',
+          { opacity: 0, scale: 0.88, duration: 0.35, ease: 'back.out(1.7)' },
+          '-=0.1',
+        )
+
+      // ── Arc pencil line — draw on from left when it enters view ────
+      const arcPaths = document.querySelectorAll('.folio-arc-stroke path')
+      arcPaths.forEach((path) => {
+        const len = path.getTotalLength()
+        gsap.set(path, { strokeDasharray: len, strokeDashoffset: len })
+        gsap.to(path, {
+          strokeDashoffset: 0,
+          duration: 1.6,
+          ease: 'power2.inOut',
+          scrollTrigger: {
+            trigger: '.folio-arc-stroke',
+            start: 'top 90%',
+            toggleActions: 'play none none none',
+          },
+        })
+      })
+
+      // ── About section — slide-up on scroll ──────────────────────────
+      gsap.from('.folio-about__body', {
+        scrollTrigger: { trigger: '.folio-about', start: 'top 78%' },
+        opacity: 0,
+        y: 36,
+        duration: 0.6,
+      })
+      gsap.from('.folio-polaroid', {
+        scrollTrigger: { trigger: '.folio-about__grid', start: 'top 80%' },
+        opacity: 0,
+        y: 24,
+        rotation: 4,
+        stagger: 0.12,
+        duration: 0.55,
+        ease: 'back.out(1.4)',
+      })
+      gsap.from('.folio-skills li', {
+        scrollTrigger: { trigger: '.folio-skills', start: 'top 85%' },
+        opacity: 0,
+        x: -28,
+        stagger: 0.07,
+        duration: 0.4,
+      })
+
+      // ── Work heading ────────────────────────────────────────────────
+      gsap.from('.folio-work__title', {
+        scrollTrigger: { trigger: '.folio-work__head', start: 'top 82%' },
+        opacity: 0,
+        y: 32,
+        duration: 0.55,
+        ease: 'power2.out',
+      })
+      gsap.from('.folio-sticky', {
+        scrollTrigger: { trigger: '.folio-work__head', start: 'top 75%' },
+        opacity: 0,
+        y: 16,
+        duration: 0.4,
+        delay: 0.15,
+      })
+
+      // ── Contact section ─────────────────────────────────────────────
+      gsap.from('.folio-contact__title', {
+        scrollTrigger: { trigger: '.folio-contact', start: 'top 82%' },
+        opacity: 0,
+        y: 28,
+        duration: 0.5,
+      })
+      gsap.from('.folio-contact__body', {
+        scrollTrigger: { trigger: '.folio-contact', start: 'top 78%' },
+        opacity: 0,
+        y: 20,
+        duration: 0.4,
+        delay: 0.1,
+      })
+      gsap.from('.folio-contact__actions .folio-btn', {
+        scrollTrigger: { trigger: '.folio-contact__actions', start: 'top 88%' },
+        opacity: 0,
+        scale: 0.9,
+        stagger: 0.08,
+        duration: 0.4,
+        ease: 'back.out(1.5)',
+      })
+
+      // ── Pill stickers — gentle x-only drift (parallax owns y) ─────────
+      // Using x only so it doesn't conflict with the scroll-driven y parallax
+      const pillAmber = document.querySelector('.folio-sticker--amber')
+      const pillPink  = document.querySelector('.folio-sticker--pink')
+      if (pillAmber) {
+        gsap.to(pillAmber, {
+          x: '+=6',
+          duration: 3.2,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+        })
+      }
+      if (pillPink) {
+        gsap.to(pillPink, {
+          x: '-=6',
+          duration: 2.8,
+          ease: 'sine.inOut',
+          repeat: -1,
+          yoyo: true,
+          delay: 0.9,
+        })
+      }
+
+      // ── Sticker parallax on scroll ───────────────────────────────────
+      const stickers = document.querySelectorAll('.folio-sticker')
+      const rates = [0.06, -0.04, 0.08, -0.06]
+      stickers.forEach((el, i) => {
+        gsap.to(el, {
+          y: () => -window.scrollY * (rates[i % rates.length] ?? 0.05),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.folio-hero',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 0.6,
+          },
+        })
+      })
+
+      // ── Magnetic hover on the hero CTA ──────────────────────────────
+      const cta = document.querySelector('.folio-btn--contact')
+      if (cta) {
+        const onMove = (e) => {
+          const r = cta.getBoundingClientRect()
+          const cx = r.left + r.width / 2
+          const cy = r.top + r.height / 2
+          const dx = (e.clientX - cx) * 0.25
+          const dy = (e.clientY - cy) * 0.25
+          gsap.to(cta, { x: dx, y: dy, duration: 0.35, ease: 'power2.out' })
+        }
+        const onLeave = () => {
+          gsap.to(cta, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' })
+        }
+        cta.addEventListener('mousemove', onMove)
+        cta.addEventListener('mouseleave', onLeave)
+      }
+    }, pageRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div>
-      <section className="hero">
-        <p className="hero__eyebrow">
-          <span className="hero__pulse" aria-hidden="true" />
-          {SITE.location} · Open to roles
+    <div className="folio folio--rich folio--fullgrid" ref={pageRef}>
+      <section className="folio-hero folio-hero--canvas" id="home" aria-labelledby="folio-name">
+        <p className="folio-hero__kicker folio-hero__kicker--script">my name is</p>
+
+        <div className="folio-hero__select">
+          <h1 id="folio-name" className="folio-hero__name folio-hero__name--display">
+            Danny
+          </h1>
+        </div>
+
+        <p className="folio-hero__avail folio-hero__avail--dot">
+          <span className="folio-dot" aria-hidden="true" />
+          Available for thoughtful projects
         </p>
-        <h1>
-          I&apos;m Danny, a product designer who ships AI into{' '}
-          <em>real operations</em>.
-        </h1>
-        <p className="hero__support">{SITE.hero.support}</p>
-        <div className="experience-strip" aria-label="Recent experience">
-          {SITE.experience.map((item) => (
-            <div className="experience-item" key={`${item.year}-${item.org}`}>
-              <span className="experience-item__year">{item.year}</span>
-              <span className="experience-item__role">{item.role}</span>
-              <span className="experience-item__org">{item.org}</span>
-            </div>
-          ))}
-        </div>
-      </section>
 
-      <section className="section" aria-labelledby="work-heading">
-        <div className="section__head">
-          <h2 id="work-heading">Selected work</h2>
-          <Link to="/play">Side quests →</Link>
+        <div className="folio-sticker folio-sticker--green" style={{ '--rot': '14deg' }}>
+          Currently shipping AI for La Bodega
         </div>
-        <div className="project-list">
-          {work.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
-          ))}
+        <div className="folio-sticker folio-sticker--yellow" style={{ '--rot': '-8deg' }}>
+          Previously CODE19 Racing · IU HCI
         </div>
-      </section>
+        <div className="folio-sticker folio-sticker--amber folio-sticker--pill" style={{ '--rot': '-3deg' }}>
+          Product Designer
+        </div>
+        <div className="folio-sticker folio-sticker--pink folio-sticker--pill" style={{ '--rot': '3deg' }}>
+          Indianapolis / Georgia
+        </div>
 
-      <section className="home-cta">
-        <div>
-          <h2>Building something that has to work on the floor?</h2>
-          <p>
-            I design and ship end to end — conversation, systems, and the
-            interfaces operators actually trust.
-          </p>
-        </div>
-        <a className="btn btn--primary" href={`mailto:${SITE.email}`}>
-          {SITE.email}
+        <p className="folio-hero__lead folio-hero__lead--center">
+          Designing for <em className="folio-lead__impact">impact</em> outside the deck.
+        </p>
+
+        <a className="folio-btn folio-btn--contact" href="#projects">
+          <span className="folio-btn__arrow-down" aria-hidden="true">↓</span>{' '}
+          See my work
         </a>
       </section>
+
+      <SketchStroke variant="arc" className="folio-arc-stroke" />
+
+      <section className="folio-about" id="about" aria-labelledby="about-hello-heading">
+
+        <h2 className="folio-about__hello" id="about-hello-heading">Hello World</h2>
+
+        <p className="folio-about__body folio-about__body--lead folio-about__body--handwritten">
+          Hi, I&apos;m Danny — a product designer based in the US. I turn messy,
+          complicated systems into simple, intuitive tools. From AI chatbots to
+          retail SaaS and car dashboards, I create data-driven designs that hit
+          business goals and work seamlessly in the real world.
+        </p>
+
+        <CareerPath />
+
+        <ul className="folio-skills folio-skills--rich">
+          {SKILLS.map((skill) => (
+            <li key={skill.label} data-tone={skill.tone}>
+              <span>{skill.label}</span>
+              <span className="folio-skills__icon">
+                <SkillIcon type={skill.icon} />
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section
+        className="folio-work folio-work--folders"
+        id="projects"
+        aria-labelledby="work-heading"
+      >
+        <div className="folio-work__head">
+          <p className="folio-work__eyebrow">explore my work!</p>
+          <h2 id="work-heading" className="folio-work__title folio-work__title--block">
+            FEATURED WORKS
+          </h2>
+          <p className="folio-sticky">
+            This is a showcase of what happens when curiosity drives the
+            process.
+          </p>
+        </div>
+
+        <FolderStack projects={featured} />
+      </section>
+
+      {/* ── Recommendations ─────────────────────────────────────────── */}
+      <section className="folio-recs" aria-label="Recommendations">
+        <p className="folio-recs__label">What people say</p>
+        <div className="folio-recs__grid">
+
+          <article className="rec-card">
+            <div className="rec-card__header">
+              <div className="rec-card__avatar" aria-hidden="true">
+                <img src="/work/code19/hero.jpg" alt="" />
+              </div>
+              <div className="rec-card__meta">
+                <strong className="rec-card__name">Lawrence W.</strong>
+                <span className="rec-card__role">CEO · Code19 Racing</span>
+              </div>
+              {/* LinkedIn bird */}
+              <span className="rec-card__source" aria-label="LinkedIn">
+                <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+                  <path fill="#0077B5" d="M4.5 6.5h-3v9h3v-9Zm-1.5-4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 3 2.5ZM7 15.5h3v-5c0-1.1.9-2 2-2s2 .9 2 2v5h3v-5.5a4.5 4.5 0 0 0-4.5-4.5c-1.3 0-2.4.6-3.1 1.5H9.1L9 6.5H7v9Z"/>
+                </svg>
+              </span>
+            </div>
+
+            <div className="rec-card__body">
+              <blockquote className="rec-card__quote">
+                Danny brought a rare blend of <em>creative vision and methodical design thinking</em>, ensuring every interface decision was grounded in user insights. His expertise in <em>UX research, interaction design, and usability testing</em> played a pivotal role in shaping both our website and our AI-driven fan experience.
+              </blockquote>
+
+              {/* Twitter-style action row */}
+              <div className="rec-card__actions">
+                {/* Comment */}
+                <span className="rec-card__action">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  1
+                </span>
+                {/* Repost */}
+                <span className="rec-card__action">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                    <polyline points="17 1 21 5 17 9"/>
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4"/>
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                  </svg>
+                  3
+                </span>
+                {/* Heart */}
+                <span className="rec-card__action rec-card__action--heart">
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                  12
+                </span>
+                {/* Views */}
+                <span className="rec-card__action" style={{ marginLeft: 'auto' }}>
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  847
+                </span>
+              </div>
+
+              <div className="rec-card__source-bar">
+                <svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true">
+                  <path fill="#0077B5" d="M4.5 6.5h-3v9h3v-9Zm-1.5-4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 3 2.5ZM7 15.5h3v-5c0-1.1.9-2 2-2s2 .9 2 2v5h3v-5.5a4.5 4.5 0 0 0-4.5-4.5c-1.3 0-2.4.6-3.1 1.5H9.1L9 6.5H7v9Z"/>
+                </svg>
+                LinkedIn recommendation
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      {/* ── Contact ──────────────────────────────────────────────────── */}
+      <section
+        className="folio-contact"
+        id="contact"
+        aria-labelledby="contact-heading"
+      >
+        <div className="folio-contact__inner">
+          <div className="folio-contact__left">
+            <p className="folio-contact__eyebrow">Get in touch</p>
+            <h2 id="contact-heading" className="folio-contact__title">
+              Let&apos;s build<br />something real.
+            </h2>
+            <p className="folio-contact__body">
+              Open to contract work, full-time roles, and interesting conversations
+              about hard design problems. I read every note.
+            </p>
+          </div>
+          <div className="folio-contact__right">
+            <a className="folio-contact__cta" href={`mailto:${SITE.email}`}>
+              <span className="folio-contact__cta-label">Send a note</span>
+              <span className="folio-contact__cta-sub">{SITE.email}</span>
+            </a>
+            <div className="folio-contact__links">
+              <a href={SITE.linkedIn} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+              <Link to="/play">Playground ↗</Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   )
 }

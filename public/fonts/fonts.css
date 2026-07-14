@@ -1,0 +1,121 @@
+/* ── DM Mono ─────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono/DMMono-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono/DMMono-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono/DMMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono/DMMono-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono/DMMono-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono/DMMono-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Just Me Again Down Here ─────────────────────────────────────── */
+@font-face {
+  font-family: "Just Me Again Down Here";
+  src: url("/fonts/just-me-again/JustMeAgainDownHere-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Press Start 2P ──────────────────────────────────────────────── */
+@font-face {
+  font-family: "Press Start 2P";
+  src: url("/fonts/press-start-2p/PressStart2P-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Chubby And Groovy ───────────────────────────────────────────── */
+@font-face {
+  font-family: "Chubby And Groovy";
+  src: url("/fonts/chubby-and-groovy/Chubby And Groovy.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Pixelify Sans — Lola's wordmark font, ported from the case study ── */
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
+
+/* ── Tiempos Text — ported from the Lola case study ─────────────── */
+@font-face {
+  font-family: "Tiempos Text";
+  src: url("/fonts/tiempos/TestTiemposText-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tiempos Text";
+  src: url("/fonts/tiempos/TestTiemposText-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Highfat ─────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Highfat";
+  src: url("/fonts/highfat/Highfat.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Cubao Free ──────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Cubao";
+  src: url("/fonts/cubao/Cubao_Free_Narrow.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cubao";
+  src: url("/fonts/cubao/Cubao_Free_Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cubao";
+  src: url("/fonts/cubao/Cubao_Free_Wide.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

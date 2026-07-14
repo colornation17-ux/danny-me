@@ -62,13 +62,13 @@ export default function Project() {
               <dd>{project.skills.join(' · ')}</dd>
             </div>
           </dl>
-          {project.liveUrl && (
-            <div className="cs-actions">
-              {project.slug === 'competitor-watch' ? (
-                <>
-                  <a className="btn btn--primary" href={`mailto:${SITE.email}`}>
-                    Ask about this work
-                  </a>
+          <div className="cs-actions">
+            {project.slug === 'competitor-watch' ? (
+              <>
+                <a className="btn btn--primary" href={`mailto:${SITE.email}`}>
+                  Ask about this work
+                </a>
+                {project.liveUrl && (
                   <a
                     className="btn btn--ghost"
                     href={project.liveUrl}
@@ -78,9 +78,11 @@ export default function Project() {
                   >
                     Open live app
                   </a>
-                </>
-              ) : (
-                <>
+                )}
+              </>
+            ) : (
+              <>
+                {project.liveUrl && (
                   <a
                     className="btn btn--primary"
                     href={project.liveUrl}
@@ -89,13 +91,16 @@ export default function Project() {
                   >
                     {project.slug === 'lola' ? 'Open full case study' : 'View live'}
                   </a>
-                  <a className="btn btn--ghost" href={`mailto:${SITE.email}`}>
-                    Ask about this work
-                  </a>
-                </>
-              )}
-            </div>
-          )}
+                )}
+                <a
+                  className={project.liveUrl ? 'btn btn--ghost' : 'btn btn--primary'}
+                  href={`mailto:${SITE.email}`}
+                >
+                  Ask about this work
+                </a>
+              </>
+            )}
+          </div>
         </div>
 
         {hasMedia && (
