@@ -29,7 +29,7 @@ export const featured = [
     reel: '/work/lola/motion/Lola-Reel.mp4',
     reelPortrait: true,
     href: 'https://la-bodega-lola.vercel.app/',
-    folderFill: '#7C3AED',
+    folderFill: '#290545',
     folderInk: '#ffffff',
     folderTitleFont: 'pixelify',
   },
