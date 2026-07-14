@@ -48,7 +48,8 @@
   src: url("/fonts/just-me-again/JustMeAgainDownHere-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  /* Preloaded in index.html — optional avoids a late typography pop */
+  font-display: optional;
 }
 
 /* ── Press Start 2P ──────────────────────────────────────────────── */
@@ -66,7 +67,7 @@
   src: url("/fonts/chubby-and-groovy/Chubby And Groovy.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 /* ── Pixelify Sans — self-hosted, avoids @import-after-rule parse failure ── */
@@ -121,7 +122,7 @@
   src: url("/fonts/highfat/Highfat.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 /* ── Cubao Free ──────────────────────────────────────────────────── */
