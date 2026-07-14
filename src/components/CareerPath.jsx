@@ -5,43 +5,70 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const PATH_D =
-  'M 200 20 Q 300 110 90 210 Q -40 320 310 440 Q 440 550 90 660 Q -40 770 310 870 Q 370 940 200 900'
+  'M 200 20 Q 300 100 90 180 Q -40 270 310 360 Q 440 450 90 540 Q -40 630 310 720 Q 440 810 90 900 Q -40 990 310 1080 Q 440 1170 90 1260 Q 150 1330 200 1290'
 
 const STOPS = [
   {
-    id: 'iu',
-    cx: 90, cy: 210,
-    year: '2020 – 2023',
-    title: 'IU Human Computer Interaction',
-    desc: 'HCI research methods & foundations',
+    id: 'civil',
+    cx: 90, cy: 180,
+    year: '2017 – 2021',
+    title: 'B.S. Civil Engineering',
+    desc: 'Foundational engineering degree',
     dir: 'right',
+    color: '#64748b',
+  },
+  {
+    id: 'sprazzo',
+    cx: 310, cy: 360,
+    year: 'Nov 2019 – Jun 2021',
+    title: 'Motion Designer — Sprazzo',
+    desc: 'Kerala, India',
+    dir: 'left',
     color: '#4f7cff',
   },
   {
-    id: 'code19',
-    cx: 310, cy: 440,
-    year: '2023 – 2024',
-    title: 'CODE19 Racing',
-    desc: 'Web, brand & AI-driven fan experience',
-    dir: 'left',
+    id: 'digitel',
+    cx: 90, cy: 540,
+    year: 'Aug 2021 – Aug 2023',
+    title: 'UX Designer — Make It Digitel',
+    desc: 'Kerala, India',
+    dir: 'right',
     color: '#111212',
   },
   {
-    id: 'wing',
-    cx: 90, cy: 660,
-    year: '2024 – 2025',
-    title: 'Wing Automotive HMI',
-    desc: 'Mission-control HMI for smart vehicles',
+    id: 'iu-hci',
+    cx: 310, cy: 720,
+    year: 'Aug 2023 – May 2025',
+    title: 'M.S. Human-Computer Interaction',
+    desc: 'Indiana University Indianapolis',
+    dir: 'left',
+    color: '#7c3aed',
+  },
+  {
+    id: 'scaling-nature',
+    cx: 90, cy: 900,
+    year: 'May 2024 – Jun 2024',
+    title: 'UX Designer — Scaling Nature',
+    desc: 'Finland',
     dir: 'right',
+    color: '#0891b2',
+  },
+  {
+    id: 'code19',
+    cx: 310, cy: 1080,
+    year: 'Sep 2024 – Dec 2025',
+    title: 'UX Engineer — Code19 Racing',
+    desc: 'Indianapolis, Indiana',
+    dir: 'left',
     color: '#EA580C',
   },
   {
     id: 'bodega',
-    cx: 310, cy: 870,
-    year: '2025 – Present',
-    title: 'La Bodega AI',
-    desc: 'Shipping AI for 1,200+ families',
-    dir: 'left',
+    cx: 90, cy: 1260,
+    year: 'Feb 2026 – Present',
+    title: 'Service & Ops UX Lead — La Bodega',
+    desc: 'Calhoun, Georgia',
+    dir: 'right',
     color: '#166534',
   },
 ]
@@ -125,7 +152,7 @@ export default function CareerPath() {
       <p className="career-path__eyebrow">The path so far</p>
       <svg
         ref={svgRef}
-        viewBox="0 0 400 920"
+        viewBox="0 0 400 1340"
         fill="none"
         aria-hidden="true"
         className="career-path__svg"
@@ -217,8 +244,8 @@ export default function CareerPath() {
         })}
 
         {/* End dot */}
-        <circle cx="200" cy="900" r="5" fill="#111212" />
-        <text x="200" y="918" fontSize="8" fontFamily="DM Mono, monospace" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
+        <circle cx="200" cy="1290" r="5" fill="#111212" />
+        <text x="200" y="1308" fontSize="8" fontFamily="DM Mono, monospace" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
       </svg>
     </div>
   )

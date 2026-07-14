@@ -104,6 +104,7 @@ export const work = [
     status: 'Shipped',
     year: '2026',
     domain: 'Service design',
+    cover: '/work/bodega-ops/store-floor.jpg',
     blurb:
       'La Bodega opened as a 25,000 sq ft hybrid grocery and restaurant. On Day 1, 40% of SKUs failed at checkout. Stabilized in 72 hours — barcode normalization pipeline, mandatory onboarding stage, role ownership, and pricing model correction.',
     role: 'Service designer',
@@ -133,8 +134,6 @@ export const work = [
         eyebrow: 'Hours 36–72 · Fix',
         title: 'Insert the missing stage before the shelf',
         body: 'No product was allowed to reach the shelf without passing through a mandatory onboarding stage. Receiving became the first system encounter, not checkout. Built and deployed a barcode normalization pipeline: scan any barcode → normalize EAN-13 to UPC-A → API auto-populate product name and category → competitor-benchmarked price per unit → batch CSV export → direct POS import. Role ownership defined at every stage — Receiving, Cashier, Stock, and Restaurant each had a named owner. Weekly governance cadence established. 5-step receiving checklist written in plain language, no training session required. Staff adopted it independently on Day 3.',
-        image: '/work/bodega-ops/scanner-tool.png',
-        caption: 'Barcode normalization pipeline — scan, normalize, lookup, price, export to POS',
       },
       {
         eyebrow: 'The scanner app',
