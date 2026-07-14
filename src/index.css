@@ -950,10 +950,10 @@ button {
   letter-spacing: 0.02em;
 }
 
-/* Mobile app mockup gallery — 9:16 aspect ratio, compact side-by-side */
+/* Mobile app mockup gallery — 9:16 aspect ratio, readable size */
 .cs-mobile-gallery {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
   margin: 2rem 0;
   flex-wrap: wrap;
@@ -961,13 +961,13 @@ button {
 
 .cs-mobile-mockup {
   flex: 0 0 auto;
-  width: 140px;
+  width: 240px;
   aspect-ratio: 9 / 16;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--line);
   background: #f9f9f9;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 }
 
 .cs-mobile-mockup img {
@@ -975,6 +975,16 @@ button {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.cs-mobile-mockup figcaption {
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  text-align: center;
+  border-top: 1px solid var(--line);
+  background: #fdfdfd;
 }
 
 /* ── Game embed layout (bodega-ops) ────────────────────────────── */
