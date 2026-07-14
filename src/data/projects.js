@@ -11,7 +11,7 @@ export const work = [
     domain: 'Conversational AI',
     layer: 'Engagement layer',
     blurb:
-      'Bilingual assistant on the thread ~1,200 loyalty families already use — flyer Q&A, voice + text, pickup orders, and staff handoff. Designed from 180 live threads (310 messages); the channel Competitor Watch later attributes.',
+      'Bilingual assistant on the thread ~1,200 loyalty families already use, flyer Q&A, voice + text, pickup orders, and staff handoff. Designed from 180 live threads (310 messages); the channel Competitor Watch later attributes.',
     role: 'Product designer',
     timeline: 'May – Jun 2026',
     team: 'Solo design & build',
@@ -21,7 +21,7 @@ export const work = [
     cover: '/work/lola/journey.png',
     hero: '/work/lola/service.png',
     gallery: [
-      { src: '/work/lola/portrait.png', caption: 'Lola — the face of the weekly thread' },
+      { src: '/work/lola/portrait.png', caption: 'Lola, the face of the weekly thread' },
       { src: '/work/lola/store.png', caption: 'Store-grounded broadcast art' },
     ],
     layout: 'character',
@@ -29,27 +29,27 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'Engagement on the thread families already use',
-        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Its weekly WhatsApp flyer reaches ~1,200 loyalty families, but replies turn into English, Spanish, voice notes, SNAP questions, and pickup lists inside one staff inbox. Lola is the engagement layer — converse, order, hand off — not the planning dashboard.',
+        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Its weekly WhatsApp flyer reaches ~1,200 loyalty families, but replies turn into English, Spanish, voice notes, SNAP questions, and pickup lists inside one staff inbox. Lola is the engagement layer, converse, order, hand off, not the planning dashboard.',
       },
       {
         eyebrow: 'Problem',
         title: 'The broadcast worked. The inbox couldn\'t keep up.',
-        body: 'Weekly deal texts created demand. Replies came back as bilingual text, voice notes, and pickup-order requests — faster than staff could answer during rush.',
+        body: 'Weekly deal texts created demand. Replies came back as bilingual text, voice notes, and pickup-order requests, faster than staff could answer during rush.',
       },
       {
         eyebrow: 'Opportunity',
         title: 'Weekly marketing could become an ordering channel',
-        body: 'If Lola can answer flyer questions instantly and turn messy replies into structured pickup requests, the broadcast becomes more than marketing — it becomes a way to order without downloading a new app.',
+        body: 'If Lola can answer flyer questions instantly and turn messy replies into structured pickup requests, the broadcast becomes more than marketing, it becomes a way to order without downloading a new app.',
       },
       {
         eyebrow: 'Solution',
         title: 'Six flows on the thread families already use',
-        body: 'Grounded answers from this week\'s flyer. Tap-first pickup lists. Voice notes that follow the same order path as text. Hard asks escalate to humans — Lola steps back.',
+        body: 'Grounded answers from this week\'s flyer. Tap-first pickup lists. Voice notes that follow the same order path as text. Hard asks escalate to humans, Lola steps back.',
       },
       {
         eyebrow: 'Research',
         title: '180 threads before a single flow shipped',
-        body: 'May–Jun 2026 inbox study: 180 conversations · 310 customer messages. Spanish led among threads with a saved language preference. Live staff-help (30d): 14 answered (avg 8.2 min) · 9 expired (~39%) — the open handoff gap. Lola bot first replies: 97.7% under 2 min (median ~4s) — not staff speed.',
+        body: 'May–Jun 2026 inbox study: 180 conversations · 310 customer messages. Spanish led among threads with a saved language preference. Live staff-help (30d): 14 answered (avg 8.2 min) · 9 expired (~39%), the open handoff gap. Lola bot first replies: 97.7% under 2 min (median ~4s), not staff speed.',
         metrics: [
           { value: '180', label: 'Threads reviewed' },
           { value: '310', label: 'Customer messages coded' },
@@ -83,7 +83,7 @@ export const work = [
     domain: 'Retail ops',
     layer: 'Intelligence layer',
     blurb:
-      'Competitor benchmarks, weather playbooks, and demand forecasts in one place — so one store plans weekend promos like a chain, then proves WhatsApp outreach with visit attribution.',
+      'Competitor benchmarks, weather playbooks, and demand forecasts in one place, so one store plans weekend promos like a chain, then proves WhatsApp outreach with visit attribution.',
     role: 'Product design · UX/IA · Full-stack',
     timeline: '2 weeks · MVP → production',
     team: 'Solo',
@@ -105,7 +105,7 @@ export const work = [
     year: '2026',
     domain: 'Service design',
     blurb:
-      'Stabilized a live retail launch — product onboarding stage, barcode normalization, SKU recognition 60% → 100%.',
+      'Stabilized a live retail launch, product onboarding stage, barcode normalization, SKU recognition 60% → 100%.',
     role: 'Service designer',
     timeline: '1 week · launch recovery',
     team: 'With store ops',
@@ -115,22 +115,22 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'Structural recovery of a live retail launch',
-        body: 'La Bodega opened as a 25,000 sq ft hybrid grocery and restaurant. On day one, roughly 40% of SKUs failed at checkout — price disputes, unattributable revenue, and 2–5 minute lookups on live lanes.',
+        body: 'La Bodega opened as a 25,000 sq ft hybrid grocery and restaurant. On day one, roughly 40% of SKUs failed at checkout, price disputes, unattributable revenue, and 2–5 minute lookups on live lanes.',
       },
       {
         eyebrow: 'Problem',
         title: 'Inventory entered the system at checkout, not at receiving',
-        body: 'No product onboarding stage. No governance. Products billed as miscellaneous. Every terminal shared the same broken database — grocery and restaurant billing failed together.',
+        body: 'No product onboarding stage. No governance. Products billed as miscellaneous. Every terminal shared the same broken database, grocery and restaurant billing failed together.',
       },
       {
         eyebrow: 'Diagnosis',
         title: 'Three converging signals, one missing stage',
-        body: 'Diagnosed by walking the floor during live checkout failures, pulling POS logs for miscellaneous-billing counts, and talking to register staff directly — three converging signals pointing at the same missing stage, not a single assumption.',
+        body: 'Diagnosed by walking the floor during live checkout failures, pulling POS logs for miscellaneous-billing counts, and talking to register staff directly, three converging signals pointing at the same missing stage, not a single assumption.',
       },
       {
         eyebrow: 'Design decision',
         title: 'Fix the cause, not the symptom',
-        body: 'Chose to insert a mandatory onboarding stage before shelving — not a faster lookup tool at the register. The symptom was slow checkout, but the cause was products entering the system with no record. Fixing the register wouldn\'t have fixed that.',
+        body: 'Chose to insert a mandatory onboarding stage before shelving, not a faster lookup tool at the register. The symptom was slow checkout, but the cause was products entering the system with no record. Fixing the register wouldn\'t have fixed that.',
       },
       {
         eyebrow: 'Solution',
@@ -150,20 +150,20 @@ export const work = [
       {
         eyebrow: 'What I learned',
         title: 'Service design is product design when the floor is on fire',
-        body: 'The interface wasn\'t a screen — it was the path from truck to shelf to register. Fix the stage that was missing, not the symptom at the till.',
+        body: 'The interface wasn\'t a screen, it was the path from truck to shelf to register. Fix the stage that was missing, not the symptom at the till.',
       },
     ],
   },
   {
     slug: 'wing-hmi',
-    outcome: '92% task success rate — mission-control HMI for premium smart vehicles',
+    outcome: '92% task success rate, mission-control HMI for premium smart vehicles',
     title: 'Wing HMI',
     meta: 'Wing · Concept 2025',
     status: 'Concept',
     year: '2025',
     domain: 'Automotive HMI',
     blurb:
-      'Next-gen in-vehicle experience inspired by interplanetary mission control — validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view.',
+      'Next-gen in-vehicle experience inspired by interplanetary mission control, validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view.',
     role: 'Product designer',
     timeline: '2 weeks · 3-phase design sprint',
     team: 'Design exploration',
@@ -173,12 +173,12 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'An HMI that feels like mission control, not a tablet glued to a dash',
-        body: 'Wing needed a premium smart-vehicle interface for tech-driven buyers aged 28–42 who expect intelligence and immersion — without drowning the driver in chrome.',
+        body: 'Wing needed a premium smart-vehicle interface for tech-driven buyers aged 28–42 who expect intelligence and immersion, without drowning the driver in chrome.',
       },
       {
         eyebrow: 'Problem',
         title: 'Automotive UI still copies phone patterns',
-        body: 'Dense menus, shallow hierarchy, and little sense of system state. Drivers need glanceable status and calm motion — not app-drawer thinking at highway speed.',
+        body: 'Dense menus, shallow hierarchy, and little sense of system state. Drivers need glanceable status and calm motion, not app-drawer thinking at highway speed.',
       },
       {
         eyebrow: 'Foundation',
@@ -188,7 +188,7 @@ export const work = [
       {
         eyebrow: 'Outcome',
         title: '92% task success in simulation',
-        body: 'Critical information landed in the driver\'s primary line of sight; secondary controls stayed reachable without breaking focus. Limitation: generative features stayed surface-level — personalization lacked deep logic or multi-turn context.',
+        body: 'Critical information landed in the driver\'s primary line of sight; secondary controls stayed reachable without breaking focus. Limitation: generative features stayed surface-level, personalization lacked deep logic or multi-turn context.',
         metrics: [
           { value: '92%', label: 'Task success rate in simulator' },
         ],
@@ -196,7 +196,7 @@ export const work = [
       {
         eyebrow: 'Delivered',
         title: 'Hi-fi screens, voice interface, simulator-tested prototype',
-        body: 'A direction for next-gen mobility UX — hi-fi HMI screens, a voice interface layer, and a simulator-tested interactive prototype. Concept work positioning Wing for younger buyers who want intelligence without surveillance theater.',
+        body: 'A direction for next-gen mobility UX, hi-fi HMI screens, a voice interface layer, and a simulator-tested interactive prototype. Concept work positioning Wing for younger buyers who want intelligence without surveillance theater.',
       },
       {
         eyebrow: 'Next',
@@ -214,7 +214,7 @@ export const work = [
     year: '2025',
     domain: 'Brand + product',
     blurb:
-      'Rebuilt the digital platform for an AI-driven racing team — persona-driven IA for four audiences, field research at Indianapolis Motor Speedway, and SEO that outlasted the launch spike.',
+      'Rebuilt the digital platform for an AI-driven racing team, persona-driven IA for four audiences, field research at Indianapolis Motor Speedway, and SEO that outlasted the launch spike.',
     role: 'Product designer',
     timeline: 'Oct – Dec 2024',
     team: 'With CODE19',
@@ -228,22 +228,22 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'A platform that converted fans and sponsors',
-        body: 'CODE19 needed a platform that converted fans and sponsors — not a brochure site that went quiet between events.',
+        body: 'CODE19 needed a platform that converted fans and sponsors, not a brochure site that went quiet between events.',
       },
       {
         eyebrow: 'Problem',
         title: 'Four audiences, one generic page',
-        body: 'Fans, sponsors, engineers, and drivers hit the same shallow content — nobody found what they came for. A heuristic evaluation and competitive teardown against Mercedes AMG F1 and other top teams confirmed it: high bounce, short sessions, thin content, no SEO structure, and no reason to stay.',
+        body: 'Fans, sponsors, engineers, and drivers hit the same shallow content, nobody found what they came for. A heuristic evaluation and competitive teardown against Mercedes AMG F1 and other top teams confirmed it: high bounce, short sessions, thin content, no SEO structure, and no reason to stay.',
       },
       {
         eyebrow: 'Foundation',
         title: 'Research at the track and in the data',
-        body: 'Heuristic evaluation, a competitive audit against top motorsports sites, 30+ fan and sponsor surveys, and field research at Indianapolis Motor Speedway — then persona-driven IA for four distinct users (fan, sponsor, engineer, driver), built through card sorting. Three months, Oct–Dec 2024.',
+        body: 'Heuristic evaluation, a competitive audit against top motorsports sites, 30+ fan and sponsor surveys, and field research at Indianapolis Motor Speedway, then persona-driven IA for four distinct users (fan, sponsor, engineer, driver), built through card sorting. Three months, Oct–Dec 2024.',
       },
       {
         eyebrow: 'Outcomes',
         title: 'Sessions, funding, and organic growth',
-        body: 'Seed funding grew from $150K to $500K post-launch. New monthly sessions peaked near 1,850 in December 2024, then faded as direct traffic typically does. Organic search started near zero and grew steadily through mid-2025 — the slower, more durable payoff of the SEO work.',
+        body: 'Seed funding grew from $150K to $500K post-launch. New monthly sessions peaked near 1,850 in December 2024, then faded as direct traffic typically does. Organic search started near zero and grew steadily through mid-2025, the slower, more durable payoff of the SEO work.',
         metrics: [
           { value: '$150K → $500K', label: 'Seed funding raised post-launch' },
           { value: '1,500+', label: 'New monthly sessions (peak ~1,850)' },
@@ -258,20 +258,20 @@ export const work = [
       {
         eyebrow: 'What I learned',
         title: 'The hard constraint was data, not design',
-        body: 'Real-time integration across third-party feeds was the hard technical constraint — not the design system. Serving four audiences on one platform meant real trade-offs in information architecture, not just responsive breakpoints.',
+        body: 'Real-time integration across third-party feeds was the hard technical constraint, not the design system. Serving four audiences on one platform meant real trade-offs in information architecture, not just responsive breakpoints.',
       },
     ],
   },
   {
     slug: 'edge-ai',
-    outcome: 'Privacy-first AI at the edge — eliminating cloud dependency for mission-critical vehicle decisions',
+    outcome: 'Privacy-first AI at the edge, eliminating cloud dependency for mission-critical vehicle decisions',
     title: 'WING Edge AI',
     meta: 'Wing · Concept 2025',
     status: 'Concept',
     year: '2025',
     domain: 'Edge AI',
     blurb:
-      'Extends the WING HMI ecosystem into real-time, privacy-first AI at the edge — local-first processing for split-second decisions, transparent controls, and data that stays in the car.',
+      'Extends the WING HMI ecosystem into real-time, privacy-first AI at the edge, local-first processing for split-second decisions, transparent controls, and data that stays in the car.',
     role: 'Product designer',
     timeline: '2025',
     team: 'Design exploration',
@@ -281,17 +281,17 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'Extending WING HMI into real-time, privacy-first AI',
-        body: 'Smart-vehicle AI leans on cloud compute, adding latency to split-second decisions — and drivers have no visibility into how their data is used. WING Edge AI brings personalization on-device, where it belongs.',
+        body: 'Smart-vehicle AI leans on cloud compute, adding latency to split-second decisions and drivers have no visibility into how their data is used. WING Edge AI brings personalization on-device, where it belongs.',
       },
       {
         eyebrow: 'Problem',
         title: 'Cloud dependency at highway speed',
-        body: 'Mission-critical vehicle decisions (lane assist, hazard alerts, adaptive routing) shouldn\'t wait on a network round-trip. And drivers increasingly want to know — and control — what data leaves the car.',
+        body: 'Mission-critical vehicle decisions (lane assist, hazard alerts, adaptive routing) shouldn\'t wait on a network round-trip. And drivers increasingly want to know and control, what data leaves the car.',
       },
       {
         eyebrow: 'Research method',
-        title: 'AI-assisted synthesis — not primary research',
-        body: 'Conceptual project. Research was AI-assisted synthesis across automotive forums, product reviews, and driver-safety reports — not direct interviews or usability studies. Findings informed design principles, not validated user needs.',
+        title: 'AI-assisted synthesis, not primary research',
+        body: 'Conceptual project. Research was AI-assisted synthesis across automotive forums, product reviews, and driver-safety reports, not direct interviews or usability studies. Findings informed design principles, not validated user needs.',
       },
       {
         eyebrow: 'Design principles',
@@ -301,12 +301,12 @@ export const work = [
       {
         eyebrow: 'Architecture',
         title: 'Local-first, cloud-optional',
-        body: 'Sensitive data — driving behavior, routes, voice — stays on-device. Only generalized data (firmware updates, public maps) syncs to cloud. The driver controls what crosses that boundary.',
+        body: 'Sensitive data, driving behavior, routes, voice, stays on-device. Only generalized data (firmware updates, public maps) syncs to cloud. The driver controls what crosses that boundary.',
       },
       {
         eyebrow: 'Target outcomes',
         title: 'Targets, not measured results',
-        body: 'These are design targets from the concept phase — not measured outcomes. Visual scan time ↓30% vs. legacy systems · edge latency <20ms · AI trust index >80% · cloud opt-out sustained >65% · alert response time ↓25%.',
+        body: 'These are design targets from the concept phase, not measured outcomes. Visual scan time ↓30% vs. legacy systems · edge latency <20ms · AI trust index >80% · cloud opt-out sustained >65% · alert response time ↓25%.',
         metrics: [
           { value: '<20ms', label: 'Target edge latency' },
           { value: '>80%', label: 'Target AI trust index' },
@@ -329,7 +329,7 @@ export const work = [
     year: '2025',
     domain: 'Creative tools',
     blurb:
-      'Multi-modal generative video plugin for Premiere Pro — create on the timeline instead of bouncing between tools.',
+      'Multi-modal generative video plugin for Premiere Pro, create on the timeline instead of bouncing between tools.',
     role: 'Product design · Front-end',
     timeline: '2025',
     team: 'Solo',
@@ -359,7 +359,7 @@ export const work = [
       {
         eyebrow: 'What I learned',
         title: 'AI features inherit the host app\'s mental model',
-        body: 'If the plugin fights Premiere\'s verbs, editors won\'t adopt it — no matter how good the model is.',
+        body: 'If the plugin fights Premiere\'s verbs, editors won\'t adopt it, no matter how good the model is.',
       },
     ],
   },

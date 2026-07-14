@@ -3,7 +3,7 @@ import { work } from './projects'
 const bySlug = Object.fromEntries(work.map((p) => [p.slug, p]))
 
 /**
- * Homepage featured strip — Nudge-style ordered showcase.
+ * Homepage featured strip, Nudge-style ordered showcase.
  * Edge AI lives in Play; shown here as a concept card.
  */
 export const featured = [
@@ -12,7 +12,7 @@ export const featured = [
     index: '01',
     displayTitle: 'Competitor Watch',
     folderDate: 'Jun 10, 2026',
-    outcome: '2,088 attributed visits · +19.2% WoW — store intelligence dashboard',
+    outcome: '2,088 attributed visits · +19.2% WoW, store intelligence dashboard',
     tags: ['Retail ops', 'AI'],
     reel: '/work/competitor-watch/motion/CompetitorWatch-Reel.mp4',
     folderFill: '#166534',
@@ -24,7 +24,7 @@ export const featured = [
     displayTitle: 'Lola',
     folderDate: 'Jun 28, 2026',
     outcome: '97.7% of bot replies under 2 min · conversational AI for La Bodega',
-    blurb: 'Guests ask, order, and get handed to staff — all on the WhatsApp thread ~1,200 loyalty families already use. Built from 180 real threads before a single flow shipped.',
+    blurb: 'Guests ask, order, and get handed to staff, all on the WhatsApp thread ~1,200 loyalty families already use. Built from 180 real threads before a single flow shipped.',
     tags: ['Conversational AI', 'WhatsApp'],
     reel: '/work/lola/motion/Lola-Reel.mp4',
     href: 'https://la-bodega-lola.vercel.app/',
@@ -63,7 +63,7 @@ export const featured = [
     index: '06',
     displayTitle: 'WING Edge AI',
     folderDate: 'Nov 4, 2025',
-    outcome: 'Target: <20ms edge latency — privacy-first AI for mission-critical vehicle decisions',
+    outcome: 'Target: <20ms edge latency, privacy-first AI for mission-critical vehicle decisions',
     tags: ['Edge AI', 'Mobility', 'Concept'],
     folderFill: '#0891B2',
     folderInk: '#ffffff',
