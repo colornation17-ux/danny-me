@@ -433,30 +433,159 @@ export const work = [
   },
 ]
 
+/** Lab case studies (not in curated Work). Linked from /play. */
+export const lab = [
+  {
+    slug: 'ocusync',
+    collection: 'lab',
+    outcome: 'YC pitch prototype: CRM inside the NLE',
+    title: 'Ocusync',
+    meta: 'YC pitch prototype · 2024',
+    status: 'Prototype',
+    year: '2024',
+    domain: 'Product design',
+    layer: 'Video production tooling',
+    blurb:
+      'Y Combinator-style pitch prototype for putting production CRM (clients, briefs, delivery status) inside the NLE so editors do not bounce between Timeline and a separate ops tool.',
+    role: 'Product designer · Front-end',
+    timeline: '2024 pitch sprint',
+    team: 'Solo concept + prototype',
+    skills: ['Product design', 'Pitch narrative', 'Plugin UX', 'Front-end prototype'],
+    accent: '#FF4D1A',
+    cover: '/work/ocusync/cover.svg',
+    hero: '/work/ocusync/cover.svg',
+    layout: 'default',
+    sections: [
+      {
+        eyebrow: 'Pitch',
+        title: 'One source of truth where the cut already lives',
+        body: 'Video teams lose deals and context switching between Premiere (or other NLEs) and a separate CRM. Ocusync is a pitch prototype for embedding client, brief, version, and delivery state next to the Timeline, so production ops ride with the edit.',
+      },
+      {
+        eyebrow: 'Problem',
+        title: 'The cut and the client live in different apps',
+        body: 'Editors ship from the NLE. Producers track status in Slack, Sheets, or a SaaS CRM. Notes get lost between rounds of review. The pitch asks: what if the CRM surface was a panel in the host app, not another browser tab?',
+      },
+      {
+        eyebrow: 'Prototype',
+        title: 'YC-style narrative + interactive concept',
+        body: 'Built as a Y Combinator pitch prototype: problem framing, target user (editors + producer leads), product wedge (CRM panel inside the NLE), and a clickable UI direction for deal sync, brief attachment, and delivery status without leaving the Timeline.',
+      },
+      {
+        eyebrow: 'Scope',
+        title: 'Pitch fidelity, not a production plugin',
+        body: 'This is a design + front-end prototype for the story, not a shipped Premiere plugin with live CRM APIs. The goal was to prove the interaction model and pitch clarity before deeper build.',
+      },
+      {
+        eyebrow: 'What I learned',
+        title: 'Pitch products need one brutal wedge',
+        body: 'A full “video ERP” story loses investors. The stronger cut is a single job: keep client + delivery state inside the NLE where the work already happens.',
+      },
+    ],
+  },
+  {
+    slug: 'stutax',
+    collection: 'lab',
+    outcome: 'Academic UX: tax filing for international students',
+    title: 'StuTax',
+    meta: 'Academic project · Fintech · 2023',
+    status: 'Student project',
+    year: '2023',
+    domain: 'UI/UX',
+    layer: 'Fintech · education',
+    blurb:
+      'Student project SaaS concept that guides international students through US tax filing with tailored checklists, university financial-office support, and financial literacy resources.',
+    role: 'UI/UX designer',
+    timeline: 'Academic studio · 2023',
+    team: 'Team project',
+    skills: ['UI/UX', 'User research', 'Prototyping', 'Fintech'],
+    accent: '#4AB68D',
+    cover: '/work/stutax/cover.png',
+    hero: '/work/stutax/cover.png',
+    reel: '/work/stutax/prototype.mp4',
+    liveUrl: 'https://dannvargh.framer.website/StuTax',
+    liveCta: 'Full Framer case study',
+    layout: 'product',
+    gallery: [
+      { src: '/work/stutax/style.png', caption: 'Whiteboard planning + wireframe flows' },
+      { src: '/work/stutax/persona-sofia.png', caption: 'Persona: Sofia Martinez, J-1 undergraduate' },
+      { src: '/work/stutax/persona-arjun.png', caption: 'Persona: Arjun Patel, F-1 graduate researcher' },
+      { src: '/work/stutax/persona-yuki.png', caption: 'Persona: Yuki Tanaka, M-1 culinary student' },
+      { src: '/work/stutax/hifi.png', caption: 'Hi-fi prototype screens' },
+    ],
+    sections: [
+      {
+        eyebrow: 'Overview',
+        title: 'Streamlining tax filing for international students in the US',
+        body: 'StuTax is an academic UI/UX project: a mobile SaaS direction that guides students through complex US tax forms with a document checklist, university financial experts for support, and resources for financial literacy.',
+      },
+      {
+        eyebrow: 'Prompt',
+        title: 'How can we improve financial literacy among international students?',
+        body: 'Background research found roughly 62% of international students unprepared to file taxes and 24% unclear on banking system differences. Forms are jargony, treaty benefits are opaque, and mainstream tax software rarely maps to visa-specific scenarios.',
+      },
+      {
+        eyebrow: 'Research',
+        title: '16 interviews across 16 universities',
+        body: 'Team interviews surfaced lack of awareness, anxiety about the tax system, and thin campus resources. Secondary sources echoed the gap: 60%+ call filing difficult; NAFSA surveys reported large shares needing more tax information and feeling unprepared.',
+        metrics: [
+          { value: '16', label: 'Student interviews' },
+          { value: '60%+', label: 'Find filing difficult' },
+          { value: '54%', label: 'Need more tax info (NAFSA)' },
+        ],
+      },
+      {
+        eyebrow: 'Direction',
+        title: 'Make filing accessible and understandable',
+        body: 'How might we make tax filing more accessible for international students? The product wedge: tailored checklist generation, university office-hours routing, and literacy resources, not a full replacement for TurboTax on day one.',
+        image: '/work/stutax/style.png',
+        caption: 'From whiteboard problems to mid-fi wireflows',
+      },
+      {
+        eyebrow: 'Prototype',
+        title: 'Hi-fi mobile flow + interactive walkthrough',
+        body: 'Onboarding, account setup, employment details, checklists, and university financial-office contacts. Evaluated key flows against NNG-style criteria (navigation 4.5, clarity 5, responsiveness 4.5, accessibility 5 on a 5-point studio rubric).',
+        image: '/work/stutax/hifi.png',
+        caption: 'Hi-fi prototype, mobile screens',
+      },
+      {
+        eyebrow: 'What I learned',
+        title: 'Student tax anxiety is an information design problem',
+        body: 'The hard part is not another form UI. It is deadlines, which forms apply to which visa, and who on campus can validate the next step. Checklist + human support beat a lonely form wizard.',
+      },
+    ],
+  },
+]
+
 export const play = [
+  {
+    slug: 'ocusync',
+    title: 'Ocusync',
+    blurb: 'Y Combinator pitch prototype: CRM inside the NLE for video production.',
+    meta: 'YC pitch prototype · 2024',
+    href: '/projects/ocusync',
+    cover: '/work/ocusync/cover.svg',
+  },
+  {
+    slug: 'stutax',
+    title: 'StuTax',
+    blurb: 'Academic UX for international student tax filing in the US.',
+    meta: 'Student project · 2023',
+    href: '/projects/stutax',
+    cover: '/work/stutax/cover.png',
+  },
   {
     slug: 'edge-ai',
     title: 'Wing Edge AI',
     blurb: 'On-device personalization for next-gen mobility.',
     meta: 'Concept · 2025',
+    href: '/projects/edge-ai',
   },
   {
     slug: 'loom',
     title: 'Loom Design System',
     blurb: 'Multiplatform DS for CODE19.ai\'s digital identity.',
     meta: 'Design systems · 2025',
-  },
-  {
-    slug: 'ocusync',
-    title: 'Ocusync',
-    blurb: 'CRM inside the NLE for video production workflows.',
-    meta: 'Product · 2024',
-  },
-  {
-    slug: 'stutax',
-    title: 'StuTax',
-    blurb: 'Tax filing SaaS for international students in the US.',
-    meta: 'UI/UX · 2024',
   },
   {
     slug: 'branding',
@@ -475,5 +604,5 @@ export const play = [
 export const projects = work
 
 export function getProjectBySlug(slug) {
-  return work.find((p) => p.slug === slug) ?? null
+  return work.find((p) => p.slug === slug) ?? lab.find((p) => p.slug === slug) ?? null
 }

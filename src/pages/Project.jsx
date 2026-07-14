@@ -1,6 +1,6 @@
 ﻿import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { getProjectBySlug, work } from '../data/projects'
+import { getProjectBySlug, lab, work } from '../data/projects'
 import { featured } from '../data/featured'
 import { SITE } from '../data/site'
 import ProjectMotionPreview, { hasMotionPreview } from '../components/motion/ProjectMotionPreview'
@@ -25,14 +25,22 @@ export default function Project() {
     )
   }
 
-  // Cycle through the homepage-featured set only, so "up next" never lands
-  // on a project (e.g. timely-ne) that isn't linked anywhere a visitor can find.
+  const isLab = project.collection === 'lab'
+  // Lab case studies cycle within Lab. Work cycles the homepage-featured set
+  // so "up next" never lands on a project visitors cannot find from Home.
   const featuredOrder = featured.map((p) => p.slug)
   const featuredIndex = featuredOrder.indexOf(project.slug)
-  const next =
-    featuredIndex === -1
-      ? work[(work.findIndex((p) => p.slug === project.slug) + 1) % work.length]
-      : getProjectBySlug(featuredOrder[(featuredIndex + 1) % featuredOrder.length])
+  let next
+  if (isLab) {
+    const i = lab.findIndex((p) => p.slug === project.slug)
+    next = lab[(i + 1) % lab.length]
+  } else if (featuredIndex === -1) {
+    next = work[(work.findIndex((p) => p.slug === project.slug) + 1) % work.length]
+  } else {
+    next = getProjectBySlug(featuredOrder[(featuredIndex + 1) % featuredOrder.length])
+  }
+  const backTo = isLab ? '/play' : '/'
+  const backLabel = isLab ? '← Lab' : '← Work'
   const layout = project.layout || 'default'
   const motion = hasMotionPreview(project.slug)
   const isCwCase = project.caseStudyBody === 'competitor-watch'
@@ -79,7 +87,7 @@ export default function Project() {
         )}
 
         <div id="case-study" className="cs-game-body">
-          <Link className="cs-back" to="/">← Work</Link>
+          <Link className="cs-back" to={backTo}>{backLabel}</Link>
           <header className="cs-hero cs-hero--default">
             <div className="cs-hero__copy">
               <p className="cs-hero__meta">{project.meta}</p>
@@ -148,8 +156,8 @@ export default function Project() {
       className={`cs cs--${layout}${isCwCase ? ' cs--cw' : ''}`}
       style={{ '--cs-accent': project.accent }}
     >
-      <Link className="cs-back" to="/">
-        ← Work
+      <Link className="cs-back" to={backTo}>
+        {backLabel}
       </Link>
 
       <header className={`cs-hero cs-hero--${layout}`}>
@@ -202,7 +210,8 @@ export default function Project() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {project.slug === 'lola' ? 'Open full case study' : 'View live site'}
+                    {project.liveCta
+                      || (project.slug === 'lola' ? 'Open full case study' : 'View live site')}
                   </a>
                 )}
                 <a

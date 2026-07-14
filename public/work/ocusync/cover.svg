@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" fill="none">
+  <rect width="1600" height="1000" fill="#0B1220"/>
+  <rect x="80" y="120" width="1440" height="760" rx="28" fill="#151D2E" stroke="#2A3548"/>
+  <rect x="120" y="170" width="220" height="660" rx="16" fill="#1C2638"/>
+  <rect x="380" y="170" width="1080" height="80" rx="12" fill="#1C2638"/>
+  <rect x="380" y="280" width="700" height="420" rx="12" fill="#222C40"/>
+  <rect x="1120" y="280" width="340" height="420" rx="12" fill="#1C2638"/>
+  <text x="140" y="230" fill="#FF4D1A" font-family="Arial Black, sans-serif" font-size="36">OCU</text>
+  <text x="140" y="275" fill="#E8EEF7" font-family="Arial, sans-serif" font-size="22">CRM · NLE</text>
+  <rect x="140" y="320" width="180" height="36" rx="8" fill="#FF4D1A" opacity="0.9"/>
+  <rect x="140" y="380" width="160" height="28" rx="6" fill="#2A3548"/>
+  <rect x="140" y="428" width="160" height="28" rx="6" fill="#2A3548"/>
+  <rect x="140" y="476" width="160" height="28" rx="6" fill="#2A3548"/>
+  <text x="400" y="225" fill="#E8EEF7" font-family="Arial, sans-serif" font-size="28">Timeline · Deal sync</text>
+  <text x="80" y="90" fill="#E8EEF7" font-family="Arial Black, sans-serif" font-size="48">Ocusync</text>
+  <text x="340" y="90" fill="#8B97A8" font-family="Arial, sans-serif" font-size="28">YC pitch prototype · CRM inside the NLE</text>
+</svg>
