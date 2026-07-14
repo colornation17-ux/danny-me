@@ -1,5 +1,5 @@
 ﻿import { Link, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getProjectBySlug, work } from '../data/projects'
 import { SITE } from '../data/site'
 import ProjectMotionPreview, { hasMotionPreview } from '../components/motion/ProjectMotionPreview'
@@ -31,6 +31,7 @@ export default function Project() {
   const isCwCase = project.caseStudyBody === 'competitor-watch'
   const isGameCase = project.slug === 'bodega-ops'
   const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)
+  const [gameActive, setGameActive] = useState(true)
 
   useEffect(() => {
     if (isGameCase) {
@@ -42,17 +43,32 @@ export default function Project() {
   if (isGameCase) {
     return (
       <article className="cs cs--game" style={{ '--cs-accent': project.accent }}>
-        <div className="cs-game-frame">
-          <iframe
-            src="https://mattjr21.github.io/La-Bodega-game/?embed=1"
-            title="La Bodega Interactive Case Study"
-            className="cs-game-iframe"
-            allowFullScreen
-          />
-          <a href="#case-study" className="cs-game-skip">
-            Skip — read the case study ↓
-          </a>
-        </div>
+        {gameActive && (
+          <div className="cs-game-frame">
+            <iframe
+              src="https://mattjr21.github.io/La-Bodega-game/?embed=1"
+              title="La Bodega Interactive Case Study"
+              className="cs-game-iframe"
+              allowFullScreen
+            />
+            <div className="cs-game-badge">
+              <span>Danny Varghese</span>
+              <span className="cs-game-badge__sep">·</span>
+              <span>La Bodega Case Study</span>
+            </div>
+            <button
+              className="cs-game-skip"
+              onClick={() => {
+                setGameActive(false)
+                setTimeout(() => {
+                  document.getElementById('case-study')?.scrollIntoView({ behavior: 'smooth' })
+                }, 50)
+              }}
+            >
+              Skip — read the case study ↓
+            </button>
+          </div>
+        )}
 
         <div id="case-study" className="cs-game-body">
           <Link className="cs-back" to="/">← Work</Link>
