@@ -951,15 +951,19 @@ button {
 /* ── Game embed layout (bodega-ops) ────────────────────────────── */
 .cs--game { padding: 0; }
 /* hide portfolio chrome while game is fullscreen */
-body.game-embed .nav,
 body.game-embed nav,
 body.game-embed footer { display: none !important; }
-body.game-embed .main { padding: 0; }
+body.game-embed,
+body.game-embed .main { overflow: hidden; padding: 0; }
 
+/* break fully out of all containers — true full-viewport */
 .cs-game-frame {
-  position: relative;
-  width: 100%;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
   height: 100vh;
+  z-index: 50;
+  background: #fdfdfd;
   overflow: hidden;
 }
 
@@ -971,7 +975,7 @@ body.game-embed .main { padding: 0; }
 }
 
 .cs-game-skip {
-  position: absolute;
+  position: fixed;
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
@@ -984,7 +988,7 @@ body.game-embed .main { padding: 0; }
   padding-bottom: 1px;
   transition: color 0.2s;
   white-space: nowrap;
-  z-index: 10;
+  z-index: 60;
 }
 .cs-game-skip:hover { color: var(--ink); }
 
