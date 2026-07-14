@@ -4,7 +4,7 @@ import { getProjectBySlug } from '../data/projects'
 const DEFAULT_DESCRIPTION =
   'Danny Varghese — product designer who ships AI into real operations. Selected work across conversational AI, retail systems, and HMI.'
 
-const DEFAULT_IMAGE = `${SITE.url}/og.png`
+const DEFAULT_IMAGE = `${SITE.url}/og.png?v=3`
 
 function upsertMeta(attr, key, content) {
   if (!content) return
