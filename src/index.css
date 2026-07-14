@@ -3101,7 +3101,7 @@ body:has(.folio--fullgrid) .app {
   display: grid;
   gap: 1.5rem;
   padding: clamp(2rem, 6vw, 4rem) 0 clamp(2.5rem, 5vw, 3.5rem);
-  border-bottom: 1px solid var(--folio-line);
+  border-bottom: 0;
 }
 
 @media (min-width: 900px) {
@@ -3256,7 +3256,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-about {
   padding: clamp(2.5rem, 6vw, 4rem) 0;
-  border-bottom: 1px solid var(--folio-line);
+  border-bottom: 0;
 }
 
 .folio-about__head {
@@ -4647,16 +4647,109 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-arc-stroke {
-  /* Full-bleed: break out of page column */
   display: block;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-top: 0;
-  margin-bottom: 0;
+  width: 100%;
+  margin: 0;
   overflow: visible;
-  /* Mask the grid line that runs parallel to the stroke */
-  background: #f4f7fa;
+  background: transparent;
   padding-block: 0.5rem;
+}
+
+/* Pencil grid rule — full-bleed, graphite, discoverable on the right */
+.spring-wire {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0.35rem 0;
+  background: transparent;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  z-index: 1;
+}
+
+/* Thin paper mask kills only the parallel graph-paper rule under the pencil */
+.spring-wire::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 5px;
+  transform: translateY(-50%);
+  background: var(--folio-paper, #ffffff);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.spring-wire--pulling {
+  cursor: grabbing;
+}
+
+.spring-wire--hint .spring-wire__path--main {
+  stroke: #9aa8b8;
+}
+
+.spring-wire__svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 3.1rem;
+  overflow: visible;
+}
+
+.spring-wire__path {
+  vector-effect: non-scaling-stroke;
+}
+
+.spring-wire__path--main {
+  stroke: #c8d0da;
+  stroke-width: 1.2;
+  opacity: 0.95;
+  transition: stroke 0.25s ease;
+}
+
+.spring-wire__path--ghost {
+  stroke: #b8c2ce;
+  stroke-width: 0.7;
+  opacity: 0.45;
+}
+
+.spring-wire__hint {
+  position: absolute;
+  z-index: 2;
+  right: clamp(0.85rem, 4vw, 2.5rem);
+  top: 50%;
+  margin-top: -0.95rem;
+  font-family: "Just Me Again Down Here", "Segoe Print", cursive;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: #8a96a6;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
+}
+
+/* Edge-to-edge across the viewport (parent clips overflow) */
+.folio-spring {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: 0;
+  margin-block: 0.15rem;
+}
+
+/* Kill leftover paper tint seams on the full-grid home */
+.folio--fullgrid,
+.folio--fullgrid .folio-arc-stroke {
+  background-color: var(--folio-paper, #ffffff);
+}
+
+body:has(.folio--fullgrid) .site-footer {
+  background: #ffffff;
+  border-top-color: var(--folio-line, #d5dde5);
 }
 
 .folio-hero__name {

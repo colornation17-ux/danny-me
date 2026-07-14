@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SITE } from '../data/site'
 import { featured } from '../data/featured'
 import FolderStack from '../components/FolderStack'
-import { SketchStroke } from '../components/SketchStroke'
+import SpringWire from '../components/SpringWire'
 import CareerPath from '../components/CareerPath'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -114,23 +114,6 @@ export default function Home() {
           { opacity: 0, scale: 0.88, duration: 0.35, ease: 'back.out(1.7)' },
           '-=0.1',
         )
-
-      // ── Arc pencil line — draw on from left when it enters view ────
-      const arcPaths = document.querySelectorAll('.folio-arc-stroke path')
-      arcPaths.forEach((path) => {
-        const len = path.getTotalLength()
-        gsap.set(path, { strokeDasharray: len, strokeDashoffset: len })
-        gsap.to(path, {
-          strokeDashoffset: 0,
-          duration: 1.6,
-          ease: 'power2.inOut',
-          scrollTrigger: {
-            trigger: '.folio-arc-stroke',
-            start: 'top 90%',
-            toggleActions: 'play none none none',
-          },
-        })
-      })
 
       // ── About section — slide-up on scroll ──────────────────────────
       gsap.from('.folio-about__body', {
@@ -299,7 +282,7 @@ export default function Home() {
         </a>
       </section>
 
-      <SketchStroke variant="arc" className="folio-arc-stroke" />
+      <SpringWire className="folio-spring" seed={2} />
 
       <section className="folio-about" id="about" aria-labelledby="about-hello-heading">
 
@@ -324,6 +307,8 @@ export default function Home() {
           ))}
         </ul>
       </section>
+
+      <SpringWire className="folio-spring" seed={5} />
 
       <section
         className="folio-work folio-work--folders"
