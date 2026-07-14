@@ -4778,26 +4778,15 @@ body:has(.folio--fullgrid) .app {
   position: relative;
   width: 100%;
   margin: 0;
-  padding: 0.35rem 0;
-  background: transparent;
+  /* Tall enough that the wavy stroke never crosses a visible grid rule */
+  padding: 0.55rem 0;
+  background-color: var(--folio-paper, #ffffff);
+  background-image: none;
   touch-action: none;
   user-select: none;
   cursor: grab;
-  z-index: 1;
-}
-
-/* Thin paper mask kills only the parallel graph-paper rule under the pencil */
-.spring-wire::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 5px;
-  transform: translateY(-50%);
-  background: var(--folio-paper, #ffffff);
-  pointer-events: none;
-  z-index: 0;
+  z-index: 2;
+  isolation: isolate;
 }
 
 .spring-wire--pulling {
