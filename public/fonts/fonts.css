@@ -69,8 +69,35 @@
   font-display: swap;
 }
 
-/* ── Pixelify Sans — Lola's wordmark font, ported from the case study ── */
-@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap");
+/* ── Pixelify Sans — self-hosted, avoids @import-after-rule parse failure ── */
+@font-face {
+  font-family: "Pixelify Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/pixelify-sans/PixelifySans-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Pixelify Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/pixelify-sans/PixelifySans-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Pixelify Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/pixelify-sans/PixelifySans-SemiBold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Pixelify Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/pixelify-sans/PixelifySans-Bold.ttf") format("truetype");
+}
 
 /* ── Tiempos Text — ported from the Lola case study ─────────────── */
 @font-face {

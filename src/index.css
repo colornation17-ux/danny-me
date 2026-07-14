@@ -4582,8 +4582,35 @@ button {
   inset: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+
+.folder-card__image--portrait {
+  background: var(--folder-fill, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.folder-card__image--portrait video {
   object-fit: contain;
-  background: #0a0a0a;
+}
+
+.folder-card__portrait-wrap {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 9 / 16;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 0.15rem;
+}
+
+.folder-card__portrait-wrap video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .folder-card__corners {

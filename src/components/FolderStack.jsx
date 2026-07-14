@@ -154,8 +154,15 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
         </div>
 
         <div className="folder-card__img">
-          <div className="folder-card__image">
-            {project.reel ? (
+          <div className={`folder-card__image${project.reelPortrait ? ' folder-card__image--portrait' : ''}`}>
+            {project.reel && project.reelPortrait ? (
+              <div className="folder-card__portrait-wrap">
+                <video src={project.reel} autoPlay muted loop playsInline />
+                <div className="folder-card__corners" aria-hidden="true">
+                  <span /><span /><span /><span />
+                </div>
+              </div>
+            ) : project.reel ? (
               <video
                 src={project.reel}
                 autoPlay
@@ -173,12 +180,14 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
               </div>
             )}
 
-            <div className="folder-card__corners" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
+            {!project.reelPortrait && (
+              <div className="folder-card__corners" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
+            )}
           </div>
         </div>
       </div>

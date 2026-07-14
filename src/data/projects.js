@@ -162,6 +162,15 @@ export const work = [
     status: 'Concept',
     year: '2025',
     domain: 'Automotive HMI',
+    cover: '/work/wing-hmi/hero.png',
+    hero: '/work/wing-hmi/hero.png',
+    reel: '/work/wing-hmi/demo-1.mp4',
+    gallery: [
+      { src: '/work/wing-hmi/screen-1.png', caption: 'Cluster and HUD layout' },
+      { src: '/work/wing-hmi/screen-2.png', caption: 'Center display system state' },
+      { src: '/work/wing-hmi/screen-3.png', caption: 'Voice interface layer' },
+      { src: '/work/wing-hmi/screen-4.png', caption: 'Alert states and attention zones' },
+    ],
     blurb:
       'Next-gen in-vehicle experience inspired by interplanetary mission control, validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view.',
     role: 'Product designer',
@@ -270,6 +279,15 @@ export const work = [
     status: 'Concept',
     year: '2025',
     domain: 'Edge AI',
+    cover: '/work/edge-ai/hero.jpg',
+    hero: '/work/edge-ai/hero.jpg',
+    reel: '/work/edge-ai/demo-1.mp4',
+    gallery: [
+      { src: '/work/edge-ai/screen-2.png', caption: 'Local-first architecture overview' },
+      { src: '/work/edge-ai/screen-3.png', caption: 'Driver transparency controls' },
+      { src: '/work/edge-ai/screen-4.png', caption: 'Edge inference pipeline' },
+      { src: '/work/edge-ai/screen-5.png', caption: 'Privacy data boundary diagram' },
+    ],
     blurb:
       'Extends the WING HMI ecosystem into real-time, privacy-first AI at the edge, local-first processing for split-second decisions, transparent controls, and data that stays in the car.',
     role: 'Product designer',
