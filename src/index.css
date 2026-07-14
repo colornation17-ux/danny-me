@@ -3485,12 +3485,13 @@ body:has(.folio--fullgrid) .app {
 
 .folio-contact {
   margin-top: 0;
-  padding: clamp(3rem, 8vw, 5.5rem) clamp(1.5rem, 5vw, 3.5rem);
+  padding: clamp(3rem, 8vw, 5.5rem) clamp(1.5rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3.5rem);
   border: 0;
   border-radius: 0;
-  background: #111212;
-  color: #f5f0eb;
-  overflow: hidden;
+  /* Stay on graph paper — black slab was fighting the folio system */
+  background: transparent;
+  color: #111212;
+  overflow: visible;
   position: relative;
 }
 
@@ -3693,7 +3694,16 @@ body:has(.folio--fullgrid) .app {
 }
 
 @media (max-width: 700px) {
-  .folio-contact__inner { grid-template-columns: 1fr; }
+  .folio-contact__inner {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  .folio-contact__cta {
+    width: 100%;
+    max-width: 22rem;
+  }
 }
 
 .folio-contact__eyebrow {
@@ -3702,82 +3712,99 @@ body:has(.folio--fullgrid) .app {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #4f7cff;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.75rem;
 }
 
 .folio-contact__title {
-  font-family: "Highfat", var(--font-display);
-  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  font-family: "Chubby And Groovy", "Highfat", var(--font-display);
+  font-size: clamp(2.2rem, 5.2vw, 3.6rem);
   font-weight: 400;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  margin-bottom: 1.25rem;
-  color: #f5f0eb;
+  margin-bottom: 1rem;
+  color: #111212;
   line-height: 0.95;
   position: relative;
 }
 
 .folio-contact__body {
   max-width: 34rem;
-  color: rgba(245, 240, 235, 0.6);
+  color: #4a5560;
   margin-bottom: 0;
-  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
-  font-family: "Cubao", var(--font-sans);
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  font-family: "Just Me Again Down Here", "Cubao", cursive;
   font-weight: 400;
-  line-height: 1.6;
+  line-height: 1.45;
   position: relative;
 }
 
-/* Right column — CTA card + links */
+/* Right column — sticker CTA + links */
 .folio-contact__right {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
+  align-items: flex-start;
 }
 
 .folio-contact__cta {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  padding: 1.5rem 1.75rem;
+  gap: 0.35rem;
+  padding: 1.35rem 1.6rem;
   background: #4f7cff;
-  border-radius: 1rem;
+  border: 2px solid #111212;
+  border-radius: 0.9rem 0.9rem 0.9rem 0.35rem;
   color: #fff;
   text-decoration: none;
-  transition: background 0.18s;
+  box-shadow: 5px 5px 0 #111212;
+  transform: rotate(-1.5deg);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
 }
 
-.folio-contact__cta:hover { background: #3d6be8; }
+.folio-contact__cta:hover {
+  background: #3d6be8;
+  transform: rotate(0deg) translate(-2px, -2px);
+  box-shadow: 7px 7px 0 #111212;
+}
+
+.folio-contact__cta:focus-visible {
+  outline: 2px solid #111212;
+  outline-offset: 3px;
+}
 
 .folio-contact__cta-label {
-  font-family: "Highfat", var(--font-display);
-  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  font-family: "Chubby And Groovy", "Highfat", var(--font-display);
+  font-size: clamp(1.35rem, 3vw, 1.85rem);
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   line-height: 1;
 }
 
 .folio-contact__cta-sub {
   font-family: var(--font-mono, "DM Mono", monospace);
   font-size: 0.78rem;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .folio-contact__links {
   display: flex;
   gap: 1.5rem;
+  padding-left: 0.15rem;
 }
 
 .folio-contact__links a {
   font-family: var(--font-mono, "DM Mono", monospace);
   font-size: 0.82rem;
-  color: rgba(245, 240, 235, 0.55);
+  color: #5a6570;
   text-decoration: none;
   transition: color 0.15s;
 }
 
-.folio-contact__links a:hover { color: #f5f0eb; }
+.folio-contact__links a:hover { color: #111212; }
 
 .folio-contact__actions {
   display: flex;
@@ -3929,6 +3956,25 @@ body:has(.folio--fullgrid) .app {
 
   .nav-hamburger {
     display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Resume + LinkedIn live in the menu — free the top bar */
+  .nav-cta--linkedin,
+  .nav-cta--resume {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: 0.35rem;
+  }
+
+  .nav-cta--contact {
+    min-height: 36px;
+    padding: 0.45rem 0.75rem;
   }
 
   /* Show mobile dropdown when open */
@@ -4307,14 +4353,84 @@ body:has(.folio--fullgrid) .app {
   display: block;
 }
 
+/* Mobile HTML timeline — readable type (SVG labels crush below ~11px) */
+.career-path__list {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.1rem;
+  border-left: 1.5px solid #d5dde5;
+}
+
+.career-path__item {
+  position: relative;
+  padding: 0 0 1.15rem 1rem;
+}
+
+.career-path__item:last-child {
+  padding-bottom: 0;
+}
+
+.career-path__dot {
+  position: absolute;
+  left: -1.1rem;
+  top: 0.2rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px currentColor;
+  transform: translateX(-50%);
+  color: #d5dde5;
+}
+
+.career-path__dot--now {
+  background: #111212;
+  width: 11px;
+  height: 11px;
+}
+
+.career-path__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.career-path__year {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #888;
+}
+
+.career-path__title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #111212;
+}
+
+.career-path__desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: #666;
+  line-height: 1.35;
+}
+
 @media (max-width: 600px) {
   .career-path {
     max-width: 100%;
     margin: 1.5rem 0 0.5rem;
   }
 
+  .career-path__list {
+    display: block;
+  }
+
   .career-path__svg {
-    /* keep full width on mobile, text will scale with SVG */
+    display: none;
   }
 }
 
@@ -5691,6 +5807,15 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 @media (max-width: 600px) {
+  /* Shorter sticky scrub — less scroll tax on phones */
+  .folder-stack {
+    height: calc(var(--folder-count) * 42vh + (100vh - 74px));
+  }
+
+  .folder-card__tab {
+    font-size: 0.62rem;
+  }
+
   /* Stack text → image vertically, constrained to card width */
   .folder-card__content {
     grid-template-columns: minmax(0, 1fr);

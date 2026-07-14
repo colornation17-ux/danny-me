@@ -214,6 +214,26 @@ export default function Project() {
                       || (project.slug === 'lola' ? 'Open full case study' : 'View live site')}
                   </a>
                 )}
+                {project.connectUrl && (
+                  <a
+                    className="btn btn--ghost"
+                    href={project.connectUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {project.connectCta || 'Lola Connect'} ↗
+                  </a>
+                )}
+                {project.whatsappUrl && (
+                  <a
+                    className="btn btn--ghost"
+                    href={project.whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Try on WhatsApp ↗
+                  </a>
+                )}
                 <a
                   className={project.liveUrl ? 'btn btn--ghost' : 'btn btn--primary'}
                   href={`mailto:${SITE.email}`}

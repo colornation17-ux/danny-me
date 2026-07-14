@@ -3,7 +3,7 @@
 export const work = [
   {
     slug: 'lola',
-    outcome: 'WhatsApp CRM: deals, pickup orders, reminders, and staff handoff',
+    outcome: 'WhatsApp CRM + Lola Connect staff PWA: deals, orders, reminders, handoff',
     title: 'Lola',
     meta: 'La Bodega · Shipped 2026',
     status: 'Shipped',
@@ -11,14 +11,16 @@ export const work = [
     domain: 'Product design',
     layer: 'Customer + staff product',
     blurb:
-      'Bilingual WhatsApp product inside the store CRM (1,600+ customers): weekly deals Q&A, pickup orders, shopping reminders, voice notes, guided coach, and staff inbox/handoff. Designed from 180 live threads; 97.7% of bot replies under 2 min.',
+      'Bilingual WhatsApp product for customers (1,600+ CRM): weekly deals Q&A, pickup orders, shopping reminders, voice, and guided coach. Staff run inbox/handoff from Lola Connect — a mobile PWA on the phone. Designed from 180 live threads; 97.7% of bot replies under 2 min.',
     role: 'Product designer',
     timeline: 'May – Jun 2026',
     team: 'Solo design & build',
-    skills: ['Product design', 'Conversation design', 'Service design', 'WhatsApp CRM'],
+    skills: ['Product design', 'Conversation design', 'WhatsApp CRM', 'PWA'],
     accent: '#1FA97A',
     liveUrl: 'https://la-bodega-lola.vercel.app/',
     whatsappUrl: 'https://wa.me/14043238325?text=Hi%20Lola',
+    connectUrl: 'https://wacrm-i9f2.vercel.app/',
+    connectCta: 'Lola Connect',
     liveCta: 'View product site',
     cover: '/work/lola/journey.png',
     hero: '/work/lola/service.png',
@@ -31,7 +33,7 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'Engagement on the thread families already use',
-        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Weekly WhatsApp reach sits inside a live CRM (1,600+ customers), but replies (English, Spanish, voice notes, SNAP questions, shopping lists) used to pile into one staff inbox. Lola is the customer + staff product on that stack: weekly deals, pickup orders, shopping reminders, voice, guided coach, and staff handoff inside wacrm. Competitor Watch owns planning and visit attribution; Lola owns conversation, orders, and ops handoff.',
+        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Weekly WhatsApp reach sits inside a live CRM (1,600+ customers), but replies (English, Spanish, voice notes, SNAP questions, shopping lists) used to pile into one staff inbox. Lola is the customer + staff product on that stack: weekly deals, pickup orders, shopping reminders, voice, and guided coach on WhatsApp; staff handoff runs in Lola Connect, a mobile PWA installable on the floor phone. Competitor Watch owns planning and visit attribution; Lola owns conversation, orders, and ops handoff.',
       },
       {
         eyebrow: 'Problem',
@@ -46,7 +48,7 @@ export const work = [
       {
         eyebrow: 'Solution',
         title: 'Three customer jobs on the loyalty WhatsApp thread',
-        body: 'Weekly deals (flyer-grounded answers). Pickup orders (#order → quote → confirm, text or voice). Shopping and offer reminders. Hard asks escalate to humans via staff inbox; Lola pauses when an agent owns the thread.',
+        body: 'Weekly deals (flyer-grounded answers). Pickup orders (#order → quote → confirm, text or voice). Shopping and offer reminders. Hard asks escalate to humans via Lola Connect (staff PWA on mobile); Lola pauses when an agent owns the thread.',
       },
       {
         eyebrow: 'Research',
@@ -61,11 +63,11 @@ export const work = [
       {
         eyebrow: 'Outcomes',
         title: 'Live in production inside the store CRM',
-        body: 'Families stay on WhatsApp. Deals, orders, and reminders resolve in-thread. Staff get an orders/reminders/inbox stack instead of an unshared blast inbox. Competitor Watch later attributes visits to this same channel.',
+        body: 'Families stay on WhatsApp. Deals, orders, and reminders resolve in-thread. Staff run orders, reminders, and handoff from Lola Connect — a PWA on the store phone — instead of an unshared blast inbox. Competitor Watch later attributes visits to this same channel.',
         metrics: [
           { value: '1,600+', label: 'Customers in CRM' },
           { value: 'EN / ES', label: 'One language per reply' },
-          { value: 'Live', label: 'WhatsApp + staff CRM' },
+          { value: 'Live', label: 'WhatsApp + Lola Connect PWA' },
         ],
       },
       {
@@ -85,11 +87,11 @@ export const work = [
     domain: 'Product design',
     layer: 'Ops + analytics product',
     blurb:
-      'Product for independent grocery ops: competitor ads, weekend actions, store pulse, RFM/CRM views, and live demand forecast. Closes the loop with WhatsApp → POS visit attribution (2,088 visits).',
+      'Web app for independent grocery ops: competitor ads, weekend actions, store pulse, RFM/CRM views, and live demand forecast. Closes the loop with WhatsApp → POS visit attribution (2,088 visits).',
     role: 'Product designer · Full-stack',
     timeline: '2 weeks · MVP → production',
     team: 'Solo',
-    skills: ['Product design', 'IA', 'Demand forecast', 'CRM', 'React', 'Python'],
+    skills: ['Product design', 'Web app', 'Demand forecast', 'CRM', 'React', 'Python'],
     accent: '#166534',
     liveUrl: 'https://competitor-watch-1.onrender.com',
     cover: '/work/competitor-watch/motion/CW-02-CompetitorDeals.png',

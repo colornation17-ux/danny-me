@@ -96,95 +96,126 @@ export default function CareerPath() {
     const progressPath = progressRef.current
     if (!svg || !progressPath) return
 
-    const ctx = gsap.context(() => {
-      const totalLen = progressPath.getTotalLength()
+    // SVG timeline is desktop-only; mobile uses the HTML list.
+    const mq = window.matchMedia('(max-width: 600px)')
+    let ctx
 
-      // Set up draw-on: start fully hidden
-      gsap.set(progressPath, {
-        strokeDasharray: totalLen,
-        strokeDashoffset: totalLen,
-      })
-
-      // Hide all stops, labels, and photos; set scale origin per circle
-      STOPS.forEach((s) => {
-        const circle = svg.querySelector(`#cp-stop-${s.id}`)
-        const label = svg.querySelector(`#cp-label-${s.id}`)
-        if (circle) gsap.set(circle, { scale: 0, autoAlpha: 0, svgOrigin: `${s.cx} ${s.cy}` })
-        if (label) gsap.set(label, { autoAlpha: 0 })
-        ;(s.photos || []).forEach((p) => {
-          const photo = svg.querySelector(`#cp-photo-${p.id}`)
-          if (photo) gsap.set(photo, { scale: 0.85, autoAlpha: 0, svgOrigin: `${p.x} ${p.y}` })
-        })
-      })
-
-      // Find where each stop sits along the path (fraction 0–1)
-      function fractionOf(cx, cy) {
-        const steps = 1000
-        let best = 0, min = Infinity
-        for (let i = 0; i <= steps; i++) {
-          const t = i / steps
-          const pt = progressPath.getPointAtLength(t * totalLen)
-          const d = Math.hypot(pt.x - cx, pt.y - cy)
-          if (d < min) { min = d; best = t }
-        }
-        return best
+    const setup = () => {
+      if (ctx) {
+        ctx.revert()
+        ctx = undefined
       }
+      if (mq.matches) return
 
-      const DUR = 10  // timeline duration units (maps to full scroll range)
+      ctx = gsap.context(() => {
+        const totalLen = progressPath.getTotalLength()
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: svg,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          scrub: 1.5,
-        },
-      })
-
-      // Main path draw
-      tl.to(progressPath, { strokeDashoffset: 0, duration: DUR, ease: 'none' })
-
-      // Precompute each stop's position along the timeline so photos know
-      // how long to stay up before the next event pushes them out.
-      const stopTimes = STOPS.map((s) => fractionOf(s.cx, s.cy) * DUR)
-
-      // Pop each stop at the moment the path reaches it
-      STOPS.forEach((s, i) => {
-        const t = stopTimes[i]
-        const nextT = stopTimes[i + 1] ?? DUR
-        const circle = svg.querySelector(`#cp-stop-${s.id}`)
-        const label = svg.querySelector(`#cp-label-${s.id}`)
-        if (circle) {
-          tl.to(circle, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'back.out(2.5)' }, t)
-        }
-        if (label) {
-          tl.to(label, { autoAlpha: 1, duration: 0.25 }, t + 0.05)
-        }
-
-        // Photos fade in with their event, then fade back out before the
-        // next stop takes over, so they travel with their moment in time.
-        ;(s.photos || []).forEach((p, pi) => {
-          const photo = svg.querySelector(`#cp-photo-${p.id}`)
-          if (!photo) return
-          const inAt = t + 0.35 + pi * 0.1
-          const outAt = Math.max(inAt + 0.4, nextT - 0.4)
-          tl.to(photo, { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'back.out(2)' }, inAt)
-          tl.to(photo, { autoAlpha: 0, scale: 0.9, duration: 0.5, ease: 'power1.in' }, outAt)
+        gsap.set(progressPath, {
+          strokeDasharray: totalLen,
+          strokeDashoffset: totalLen,
         })
-      })
-    }, svgRef)
 
-    // Force a recalculation: GSAP's automatic refresh listeners are tied to
-    // the window 'load' event, which won't refire if this mounts via
-    // client-side route navigation (e.g. About → Home) rather than a hard load.
-    ScrollTrigger.refresh()
+        STOPS.forEach((s) => {
+          const circle = svg.querySelector(`#cp-stop-${s.id}`)
+          const label = svg.querySelector(`#cp-label-${s.id}`)
+          if (circle) gsap.set(circle, { scale: 0, autoAlpha: 0, svgOrigin: `${s.cx} ${s.cy}` })
+          if (label) gsap.set(label, { autoAlpha: 0 })
+          ;(s.photos || []).forEach((p) => {
+            const photo = svg.querySelector(`#cp-photo-${p.id}`)
+            if (photo) gsap.set(photo, { scale: 0.85, autoAlpha: 0, svgOrigin: `${p.x} ${p.y}` })
+          })
+        })
 
-    return () => ctx.revert()
+        function fractionOf(cx, cy) {
+          const steps = 1000
+          let best = 0, min = Infinity
+          for (let i = 0; i <= steps; i++) {
+            const t = i / steps
+            const pt = progressPath.getPointAtLength(t * totalLen)
+            const d = Math.hypot(pt.x - cx, pt.y - cy)
+            if (d < min) { min = d; best = t }
+          }
+          return best
+        }
+
+        const DUR = 10
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: svg,
+            start: 'top 80%',
+            end: 'bottom 20%',
+            scrub: 1.5,
+          },
+        })
+
+        tl.to(progressPath, { strokeDashoffset: 0, duration: DUR, ease: 'none' })
+
+        const stopTimes = STOPS.map((s) => fractionOf(s.cx, s.cy) * DUR)
+
+        STOPS.forEach((s, i) => {
+          const t = stopTimes[i]
+          const nextT = stopTimes[i + 1] ?? DUR
+          const circle = svg.querySelector(`#cp-stop-${s.id}`)
+          const label = svg.querySelector(`#cp-label-${s.id}`)
+          if (circle) {
+            tl.to(circle, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'back.out(2.5)' }, t)
+          }
+          if (label) {
+            tl.to(label, { autoAlpha: 1, duration: 0.25 }, t + 0.05)
+          }
+
+          ;(s.photos || []).forEach((p, pi) => {
+            const photo = svg.querySelector(`#cp-photo-${p.id}`)
+            if (!photo) return
+            const inAt = t + 0.35 + pi * 0.1
+            const outAt = Math.max(inAt + 0.4, nextT - 0.4)
+            tl.to(photo, { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'back.out(2)' }, inAt)
+            tl.to(photo, { autoAlpha: 0, scale: 0.9, duration: 0.5, ease: 'power1.in' }, outAt)
+          })
+        })
+      }, svgRef)
+
+      ScrollTrigger.refresh()
+    }
+
+    setup()
+    mq.addEventListener('change', setup)
+
+    return () => {
+      mq.removeEventListener('change', setup)
+      if (ctx) ctx.revert()
+    }
   }, [])
 
   return (
     <div className="career-path" aria-label="Career journey">
       <p className="career-path__eyebrow">The path so far</p>
+
+      {/* Mobile: readable HTML timeline (SVG label text scales too small) */}
+      <ol className="career-path__list">
+        {STOPS.map((s) => (
+          <li key={s.id} className="career-path__item">
+            <span
+              className="career-path__dot"
+              style={{ background: s.color }}
+              aria-hidden="true"
+            />
+            <div className="career-path__copy">
+              <span className="career-path__year">{s.year}</span>
+              <span className="career-path__title">{s.title}</span>
+              <span className="career-path__desc">{s.desc}</span>
+            </div>
+          </li>
+        ))}
+        <li className="career-path__item career-path__item--now">
+          <span className="career-path__dot career-path__dot--now" aria-hidden="true" />
+          <div className="career-path__copy">
+            <span className="career-path__title">Now</span>
+          </div>
+        </li>
+      </ol>
+
       <svg
         ref={svgRef}
         viewBox="-140 0 680 1420"

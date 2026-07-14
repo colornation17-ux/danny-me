@@ -196,6 +196,18 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
                 Try on WhatsApp ↗
               </a>
             )}
+            {project.connectUrl && (
+              <a
+                href={project.connectUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="folder-card__live"
+                tabIndex={cardState === 'active' ? 0 : -1}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {project.connectCta || 'Lola Connect'} ↗
+              </a>
+            )}
           </div>
 
           {tags.length > 0 && (

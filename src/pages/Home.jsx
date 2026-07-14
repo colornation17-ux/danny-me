@@ -159,27 +159,36 @@ export default function Home() {
       })
 
       // ── Contact section ─────────────────────────────────────────────
-      gsap.from('.folio-contact__title', {
-        scrollTrigger: { trigger: '.folio-contact', start: 'top 82%' },
-        opacity: 0,
-        y: 28,
-        duration: 0.5,
-      })
-      gsap.from('.folio-contact__body', {
-        scrollTrigger: { trigger: '.folio-contact', start: 'top 78%' },
-        opacity: 0,
-        y: 20,
-        duration: 0.4,
-        delay: 0.1,
-      })
-      gsap.from('.folio-contact__actions .folio-btn', {
-        scrollTrigger: { trigger: '.folio-contact__actions', start: 'top 88%' },
-        opacity: 0,
-        scale: 0.9,
-        stagger: 0.08,
-        duration: 0.4,
-        ease: 'back.out(1.5)',
-      })
+      // Do not use gsap.from({ opacity: 0 }) here. FolderStack pin/refresh
+      // can prevent the tween from playing and leave the copy invisible
+      // (eyebrow + CTA visible, headline/body gone). Animate only on enter
+      // and force-visible if the section is already past the start line.
+      const contactEls = gsap.utils.toArray(
+        '.folio-contact__title, .folio-contact__body, .folio-contact__cta',
+      )
+      if (contactEls.length) {
+        const revealContact = () => {
+          gsap.to(contactEls, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.45,
+            stagger: 0.08,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          })
+        }
+        gsap.set(contactEls, { autoAlpha: 0, y: 20 })
+        ScrollTrigger.create({
+          trigger: '.folio-contact',
+          start: 'top 90%',
+          once: true,
+          invalidateOnRefresh: true,
+          onEnter: revealContact,
+          onRefresh(self) {
+            if (self.progress > 0 || self.isActive) revealContact()
+          },
+        })
+      }
 
       // ── Pill stickers — gentle x-only drift (parallax owns y) ─────────
       // Using x only so it doesn't conflict with the scroll-driven y parallax
@@ -383,8 +392,8 @@ export default function Home() {
               Let&apos;s build<br />something real.
             </h2>
             <p className="folio-contact__body">
-              Open to contract work, full-time roles, and interesting conversations
-              about hard design problems. I read every note.
+              Open to contract work, full-time roles, and hard design problems.
+              I read every note.
             </p>
           </div>
           <div className="folio-contact__right">
