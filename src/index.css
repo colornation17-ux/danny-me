@@ -948,6 +948,47 @@ button {
   letter-spacing: 0.02em;
 }
 
+/* ── Game embed layout (bodega-ops) ────────────────────────────── */
+.cs--game { padding: 0; }
+
+.cs-game-frame {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.cs-game-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+.cs-game-skip {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+  transition: color 0.2s;
+  white-space: nowrap;
+  z-index: 10;
+}
+.cs-game-skip:hover { color: var(--ink); }
+
+.cs-game-body {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 2rem;
+}
+
 .cs-next {
   margin-top: 3rem;
   padding: 1.5rem;

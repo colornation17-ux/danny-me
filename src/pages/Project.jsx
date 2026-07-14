@@ -28,7 +28,78 @@ export default function Project() {
   const layout = project.layout || 'default'
   const motion = hasMotionPreview(project.slug)
   const isCwCase = project.caseStudyBody === 'competitor-watch'
+  const isGameCase = project.slug === 'bodega-ops'
   const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)
+
+  if (isGameCase) {
+    return (
+      <article className="cs cs--game" style={{ '--cs-accent': project.accent }}>
+        <div className="cs-game-frame">
+          <iframe
+            src="https://mattjr21.github.io/La-Bodega-game/"
+            title="La Bodega Interactive Case Study"
+            className="cs-game-iframe"
+            allowFullScreen
+          />
+          <a href="#case-study" className="cs-game-skip">
+            Skip — read the case study ↓
+          </a>
+        </div>
+
+        <div id="case-study" className="cs-game-body">
+          <Link className="cs-back" to="/">← Work</Link>
+          <header className="cs-hero cs-hero--default">
+            <div className="cs-hero__copy">
+              <p className="cs-hero__meta">{project.meta}</p>
+              <h1>{project.outcome}</h1>
+              <p className="cs-hero__blurb">{project.blurb}</p>
+              <dl className="cs-meta-row">
+                <div><dt>Role</dt><dd>{project.role}</dd></div>
+                <div><dt>Timeline</dt><dd>{project.timeline}</dd></div>
+                <div><dt>Team</dt><dd>{project.team}</dd></div>
+                <div><dt>Skills</dt><dd>{project.skills.join(' · ')}</dd></div>
+              </dl>
+              <div className="cs-actions">
+                <a className="btn btn--primary" href={`mailto:${SITE.email}`}>Ask about this work</a>
+              </div>
+            </div>
+          </header>
+
+          {project.sections.map((section, index) => (
+            <section className={`cs-section ${index === 0 ? 'cs-section--lead' : ''}`} key={section.eyebrow}>
+              <p className="cs-section__eyebrow">{section.eyebrow}</p>
+              <h2>{section.title}</h2>
+              <p>{section.body}</p>
+              {section.metrics && (
+                <div className="cs-metrics">
+                  {section.metrics.map((metric) => (
+                    <div className="cs-metric" key={metric.label}>
+                      <div className="cs-metric__value">{metric.value}</div>
+                      <div className="cs-metric__label">{metric.label}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {section.image && (
+                <figure className="cs-inline-shot">
+                  <img src={section.image} alt="" />
+                  {section.caption && <figcaption>{section.caption}</figcaption>}
+                </figure>
+              )}
+            </section>
+          ))}
+
+          <aside className="cs-next">
+            <div>
+              <p>Up next</p>
+              <strong>{next.outcome}</strong>
+            </div>
+            <Link to={`/projects/${next.slug}`}>View project →</Link>
+          </aside>
+        </div>
+      </article>
+    )
+  }
 
   return (
     <article
