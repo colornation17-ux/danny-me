@@ -17,8 +17,8 @@ const BRIEF_PROBLEM = [
   {
     n: '01',
     title: 'Blind vs the chains',
-    body: 'Thursday ads rewrite the weekend. Without a live competitor view, the owner prices and features meat by gut — while mainstream and Latino chains set the floor, and the store finds out it was wrong on Saturday.',
-    user: 'Know in one glance if pricing and features are competitive — before the ad window closes.',
+    body: 'Thursday ads rewrite the weekend. Without a live competitor view, the owner prices and features meat by gut, while mainstream and Latino chains set the floor, and the store finds out it was wrong on Saturday.',
+    user: 'Know in one glance if pricing and features are competitive, before the ad window closes.',
     business: "Turn Thursday's chain ads into same-day pricing calls, not gut instinct.",
   },
   {
@@ -38,9 +38,9 @@ const BRIEF_PROBLEM = [
   {
     n: '04',
     title: 'Outreach without proof',
-    body: 'Loyalty and WhatsApp could already reach shoppers (Lola + campaigns). The gap was proving which messages drove a register visit — not building CRM from scratch.',
+    body: 'Loyalty and WhatsApp could already reach shoppers (Lola + campaigns). The gap was proving which messages drove a register visit, not building CRM from scratch.',
     user: 'Know which WhatsApp message actually got someone back in the store.',
-    business: 'Prove outreach as POS visits, not send/read counts — justify the continued spend.',
+    business: 'Prove outreach as POS visits, not send/read counts: justify the continued spend.',
   },
 ]
 
@@ -48,7 +48,7 @@ const BRIEF_SOLUTION = [
   {
     n: '01',
     title: 'Competitor benchmarks',
-    body: 'Live Flipp index across markets — meat winners surfaced first so independents can answer the chains on price and pack.',
+    body: 'Live Flipp index across markets: meat winners surfaced first so independents can answer the chains on price and pack.',
   },
   {
     n: '02',
@@ -58,19 +58,19 @@ const BRIEF_SOLUTION = [
   {
     n: '03',
     title: 'Sales + demand in one loop',
-    body: 'Store pulse beside 7-day forecast bands and buy/hold/reduce lists — decision support, not another report dump.',
+    body: 'Store pulse beside 7-day forecast bands and buy/hold/reduce lists: decision support, not another report dump.',
   },
   {
     n: '04',
     title: 'Attribution on the channel they run',
-    body: 'Segment who is slipping, message on WhatsApp, match POS visits in seven days — close the loop with the engagement layer already in market.',
+    body: 'Segment who is slipping, message on WhatsApp, match POS visits in seven days; close the loop with the engagement layer already in market.',
   },
 ]
 
 const DECISIONS = [
   {
     title: 'Intelligence, not another inbox',
-    body: 'Engagement already lived in loyalty and Lola. Competitor Watch owns the Thursday planning call — competitors, weather, forecast — then proves outreach with visits.',
+    body: 'Engagement already lived in loyalty and Lola. Competitor Watch owns the Thursday planning call (competitors, weather, forecast), then proves outreach with visits.',
   },
   {
     title: 'Forecasts as ranges',
@@ -78,7 +78,7 @@ const DECISIONS = [
   },
   {
     title: 'Attribution over send counts',
-    body: 'WhatsApp is the channel the store already runs. The product is CRM phone → POS visit within seven days — not vanity campaign metrics.',
+    body: 'WhatsApp is the channel the store already runs. The product is CRM phone → POS visit within seven days, not vanity campaign metrics.',
   },
 ]
 
@@ -158,10 +158,10 @@ function BriefToggle() {
   return (
     <section className="cs-section cw-cs__brief" id="cw-brief">
       <p className="cs-section__eyebrow">Problem → solution</p>
-      <h2>Thursday decides the weekend — without a decision system</h2>
+      <h2>Thursday decides the weekend, without a decision system</h2>
       <p>
         La Bodega already had loyalty and WhatsApp reach. What it lacked was an intelligence layer:
-        live competitor prices, weather-tied weekend calls, and demand signal in one place — in the
+        live competitor prices, weather-tied weekend calls, and demand signal in one place, in the
         twelve minutes between ad drop and the order. Competitor Watch is that decision-support
         stack; attribution closes the loop with the engagement layer already in market.
       </p>
@@ -235,23 +235,22 @@ function FoundationSection() {
       <p className="cs-section__eyebrow">Foundation</p>
       <h2>Two weeks, one builder, five tabs of IA</h2>
       <p>
-        I started with the Thursday window — the twelve minutes between the chains&apos; ad drop and
-        La Bodega&apos;s order call — and mapped every question the owner needed answered inside it:
+        I started with the Thursday window (the twelve minutes between the chains&apos; ad drop and
+        La Bodega&apos;s order call) and mapped every question the owner needed answered inside it:
         what are they advertising, what should we push, will we sell it, who&apos;s slipping, did the
         outreach land. That became the IA: five tabs, one story each.
       </p>
       <p>
         Solo build, React frontend + Python backend (StatsForecast ensemble), MVP to production in
-        two weeks. The hard calls weren&apos;t visual — they were legibility: making avg-vs-floor
+        two weeks. The hard calls weren&apos;t visual; they were legibility: making avg-vs-floor
         pricing readable in seconds, keeping the guest view honest without gating the owner&apos;s
         real numbers, and drawing a hard line between engagement (already owned by loyalty/Lola) and
         decision support (this product) so Competitor Watch never turned into a second CRM.
       </p>
       <p>
-        Designing with a constraint: the demand-forecast model got disabled in production before
-        launch. Rather than cut the surface, I built it for the model&apos;s real output shape — buy /
-        hold / reduce plus bands, not a fake-precise single number — so forecasting drops back in
-        cleanly whenever it&apos;s re-enabled.
+        Designed for the model&apos;s real output shape (buy / hold / reduce plus bands, not a
+        fake-precise single number). The demand-forecast model was briefly offline before launch;
+        the UI stayed ready, and forecasting is live again in production today.
       </p>
 
       <div className="cw-cs__decisions-block">
@@ -293,7 +292,7 @@ function CapabilityProof({ clip, index }) {
         <p className="cw-cs__eyebrow">Proof · {clip.n}</p>
         <h2>{clip.label}</h2>
         <p className="cw-cs__job">
-          <em>{clip.job}</em> — {clip.problem}
+          <em>{clip.job}</em>: {clip.problem}
         </p>
         <p className="cw-cs__signature">
           <strong>{clip.signature}</strong>
@@ -358,7 +357,7 @@ export default function CompetitorWatchCaseStudy() {
         <h2>Planning signal + attributed visits</h2>
         <p>
           Success is twofold: operators can see competitor and demand signal before the weekend, and
-          outreach is measured as register visits — not send counts alone.
+          outreach is measured as register visits, not send counts alone.
         </p>
         <ImpactStats />
       </section>
@@ -366,7 +365,7 @@ export default function CompetitorWatchCaseStudy() {
       <section className="cw-cs__close" id="cw-close">
         <h2>Intelligence for the call operators actually make.</h2>
         <p>
-          Looking to bring the same problem-framing — engagement layer + decision layer — to product
+          Looking to bring the same problem-framing (engagement layer + decision layer) to product
           teams.
         </p>
         <div className="cs-actions">

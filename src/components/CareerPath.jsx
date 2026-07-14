@@ -5,7 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const PATH_D =
-  'M 200 20 Q 300 100 90 180 Q -40 270 310 360 Q 440 450 90 540 Q -40 630 310 720 Q 440 810 90 900 Q -40 990 310 1080 Q 440 1170 90 1260 Q 150 1330 200 1290'
+  // Original dramatic column S-curve. Last leg bows into NOW below Bodega.
+  'M 200 20 Q 160 110 90 180 Q -40 270 310 360 Q 440 450 90 540 Q -40 630 310 720 Q 440 810 90 900 Q -40 990 310 1080 Q 440 1170 90 1260 Q 40 1335 200 1385'
 
 const STOPS = [
   {
@@ -14,25 +15,27 @@ const STOPS = [
     year: '2017 – 2021',
     title: 'B.S. Civil Engineering',
     desc: 'Foundational engineering degree',
-    dir: 'right',
+    // Outer side — path arrives from the right on left-column stops
+    dir: 'left',
     color: '#64748b',
   },
   {
     id: 'sprazzo',
     cx: 310, cy: 360,
     year: 'Nov 2019 – Jun 2021',
-    title: 'Motion Designer — Sprazzo',
+    title: 'Motion Designer · Sprazzo',
     desc: 'Kerala, India',
-    dir: 'left',
+    // Outer side — path arrives from the left on right-column stops
+    dir: 'right',
     color: '#4f7cff',
   },
   {
     id: 'digitel',
     cx: 90, cy: 540,
     year: 'Aug 2021 – Aug 2023',
-    title: 'UX Designer — Make It Digitel',
+    title: 'UX Designer · Make It Digitel',
     desc: 'Kerala, India',
-    dir: 'right',
+    dir: 'left',
     color: '#111212',
   },
   {
@@ -41,34 +44,42 @@ const STOPS = [
     year: 'Aug 2023 – May 2025',
     title: 'M.S. Human-Computer Interaction',
     desc: 'Indiana University Indianapolis',
-    dir: 'left',
+    dir: 'right',
     color: '#7c3aed',
+    photos: [
+      // Inner pocket so outer labels stay clear
+      { id: 'grad', src: '/timeline/graduation.jpg', x: 175, y: 700, rot: -4 },
+    ],
   },
   {
     id: 'scaling-nature',
     cx: 90, cy: 900,
     year: 'May 2024 – Jun 2024',
-    title: 'UX Designer — Scaling Nature',
+    title: 'UX Designer · Scaling Nature',
     desc: 'Finland',
-    dir: 'right',
+    dir: 'left',
     color: '#0891b2',
   },
   {
     id: 'code19',
     cx: 310, cy: 1080,
     year: 'Sep 2024 – Dec 2025',
-    title: 'UX Engineer — Code19 Racing',
+    title: 'UX Engineer · Code19 Racing',
     desc: 'Indianapolis, Indiana',
-    dir: 'left',
+    dir: 'right',
     color: '#EA580C',
+    photos: [
+      { id: 'track', src: '/timeline/code19-track.jpg', x: 165, y: 1055, rot: 6 },
+      { id: 'poster', src: '/timeline/code19-poster.jpg', x: 190, y: 1105, rot: -7 },
+    ],
   },
   {
     id: 'bodega',
     cx: 90, cy: 1260,
     year: 'Feb 2026 – Present',
-    title: 'Service & Ops UX Lead — La Bodega',
+    title: 'Service & Ops UX Lead · La Bodega',
     desc: 'Calhoun, Georgia',
-    dir: 'right',
+    dir: 'left',
     color: '#166534',
   },
 ]
@@ -94,12 +105,16 @@ export default function CareerPath() {
         strokeDashoffset: totalLen,
       })
 
-      // Hide all stops and labels, set scale origin per circle
+      // Hide all stops, labels, and photos; set scale origin per circle
       STOPS.forEach((s) => {
         const circle = svg.querySelector(`#cp-stop-${s.id}`)
         const label = svg.querySelector(`#cp-label-${s.id}`)
         if (circle) gsap.set(circle, { scale: 0, autoAlpha: 0, svgOrigin: `${s.cx} ${s.cy}` })
         if (label) gsap.set(label, { autoAlpha: 0 })
+        ;(s.photos || []).forEach((p) => {
+          const photo = svg.querySelector(`#cp-photo-${p.id}`)
+          if (photo) gsap.set(photo, { scale: 0.85, autoAlpha: 0, svgOrigin: `${p.x} ${p.y}` })
+        })
       })
 
       // Find where each stop sits along the path (fraction 0–1)
@@ -129,20 +144,40 @@ export default function CareerPath() {
       // Main path draw
       tl.to(progressPath, { strokeDashoffset: 0, duration: DUR, ease: 'none' })
 
+      // Precompute each stop's position along the timeline so photos know
+      // how long to stay up before the next event pushes them out.
+      const stopTimes = STOPS.map((s) => fractionOf(s.cx, s.cy) * DUR)
+
       // Pop each stop at the moment the path reaches it
-      STOPS.forEach((s) => {
-        const frac = fractionOf(s.cx, s.cy)
-        const t = frac * DUR
+      STOPS.forEach((s, i) => {
+        const t = stopTimes[i]
+        const nextT = stopTimes[i + 1] ?? DUR
         const circle = svg.querySelector(`#cp-stop-${s.id}`)
         const label = svg.querySelector(`#cp-label-${s.id}`)
         if (circle) {
           tl.to(circle, { autoAlpha: 1, scale: 1, duration: 0.5, ease: 'back.out(2.5)' }, t)
         }
         if (label) {
-          tl.to(label, { autoAlpha: 1, duration: 0.35 }, t + 0.3)
+          tl.to(label, { autoAlpha: 1, duration: 0.25 }, t + 0.05)
         }
+
+        // Photos fade in with their event, then fade back out before the
+        // next stop takes over, so they travel with their moment in time.
+        ;(s.photos || []).forEach((p, pi) => {
+          const photo = svg.querySelector(`#cp-photo-${p.id}`)
+          if (!photo) return
+          const inAt = t + 0.35 + pi * 0.1
+          const outAt = Math.max(inAt + 0.4, nextT - 0.4)
+          tl.to(photo, { autoAlpha: 1, scale: 1, duration: 0.45, ease: 'back.out(2)' }, inAt)
+          tl.to(photo, { autoAlpha: 0, scale: 0.9, duration: 0.5, ease: 'power1.in' }, outAt)
+        })
       })
     }, svgRef)
+
+    // Force a recalculation: GSAP's automatic refresh listeners are tied to
+    // the window 'load' event, which won't refire if this mounts via
+    // client-side route navigation (e.g. About → Home) rather than a hard load.
+    ScrollTrigger.refresh()
 
     return () => ctx.revert()
   }, [])
@@ -152,11 +187,20 @@ export default function CareerPath() {
       <p className="career-path__eyebrow">The path so far</p>
       <svg
         ref={svgRef}
-        viewBox="0 0 400 1340"
+        viewBox="-140 0 680 1420"
         fill="none"
         aria-hidden="true"
         className="career-path__svg"
       >
+        <defs>
+          <clipPath id="cp-photo-window">
+            <rect x="-46" y="-44" width="92" height="80" rx="1" />
+          </clipPath>
+          <filter id="cp-photo-shadow" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.24" />
+          </filter>
+        </defs>
+
         {/* Start dot */}
         <circle cx="200" cy="20" r="4" fill="#d5dde5" />
 
@@ -200,7 +244,7 @@ export default function CareerPath() {
                 strokeWidth="2.5"
               />
 
-              {/* Label group (tick + text) */}
+              {/* Label group — straight tick + text */}
               <g id={`cp-label-${s.id}`} className="cp-label">
                 <line
                   x1={tickX1} y1={s.cy}
@@ -239,13 +283,37 @@ export default function CareerPath() {
                   {s.desc}
                 </text>
               </g>
+
+              {/* Polaroid photos tied to this stop's moment */}
+              {(s.photos || []).map((p) => (
+                <g
+                  key={p.id}
+                  id={`cp-photo-${p.id}`}
+                  className="cp-photo"
+                  transform={`translate(${p.x} ${p.y}) rotate(${p.rot})`}
+                >
+                  <rect
+                    x="-54" y="-52" width="108" height="128" rx="3"
+                    fill="#fff"
+                    stroke="#e9e9e9"
+                    strokeWidth="1"
+                    filter="url(#cp-photo-shadow)"
+                  />
+                  <image
+                    href={p.src}
+                    x="-46" y="-44" width="92" height="80"
+                    preserveAspectRatio="xMidYMid slice"
+                    clipPath="url(#cp-photo-window)"
+                  />
+                </g>
+              ))}
             </g>
           )
         })}
 
         {/* End dot */}
-        <circle cx="200" cy="1290" r="5" fill="#111212" />
-        <text x="200" y="1308" fontSize="8" fontFamily="DM Mono, monospace" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
+        <circle cx="200" cy="1385" r="5" fill="#111212" />
+        <text x="200" y="1405" fontSize="8" fontFamily="DM Mono, monospace" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
       </svg>
     </div>
   )

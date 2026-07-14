@@ -1,6 +1,7 @@
 ﻿import { Link, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getProjectBySlug, work } from '../data/projects'
+import { featured } from '../data/featured'
 import { SITE } from '../data/site'
 import ProjectMotionPreview, { hasMotionPreview } from '../components/motion/ProjectMotionPreview'
 import CompetitorWatchCaseStudy from '../components/motion/CompetitorWatchCaseStudy'
@@ -24,8 +25,14 @@ export default function Project() {
     )
   }
 
+  // Cycle through the homepage-featured set only, so "up next" never lands
+  // on a project (e.g. timely-ne) that isn't linked anywhere a visitor can find.
+  const featuredOrder = featured.map((p) => p.slug)
+  const featuredIndex = featuredOrder.indexOf(project.slug)
   const next =
-    work[(work.findIndex((p) => p.slug === project.slug) + 1) % work.length]
+    featuredIndex === -1
+      ? work[(work.findIndex((p) => p.slug === project.slug) + 1) % work.length]
+      : getProjectBySlug(featuredOrder[(featuredIndex + 1) % featuredOrder.length])
   const layout = project.layout || 'default'
   const motion = hasMotionPreview(project.slug)
   const isCwCase = project.caseStudyBody === 'competitor-watch'
@@ -66,7 +73,7 @@ export default function Project() {
                 }, 50)
               }}
             >
-              Skip — read the case study ↓
+              Skip · read the case study ↓
             </button>
           </div>
         )}
@@ -195,7 +202,7 @@ export default function Project() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {project.slug === 'lola' ? 'Open full case study' : 'View live'}
+                    {project.slug === 'lola' ? 'Open full case study' : 'View live site'}
                   </a>
                 )}
                 <a
@@ -229,7 +236,7 @@ export default function Project() {
             ) : (
               <img
                 src={project.hero || project.cover}
-                alt={`${project.title} — project visual`}
+                alt={`${project.title}: project visual`}
               />
             )}
           </div>

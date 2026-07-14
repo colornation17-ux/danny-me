@@ -3,21 +3,23 @@
 export const work = [
   {
     slug: 'lola',
-    outcome: 'WhatsApp AI that runs the weekly shop',
+    outcome: 'WhatsApp CRM: deals, pickup orders, reminders, and staff handoff',
     title: 'Lola',
     meta: 'La Bodega · Shipped 2026',
     status: 'Shipped',
     year: '2026',
-    domain: 'Conversational AI',
-    layer: 'Engagement layer',
+    domain: 'Product design',
+    layer: 'Customer + staff product',
     blurb:
-      'Bilingual assistant on the thread ~1,200 loyalty families already use, flyer Q&A, voice + text, pickup orders, and staff handoff. Designed from 180 live threads (310 messages); the channel Competitor Watch later attributes.',
+      'Bilingual WhatsApp product inside the store CRM (1,600+ customers): weekly deals Q&A, pickup orders, shopping reminders, voice notes, guided coach, and staff inbox/handoff. Designed from 180 live threads; 97.7% of bot replies under 2 min.',
     role: 'Product designer',
     timeline: 'May – Jun 2026',
     team: 'Solo design & build',
-    skills: ['Conversation design', 'Service design', 'WhatsApp UX', 'EN/ES copy'],
+    skills: ['Product design', 'Conversation design', 'Service design', 'WhatsApp CRM'],
     accent: '#1FA97A',
     liveUrl: 'https://la-bodega-lola.vercel.app/',
+    whatsappUrl: 'https://wa.me/14043238325?text=Hi%20Lola',
+    liveCta: 'View product site',
     cover: '/work/lola/journey.png',
     hero: '/work/lola/service.png',
     gallery: [
@@ -29,7 +31,7 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'Engagement on the thread families already use',
-        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Its weekly WhatsApp flyer reaches ~1,200 loyalty families, but replies turn into English, Spanish, voice notes, SNAP questions, and pickup lists inside one staff inbox. Lola is the engagement layer, converse, order, hand off, not the planning dashboard.',
+        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Weekly WhatsApp reach sits inside a live CRM (1,600+ customers), but replies — English, Spanish, voice notes, SNAP questions, shopping lists — used to pile into one staff inbox. Lola is the customer + staff product on that stack: weekly deals, pickup orders, shopping reminders, voice, guided coach, and staff handoff inside wacrm. Competitor Watch owns planning and visit attribution; Lola owns conversation, orders, and ops handoff.',
       },
       {
         eyebrow: 'Problem',
@@ -43,8 +45,8 @@ export const work = [
       },
       {
         eyebrow: 'Solution',
-        title: 'Six flows on the thread families already use',
-        body: 'Grounded answers from this week\'s flyer. Tap-first pickup lists. Voice notes that follow the same order path as text. Hard asks escalate to humans, Lola steps back.',
+        title: 'Three customer jobs on the loyalty WhatsApp thread',
+        body: 'Weekly deals (flyer-grounded answers). Pickup orders (#order → quote → confirm, text or voice). Shopping and offer reminders. Hard asks escalate to humans via staff inbox; Lola pauses when an agent owns the thread.',
       },
       {
         eyebrow: 'Research',
@@ -58,12 +60,12 @@ export const work = [
       },
       {
         eyebrow: 'Outcomes',
-        title: 'Live in production with a staff dashboard',
-        body: 'Families stay on the weekly thread. Repeat questions (hours, SNAP, deals) resolve in chat. Pickup lists reach staff before the customer walks in. Voice works like text. Competitor Watch later closes the loop by attributing visits to this same channel.',
+        title: 'Live in production inside the store CRM',
+        body: 'Families stay on WhatsApp. Deals, orders, and reminders resolve in-thread. Staff get an orders/reminders/inbox stack instead of an unshared blast inbox. Competitor Watch later attributes visits to this same channel.',
         metrics: [
-          { value: '~1,200', label: 'Loyalty families on the blast' },
+          { value: '1,600+', label: 'Customers in CRM' },
           { value: 'EN / ES', label: 'One language per reply' },
-          { value: 'Live', label: 'WhatsApp + staff dashboard' },
+          { value: 'Live', label: 'WhatsApp + staff CRM' },
         ],
       },
       {
@@ -75,19 +77,19 @@ export const work = [
   },
   {
     slug: 'competitor-watch',
-    outcome: 'Decision support for the Thursday merchandising call',
+    outcome: 'Planning and attribution product for store merchandising',
     title: 'Competitor Watch',
     meta: 'La Bodega · Shipped 2026',
     status: 'Shipped',
     year: '2026',
-    domain: 'Retail ops',
-    layer: 'Intelligence layer',
+    domain: 'Product design',
+    layer: 'Ops + analytics product',
     blurb:
-      'Competitor benchmarks, weather playbooks, and demand forecasts in one place, so one store plans weekend promos like a chain, then proves WhatsApp outreach with visit attribution.',
-    role: 'Product design · UX/IA · Full-stack',
+      'Product for independent grocery ops: competitor ads, weekend actions, store pulse, RFM/CRM views, and live demand forecast. Closes the loop with WhatsApp → POS visit attribution (2,088 visits).',
+    role: 'Product designer · Full-stack',
     timeline: '2 weeks · MVP → production',
     team: 'Solo',
-    skills: ['Product design', 'Service design', 'React', 'Python'],
+    skills: ['Product design', 'IA', 'Demand forecast', 'CRM', 'React', 'Python'],
     accent: '#166534',
     liveUrl: 'https://competitor-watch-1.onrender.com',
     cover: '/work/competitor-watch/motion/CW-02-CompetitorDeals.png',
@@ -98,15 +100,15 @@ export const work = [
   },
   {
     slug: 'bodega-ops',
-    outcome: 'Checkout from 5 minutes to under 30 seconds',
-    title: 'La Bodega',
+    outcome: 'Ops recovery + scanner tool that fixed checkout in 72 hours',
+    title: 'Checkout ops',
     meta: 'La Bodega Supermarcado · Shipped 2026',
     status: 'Shipped',
     year: '2026',
     domain: 'Service design',
     cover: '/work/bodega-ops/store-floor.jpg',
     blurb:
-      'La Bodega opened as a 25,000 sq ft hybrid grocery and restaurant. On Day 1, 40% of SKUs failed at checkout. Stabilized in 72 hours — barcode normalization pipeline, mandatory onboarding stage, role ownership, and pricing model correction.',
+      'Day-1 launch: ~40% of SKUs failed at checkout. Stabilized in 72 hours with a barcode/receiving pipeline, pricing correction, role ownership, and a mobile scanner app (design→live in 24 hrs). Checkout under 30 seconds; SKU recognition ~100%.',
     role: 'Service designer',
     timeline: '72 hours · live launch recovery',
     team: 'Reported to CEO · with store ops',
@@ -116,29 +118,29 @@ export const work = [
       {
         eyebrow: 'The situation',
         title: 'A 25,000 sq ft store opened with a broken system',
-        body: 'La Bodega opened as a hybrid grocery and restaurant serving a working-class Latino community — the only nearby source for culturally specific groceries. On Day 1, ~40% of SKUs returned "Item Not Found" across all four terminals. Every register shared the same broken database. Grocery checkout and restaurant billing failed simultaneously. Daily transaction volume: $3K–$5K. Weekend: $8K–$10K. ~2,500 active SKUs. With 40% unrecognized, roughly $1.2K–$2K of daily transactions had no product attribution.',
+        body: 'La Bodega opened as a hybrid grocery and restaurant serving a working-class Latino community, the only nearby source for culturally specific groceries. On Day 1, ~40% of SKUs returned "Item Not Found" across all four terminals. Every register shared the same broken database. Grocery checkout and restaurant billing failed simultaneously. Daily transaction volume: $3K–$5K. Weekend: $8K–$10K. ~2,500 active SKUs. With 40% unrecognized, roughly $1.2K–$2K of daily transactions had no product attribution.',
         image: '/work/bodega-ops/store-floor.jpg',
         caption: 'La Bodega store floor, Day 1 of operations',
       },
       {
         eyebrow: 'Hours 0–10 · Contain',
         title: 'Preserve revenue flow before diagnosing anything',
-        body: 'Investigation requires stability. The first decision was to prevent collapse, not fix the cause. Parallelized checkout into 3 stations: billing, price lookup, and packing — transactions continued while staff resolved unknowns. Staff reassigned to cover failure points without additional headcount. Deployed a cashier transparency script that consistently converted checkout delays into expressed customer goodwill. Store closed 2 hours early; entire staff divided by aisle to manually correct barcodes. Outcome: floor remained operational, revenue continued, ~30% of flagged items corrected.',
+        body: 'Investigation requires stability. The first decision was to prevent collapse, not fix the cause. Parallelized checkout into 3 stations: billing, price lookup, and packing; transactions continued while staff resolved unknowns. Staff reassigned to cover failure points without additional headcount. Deployed a cashier transparency script that consistently converted checkout delays into expressed customer goodwill. Store closed 2 hours early; entire staff divided by aisle to manually correct barcodes. Outcome: floor remained operational, revenue continued, ~30% of flagged items corrected.',
       },
       {
         eyebrow: 'Hours 10–36 · Diagnose',
         title: 'One barcode format error hit all four terminals at once',
-        body: 'Systematic floor audit — every barcode, every aisle. Vendor invoice cross-reference: EAN-13 format consistently failed. Hardware scanner translation tested and invalidated — firmware at this tier didn\'t support format conversion. Root cause confirmed at the database layer: the POS lookup stripped the leading zero before querying. One format error in the shared database propagated to all four registers simultaneously — not a terminal bug, a shared infrastructure failure. Patching any individual surface would have failed.',
+        body: 'Systematic floor audit: every barcode, every aisle. Vendor invoice cross-reference: EAN-13 format consistently failed. Hardware scanner translation tested and invalidated: firmware at this tier didn\'t support format conversion. Root cause confirmed at the database layer: the POS lookup stripped the leading zero before querying. One format error in the shared database propagated to all four registers simultaneously, not a terminal bug, a shared infrastructure failure. Patching any individual surface would have failed.',
       },
       {
         eyebrow: 'Hours 36–72 · Fix',
         title: 'Insert the missing stage before the shelf',
-        body: 'No product was allowed to reach the shelf without passing through a mandatory onboarding stage. Receiving became the first system encounter, not checkout. Built and deployed a barcode normalization pipeline: scan any barcode → normalize EAN-13 to UPC-A → API auto-populate product name and category → competitor-benchmarked price per unit → batch CSV export → direct POS import. Role ownership defined at every stage — Receiving, Cashier, Stock, and Restaurant each had a named owner. Weekly governance cadence established. 5-step receiving checklist written in plain language, no training session required. Staff adopted it independently on Day 3.',
+        body: 'No product was allowed to reach the shelf without passing through a mandatory onboarding stage. Receiving became the first system encounter, not checkout. Built and deployed a barcode normalization pipeline: scan any barcode → normalize EAN-13 to UPC-A → API auto-populate product name and category → competitor-benchmarked price per unit → batch CSV export → direct POS import. Role ownership defined at every stage: Receiving, Cashier, Stock, and Restaurant each had a named owner. Weekly governance cadence established. 5-step receiving checklist written in plain language, no training session required. Staff adopted it independently on Day 3.',
       },
       {
         eyebrow: 'The scanner app',
         title: 'Built and deployed in 24 hours. Still in use.',
-        body: 'The tool had to work within the existing POS infrastructure — not replace it. Mobile web, browser-based, no install, no login, no engineering dependencies. Staff used existing phones. Product name and description auto-populated on scan — zero manual entry. Competitor price benchmarked per UPC against nearby stores and online listings. Batch CSV formatted for direct POS import: one action, export → import. 24 hours from design to live deployment. Active post-engagement. Staff trained staff on Day 3 without designer involvement.',
+        body: 'The tool had to work within the existing POS infrastructure, not replace it. Mobile web, browser-based, no install, no login, no engineering dependencies. Staff used existing phones. Product name and description auto-populated on scan: zero manual entry. Competitor price benchmarked per UPC against nearby stores and online listings. Batch CSV formatted for direct POS import: one action, export → import. 24 hours from design to live deployment. Active post-engagement. Staff trained staff on Day 3 without designer involvement.',
         mobileGallery: [
           { src: '/work/bodega-ops/scanner-app-1.jpg', caption: 'Barcode input & UPC lookup' },
           { src: '/work/bodega-ops/scanner-app-2.jpg', caption: 'Competitor pricing & CSV export' }
@@ -147,17 +149,17 @@ export const work = [
       {
         eyebrow: 'Pricing correction',
         title: 'Prices were being set on a wrong cost basis with no market reference',
-        body: 'A fixed markup was never feasible — margin varies by product, vendor, and category. Two compounding errors: wrong unit cost (invoice price pulled from case total, not normalized per item) and no competitor benchmark. A price could appear internally valid while above market or below cost — neither detectable. Correction: normalize unit cost per vendor invoice, source competitor price for same UPC, set competitive market price individually. No formula applied uniformly. Grocery, restaurant, and produce each benchmarked against equivalent market items. Price disputes at checkout dropped significantly once shelf pricing was validated during onboarding.',
+        body: 'A fixed markup was never feasible: margin varies by product, vendor, and category. Two compounding errors: wrong unit cost (invoice price pulled from case total, not normalized per item) and no competitor benchmark. A price could appear internally valid while above market or below cost, neither detectable. Correction: normalize unit cost per vendor invoice, source competitor price for same UPC, set competitive market price individually. No formula applied uniformly. Grocery, restaurant, and produce each benchmarked against equivalent market items. Price disputes at checkout dropped significantly once shelf pricing was validated during onboarding.',
       },
       {
         eyebrow: 'Org & behavioral change',
         title: 'Fixing the system and changing how the organization ran it',
-        body: 'Reported directly to CEO during launch week. Daily 4pm review with CEO, store manager, and co-investor. Initial leadership framing: "a spreadsheet error." Reframe delivered with demonstrated output — GPT invoice extraction workflow built in parallel, manual vs. automated throughput compared within 24 hours. Hybrid safeguard proposed: automation for scale, manual validation gate before import. Alignment built through evidence, not argument. Spanish produce naming was resisted by management until checkout latency from English-only catalog terms was demonstrated live on the floor — naming corrected the same hour. Governance cadence established: weekly review, one agenda, both investors, decision log maintained.',
+        body: 'Reported directly to CEO during launch week. Daily 4pm review with CEO, store manager, and co-investor. Initial leadership framing: "a spreadsheet error." Reframe delivered with demonstrated output: GPT invoice extraction workflow built in parallel, manual vs. automated throughput compared within 24 hours. Hybrid safeguard proposed: automation for scale, manual validation gate before import. Alignment built through evidence, not argument. Spanish produce naming was resisted by management until checkout latency from English-only catalog terms was demonstrated live on the floor; naming corrected the same hour. Governance cadence established: weekly review, one agenda, both investors, decision log maintained.',
       },
       {
         eyebrow: 'Outcomes',
         title: 'Stabilized in 72 hours. System held without designer present.',
-        body: 'The intervention was designed to function without ongoing designer involvement. SKU recognition restored to ~100%. Checkout processed without lookup stalls. Margins verifiable and enforceable per SKU. Product master database established. Price disputes near-eliminated. Loyalty enrollment ("2% back on every purchase") deployed end-of-transaction on Day 3 — transactional relationship converted to relational.',
+        body: 'The intervention was designed to function without ongoing designer involvement. SKU recognition restored to ~100%. Checkout processed without lookup stalls. Margins verifiable and enforceable per SKU. Product master database established. Price disputes near-eliminated. Loyalty enrollment ("2% back on every purchase") deployed end-of-transaction on Day 3: transactional relationship converted to relational.',
         metrics: [
           { value: '60% → 100%', label: 'SKU recognition' },
           { value: '<30 sec', label: 'Checkout time' },
@@ -168,13 +170,13 @@ export const work = [
       {
         eyebrow: 'What I learned',
         title: 'Upstream process design is more effective than interface redesign',
-        body: 'The interface wasn\'t a screen — it was the path from truck to shelf to register. Operational systems fail when scale assumptions change: the factory-scale mental model (40 SKUs, owner memory) applied to a 2,500+ SKU supermarket was the root organizational failure. Stabilization and diagnosis had to occur in sequence during a live failure. The right insertion point — one mandatory stage before shelving — resolved four distinct failure categories simultaneously: operational, revenue, trust, and organizational.',
+        body: 'The interface wasn\'t a screen: it was the path from truck to shelf to register. Operational systems fail when scale assumptions change: the factory-scale mental model (40 SKUs, owner memory) applied to a 2,500+ SKU supermarket was the root organizational failure. Stabilization and diagnosis had to occur in sequence during a live failure. The right insertion point, one mandatory stage before shelving, resolved four distinct failure categories simultaneously: operational, revenue, trust, and organizational.',
       },
     ],
   },
   {
     slug: 'wing-hmi',
-    outcome: '92% task success rate, mission-control HMI for premium smart vehicles',
+    outcome: 'Concept HMI prototype validated in a driving simulator',
     title: 'Wing HMI',
     meta: 'Wing · Concept 2025',
     status: 'Concept',
@@ -190,7 +192,7 @@ export const work = [
       { src: '/work/wing-hmi/screen-4.png', caption: 'Alert states and attention zones' },
     ],
     blurb:
-      'Next-gen in-vehicle experience inspired by interplanetary mission control, validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view.',
+      'Concept in-vehicle HMI for premium smart vehicles: cluster, HUD, center display, and voice. Validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view — 92% task success.',
     role: 'Product designer',
     timeline: '2 weeks · 3-phase design sprint',
     team: 'Design exploration',
@@ -234,18 +236,18 @@ export const work = [
   },
   {
     slug: 'code19',
-    outcome: 'Digital platform that helped unlock $350K seed',
+    outcome: 'Website redesign that grew sessions, dwell time, and seed credibility',
     title: 'CODE19 Racing',
     meta: 'CODE19 · Shipped 2024–25',
     status: 'Shipped',
     year: '2025',
-    domain: 'Brand + product',
+    domain: 'Website redesign',
     blurb:
-      'Rebuilt the digital platform for an AI-driven racing team, persona-driven IA for four audiences, field research at Indianapolis Motor Speedway, and SEO that outlasted the launch spike.',
-    role: 'Product designer',
-    timeline: 'Oct – Dec 2024',
+      'Redesigned the CODE19 digital platform for fans, sponsors, engineers, and drivers — UI/UX, content strategy, and SEO. Seed funding rose $150K→$500K with stronger brand presence; 1,500+ new monthly sessions; direct sessions 3.6 min; organic bounce −36% (to 58.5%).',
+    role: 'UI · UX · Content strategy · SEO',
+    timeline: '3 months · Oct – Dec 2024',
     team: 'With CODE19',
-    skills: ['Web design', 'Content strategy', 'SEO', 'Information architecture'],
+    skills: ['UI/UX', 'Content strategy', 'SEO', 'Information architecture'],
     accent: '#E11D48',
     cover: '/work/code19/hero-2.jpg',
     hero: '/work/code19/hero-2.jpg',
@@ -266,8 +268,8 @@ export const work = [
     sections: [
       {
         eyebrow: 'Overview',
-        title: 'Reimagining autonomous motorsports for four audiences',
-        body: 'CODE19 Racing set out to reimagine the digital experience for autonomous motorsports, designing a user-centered platform that meets the distinct needs of fans, sponsors, engineers, and drivers. The goal: transform a brochure site into an engaging hub delivering real-time value while strengthening brand leadership.',
+        title: 'A platform for four audiences, not one brochure site',
+        body: 'CODE19 Racing set out to reimagine the digital experience for autonomous motorsports by designing a user-centered platform for fans, sponsors, engineers, and drivers. The goal: transform the website into an engaging hub that delivers real-time value and strengthens brand leadership in a fast-moving category.',
         image: '/work/code19/screen-2.png',
         caption: 'CODE19 Racing website, shipped Dec 2024',
       },
@@ -276,7 +278,7 @@ export const work = [
         title: 'How might we communicate innovation across diverse audiences?',
         body: 'Fans, sponsors, engineers, and drivers hit the same shallow content, nobody found what they came for. High bounce, short sessions, thin content, no SEO structure, and no reason to stay. Heuristic evaluation using NNG principles scored the existing site at 39.1/100 across four dimensions.',
         image: '/work/code19/heuristic-score.png',
-        caption: 'NNG heuristic evaluation — composite score 39.1/100',
+        caption: 'NNG heuristic evaluation: composite score 39.1/100',
       },
       {
         eyebrow: 'Research',
@@ -301,13 +303,13 @@ export const work = [
       },
       {
         eyebrow: 'Outcomes',
-        title: 'Sessions, funding, and organic durability',
-        body: 'Direct and organic search traffic delivered the highest engagement metrics. Direct sessions averaged 3.6 minutes and 2.92 page views; organic averaged 96 seconds and 2.02 page views, indicating relevant, compelling content for core motor-racing audiences. Seed funding grew from $150K to $500K post-launch.',
+        title: 'Investment, engagement, dwell, and bounce',
+        body: 'Elevating digital brand presence and credibility supported seed funding rising from $150K to $500K. SEO and optimized direct channels drove 1,500+ new monthly sessions. Direct traffic averaged 3.6-minute sessions; organic averaged 96 seconds. Organic bounce rate fell 36% to 58.5%.',
         metrics: [
-          { value: '$150K → $500K', label: 'Seed funding raised post-launch' },
-          { value: '1,500+', label: 'New monthly sessions at peak' },
-          { value: '3.6 min', label: 'Avg. direct session duration' },
-          { value: '−36%', label: 'Bounce rate, organic (down to 58.5%)' },
+          { value: '$150K → $500K', label: 'Seed funding' },
+          { value: '1,500+', label: 'New monthly sessions' },
+          { value: '3.6 min', label: 'Avg. direct session' },
+          { value: '−36%', label: 'Organic bounce (to 58.5%)' },
         ],
       },
       {
@@ -321,7 +323,7 @@ export const work = [
   },
   {
     slug: 'edge-ai',
-    outcome: 'Privacy-first AI at the edge, eliminating cloud dependency for mission-critical vehicle decisions',
+    outcome: 'Concept on-device AI UX with driver data controls',
     title: 'WING Edge AI',
     meta: 'Wing · Concept 2025',
     status: 'Concept',
@@ -337,7 +339,7 @@ export const work = [
       { src: '/work/edge-ai/screen-5.png', caption: 'Privacy data boundary diagram' },
     ],
     blurb:
-      'Extends the WING HMI ecosystem into real-time, privacy-first AI at the edge, local-first processing for split-second decisions, transparent controls, and data that stays in the car.',
+      'Concept extension of Wing HMI: local-first vehicle AI, transparent controls, and data that stays in the car. Design targets (not measured results) include <20ms edge latency and stronger driver control over what leaves the vehicle.',
     role: 'Product designer',
     timeline: '2025',
     team: 'Design exploration',

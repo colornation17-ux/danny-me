@@ -113,6 +113,14 @@ export default function Nav() {
           >
             in
           </a>
+          <a
+            className="nav-cta nav-cta--resume"
+            href={SITE.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Resume
+          </a>
           <a className="nav-cta nav-cta--contact" href={`mailto:${SITE.email}`}>
             Contact
           </a>
@@ -155,6 +163,17 @@ export default function Nav() {
               )}
             </li>
           ))}
+          <li>
+            <a
+              className="nav-mobile-link"
+              href={SITE.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={close}
+            >
+              Resume
+            </a>
+          </li>
           <li>
             <a
               className="nav-mobile-link"

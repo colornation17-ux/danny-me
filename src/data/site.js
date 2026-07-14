@@ -3,12 +3,12 @@ export const SITE = {
   shortName: 'Danny',
   email: 'dannyvr172@gmail.com',
   linkedIn: 'https://www.linkedin.com/in/dannvarg/',
-  resume: '#', // swap for hosted CV URL
+  resume: '/resume/danny-varghese-resume.pdf',
   location: 'Indianapolis, IN',
   hero: {
     line: "I'm Danny, a product designer who ships AI into real operations.",
     support:
-      'I design and build systems that hold up on grocery floors, WhatsApp inboxes, and race weekends, not just in the deck.',
+      'I design and build systems that hold up on grocery floors, WhatsApp inboxes, and race weekends.',
   },
   experience: [
     { year: '2026', role: 'Design technologist', org: 'La Bodega' },

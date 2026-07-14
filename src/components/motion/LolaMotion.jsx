@@ -23,7 +23,7 @@ export default function LolaMotion() {
 
           <div className="lola-motion__bubble lola-motion__bubble--in lola-motion__bubble--1">
             <p>
-              Hi María! I&apos;m Lola — tap below or ask in English or Spanish.
+              Hi María! I&apos;m Lola. Tap below or ask in English or Spanish.
             </p>
             <time>9:12 AM</time>
           </div>
@@ -41,7 +41,7 @@ export default function LolaMotion() {
 
           <div className="lola-motion__bubble lola-motion__bubble--in lola-motion__bubble--3">
             <p>
-              Sí — pechuga sin hueso <strong>$1.99/lb</strong> esta semana. ¿La
+              Sí, pechuga sin hueso <strong>$1.99/lb</strong> esta semana. ¿La
               agrego a tu lista?
             </p>
             <time>9:13 AM</time>

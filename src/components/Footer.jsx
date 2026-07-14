@@ -12,6 +12,9 @@ export default function Footer() {
           <a href={SITE.linkedIn} target="_blank" rel="noreferrer">
             LinkedIn
           </a>
+          <a href={SITE.resume} target="_blank" rel="noreferrer">
+            Resume
+          </a>
         </div>
       </div>
     </footer>

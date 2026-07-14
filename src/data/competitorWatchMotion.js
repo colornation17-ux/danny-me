@@ -20,13 +20,13 @@ export const CW_CLIPS = [
     n: '01',
     label: 'Sales pulse',
     job: 'Is this week good or not?',
-    problem: 'Store heartbeat — revenue, orders, and movers at a glance.',
+    problem: 'Store heartbeat: revenue, orders, and movers at a glance.',
     signature: '+19.2%',
     signatureLabel: 'Week over week',
     proof: ['$46,091 week', '1,582 orders', 'Daily bars'],
-    caption: 'Sales pulse — store heartbeat at a glance.',
+    caption: 'Sales pulse: store heartbeat at a glance.',
     decision:
-      'Lead with the week pulse, not a report dump — operators need a yes/no in seconds before the order call.',
+      'Lead with the week pulse, not a report dump; operators need a yes/no in seconds before the order call.',
   },
   {
     id: 'competitor-deals',
@@ -38,9 +38,9 @@ export const CW_CLIPS = [
     signature: '144',
     signatureLabel: 'Ads indexed',
     proof: ['15 chains', 'Meat winners', 'ZIP markets'],
-    caption: 'Competitor deals — live Flipp index, meat winners first.',
+    caption: 'Competitor deals: live Flipp index, meat winners first.',
     decision:
-      'Surface meat winners first — the category where independents lose weekends to mainstream and Latino competitors.',
+      'Surface meat winners first: the category where independents lose weekends to mainstream and Latino competitors.',
   },
   {
     id: 'weekend-playbook',
@@ -52,9 +52,9 @@ export const CW_CLIPS = [
     signature: '↑30%',
     signatureLabel: 'Hot food lift',
     proof: ['Rain weekend', 'Push / skip', 'Category targets'],
-    caption: 'Weekend playbook — weather-tied category targets.',
+    caption: 'Weekend playbook: weather-tied category targets.',
     decision:
-      'Turn the forecast into push/skip language — not another weather widget operators ignore.',
+      'Turn the forecast into push/skip language, not another weather widget operators ignore.',
   },
   {
     id: 'demand-forecast',
@@ -63,13 +63,13 @@ export const CW_CLIPS = [
     label: 'Demand forecast',
     job: 'How much will we sell?',
     problem:
-      '7-day outlook with per-SKU buy / hold / reduce (StatsForecast ensemble — statistical forecast models).',
+      'Live 7-day outlook with per-SKU buy / hold / reduce (StatsForecast ensemble).',
     signature: '80%',
     signatureLabel: 'Prediction band',
-    proof: ['$42.4K next week', 'Buy · Hold · Reduce'],
-    caption: 'Demand forecast — bands and buy/hold/reduce, not a single fake-precise number.',
+    proof: ['$42.4K next week', 'Buy · Hold · Reduce', 'Live in prod'],
+    caption: 'Demand forecast: live bands and buy/hold/reduce — not a fake-precise single number.',
     decision:
-      'Designed for the model’s real output shape (buy / hold / reduce + bands) so forecasting can drop back in when re-enabled in production.',
+      'Designed for the model’s real output shape (buy / hold / reduce + bands). Shipped for that contract so the ensemble could go live and stay honest — no fake-precise single number.',
   },
   {
     id: 'customers-rfm',
@@ -82,9 +82,9 @@ export const CW_CLIPS = [
     signature: '277',
     signatureLabel: 'Due to return',
     proof: ['1,469 customers', '5 RFM tiers', 'Win-back'],
-    caption: 'Customers — RFM segments and who is due back.',
+    caption: 'Customers: RFM segments and who is due back.',
     decision:
-      'Win-back starts with who is slipping — not another anonymous coupon blast.',
+      'Win-back starts with who is slipping, not another anonymous coupon blast.',
   },
   {
     id: 'whatsapp-crm',
@@ -92,13 +92,13 @@ export const CW_CLIPS = [
     n: '06',
     label: 'WhatsApp attribution',
     job: 'Did the outreach work?',
-    problem: 'Every message matched to a POS visit within seven days — proof on the channel the store already runs.',
+    problem: 'Every message matched to a POS visit within seven days, proof on the channel the store already runs.',
     signature: '2,088',
     signatureLabel: 'Attributed visits',
     proof: ['8,369 sent', '65.9% read', '7-day match'],
-    caption: 'WhatsApp attribution — CRM phone → POS visit, not vanity sends.',
+    caption: 'WhatsApp attribution: CRM phone → POS visit, not vanity sends.',
     decision:
-      'Attribution is the product — close the loop with loyalty/Lola outreach, don’t rebuild CRM from scratch.',
+      'Attribution is the product: close the loop with loyalty/Lola outreach, don’t rebuild CRM from scratch.',
   },
 ].map((clip) => ({
   ...clip,

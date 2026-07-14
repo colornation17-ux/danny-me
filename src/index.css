@@ -549,6 +549,11 @@ button {
 
 /* ── About ───────────────────────────────────────── */
 
+.about-hero__content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
 .about-hero h1,
 .page-hero h1 {
   font-family: var(--font-display);
@@ -556,7 +561,7 @@ button {
   font-weight: 500;
   letter-spacing: -0.025em;
   line-height: 1.12;
-  max-width: 18ch;
+  max-width: 26ch;
   margin: 2.5rem 0 1rem;
 }
 
@@ -570,20 +575,21 @@ button {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 40rem;
+  max-width: 52rem;
   color: var(--muted);
   margin-bottom: 2rem;
 }
 
 .about-panel {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 2rem;
+  align-items: start;
 }
 
 @media (min-width: 800px) {
   .about-panel {
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -600,6 +606,10 @@ button {
   margin-bottom: 0.85rem;
 }
 
+.about-box h2:not(:first-child) {
+  margin-top: 0.5rem;
+}
+
 .about-box ul {
   margin: 0;
   padding-left: 1.1rem;
@@ -607,6 +617,360 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
+}
+
+.about-box__divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 1.3rem 0;
+}
+
+.about-panel__coffee {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-panel__coffee .about-section__eyebrow {
+  align-self: flex-start;
+}
+
+.about-panel__coffee .coffee-notes {
+  margin: 0 auto;
+}
+
+.about-section__eyebrow {
+  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.coffee-notes {
+  position: relative;
+  max-width: 460px;
+  min-height: 300px;
+  margin: 0 auto 1rem 0;
+}
+
+.sticky-note {
+  position: absolute;
+  width: 235px;
+  padding: 1.4rem 1.3rem 1.2rem;
+  font-family: var(--font-mono, 'DM Mono', monospace);
+  color: #3a2c1a;
+  box-shadow:
+    0 14px 28px rgba(35, 24, 10, 0.16),
+    0 3px 8px rgba(35, 24, 10, 0.1);
+}
+
+.sticky-note--basics {
+  top: 0;
+  left: 0;
+  background: #fbecc4;
+  clip-path: polygon(
+    1.5% 1%, 38% 0%, 76% 1.5%, 100% 0.5%,
+    99% 34%, 100% 67%, 98.5% 100%,
+    61% 98.5%, 24% 100%, 0% 97%,
+    1% 61%, 0% 28%
+  );
+  transform: rotate(-4deg);
+  z-index: 1;
+}
+
+.sticky-note--trending {
+  top: 92px;
+  left: 128px;
+  background: #ecd8ae;
+  clip-path: polygon(
+    0.5% 0%, 40% 1.5%, 79% 0%, 100% 1.5%,
+    98.5% 33%, 100% 65%, 99% 100%,
+    63% 99%, 22% 100%, 0% 98.5%,
+    1.5% 63%, 0.5% 30%
+  );
+  transform: rotate(5deg);
+  z-index: 2;
+}
+
+.sticky-note__tape {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 56px;
+  height: 22px;
+  margin-left: -28px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: rotate(-4deg);
+}
+
+.sticky-note--trending .sticky-note__tape {
+  transform: rotate(3deg);
+}
+
+.sticky-note__heading {
+  font-family: 'Just Me Again Down Here', cursive;
+  font-size: 1.65rem;
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0.3rem 0 0.85rem;
+  color: #2a1d10;
+}
+
+.sticky-note__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+.sticky-note__list li {
+  border-bottom: 1px dashed rgba(58, 44, 26, 0.2);
+  padding: 0.2rem 0;
+}
+
+.sticky-note__list li:last-child {
+  border-bottom: none;
+}
+
+.sticky-note__footer {
+  margin: 0.65rem 0 0;
+  font-size: 0.72rem;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+@media (max-width: 560px) {
+  .coffee-notes {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .sticky-note {
+    position: static;
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* ── About: road trip ───────────────────────────────────────────── */
+.about-travel {
+  margin-top: 3.5rem;
+  padding-bottom: 1rem;
+}
+
+.about-travel__story {
+  font-family: 'Just Me Again Down Here', cursive;
+  font-size: 1.55rem;
+  line-height: 1.5;
+  max-width: 38rem;
+  color: var(--ink, #12151a);
+  margin-bottom: 1.75rem;
+}
+
+.road-trip {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.road-trip__pin {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.road-trip__map {
+  width: min(100%, 1000px);
+  max-height: 60vh;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  flex-shrink: 1;
+}
+
+.road-trip__map path {
+  transition: fill 0.2s ease;
+}
+
+.road-trip__marker {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.road-trip__panel-stack {
+  position: relative;
+  width: min(96%, 640px);
+  height: 190px;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.road-trip__panel {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--folio-line, #d5dde5);
+  border-radius: 10px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+  padding: 1rem 1.4rem 1rem 0.75rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.road-trip__polaroid {
+  flex-shrink: 0;
+  width: 160px;
+  padding: 10px 10px 26px;
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  border-radius: 3px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  transform: rotate(-3deg);
+}
+
+.road-trip__polaroid img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.road-trip__panel-text {
+  text-align: left;
+  min-width: 0;
+}
+
+.road-trip__panel-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #767676;
+  margin-bottom: 0.2rem;
+}
+
+.road-trip__panel-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #111212;
+  margin-bottom: 0.4rem;
+}
+
+.road-trip__panel-note {
+  margin: 0;
+  font-family: 'Just Me Again Down Here', cursive;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  color: #445;
+}
+
+.road-trip__hint {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted, #747272);
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .road-trip__pin {
+    height: 100svh;
+  }
+
+  .road-trip__map {
+    max-height: 52vh;
+  }
+
+  .road-trip__panel-stack {
+    height: 170px;
+  }
+}
+
+/* ── About: solo city trips ──────────────────────────────────────── */
+.about-solo-trips {
+  margin-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.solo-trips__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 640px;
+}
+
+.solo-trips__grid figure {
+  margin: 0;
+}
+
+.solo-trips__grid img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--folio-line, #d5dde5);
+}
+
+.solo-trips__grid figcaption {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.about-photobook {
+  margin-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.about-photobook__label {
+  font-family: 'Just Me Again Down Here', cursive;
+  font-size: 1.6rem;
+  color: #111212;
+  margin-bottom: 0.75rem;
+}
+
+.about-photobook__frame {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  height: 640px;
+  border: 1px solid var(--folio-line, #d5dde5);
+  border-radius: 8px;
+}
+
+@media (max-width: 700px) {
+  .about-photobook__frame {
+    height: 480px;
+  }
 }
 
 .about-seeking {
@@ -2337,12 +2701,12 @@ body.game-embed .main { padding: 0; overflow: visible; }
   margin-right: calc(50% - 50vw);
   padding-inline: clamp(0.75rem, 3vw, 2rem);
   border-inline: 0;
-  /* Single canonical grid — defined here only, not in base .folio */
-  background-image:
-    linear-gradient(var(--folio-grid, #d7e0ea) 1px, transparent 1px),
-    linear-gradient(90deg, var(--folio-grid, #d7e0ea) 1px, transparent 1px);
-  background-size: 56px 56px;
   min-height: 100vh;
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(var(--folio-grid-light, #e2e7ee) 1px, transparent 1px),
+    linear-gradient(90deg, var(--folio-grid-light, #e2e7ee) 1px, transparent 1px);
+  background-size: 56px 56px;
 }
 
 /* Let folder strip use the full viewport width inside .main */
@@ -2441,6 +2805,25 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .nav-cta--linkedin:hover {
   opacity: 0.7;
+}
+
+.nav-cta--resume {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--folio-ink, #12151a);
+  padding: 0.4rem 0.55rem;
+  border: none;
+  background: none;
+  transition: opacity 0.15s;
+}
+
+.nav-cta--resume:hover {
+  opacity: 0.65;
 }
 
 .nav-cta--contact {
@@ -3277,7 +3660,14 @@ body.game-embed .main { padding: 0; overflow: visible; }
   background: #f5f7ff;
 }
 
-/* Fix contact button at all sizes — override base .nav-cta circle */
+/* Fix text CTAs at all sizes — override base .nav-cta circle */
+.nav-cta--resume {
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  padding: 0.4rem 0.55rem !important;
+}
+
 .nav-cta--contact {
   width: auto !important;
   height: auto !important;
@@ -3662,7 +4052,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 /* ── Career Path ──────────────────────────────────────── */
 .career-path {
   width: 100%;
-  max-width: 520px;
+  max-width: 640px;
   margin: 2.5rem auto 1rem;
 }
 
@@ -4612,9 +5002,26 @@ body.game-embed .main { padding: 0; overflow: visible; }
   -webkit-font-smoothing: antialiased;
 }
 
+.folder-card__meta {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  opacity: 0.78;
+  text-wrap: balance;
+}
+
+.folder-card__meta--sub {
+  margin-top: 0.2rem;
+  font-weight: 500;
+  opacity: 0.62;
+}
+
 .folder-card__blurb {
-  margin: 0;
-  max-width: 32ch;
+  margin: 0.55rem 0 0;
+  max-width: 34ch;
   font-size: clamp(0.98rem, 1.8vw, 1.15rem);
   line-height: 1.45;
   opacity: 0.92;
@@ -4643,6 +5050,48 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .folder-card__cta-arrow {
   font-style: normal;
   font-size: 0.85rem;
+}
+
+.folder-card__cta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.folder-card__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.72;
+  cursor: pointer;
+  transition:
+    opacity var(--dur-ui) var(--ease-out),
+    transform var(--dur-fast) var(--ease-press);
+}
+
+.folder-card__live:hover,
+.folder-card__live:focus-visible {
+  opacity: 1;
+  outline: none;
+}
+
+.folder-card__live:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.folder-card__live:active {
+  transform: scale(0.96);
 }
 
 .folder-card__cta:hover,

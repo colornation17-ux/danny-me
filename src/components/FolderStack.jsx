@@ -68,20 +68,38 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
     ? { fill: project.folderFill, ink: project.folderInk ?? baseTone.ink }
     : baseTone
   const to = project.href || `/projects/${project.slug}`
+  const isExternalCase = typeof to === 'string' && /^https?:\/\//i.test(to)
   const motion = hasMotionPreview(project.slug)
   const cta = project.placeholder
     ? 'Case study soon'
     : project.conceptOnly
       ? 'View in Play'
-      : 'View Project'
+      : 'View case study'
   const label = project.index || String(index + 1).padStart(2, '0')
   const tags = project.tags || project.skills?.slice(0, 2) || []
   const mediaAlt = project.coverAlt || `${project.displayTitle} preview`
+  const company =
+    project.company ||
+    (project.meta ? project.meta.split('·')[0].trim() : null)
+  const status = project.status || null
+  const role = project.role || null
+  const liveLabel =
+    project.liveCta ||
+    (project.whatsappUrl && project.liveUrl ? 'View product site' : 'Open live demo')
 
   // Past cards sit underneath the active card — their tab buttons stay visible
   // through the transparent indent holes in the active card's chrome row.
   // Active card sits on top. Future cards are hidden off-screen below.
   const zIndex = cardState === 'active' ? total + 10 : index + 1
+
+  const CtaEl = isExternalCase ? 'a' : Link
+  const ctaProps = isExternalCase
+    ? {
+        href: to,
+        target: '_blank',
+        rel: 'noreferrer',
+      }
+    : { to }
 
   return (
     <article
@@ -130,19 +148,55 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
             className="folder-card__title"
             data-font={project.folderTitleFont || ''}
           >{project.displayTitle}</h3>
+            {(role || company || status) && (
+              <p className="folder-card__meta">
+                {[role, company, status].filter(Boolean).join(' · ')}
+              </p>
+            )}
+            {(project.timeline || project.team) && (
+              <p className="folder-card__meta folder-card__meta--sub">
+                {[project.timeline, project.team].filter(Boolean).join(' · ')}
+              </p>
+            )}
             <p className="folder-card__blurb">
               {project.outcome || project.blurb}
             </p>
           </div>
 
-          <Link
-            to={to}
-            className="folder-card__cta"
-            tabIndex={cardState === 'active' ? 0 : -1}
-          >
-            <span>{cta}</span>
-            <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
-          </Link>
+          <div className="folder-card__cta-row">
+            <CtaEl
+              {...ctaProps}
+              className="folder-card__cta"
+              tabIndex={cardState === 'active' ? 0 : -1}
+            >
+              <span>{cta}</span>
+              <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
+            </CtaEl>
+            {project.liveUrl && to !== project.liveUrl && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="folder-card__live"
+                tabIndex={cardState === 'active' ? 0 : -1}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {liveLabel || 'Open live demo'} ↗
+              </a>
+            )}
+            {project.whatsappUrl && (
+              <a
+                href={project.whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="folder-card__live"
+                tabIndex={cardState === 'active' ? 0 : -1}
+                onClick={(e) => e.stopPropagation()}
+              >
+                Try on WhatsApp ↗
+              </a>
+            )}
+          </div>
 
           {tags.length > 0 && (
             <div className="folder-card__tags">

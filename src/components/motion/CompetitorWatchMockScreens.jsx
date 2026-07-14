@@ -113,7 +113,7 @@ function SceneWeather({ active }) {
       <div className="cw-mock__body">
         <div className="cw-mock__alert cw-mock__alert--rain">
           <span className="cw-mock__alert-icon">☔</span>
-          Rain week — push comfort food, ease off grill
+          Rain week: push comfort food, ease off grill
         </div>
         <div className="cw-mock__weather-grid">
           {WEATHER_DAYS.map((day, i) => (
@@ -215,7 +215,7 @@ function ScenePricing({ active }) {
           </table>
         </div>
         <div className="cw-mock__insight">
-          <strong>4 items</strong> priced above local ad lows — meat basket most exposed
+          <strong>4 items</strong> priced above local ad lows, meat basket most exposed
         </div>
       </div>
     </div>

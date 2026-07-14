@@ -273,7 +273,7 @@ export default function Home() {
 
         <p className="folio-hero__avail folio-hero__avail--dot">
           <span className="folio-dot" aria-hidden="true" />
-          Available for thoughtful projects
+          Open to full-time product design roles
         </p>
 
         <div className="folio-sticker folio-sticker--green" style={{ '--rot': '14deg' }}>
@@ -290,7 +290,7 @@ export default function Home() {
         </div>
 
         <p className="folio-hero__lead folio-hero__lead--center">
-          Designing for <em className="folio-lead__impact">impact</em> outside the deck.
+          A product designer who ships AI into <em className="folio-lead__impact">real operations</em>.
         </p>
 
         <a className="folio-btn folio-btn--contact" href="#projects">
@@ -306,10 +306,9 @@ export default function Home() {
         <h2 className="folio-about__hello" id="about-hello-heading">Hello World</h2>
 
         <p className="folio-about__body folio-about__body--lead folio-about__body--handwritten">
-          Hi, I&apos;m Danny — a product designer based in the US. I turn messy,
-          complicated systems into simple, intuitive tools. From AI chatbots to
-          retail SaaS and car dashboards, I create data-driven designs that hit
-          business goals and work seamlessly in the real world.
+          Hi, I&apos;m Danny: a designer, builder, and systems thinker. I care about
+          interfaces that survive real constraints: bilingual shoppers, broken SKUs,
+          Thursday ad drops, and staff who need answers before the line forms.
         </p>
 
         <CareerPath />
@@ -332,13 +331,12 @@ export default function Home() {
         aria-labelledby="work-heading"
       >
         <div className="folio-work__head">
-          <p className="folio-work__eyebrow">explore my work!</p>
+          <p className="folio-work__eyebrow">Selected work</p>
           <h2 id="work-heading" className="folio-work__title folio-work__title--block">
-            FEATURED WORKS
+            Featured work
           </h2>
           <p className="folio-sticky">
-            This is a showcase of what happens when curiosity drives the
-            process.
+            Systems built to hold up in live ops — grocery floors, WhatsApp inboxes, and race weekends.
           </p>
         </div>
 
@@ -371,41 +369,6 @@ export default function Home() {
               <blockquote className="rec-card__quote">
                 Danny brought a rare blend of <em>creative vision and methodical design thinking</em>, ensuring every interface decision was grounded in user insights. His expertise in <em>UX research, interaction design, and usability testing</em> played a pivotal role in shaping both our website and our AI-driven fan experience.
               </blockquote>
-
-              {/* Twitter-style action row */}
-              <div className="rec-card__actions">
-                {/* Comment */}
-                <span className="rec-card__action">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                  </svg>
-                  1
-                </span>
-                {/* Repost */}
-                <span className="rec-card__action">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                    <polyline points="17 1 21 5 17 9"/>
-                    <path d="M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4"/>
-                    <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-                  </svg>
-                  3
-                </span>
-                {/* Heart */}
-                <span className="rec-card__action rec-card__action--heart">
-                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                  </svg>
-                  12
-                </span>
-                {/* Views */}
-                <span className="rec-card__action" style={{ marginLeft: 'auto' }}>
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                    <circle cx="12" cy="12" r="3"/>
-                  </svg>
-                  847
-                </span>
-              </div>
 
               <div className="rec-card__source-bar">
                 <svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true">
