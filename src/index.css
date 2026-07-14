@@ -4969,6 +4969,16 @@ body:has(.folio--fullgrid) .site-footer {
   width: max-content;
   max-width: min(100%, calc(100vw - 2.5rem));
   box-sizing: border-box;
+  z-index: 3;
+  cursor: default;
+  will-change: transform;
+  transition: box-shadow 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .folio-hero__select:hover {
+    box-shadow: 9px 9px 0 0 #111;
+  }
 }
 
 .folio-hero__name--display {
@@ -5018,8 +5028,11 @@ body:has(.folio--fullgrid) .site-footer {
   letter-spacing: 0.03em;
   line-height: 1.4;
   box-shadow: 3px 3px 0 #111;
+  /* Base tilt before GSAP float takes over transform */
   transform: rotate(var(--rot, 0deg));
   max-width: 16rem;
+  will-change: transform;
+  pointer-events: none;
 }
 
 .folio-sticker--pill {

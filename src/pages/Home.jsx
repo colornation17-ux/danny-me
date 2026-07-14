@@ -190,45 +190,80 @@ export default function Home() {
         })
       }
 
-      // ── Pill stickers — gentle x-only drift (parallax owns y) ─────────
-      // Using x only so it doesn't conflict with the scroll-driven y parallax
-      const pillAmber = document.querySelector('.folio-sticker--amber')
-      const pillPink  = document.querySelector('.folio-sticker--pink')
-      if (pillAmber) {
-        gsap.to(pillAmber, {
-          x: '+=6',
-          duration: 3.2,
-          ease: 'sine.inOut',
-          repeat: -1,
-          yoyo: true,
-        })
-      }
-      if (pillPink) {
-        gsap.to(pillPink, {
-          x: '-=6',
-          duration: 2.8,
-          ease: 'sine.inOut',
-          repeat: -1,
-          yoyo: true,
-          delay: 0.9,
-        })
-      }
+      // ── Hero stickers + DANNY box ────────────────────────────────────
+      // Was nearly static: only amber/pink drifted ±6px on x; green/yellow
+      // waited on scroll parallax (0 motion at rest). Float all four instead.
+      const mm = gsap.matchMedia()
+      mm.add(
+        {
+          reduce: '(prefers-reduced-motion: reduce)',
+          motion: '(prefers-reduced-motion: no-preference)',
+          mouse: '(hover: hover) and (pointer: fine)',
+        },
+        (context) => {
+          const { reduce, motion, mouse } = context.conditions
+          if (reduce || !motion) return
 
-      // ── Sticker parallax on scroll ───────────────────────────────────
-      const stickers = document.querySelectorAll('.folio-sticker')
-      const rates = [0.06, -0.04, 0.08, -0.06]
-      stickers.forEach((el, i) => {
-        gsap.to(el, {
-          y: () => -window.scrollY * (rates[i % rates.length] ?? 0.05),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.folio-hero',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 0.6,
-          },
-        })
-      })
+          const stickers = gsap.utils.toArray('.folio-sticker')
+          stickers.forEach((el, i) => {
+            const baseRot =
+              parseFloat(getComputedStyle(el).getPropertyValue('--rot')) || 0
+            gsap.set(el, {
+              rotation: baseRot,
+              x: 0,
+              y: 0,
+              transformOrigin: '50% 50%',
+            })
+            const dir = i % 2 === 0 ? 1 : -1
+            gsap.to(el, {
+              y: `+=${10 + (i % 3) * 5}`,
+              x: `+=${dir * (8 + i * 3)}`,
+              rotation: baseRot + dir * 2.2,
+              duration: 2.6 + i * 0.4,
+              ease: 'sine.inOut',
+              repeat: -1,
+              yoyo: true,
+              // Wait for hero entrance stagger to finish before floating
+              delay: 1.15 + i * 0.28,
+            })
+          })
+
+          if (mouse) {
+            const select = document.querySelector('.folio-hero__select')
+            if (select) {
+              const onMove = (e) => {
+                const r = select.getBoundingClientRect()
+                const nx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2)
+                const ny = (e.clientY - (r.top + r.height / 2)) / (r.height / 2)
+                gsap.to(select, {
+                  x: nx * 8,
+                  y: ny * 5,
+                  rotation: nx * 1.6,
+                  duration: 0.4,
+                  ease: 'power2.out',
+                  overwrite: 'auto',
+                })
+              }
+              const onLeave = () => {
+                gsap.to(select, {
+                  x: 0,
+                  y: 0,
+                  rotation: 0,
+                  duration: 0.65,
+                  ease: 'elastic.out(1, 0.45)',
+                  overwrite: 'auto',
+                })
+              }
+              select.addEventListener('mousemove', onMove)
+              select.addEventListener('mouseleave', onLeave)
+              context.add(() => {
+                select.removeEventListener('mousemove', onMove)
+                select.removeEventListener('mouseleave', onLeave)
+              })
+            }
+          }
+        },
+      )
 
       // ── Magnetic hover on the hero CTA ──────────────────────────────
       const cta = document.querySelector('.folio-btn--contact')
