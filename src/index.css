@@ -953,6 +953,9 @@ button {
 /* ── Game embed layout (bodega-ops) ────────────────────────────── */
 .cs--game { padding: 0; }
 /* hide portfolio chrome during game, restore on case study scroll */
+body.game-embed {
+  background: #0a0a0a;
+}
 body.game-embed nav,
 body.game-embed footer { display: none !important; }
 body.game-embed .main { padding: 0; overflow: visible; }
