@@ -148,12 +148,15 @@ export default function Home() {
         duration: 0.55,
         ease: 'back.out(1.4)',
       })
+      // ── Skills — drop-and-tumble entrance (GSAP SplitText demo physics) ──
       gsap.from('.folio-skills li', {
         scrollTrigger: { trigger: '.folio-skills', start: 'top 85%' },
+        y: -100,
         opacity: 0,
-        x: -28,
-        stagger: 0.07,
-        duration: 0.4,
+        rotation: 'random(-80, 80)',
+        stagger: 0.1,
+        duration: 1,
+        ease: 'back',
       })
 
       // ── Work heading ────────────────────────────────────────────────
