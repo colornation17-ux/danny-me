@@ -67,9 +67,9 @@ export const CW_CLIPS = [
     signature: '80%',
     signatureLabel: 'Prediction band',
     proof: ['$42.4K next week', 'Buy · Hold · Reduce', 'Live in prod'],
-    caption: 'Demand forecast: live bands and buy/hold/reduce — not a fake-precise single number.',
+    caption: 'Demand forecast: live bands and buy/hold/reduce, not a fake-precise single number.',
     decision:
-      'Designed for the model’s real output shape (buy / hold / reduce + bands). Shipped for that contract so the ensemble could go live and stay honest — no fake-precise single number.',
+      'Designed for the model’s real output shape (buy / hold / reduce + bands). Shipped for that contract so the ensemble could go live and stay honest, with no fake-precise single number.',
   },
   {
     id: 'customers-rfm',

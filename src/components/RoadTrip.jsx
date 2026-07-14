@@ -15,10 +15,10 @@ const OTHER_COLOR = '#f6f4ee'
 // the real-world location relative to that state's shape.
 const TRIP_STOPS = [
   // Departure / midwest → west (photos pending for IN + OK)
-  { id: 'indianapolis', title: 'Indianapolis', desc: 'Indiana — departure', state: 'IN', fx: 0.55, fy: 0.55, note: 'Packed the car. Twelve states waiting.' },
-  { id: 'illinois', title: 'Chicago', desc: 'Illinois — kayaks under the bridge', state: 'IL', fx: 0.82, fy: 0.18, note: 'Lime kayaks, steel overhead, Chicago in the middle.', photo: '/travel/chicago-il.jpg' },
+  { id: 'indianapolis', title: 'Indianapolis', desc: 'Indiana, departure', state: 'IN', fx: 0.55, fy: 0.55, note: 'Packed the car. Twelve states waiting.' },
+  { id: 'illinois', title: 'Chicago', desc: 'Illinois, kayaks under the bridge', state: 'IL', fx: 0.82, fy: 0.18, note: 'Lime kayaks, steel overhead, Chicago in the middle.', photo: '/travel/chicago-il.jpg' },
   { id: 'missouri', title: 'Missouri', desc: 'Crossing the Mississippi', state: 'MO', fx: 0.92, fy: 0.55, note: 'Somewhere past St. Louis, the trip finally felt real.', photo: '/travel/missouri.jpg' },
-  { id: 'kansas', title: 'Fort Riley', desc: 'Junction City, Kansas', state: 'KS', fx: 0.55, fy: 0.38, note: 'Water tower and open sky — Midwestern mile marker.', photo: '/travel/fort-riley-ks.jpg' },
+  { id: 'kansas', title: 'Fort Riley', desc: 'Junction City, Kansas', state: 'KS', fx: 0.55, fy: 0.38, note: 'Water tower and open sky. Midwestern mile marker.', photo: '/travel/fort-riley-ks.jpg' },
   { id: 'garden-of-gods', title: 'Garden of the Gods', desc: 'Colorado Springs', state: 'CO', fx: 0.55, fy: 0.62, note: 'Red rock spires, no crowds, just us and the wind.', photo: '/travel/garden-of-gods.jpg' },
   { id: 'cliff-dwellers', title: 'Manitou Cliff Dwellings', desc: 'Manitou Springs', state: 'CO', fx: 0.53, fy: 0.6, note: 'Ancient homes carved into sandstone, still standing.', photo: '/travel/cliff-dwellings.jpg' },
   { id: 'pikes-peak', title: 'Pikes Peak', desc: 'America’s Mountain', state: 'CO', fx: 0.52, fy: 0.58 },
@@ -39,7 +39,7 @@ const TRIP_STOPS = [
   { id: 'route66', title: 'Route 66 · End of the Trail', desc: 'Santa Monica Pier', state: 'CA', fx: 0.25, fy: 0.78, note: 'End of the road. Feet in the Pacific at last.', photo: '/travel/route66-santa-monica.jpg' },
   { id: 'grand-canyon', title: 'Grand Canyon', desc: 'South Rim', state: 'AZ', fx: 0.25, fy: 0.15, note: 'Stood at the rim and still couldn’t believe the scale.', photo: '/travel/grand-canyon.jpg' },
   // Return leg
-  { id: 'new-mexico', title: 'Santa Rosa', desc: 'New Mexico — sunrise on the highway', state: 'NM', fx: 0.72, fy: 0.38, note: 'Sun through the windshield. Still heading home.', photo: '/travel/santa-rosa-nm.jpg' },
+  { id: 'new-mexico', title: 'Santa Rosa', desc: 'New Mexico, sunrise on the highway', state: 'NM', fx: 0.72, fy: 0.38, note: 'Sun through the windshield. Still heading home.', photo: '/travel/santa-rosa-nm.jpg' },
   { id: 'texas', title: 'Big Texan', desc: 'Amarillo, Texas', state: 'TX', fx: 0.42, fy: 0.1, note: 'Flags, a yellow landmark, and a Texas-sized lunch.', photo: '/travel/amarillo-big-texan.jpg' },
   { id: 'oklahoma', title: 'Oklahoma', desc: 'Almost back east', state: 'OK', fx: 0.55, fy: 0.45, note: 'Last open stretch before the map folds up.' },
 ]
@@ -158,7 +158,10 @@ export default function RoadTrip() {
           ))}
         </div>
 
-        <p className="road-trip__hint">Scroll to drive it</p>
+        <p className="road-trip__hint">
+          <span className="road-trip__hint-car" aria-hidden="true">🚗</span>
+          Scroll to drive it
+        </p>
       </div>
     </div>
   )

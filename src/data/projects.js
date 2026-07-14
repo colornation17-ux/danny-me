@@ -31,7 +31,7 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'Engagement on the thread families already use',
-        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Weekly WhatsApp reach sits inside a live CRM (1,600+ customers), but replies — English, Spanish, voice notes, SNAP questions, shopping lists — used to pile into one staff inbox. Lola is the customer + staff product on that stack: weekly deals, pickup orders, shopping reminders, voice, guided coach, and staff handoff inside wacrm. Competitor Watch owns planning and visit attribution; Lola owns conversation, orders, and ops handoff.',
+        body: 'La Bodega is an independent Hispanic grocer in Calhoun, GA. Weekly WhatsApp reach sits inside a live CRM (1,600+ customers), but replies (English, Spanish, voice notes, SNAP questions, shopping lists) used to pile into one staff inbox. Lola is the customer + staff product on that stack: weekly deals, pickup orders, shopping reminders, voice, guided coach, and staff handoff inside wacrm. Competitor Watch owns planning and visit attribution; Lola owns conversation, orders, and ops handoff.',
       },
       {
         eyebrow: 'Problem',
@@ -192,7 +192,7 @@ export const work = [
       { src: '/work/wing-hmi/screen-4.png', caption: 'Alert states and attention zones' },
     ],
     blurb:
-      'Concept in-vehicle HMI for premium smart vehicles: cluster, HUD, center display, and voice. Validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view — 92% task success.',
+      'Concept in-vehicle HMI for premium smart vehicles: cluster, HUD, center display, and voice. Validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view. 92% task success.',
     role: 'Product designer',
     timeline: '2 weeks · 3-phase design sprint',
     team: 'Design exploration',
@@ -243,7 +243,7 @@ export const work = [
     year: '2025',
     domain: 'Website redesign',
     blurb:
-      'Redesigned the CODE19 digital platform for fans, sponsors, engineers, and drivers — UI/UX, content strategy, and SEO. Seed funding rose $150K→$500K with stronger brand presence; 1,500+ new monthly sessions; direct sessions 3.6 min; organic bounce −36% (to 58.5%).',
+      'Redesigned the CODE19 digital platform for fans, sponsors, engineers, and drivers: UI/UX, content strategy, and SEO. Seed funding rose $150K→$500K with stronger brand presence; 1,500+ new monthly sessions; direct sessions 3.6 min; organic bounce −36% (to 58.5%).',
     role: 'UI · UX · Content strategy · SEO',
     timeline: '3 months · Oct – Dec 2024',
     team: 'With CODE19',

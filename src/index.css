@@ -779,9 +779,8 @@ button {
 
 .road-trip {
   position: relative;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width: 100%;
+  max-width: 100%;
 }
 
 .road-trip__pin {
@@ -893,12 +892,40 @@ button {
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-family: var(--font-mono, 'DM Mono', monospace);
   font-size: 0.72rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted, #747272);
   pointer-events: none;
+  white-space: nowrap;
+}
+
+.road-trip__hint-car {
+  display: inline-block;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  text-transform: none;
+  animation: road-trip-car-nudge 1.5s ease-in-out infinite;
+}
+
+@keyframes road-trip-car-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(7px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .road-trip__hint-car {
+    animation: none;
+  }
 }
 
 @media (max-width: 700px) {
@@ -915,7 +942,7 @@ button {
   }
 }
 
-/* ── About: solo city trips ──────────────────────────────────────── */
+/* ── About: solo city trips (bento) ──────────────────────────────── */
 .about-solo-trips {
   margin-top: 3rem;
   padding: 0 clamp(0.75rem, 3vw, 2rem) 2rem;
@@ -923,115 +950,177 @@ button {
   margin-inline: auto;
 }
 
-.about-solo-trips__layout {
+.solo-bento {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  align-items: stretch;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
 }
 
-.solo-trips__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  max-width: 640px;
-}
-
-.solo-trips__grid figure {
+.solo-bento__cell {
   margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.solo-trips__frame {
-  border-radius: 8px;
+.solo-bento__frame {
+  flex: 1;
+  border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--folio-line, #d5dde5);
   background: #f0f2f5;
+  min-height: 0;
 }
 
-.solo-trips__grid img {
+.solo-bento__frame img {
   display: block;
   width: 100%;
+  height: 100%;
+  min-height: 180px;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: center;
-  background: #f0f2f5;
 }
 
-.solo-trips__grid figcaption {
+.solo-bento__frame--video {
+  background: #0b0b0b;
+  position: relative;
+}
+
+.solo-bento__frame--video iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.solo-bento__cell figcaption,
+.solo-bento__video-link {
   margin-top: 0.4rem;
   font-family: var(--font-mono, 'DM Mono', monospace);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
-}
-
-/* Desktop / laptop / tablet: photobook callout fills the right blank */
-.solo-trips__photobook {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 0.65rem;
-  min-height: 12rem;
-  padding: 1.75rem 1.5rem;
-  border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 10px;
-  background: #fff;
   text-decoration: none;
-  color: inherit;
-  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-.solo-trips__photobook:hover {
-  border-color: #111212;
-  transform: translateY(-2px);
-}
-
-.solo-trips__photobook-label {
-  font-family: 'Just Me Again Down Here', cursive;
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  line-height: 1.05;
+.solo-bento__video-link:hover {
   color: #111212;
 }
 
-.solo-trips__photobook-sub {
-  font-family: var(--font-mono, 'DM Mono', monospace);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted, #747272);
+/* Mobile: hero + video get a bit more presence */
+.solo-bento__cell--hero,
+.solo-bento__cell--video {
+  grid-column: span 2;
 }
 
-@media (min-width: 768px) {
-  .about-solo-trips__layout {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: 2rem;
-    align-items: stretch;
+.solo-bento__cell--hero .solo-bento__frame img {
+  aspect-ratio: 16 / 10;
+  min-height: 200px;
+}
+
+@media (min-width: 800px) {
+  /*
+    4×3 bento:
+    [ hero      ][ std ][ std ]
+    [ hero      ][ wide      ]
+    [ tall ][ video          ]
+  */
+  .solo-bento {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: minmax(160px, 1fr) minmax(160px, 1fr) minmax(200px, 1.1fr);
+    gap: 0.9rem;
   }
 
-  .solo-trips__grid {
-    max-width: none;
+  .solo-bento__cell--hero {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
   }
 
-  .solo-trips__photobook {
-    display: flex;
+  .solo-bento__cell--hero .solo-bento__frame img {
+    aspect-ratio: auto;
     min-height: 100%;
-    align-self: stretch;
+    height: 100%;
+  }
+
+  .solo-bento__cell--std:nth-of-type(2) {
+    grid-column: 3 / 4;
+    grid-row: 1;
+  }
+
+  .solo-bento__cell--std:nth-of-type(3) {
+    grid-column: 4 / 5;
+    grid-row: 1;
+  }
+
+  .solo-bento__cell--wide {
+    grid-column: 3 / 5;
+    grid-row: 2;
+  }
+
+  .solo-bento__cell--wide .solo-bento__frame img {
+    aspect-ratio: 16 / 10;
+    min-height: 100%;
+    height: 100%;
+  }
+
+  .solo-bento__cell--tall {
+    grid-column: 1 / 2;
+    grid-row: 3;
+  }
+
+  .solo-bento__cell--tall .solo-bento__frame img {
+    aspect-ratio: auto;
+    min-height: 100%;
+    height: 100%;
+  }
+
+  .solo-bento__cell--video {
+    grid-column: 2 / 5;
+    grid-row: 3;
+  }
+
+  .solo-bento__frame--video iframe {
+    aspect-ratio: auto;
+    min-height: 100%;
+    height: 100%;
+  }
+
+  .solo-bento__cell--video .solo-bento__frame--video {
+    min-height: 220px;
+  }
+
+  /* Fill cells so spans align edge-to-edge */
+  .solo-bento__cell--hero,
+  .solo-bento__cell--wide,
+  .solo-bento__cell--tall,
+  .solo-bento__cell--video {
+    height: 100%;
+  }
+
+  .solo-bento__cell--hero .solo-bento__frame,
+  .solo-bento__cell--wide .solo-bento__frame,
+  .solo-bento__cell--tall .solo-bento__frame,
+  .solo-bento__cell--video .solo-bento__frame {
+    height: 100%;
   }
 }
 
-@media (max-width: 767px) {
-  .solo-trips__photobook {
-    display: flex;
-    min-height: 0;
-  }
-}
-
+/* Framer photobook portfolio */
 .about-photobook {
-  margin: 1rem auto 0;
+  margin: 2rem auto 0;
   padding: 0 clamp(0.75rem, 3vw, 2rem) 3.5rem;
   max-width: 1100px;
+}
+
+.about-photobook__label {
+  font-family: 'Just Me Again Down Here', cursive;
+  font-size: 1.6rem;
+  color: #111212;
+  margin-bottom: 0.75rem;
 }
 
 .about-photobook__frame-wrap {
@@ -2795,13 +2884,15 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .folio--fullgrid {
   --folio-paper: #ffffff;
   --folio-grid-light: #e2e7ee;
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  /* 100% not 100vw — avoids horizontal scrollbar from scrollbar gutter math */
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
   padding-inline: clamp(0.75rem, 3vw, 2rem);
   border-inline: 0;
   min-height: 100vh;
+  overflow-x: clip;
   /* Graph paper: line layers use transparent cells so both axes show.
      Paper color comes only from background-color (keeps fill uniform). */
   background-color: var(--folio-paper);

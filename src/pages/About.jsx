@@ -3,11 +3,42 @@ import CoffeeNotes from '../components/CoffeeNotes'
 import RoadTrip from '../components/RoadTrip'
 
 const SOLO_SHOTS = [
-  { src: '/travel/sf-cable-car.jpg', alt: 'San Francisco cable car with the Bay Bridge behind it', caption: 'San Francisco' },
-  { src: '/travel/sf-golden-gate.jpg', alt: 'Golden Gate Bridge framed through flowers', caption: 'San Francisco' },
-  { src: '/travel/nyc-dumbo.jpg', alt: 'DUMBO, Brooklyn, with the Manhattan Bridge behind', caption: 'New York' },
-  { src: '/travel/nyc-street.jpg', alt: 'Street scene in downtown New York', caption: 'New York' },
+  {
+    src: '/travel/sf-cable-car.jpg',
+    alt: 'San Francisco cable car with the Bay Bridge behind it',
+    caption: 'San Francisco',
+    size: 'hero',
+  },
+  {
+    src: '/travel/sf-golden-gate.jpg',
+    alt: 'Golden Gate Bridge framed through flowers',
+    caption: 'San Francisco',
+    size: 'std',
+  },
+  {
+    src: '/travel/nyc-dumbo.jpg',
+    alt: 'DUMBO, Brooklyn, with the Manhattan Bridge behind',
+    caption: 'New York',
+    size: 'std',
+  },
+  {
+    src: '/travel/nyc-street.jpg',
+    alt: 'Street scene in downtown New York',
+    caption: 'New York',
+    size: 'wide',
+  },
+  {
+    src: '/travel/nyc-delmonicos.jpg',
+    alt: "Delmonico's at night, financial district, New York",
+    caption: 'New York',
+    size: 'tall',
+  },
 ]
+
+const YT_ID = 'mbZF7gsrWZU'
+const YT_EMBED = `https://www.youtube.com/embed/${YT_ID}?autoplay=1&mute=1&loop=1&playlist=${YT_ID}&rel=0&modestbranding=1&playsinline=1`
+const YT_WATCH = `https://www.youtube.com/watch?v=${YT_ID}`
+const PHOTOBOOK_URL = 'https://dannyphoto.framer.website/'
 
 export default function About() {
   return (
@@ -79,36 +110,56 @@ export default function About() {
 
       <section className="about-solo-trips">
         <p className="about-section__eyebrow">Street photography, solo</p>
-        <div className="about-solo-trips__layout">
-          <div className="solo-trips__grid">
-            {SOLO_SHOTS.map((shot) => (
-              <figure key={shot.src}>
-                <div className="solo-trips__frame">
-                  <img src={shot.src} alt={shot.alt} loading="lazy" />
-                </div>
-                <figcaption>{shot.caption}</figcaption>
-              </figure>
-            ))}
+
+        <div className="solo-bento">
+          {SOLO_SHOTS.map((shot) => (
+            <figure
+              key={shot.src}
+              className={`solo-bento__cell solo-bento__cell--${shot.size}`}
+            >
+              <div className="solo-bento__frame">
+                <img src={shot.src} alt={shot.alt} loading="lazy" />
+              </div>
+              <figcaption>{shot.caption}</figcaption>
+            </figure>
+          ))}
+
+          <div className="solo-bento__cell solo-bento__cell--video">
+            <div className="solo-bento__frame solo-bento__frame--video">
+              <iframe
+                src={YT_EMBED}
+                title="Street photography, YouTube"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
+            </div>
+            <a
+              className="solo-bento__video-link"
+              href={YT_WATCH}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Watch on YouTube ↗
+            </a>
           </div>
-          <a className="solo-trips__photobook" href="#photobook">
-            <span className="solo-trips__photobook-label">photobook.photography</span>
-            <span className="solo-trips__photobook-sub">Browse the archive below →</span>
-          </a>
         </div>
       </section>
 
       <section className="about-photobook" id="photobook" aria-label="Photography archive">
+        <p className="about-photobook__label">photobook.photography</p>
         <div className="about-photobook__frame-wrap">
           <iframe
             className="about-photobook__frame"
-            src="https://dannyphoto.framer.website/"
+            src={PHOTOBOOK_URL}
             title="Danny's photography portfolio"
             loading="lazy"
           />
         </div>
         <a
           className="about-photobook__external"
-          href="https://dannyphoto.framer.website/"
+          href={PHOTOBOOK_URL}
           target="_blank"
           rel="noopener noreferrer"
         >

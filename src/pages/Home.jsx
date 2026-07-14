@@ -306,8 +306,8 @@ export default function Home() {
         <h2 className="folio-about__hello" id="about-hello-heading">Hello World</h2>
 
         <p className="folio-about__body folio-about__body--lead folio-about__body--handwritten">
-          Hi, I&apos;m Danny: a designer, builder, and systems thinker. I care about
-          interfaces that survive real constraints: bilingual shoppers, broken SKUs,
+          Hi, I&apos;m Danny, product designer between Indy and Georgia. I care about
+          interfaces that survive real floors: bilingual shoppers, broken SKUs,
           Thursday ad drops, and staff who need answers before the line forms.
         </p>
 
@@ -336,7 +336,7 @@ export default function Home() {
             Featured work
           </h2>
           <p className="folio-sticky">
-            Systems built to hold up in live ops — grocery floors, WhatsApp inboxes, and race weekends.
+            Systems built to hold up in live ops: grocery floors, WhatsApp inboxes, and race weekends.
           </p>
         </div>
 

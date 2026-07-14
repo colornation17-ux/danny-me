@@ -28,7 +28,7 @@ export const featured = [
     outcome:
       'WhatsApp CRM product: bilingual deals, pickup orders, reminders, voice, and staff inbox/handoff (1,600+ CRM customers · 97.7% replies <2 min)',
     blurb:
-      'Lola runs inside the WhatsApp CRM — deals, #order pickups, shopping reminders, voice, guided coach, and staff dashboards. Research-backed from real threads before ship.',
+      'Lola runs inside the WhatsApp CRM: deals, #order pickups, shopping reminders, voice, guided coach, and staff dashboards. Research-backed from real threads before ship.',
     tags: ['Product', 'WhatsApp CRM'],
     reel: '/work/lola/motion/Lola-Reel.mp4',
     reelPortrait: true,
@@ -43,7 +43,7 @@ export const featured = [
     company: 'La Bodega',
     folderDate: 'Feb 24, 2026',
     outcome:
-      'Ops recovery + tool: barcode/receiving pipeline and scanner app — checkout <30s, SKU recognition ~100% in 72 hrs',
+      'Ops recovery + tool: barcode/receiving pipeline and scanner app. Checkout <30s, SKU recognition ~100% in 72 hrs',
     tags: ['Service design', 'Ops'],
   },
   {
@@ -53,7 +53,7 @@ export const featured = [
     company: 'CODE19',
     folderDate: 'Dec 2024',
     outcome:
-      'Website redesign: UI/UX, IA, content & SEO for fans, sponsors, engineers, and drivers — 1,500+ monthly sessions · −36% organic bounce · seed $150K→$500K',
+      'Website redesign: UI/UX, IA, content & SEO for fans, sponsors, engineers, and drivers. 1,500+ monthly sessions · −36% organic bounce · seed $150K→$500K',
     tags: ['Website redesign', 'SEO'],
     cover: '/work/code19/hero-2.jpg',
     folderFill: '#111212',
@@ -66,7 +66,7 @@ export const featured = [
     company: 'Wing',
     folderDate: 'Aug 18, 2025',
     outcome:
-      'Concept HMI: cluster, HUD, and voice prototype — 92% task success in simulator (2-week sprint)',
+      'Concept HMI: cluster, HUD, and voice prototype. 92% task success in simulator (2-week sprint)',
     tags: ['HMI', 'Concept'],
     reel: '/work/wing-hmi/demo-1.mp4',
     cover: '/work/wing-hmi/hero.png',
@@ -80,7 +80,7 @@ export const featured = [
     company: 'Wing',
     folderDate: 'Nov 4, 2025',
     outcome:
-      'Concept: on-device vehicle AI UX — local inference, driver data controls (target <20ms edge latency)',
+      'Concept: on-device vehicle AI UX: local inference, driver data controls (target <20ms edge latency)',
     tags: ['Edge AI', 'Concept'],
     reel: '/work/edge-ai/demo-1.mp4',
     cover: '/work/edge-ai/hero.jpg',
