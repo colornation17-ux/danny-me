@@ -810,6 +810,8 @@ button {
 
 .cs-inline-shot img {
   width: 100%;
+  max-height: 480px;
+  object-fit: cover;
   border-radius: var(--radius);
   border: 1px solid var(--line);
   display: block;
@@ -967,7 +969,7 @@ body.game-embed .main { overflow: hidden; padding: 0; }
   overflow: hidden;
 }
 
-/* top-left attribution badge */
+/* top-left attribution badge — clickable link back to home */
 .cs-game-badge {
   position: fixed;
   top: 1.25rem;
@@ -980,8 +982,12 @@ body.game-embed .main { overflow: hidden; padding: 0; }
   font-family: var(--font-mono);
   color: var(--muted);
   letter-spacing: 0.04em;
-  pointer-events: none;
+  text-decoration: none;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: color 0.2s;
 }
+.cs-game-badge:hover { color: var(--ink); }
 .cs-game-badge__sep { opacity: 0.4; }
 
 .cs-game-iframe {

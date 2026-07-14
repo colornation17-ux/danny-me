@@ -34,11 +34,12 @@ export default function Project() {
   const [gameActive, setGameActive] = useState(true)
 
   useEffect(() => {
-    if (isGameCase) {
+    if (isGameCase && gameActive) {
       document.body.classList.add('game-embed')
-      return () => document.body.classList.remove('game-embed')
+    } else {
+      document.body.classList.remove('game-embed')
     }
-  }, [isGameCase])
+  }, [isGameCase, gameActive])
 
   if (isGameCase) {
     return (
@@ -51,11 +52,11 @@ export default function Project() {
               className="cs-game-iframe"
               allowFullScreen
             />
-            <div className="cs-game-badge">
+            <Link to="/" className="cs-game-badge">
               <span>Danny Varghese</span>
               <span className="cs-game-badge__sep">·</span>
               <span>La Bodega Case Study</span>
-            </div>
+            </Link>
             <button
               className="cs-game-skip"
               onClick={() => {
