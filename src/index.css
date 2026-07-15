@@ -5872,12 +5872,17 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-card__img {
     min-height: auto;
-    padding: 0 0.75rem 0.75rem;
+    padding: 0.45rem 0.75rem 0.75rem;
     align-items: flex-start;
   }
 
   .folder-card__text {
-    padding: 1rem 1rem 0.75rem;
+    gap: 0.7rem;
+    padding: 0.9rem 1rem 0.45rem;
+  }
+
+  .folder-card__text-main {
+    gap: 0.4rem;
   }
 
   .folder-card__title {
@@ -5885,12 +5890,19 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__blurb {
+    margin-top: 0.25rem;
     font-size: 0.82rem;
     -webkit-line-clamp: 3;
     line-clamp: 3;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
+  }
+
+  /* Sit tags under the CTA — auto was leaving a big empty band */
+  .folder-card__tags {
+    margin-top: 0;
+    padding-top: 0;
   }
 }
 
