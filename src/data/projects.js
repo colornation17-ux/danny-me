@@ -274,7 +274,7 @@ export const work = [
         title: 'A platform for four audiences, not one brochure site',
         body: 'CODE19 Racing set out to reimagine the digital experience for autonomous motorsports by designing a user-centered platform for fans, sponsors, engineers, and drivers. The goal: transform the website into an engaging hub that delivers real-time value and strengthens brand leadership in a fast-moving category.',
         image: '/work/code19/screen-2.png',
-        caption: 'CODE19 Racing website, shipped Dec 2024',
+        caption: 'Previous CODE19 website (before redesign)',
       },
       {
         eyebrow: 'Core challenge',

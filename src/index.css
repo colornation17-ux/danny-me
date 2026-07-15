@@ -1432,6 +1432,7 @@ button {
 .cs-section {
   padding: 2.75rem 0;
   border-bottom: 1px solid var(--line);
+  scroll-margin-top: 5.5rem;
 }
 
 .cs-section__eyebrow {
@@ -5937,5 +5938,265 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card {
     position: relative;
     top: auto;
+  }
+}
+
+/* ── Case study vertical timeline rail ───────────────────────────── */
+.cs-rail {
+  display: none;
+}
+
+.cs-rail-mobile {
+  display: block;
+  position: sticky;
+  top: 4.5rem;
+  z-index: 35;
+  background: color-mix(in srgb, #fff 94%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--folio-line, #d5dde5);
+  margin: 0 calc(var(--gutter) * -1);
+  padding: 0.55rem var(--gutter);
+}
+
+.cs--with-rail .cs-rail-mobile {
+  margin-bottom: 0.5rem;
+}
+
+.cs-rail-mobile__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.cs-rail-mobile__brand {
+  font-family: "Chubby And Groovy", var(--font-display);
+  font-size: 0.95rem;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.cs-rail-mobile__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 2.5rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--folio-line, #d5dde5);
+  border-radius: 0.45rem;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.cs-rail-mobile__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.cs-rail-mobile__num {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.cs-rail-mobile__chevron {
+  transition: transform 0.2s ease;
+}
+
+.cs-rail-mobile__chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.cs-rail-mobile__menu {
+  list-style: none;
+  margin: 0.45rem 0 0;
+  padding: 0.35rem;
+  border: 1px solid var(--folio-line, #d5dde5);
+  border-radius: 0.45rem;
+  background: #fff;
+  max-width: var(--max);
+  margin-inline: auto;
+}
+
+.cs-rail-mobile__option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.7rem;
+  text-decoration: none;
+  color: var(--muted);
+  border-radius: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.cs-rail-mobile__option:hover,
+.cs-rail-mobile__option.is-active {
+  color: var(--ink);
+  background: #ececec;
+}
+
+@media (min-width: 1024px) {
+  .cs-rail-mobile {
+    display: none;
+  }
+
+  .cs-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: fixed;
+    top: calc(4.5rem + 1rem);
+    left: 0.85rem;
+    z-index: 30;
+    width: 6.75rem;
+    max-height: calc(100vh - 6rem);
+    pointer-events: none;
+  }
+
+  .cs-rail__brand {
+    pointer-events: auto;
+    display: inline-flex;
+    width: fit-content;
+    margin: 0 0 0.15rem 0.55rem;
+    padding: 0 0 0.45rem;
+    border-bottom: 1px solid var(--folio-line, #d5dde5);
+    font-family: "Chubby And Groovy", var(--font-display);
+    font-size: 1rem;
+    color: var(--ink);
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  .cs-rail__brand:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 2px;
+  }
+
+  .cs-rail__body {
+    display: flex;
+    gap: 0.45rem;
+    align-items: stretch;
+  }
+
+  .cs-rail__progress {
+    width: 2px;
+    flex-shrink: 0;
+    padding-block: 0.3rem;
+    margin-left: 0.15rem;
+  }
+
+  .cs-rail__track {
+    position: relative;
+    width: 2px;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--folio-line, #d5dde5);
+    overflow: hidden;
+  }
+
+  .cs-rail__fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--cs-accent, #111) 75%, #111);
+    transition: height 0.25s ease-out;
+  }
+
+  .cs-rail__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    pointer-events: auto;
+  }
+
+  .cs-rail__step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.4rem;
+    align-items: center;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.2s ease;
+  }
+
+  .cs-rail__step:hover {
+    color: var(--ink);
+  }
+
+  .cs-rail__step:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+  }
+
+  .cs-rail__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    border: 1.5px solid currentColor;
+    background: #fff;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .cs-rail__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05rem;
+    min-width: 0;
+  }
+
+  .cs-rail__num {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    opacity: 0.8;
+  }
+
+  .cs-rail__label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+  }
+
+  .cs-rail__step.is-past {
+    color: color-mix(in srgb, var(--ink) 55%, var(--muted));
+  }
+
+  .cs-rail__step.is-past .cs-rail__dot {
+    background: color-mix(in srgb, var(--ink) 35%, #fff);
+    border-color: transparent;
+  }
+
+  .cs-rail__step.is-active {
+    color: var(--cs-accent, #111);
+  }
+
+  .cs-rail__step.is-active .cs-rail__dot {
+    background: var(--cs-accent, #111);
+    border-color: var(--cs-accent, #111);
+    transform: scale(1.15);
+  }
+
+  .cs--with-rail.cs,
+  .cs-game-body.cs--with-rail {
+    padding-left: min(7.25rem, 10vw);
   }
 }

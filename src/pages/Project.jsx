@@ -1,11 +1,17 @@
 ﻿import { Link, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getProjectBySlug, lab, work } from '../data/projects'
 import { featured } from '../data/featured'
 import { SITE } from '../data/site'
 import ProjectMotionPreview, { hasMotionPreview } from '../components/motion/ProjectMotionPreview'
 import CompetitorWatchCaseStudy from '../components/motion/CompetitorWatchCaseStudy'
 import CwHeroChapters from '../components/motion/CwHeroChapters'
+import {
+  CaseStudyMobileBar,
+  CaseStudyRail,
+  sectionAnchorId,
+  stepsFromSections,
+} from '../components/CaseStudyRail'
 
 export default function Project() {
   const { slug } = useParams()
@@ -47,6 +53,12 @@ export default function Project() {
   const isGameCase = project.slug === 'bodega-ops'
   const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)
   const [gameActive, setGameActive] = useState(true)
+  const railSteps = useMemo(
+    () => (isCwCase ? [] : stepsFromSections(project.sections)),
+    [isCwCase, project.sections],
+  )
+  const railBrand = project.title?.split(' ')[0] || project.title
+  const showRail = railSteps.length >= 2
 
   useEffect(() => {
     if (isGameCase && gameActive) {
@@ -86,7 +98,13 @@ export default function Project() {
           </div>
         )}
 
-        <div id="case-study" className="cs-game-body">
+        <div id="case-study" className={`cs-game-body${showRail ? ' cs--with-rail' : ''}`}>
+          {showRail ? (
+            <>
+              <CaseStudyMobileBar brand={railBrand} steps={railSteps} />
+              <CaseStudyRail brand={railBrand} steps={railSteps} />
+            </>
+          ) : null}
           <Link className="cs-back" to={backTo}>{backLabel}</Link>
           <header className="cs-hero cs-hero--default">
             <div className="cs-hero__copy">
@@ -106,7 +124,11 @@ export default function Project() {
           </header>
 
           {project.sections.map((section, index) => (
-            <section className={`cs-section ${index === 0 ? 'cs-section--lead' : ''}`} key={section.eyebrow}>
+            <section
+              id={sectionAnchorId(section.eyebrow, index)}
+              className={`cs-section ${index === 0 ? 'cs-section--lead' : ''}`}
+              key={section.eyebrow}
+            >
               <p className="cs-section__eyebrow">{section.eyebrow}</p>
               <h2>{section.title}</h2>
               <p>{section.body}</p>
@@ -153,9 +175,15 @@ export default function Project() {
 
   return (
     <article
-      className={`cs cs--${layout}${isCwCase ? ' cs--cw' : ''}`}
+      className={`cs cs--${layout}${isCwCase ? ' cs--cw' : ''}${showRail ? ' cs--with-rail' : ''}`}
       style={{ '--cs-accent': project.accent }}
     >
+      {showRail ? (
+        <>
+          <CaseStudyMobileBar brand={railBrand} steps={railSteps} />
+          <CaseStudyRail brand={railBrand} steps={railSteps} />
+        </>
+      ) : null}
       <Link className="cs-back" to={backTo}>
         {backLabel}
       </Link>
@@ -276,6 +304,7 @@ export default function Project() {
 
       {project.sections.map((section, index) => (
         <section
+          id={sectionAnchorId(section.eyebrow, index)}
           className={`cs-section ${index === 0 ? 'cs-section--lead' : ''}`}
           key={section.eyebrow}
         >
