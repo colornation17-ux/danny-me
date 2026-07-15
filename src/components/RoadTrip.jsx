@@ -266,9 +266,6 @@ export default function RoadTrip() {
                     loading="lazy"
                     decoding="async"
                   />
-                  <span className="road-trip__polaroid-hint" aria-hidden="true">
-                    View
-                  </span>
                 </button>
               )}
               <div className="road-trip__panel-text">

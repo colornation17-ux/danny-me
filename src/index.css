@@ -953,34 +953,12 @@ button {
   pointer-events: none;
 }
 
-.road-trip__polaroid-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 0.2rem;
-  transform: translateX(-50%);
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  line-height: 1;
-  color: #666;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-  white-space: nowrap;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .road-trip__polaroid:hover,
   .road-trip__polaroid:focus-visible {
     transform: rotate(-1deg) scale(1.08);
     box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
     z-index: 5;
-  }
-
-  .road-trip__polaroid:hover .road-trip__polaroid-hint,
-  .road-trip__polaroid:focus-visible .road-trip__polaroid-hint {
-    opacity: 1;
   }
 }
 
@@ -1207,16 +1185,8 @@ button {
 
   .road-trip__polaroid {
     width: 5.75rem;
-    /* Extra bottom pad so VIEW sits in the white strip, not under the photo */
-    padding: 5px 5px 1.15rem;
+    padding: 5px 5px 14px;
     transform: rotate(-2deg);
-  }
-
-  .road-trip__polaroid-hint {
-    opacity: 0.9;
-    font-size: 0.5rem;
-    letter-spacing: 0.08em;
-    bottom: 0.28rem;
   }
 
   .travel-lightbox__img {
