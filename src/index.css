@@ -3131,19 +3131,19 @@ body:has(.folio--fullgrid) .app {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--folio-ink, #12151a);
-  padding: 0.4rem 0.85rem !important;
-  border: 1.5px solid var(--folio-ink, #12151a);
-  border-radius: var(--radius-sm);
-  background: #fff;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  padding: 0.4rem 0.55rem !important;
+  border: none;
+  border-radius: 0;
+  background: none;
+  transition: opacity 0.15s;
 }
 
 .nav-cta--resume:hover,
 .nav-cta--resume:focus-visible {
-  background: var(--folio-ink, #12151a);
-  border-color: var(--folio-ink, #12151a);
-  color: #fff;
-  opacity: 1;
+  background: none;
+  border: none;
+  color: var(--folio-ink, #12151a);
+  opacity: 0.65;
 }
 
 .nav-cta--contact {
@@ -4018,7 +4018,15 @@ body:has(.folio--fullgrid) .app {
 }
 
 /* Fix text CTAs at all sizes — override base .nav-cta circle */
-.nav-cta--resume,
+.nav-cta--resume {
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  padding: 0.4rem 0.55rem !important;
+  border: none !important;
+  background: none !important;
+}
+
 .nav-cta--contact {
   width: auto !important;
   height: auto !important;
