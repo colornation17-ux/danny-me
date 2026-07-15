@@ -3095,38 +3095,54 @@ body:has(.folio--fullgrid) .app {
 .nav-cta--linkedin {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-mono);
-  font-size: var(--text-meta-lg);
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: #0077B5;
-  padding: 0.25rem 0.4rem;
-  border: none;
-  background: none;
-  transition: opacity 0.15s;
+  justify-content: center;
+  width: 2.35rem !important;
+  height: 2.35rem !important;
+  padding: 0 !important;
+  border: 1.5px solid #0077b5;
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: #0077b5;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.nav-cta--linkedin:hover {
-  opacity: 0.7;
+.nav-cta--linkedin:hover,
+.nav-cta--linkedin:focus-visible {
+  background: #0077b5;
+  border-color: #0077b5;
+  color: #fff;
+}
+
+.nav-cta--linkedin__icon {
+  display: block;
+  flex-shrink: 0;
 }
 
 .nav-cta--resume {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: auto !important;
+  height: auto !important;
   font-family: var(--font-mono);
   font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--folio-ink, #12151a);
-  padding: 0.4rem 0.55rem;
-  border: none;
-  background: none;
-  transition: opacity 0.15s;
+  padding: 0.4rem 0.85rem !important;
+  border: 1.5px solid var(--folio-ink, #12151a);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.nav-cta--resume:hover {
-  opacity: 0.65;
+.nav-cta--resume:hover,
+.nav-cta--resume:focus-visible {
+  background: var(--folio-ink, #12151a);
+  border-color: var(--folio-ink, #12151a);
+  color: #fff;
+  opacity: 1;
 }
 
 .nav-cta--contact {
@@ -3142,11 +3158,13 @@ body:has(.folio--fullgrid) .app {
   text-transform: uppercase;
   background: #fff;
   color: var(--folio-ink, #12151a);
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.nav-cta--contact:hover {
+.nav-cta--contact:hover,
+.nav-cta--contact:focus-visible {
   background: var(--folio-ink, #12151a);
+  border-color: var(--folio-ink, #12151a);
   color: #fff;
 }
 
@@ -3999,31 +4017,12 @@ body:has(.folio--fullgrid) .app {
 }
 
 /* Fix text CTAs at all sizes — override base .nav-cta circle */
-.nav-cta--resume {
-  width: auto !important;
-  height: auto !important;
-  border-radius: 0 !important;
-  padding: 0.4rem 0.55rem !important;
-}
-
+.nav-cta--resume,
 .nav-cta--contact {
   width: auto !important;
   height: auto !important;
   border-radius: var(--radius-sm) !important;
   padding: 0.4rem 0.85rem !important;
-  font-family: var(--font-mono, "DM Sans", sans-serif);
-  font-size: var(--text-meta);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  border: 1.5px solid #111212;
-  background: #fff;
-  color: #111212;
-}
-
-.nav-cta--contact:hover {
-  background: #111212;
-  color: #fff;
 }
 
 @media (max-width: 600px) {
@@ -6033,7 +6032,8 @@ body:has(.folio--fullgrid) .site-footer {
   }
 }
 
-/* Landscape frame — Competitor Watch size; everything except Lola fills this well */
+/* Landscape frame — same size for every project except Lola (portrait).
+   Media covers the locked 16:9 well so cards never stretch taller and side-crop. */
 .folder-card__image {
   position: relative;
   width: 100%;
@@ -6055,6 +6055,7 @@ body:has(.folio--fullgrid) .site-footer {
   inset: 0;
   width: 100%;
   height: 100%;
+  /* Fill the shared 16:9 well — frame is locked so CW doesn't side-crop */
   object-fit: cover;
   object-position: center;
   image-rendering: auto;
@@ -6063,32 +6064,32 @@ body:has(.folio--fullgrid) .site-footer {
   border: 0;
   outline: none;
   background: transparent;
+  transform: none;
 }
 
-/* Stretch landscape media to the full folder media column (same as CW) */
+/* Shared CW-sized well: fixed 16:9 frame; media object-fit: cover fills it */
 .folder-card__image--fill {
-  aspect-ratio: auto;
-  flex: 1 1 auto;
-  align-self: stretch;
+  aspect-ratio: 16 / 9;
+  flex: none;
+  align-self: center;
   width: 100%;
-  height: 100%;
-  min-height: 16rem;
-  background: transparent;
-}
-
-.folder-card__image--fill img {
-  /* Crop baked margins in composite stills (CODE19 etc.) */
-  transform: scale(1.04);
-  transform-origin: center center;
+  height: auto;
+  min-height: 0;
+  background: color-mix(in srgb, #fff 22%, var(--folder-fill, #f3f5f7));
 }
 
 @media (min-width: 900px) {
+  .folder-card__img {
+    align-items: center;
+  }
+
   .folder-card__image--fill {
-    min-height: 100%;
+    /* Match across cards: same frame, never stretch taller and crop */
+    max-height: min(100%, 28rem);
   }
 }
 
-/* Lola only — portrait phone reel stays centered, not stretched */
+/* Lola only — portrait phone reel stays centered, not forced to CW landscape */
 .folder-card__image--portrait {
   aspect-ratio: 16 / 9;
   flex: none;
@@ -6308,12 +6309,13 @@ body:has(.folio--fullgrid) .site-footer {
     align-items: stretch;
   }
 
-  /* Same 16:9 landscape frame as desktop CW — except Lola portrait */
+  /* Same 16:9 CW frame for all landscape cards — cover fills the well */
   .folder-card__image--fill {
     aspect-ratio: 16 / 9;
     height: auto;
     min-height: 0;
     flex: none;
+    max-height: none;
   }
 
   .folder-card__image--fill img,
