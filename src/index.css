@@ -14,7 +14,7 @@
   --accent-text: #cd4919;
   --ok: #2f9b7a;
   /* Type stack: DM Sans · Season · Chubby · Just Me
-     Exceptions: Pixelify (Lola), Press Start (pill stickers), Cubao (skills) */
+     Exceptions: Pixelify (Lola), Press Start (pills), Cubao (skills), DM Mono (rect stickers) */
   --font-display: "Season Mix TRIAL", sans-serif;
   --font-brand: "Chubby And Groovy", "Season Mix TRIAL", sans-serif;
   --font-script: "Just Me Again Down Here", cursive;
@@ -24,19 +24,21 @@
   --font-pixel: "Press Start 2P", var(--font-label);
   --font-chip: "Cubao", var(--font-sans);
   --font-lola: "Pixelify Sans", var(--font-display);
-  /* Type ladder — prefer these over one-off rem sizes */
-  --text-meta-xs: 0.68rem;
-  --text-meta: 0.75rem;
-  --text-meta-lg: 0.85rem;
+  /* Type ladder — prefer these over one-off rem sizes
+     Floor ≥12px at default 16px root for AA-friendly small text */
+  --text-meta-xs: 0.75rem;   /* 12px min */
+  --text-meta: 0.8125rem;    /* 13px */
+  --text-meta-lg: 0.875rem;  /* 14px */
   --text-body: 1rem;
-  --text-body-lg: 1.1rem;
-  --text-pixel: 0.58rem; /* Press Start pills only */
+  --text-body-lg: 1.125rem;
+  --text-pixel: 0.6875rem; /* Press Start pills — smallest allowed (~11px) */
   --text-h3: clamp(1.35rem, 2.5vw, 1.85rem);
-  --text-h2: clamp(1.6rem, 4vw, 2.6rem);
+  --text-h2: clamp(1.75rem, 4vw, 2.75rem);
   --text-h1: clamp(2.2rem, 5vw, 3.6rem);
   --text-display: clamp(3.4rem, 12vw, 7.5rem);
   --text-folder: clamp(2.8rem, 6vw, 5rem);
   --text-script: clamp(1.25rem, 2.5vw, 1.65rem);
+  --font-sticker: "DM Mono", ui-monospace, monospace; /* rect stickers only */
   /* Spacing ladder */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -3375,7 +3377,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-work__title {
   font-family: var(--font-brand);
-  font-size: var(--text-h2);
+  font-size: max(1.75rem, var(--text-h2));
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -4382,7 +4384,7 @@ body:has(.folio--fullgrid) .app {
 
 .career-path__eyebrow {
   font-family: 'DM Sans', sans-serif;
-  font-size: var(--text-meta);
+  font-size: max(var(--text-meta-lg), 0.875rem);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -4443,7 +4445,7 @@ body:has(.folio--fullgrid) .app {
 
 .career-path__year {
   font-family: 'DM Sans', sans-serif;
-  font-size: var(--text-meta);
+  font-size: max(var(--text-meta), 0.8125rem);
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #888;
@@ -4451,7 +4453,7 @@ body:has(.folio--fullgrid) .app {
 
 .career-path__title {
   font-family: 'DM Sans', sans-serif;
-  font-size: var(--text-body);
+  font-size: max(var(--text-body-lg), 1.125rem);
   font-weight: 700;
   line-height: 1.3;
   color: #111212;
@@ -4459,7 +4461,7 @@ body:has(.folio--fullgrid) .app {
 
 .career-path__desc {
   font-family: 'DM Sans', sans-serif;
-  font-size: var(--text-meta);
+  font-size: max(var(--text-meta-lg), 0.875rem);
   color: #666;
   line-height: 1.35;
 }
@@ -4595,7 +4597,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-work__eyebrow {
   font-family: var(--font-script);
-  font-size: var(--text-body-lg);
+  font-size: max(var(--text-body-lg), 1.125rem);
   color: #111;
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -4610,7 +4612,7 @@ body:has(.folio--fullgrid) .app {
   background: #fff3a3;
   border: 1px solid #e6d56a;
   box-shadow: 3px 3px 0 color-mix(in srgb, #111 12%, transparent);
-  font-size: var(--text-body-lg);
+  font-size: max(var(--text-body-lg), 1.125rem);
   color: #4a4318;
   transform: rotate(-1.5deg);
 }
@@ -5392,8 +5394,8 @@ body:has(.folio--fullgrid) .site-footer {
   z-index: 2;
   padding: var(--space-2) var(--space-4);
   border: 2px solid #111;
-  font-family: var(--font-label);
-  font-size: var(--text-meta-lg);
+  font-family: var(--font-sticker);
+  font-size: max(var(--text-meta-lg), 0.875rem);
   font-weight: 700;
   letter-spacing: 0.03em;
   line-height: 1.35;
@@ -5410,7 +5412,7 @@ body:has(.folio--fullgrid) .site-footer {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-family: var(--font-pixel);
-  font-size: var(--text-pixel);
+  font-size: max(var(--text-pixel), 0.6875rem);
   font-weight: 400;
   line-height: 1.5;
   padding: var(--space-2) var(--space-4);
@@ -5765,7 +5767,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__progress {
   margin: 0 0 var(--space-1);
   font-family: var(--font-mono);
-  font-size: var(--text-meta-xs);
+  font-size: max(var(--text-meta-xs), 0.75rem);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   opacity: 0.55;
@@ -5818,7 +5820,7 @@ body:has(.folio--fullgrid) .site-footer {
   gap: var(--space-2);
   margin: 0;
   font-family: var(--font-mono);
-  font-size: var(--text-meta);
+  font-size: max(var(--text-meta), 0.8125rem);
   letter-spacing: 0.02em;
   text-transform: none;
 }
@@ -5863,7 +5865,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__meta {
   margin: var(--space-2) 0 0;
   font-family: var(--font-mono);
-  font-size: var(--text-meta);
+  font-size: max(var(--text-meta), 0.8125rem);
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 1.35;
@@ -5880,7 +5882,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__blurb {
   margin: var(--space-2) 0 0;
   max-width: 34ch;
-  font-size: var(--text-body);
+  font-size: max(var(--text-body), 1rem);
   line-height: 1.45;
   opacity: 0.92;
 }
@@ -5893,7 +5895,7 @@ body:has(.folio--fullgrid) .site-footer {
   padding: 0.35rem 0;
   border-bottom: 1.5px solid currentColor;
   font-family: var(--font-mono);
-  font-size: var(--text-meta);
+  font-size: max(var(--text-meta), 0.8125rem);
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -6295,7 +6297,7 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-card__blurb {
     margin-top: var(--space-1);
-    font-size: var(--text-meta-lg);
+    font-size: max(var(--text-meta-lg), 0.875rem);
     -webkit-line-clamp: 3;
     line-clamp: 3;
     overflow: hidden;
