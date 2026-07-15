@@ -4,6 +4,7 @@ import {
   hasFoundWireRadio,
   isWireRadioPlaying,
   markFoundWireRadio,
+  playWireRadio,
   toggleWireRadio,
   wireRadioDefaults,
 } from '../lib/wireRadio'
@@ -93,6 +94,14 @@ export default function SpringWire({
     const reduceMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const isCoarse =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(pointer: coarse)').matches
+    // Phones: less elastic flyback so pull doesn't feel like bouncy physics
+    const springEase = isCoarse ? 'power3.out' : 'elastic.out(1.12, 0.36)'
+    const springDur = isCoarse ? 0.42 : 0.95
+    const pullPlayMinMove = isCoarse ? 8 : 10
+    const pullPlayMinHold = isCoarse ? 70 : 120
 
     const setPath = () => {
       const pts = pointsRef.current
@@ -208,7 +217,7 @@ export default function SpringWire({
         )
         gsap.to(p, {
           y: targetY,
-          duration: pullingRef.current ? 0.08 : 0.2,
+          duration: pullingRef.current ? (isCoarse ? 0.05 : 0.08) : isCoarse ? 0.14 : 0.2,
           ease: pullingRef.current ? 'power3.out' : 'power2.out',
           overwrite: 'auto',
           onUpdate: setPath,
@@ -236,8 +245,8 @@ export default function SpringWire({
       pointsRef.current.forEach((p, i) => {
         gsap.to(p, {
           y: p.oy,
-          duration: 0.95 + (i % 4) * 0.05,
-          ease: 'elastic.out(1.15, 0.32)',
+          duration: springDur + (i % 4) * (isCoarse ? 0.02 : 0.05),
+          ease: springEase,
           overwrite: 'auto',
           onUpdate: setPath,
         })
@@ -245,6 +254,8 @@ export default function SpringWire({
     }
 
     const onPointerDown = (e) => {
+      // Ignore multi-touch pinch — one finger plucks the wire
+      if (e.isPrimary === false) return
       pullingRef.current = true
       pointerIdRef.current = e.pointerId
       pullStartRef.current = { x: e.clientX, y: e.clientY, t: performance.now() }
@@ -254,17 +265,22 @@ export default function SpringWire({
         gsap.to(hint, { opacity: 0.35, duration: 0.15, overwrite: 'auto' })
       }
       wrap.setPointerCapture?.(e.pointerId)
-      pullToward(e.clientX, e.clientY, 1)
+      // Stronger initial grab on touch so phone feels plucky, not laggy
+      pullToward(e.clientX, e.clientY, isCoarse ? 1 : 1)
+      if (e.pointerType === 'touch') {
+        e.preventDefault()
+      }
     }
 
     const onPointerMove = (e) => {
       if (pullingRef.current && pointerIdRef.current === e.pointerId) {
         placeHint(e.clientX)
         pullToward(e.clientX, e.clientY, 1)
+        if (e.pointerType === 'touch') e.preventDefault()
         return
       }
-      // Hover: wire follows cursor along the full length
-      if (!pullingRef.current) {
+      // Hover: wire follows cursor along the full length (mouse / stylus only)
+      if (!pullingRef.current && e.pointerType !== 'touch') {
         pullToward(e.clientX, e.clientY, HOVER_PULL)
       }
     }
@@ -281,14 +297,14 @@ export default function SpringWire({
       pullStartRef.current = null
       springHome()
 
-      if (radioRef.current && (moved > 10 || held > 120)) {
-        // Reveal player on intentional pull even if audio file fails to load
+      if (radioRef.current && (moved > pullPlayMinMove || held > pullPlayMinHold)) {
+        // Pull always starts radio (pause lives on the site-radio control)
         invitingRef.current = false
         setFound(true)
         wrap.classList.remove('spring-wire--invite')
         wrap.classList.remove('spring-wire--invite-inview')
         markFoundWireRadio()
-        toggleWireRadio(radioRef.current).catch(() => {})
+        playWireRadio(radioRef.current).catch(() => {})
       }
     }
 
@@ -353,8 +369,8 @@ export default function SpringWire({
     const ro = new ResizeObserver(layout)
     ro.observe(wrap)
 
-    wrap.addEventListener('pointerdown', onPointerDown)
-    wrap.addEventListener('pointermove', onPointerMove)
+    wrap.addEventListener('pointerdown', onPointerDown, { passive: false })
+    wrap.addEventListener('pointermove', onPointerMove, { passive: false })
     wrap.addEventListener('pointerup', onPointerUp)
     wrap.addEventListener('pointercancel', onPointerUp)
     wrap.addEventListener('pointerleave', onPointerLeave)
@@ -382,11 +398,11 @@ export default function SpringWire({
     : showInvite
       ? 'try pulling me'
       : radioOn
-        ? 'pull to pause'
+        ? 'on air'
         : 'pull to play'
 
   const wireLabel = hasRadio
-    ? `${label}. Pull to ${radioOn ? 'pause' : 'play'} a quiet radio clip.`
+    ? `${label}. Pull to play a quiet radio clip. Pause from the radio control.`
     : label
 
   return (
@@ -404,6 +420,7 @@ export default function SpringWire({
                 e.preventDefault()
                 setFound(true)
                 markFoundWireRadio()
+                // Keyboard: play if off, pause if on
                 toggleWireRadio(radioRef.current).catch(() => {})
               }
             }

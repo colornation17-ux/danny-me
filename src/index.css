@@ -5294,20 +5294,18 @@ body.game-embed .site-radio-gate {
 
 .spring-wire--radio {
   cursor: grab;
+  /* touch-action must be none from gesture start — browsers ignore mid-pull changes */
+  touch-action: none;
 }
 
 .spring-wire--radio:active {
   cursor: grabbing;
 }
 
-/* Radio wire: don't steal vertical scroll until the finger actually pulls */
 @media (pointer: coarse) {
   .spring-wire--radio {
-    touch-action: pan-y;
-  }
-
-  .spring-wire--radio.spring-wire--pulling {
-    touch-action: none;
+    /* Taller grab band on phones — easier to pluck without hunting */
+    padding-block: 1.15rem;
   }
 }
 
