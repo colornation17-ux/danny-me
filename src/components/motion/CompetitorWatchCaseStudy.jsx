@@ -4,13 +4,13 @@ import CwVideoFrame from './CwVideoFrame'
 import { CW_PROOF_CLIPS } from '../../data/competitorWatchMotion'
 import { SITE } from '../../data/site'
 
-const TOC = [
-  { id: 'cw-brief', label: 'Problem' },
-  { id: 'cw-foundation', label: 'Foundation' },
-  { id: 'cw-product', label: 'Product' },
-  { id: 'cw-proof', label: 'Proof' },
-  { id: 'cw-impact', label: 'Impact' },
-  { id: 'cw-close', label: 'Contact' },
+export const CW_RAIL_STEPS = [
+  { id: 'cw-brief', num: '00', label: 'Problem' },
+  { id: 'cw-foundation', num: '01', label: 'Foundation' },
+  { id: 'cw-product', num: '02', label: 'Product' },
+  { id: 'cw-proof', num: '03', label: 'Proof' },
+  { id: 'cw-impact', num: '04', label: 'Impact' },
+  { id: 'cw-close', num: '05', label: 'Contact' },
 ]
 
 const BRIEF_PROBLEM = [
@@ -109,41 +109,6 @@ function ProofList({ proof }) {
         <li key={item}>{item}</li>
       ))}
     </ul>
-  )
-}
-
-function CaseToc() {
-  const [active, setActive] = useState(TOC[0].id)
-
-  useEffect(() => {
-    const nodes = TOC.map((t) => document.getElementById(t.id)).filter(Boolean)
-    if (!nodes.length) return undefined
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-        if (visible[0]?.target?.id) setActive(visible[0].target.id)
-      },
-      { rootMargin: '-20% 0px -55% 0px', threshold: [0.1, 0.35, 0.6] },
-    )
-    nodes.forEach((n) => io.observe(n))
-    return () => io.disconnect()
-  }, [])
-
-  return (
-    <nav className="cw-toc" aria-label="Case study sections">
-      {TOC.map((item) => (
-        <a
-          key={item.id}
-          href={`#${item.id}`}
-          className={`cw-toc__link${active === item.id ? ' cw-toc__link--active' : ''}`}
-        >
-          {item.label}
-        </a>
-      ))}
-    </nav>
   )
 }
 
@@ -324,8 +289,6 @@ function CapabilityProof({ clip, index }) {
 export default function CompetitorWatchCaseStudy() {
   return (
     <div className="cw-cs">
-      <CaseToc />
-
       <div className="cw-cs__body">
       <BriefToggle />
 

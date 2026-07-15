@@ -4,7 +4,9 @@ import { getProjectBySlug, lab, work } from '../data/projects'
 import { featured } from '../data/featured'
 import { SITE } from '../data/site'
 import ProjectMotionPreview, { hasMotionPreview } from '../components/motion/ProjectMotionPreview'
-import CompetitorWatchCaseStudy from '../components/motion/CompetitorWatchCaseStudy'
+import CompetitorWatchCaseStudy, {
+  CW_RAIL_STEPS,
+} from '../components/motion/CompetitorWatchCaseStudy'
 import CwHeroChapters from '../components/motion/CwHeroChapters'
 import {
   CaseStudyMobileBar,
@@ -53,11 +55,18 @@ export default function Project() {
   const isGameCase = project.slug === 'bodega-ops'
   const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)
   const [gameActive, setGameActive] = useState(true)
-  const railSteps = useMemo(
-    () => (isCwCase ? [] : stepsFromSections(project.sections)),
-    [isCwCase, project.sections],
-  )
-  const railBrand = project.title?.split(' ')[0] || project.title
+  const railSteps = useMemo(() => {
+    if (isCwCase) return CW_RAIL_STEPS
+    return stepsFromSections(project.sections)
+  }, [isCwCase, project.sections])
+  const railBrand =
+    project.slug === 'competitor-watch'
+      ? 'CW'
+      : project.slug === 'wing-hmi'
+        ? 'Wing'
+        : project.slug === 'edge-ai'
+          ? 'Edge'
+          : project.title?.split(' ')[0] || project.title
   const showRail = railSteps.length >= 2
 
   useEffect(() => {

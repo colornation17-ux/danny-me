@@ -1,0 +1,95 @@
+/**
+ * Case study design system — folio-aligned (danny-me portfolio)
+ *
+ * Layering:
+ *   Portfolio primitives (:root --ink, --muted, --line, --font-*)
+ *        ↓
+ *   Semantic case tokens (.cs --cs-*)
+ *        ↓
+ *   Components (.cs-section, .cs-rail, .cs-hero, …)
+ *
+ * Project accent is injected as --cs-accent on <article class="cs">.
+ * Shared navigation: CaseStudyRail (+ mobile bar) — use across all studies.
+ */
+
+.cs {
+  --cs-ink: var(--ink);
+  --cs-muted: var(--muted);
+  --cs-line: var(--line, #e4e9ee);
+  --cs-line-strong: var(--folio-line, #d5dde5);
+  --cs-bg: var(--bg);
+  --cs-surface: var(--bg-elevated, #fff);
+  --cs-mono: var(--font-mono);
+  --cs-display: var(--font-display);
+  --cs-sans: var(--font-sans);
+  --cs-radius: 0.45rem;
+  --cs-gutter: var(--gutter);
+  --cs-max: var(--max);
+  --cs-rail-w: 6.75rem;
+  --cs-section-y: 2.5rem;
+  --cs-ease: var(--ease, cubic-bezier(0.22, 1, 0.36, 1));
+  /* Fallback if project doesn't set --cs-accent */
+  --cs-accent: var(--ink);
+  color: var(--cs-ink);
+  background: var(--cs-bg);
+}
+
+@media (min-width: 720px) {
+  .cs {
+    --cs-section-y: 2.75rem;
+  }
+}
+
+/* Shared type roles */
+.cs .cs-section__eyebrow,
+.cs .cs-hero__meta,
+.cs .cs-meta-row dt {
+  font-family: var(--cs-mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.cs .cs-section h2,
+.cs .cs-hero h1 {
+  font-family: var(--cs-display);
+  color: var(--cs-ink);
+}
+
+.cs .cs-section p,
+.cs .cs-hero__blurb {
+  color: var(--cs-muted);
+}
+
+.cs .cs-section {
+  padding-block: var(--cs-section-y);
+  border-bottom-color: var(--cs-line);
+  scroll-margin-top: 5.5rem;
+}
+
+/* Competitor Watch: drop old dual-column TOC layout; use shared rail */
+.cs--with-rail .cw-cs {
+  display: block;
+}
+
+.cs--with-rail .cw-cs__body {
+  min-width: 0;
+}
+
+.cs--with-rail .cw-toc {
+  display: none !important;
+}
+
+/* Rail fills use project accent */
+.cs--with-rail .cs-rail__fill,
+.cs--with-rail .cs-rail__step.is-active .cs-rail__dot {
+  background: var(--cs-accent);
+  border-color: var(--cs-accent);
+}
+
+.cs--with-rail .cs-rail__step.is-active {
+  color: var(--cs-accent);
+}
+
+.cs--with-rail .cs-rail__brand {
+  color: var(--cs-ink);
+}

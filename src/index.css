@@ -2024,11 +2024,9 @@ body.game-embed .main { padding: 0; overflow: visible; }
   outline-offset: 2px;
 }
 
-/* Real reserved sidebar column — not an overlay, so it works at normal
-   laptop widths instead of requiring an ultrawide monitor. Below this
-   breakpoint .cw-toc stays the horizontal sticky pill bar (base styles). */
+/* CW TOC styles retained for back-compat; shared CaseStudyRail is primary nav */
 @media (min-width: 1040px) {
-  .cw-cs {
+  .cs:not(.cs--with-rail) .cw-cs {
     display: grid;
     grid-template-columns: 10rem 1fr;
     gap: 2.5rem;
