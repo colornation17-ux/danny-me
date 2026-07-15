@@ -5104,7 +5104,8 @@ body.game-embed .site-radio-gate {
   background: none;
   box-shadow: none;
   font-family: "Just Me Again Down Here", cursive;
-  font-size: clamp(1.2rem, 3.2vw, 1.6rem);
+  /* Same size for try pulling me / pull to play / pull to pause */
+  font-size: clamp(1.35rem, 3.6vw, 1.75rem);
   letter-spacing: 0.01em;
   line-height: 1;
   color: #2a3038;
@@ -5168,13 +5169,13 @@ body.game-embed .site-radio-gate {
   }
 }
 
-/* After discovery — same bare hint, follows cursor */
+/* After discovery — same size bare hint, follows cursor */
 .spring-wire--radio:not(.spring-wire--invite) .spring-wire__hint {
   background: none;
   border: 0;
   padding: 0;
   box-shadow: none;
-  font-size: 1.2rem;
+  font-size: clamp(1.35rem, 3.6vw, 1.75rem);
   color: #4a5560;
 }
 

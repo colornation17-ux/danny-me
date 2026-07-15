@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import gsap from 'gsap'
 import {
   hasFoundWireRadio,
+  markFoundWireRadio,
   toggleWireRadio,
   wireRadioDefaults,
 } from '../lib/wireRadio'
@@ -257,14 +258,13 @@ export default function SpringWire({
       springHome()
 
       if (radioRef.current && (moved > 10 || held > 120)) {
-        toggleWireRadio(radioRef.current)
-          .then(() => {
-            invitingRef.current = false
-            setFound(true)
-            wrap.classList.remove('spring-wire--invite')
-            wrap.classList.remove('spring-wire--invite-inview')
-          })
-          .catch(() => {})
+        // Reveal player on intentional pull even if audio file fails to load
+        invitingRef.current = false
+        setFound(true)
+        wrap.classList.remove('spring-wire--invite')
+        wrap.classList.remove('spring-wire--invite-inview')
+        markFoundWireRadio()
+        toggleWireRadio(radioRef.current).catch(() => {})
       }
     }
 
@@ -352,9 +352,9 @@ export default function SpringWire({
           ? (e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()
-                toggleWireRadio(radioRef.current)
-                  .then(() => setFound(true))
-                  .catch(() => {})
+                setFound(true)
+                markFoundWireRadio()
+                toggleWireRadio(radioRef.current).catch(() => {})
               }
             }
           : undefined
