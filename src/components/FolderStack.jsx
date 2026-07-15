@@ -284,13 +284,10 @@ export default function FolderStack({ projects }) {
       const sticky = el.querySelector('.folder-sticky')
       const width = sticky?.clientWidth || el.clientWidth
       const compact = width < 700 || window.innerWidth < 700
-      // On mobile, reserve the fold slope and divide the rest evenly so
-      // all N number tabs always fit (01…06 visible at once).
+      // Mobile: slope/ledge are hidden — divide the full card width evenly
+      // so 01…06 always fill the row with no clip.
       if (compact) {
-        const slope = 16
-        const safety = 4
-        const usable = Math.max(180, width - slope - safety)
-        setTabW(Math.max(24, Math.floor(usable / total)))
+        setTabW(Math.max(24, Math.floor(width / total)))
         return
       }
       const usable = Math.max(300, width * 0.85)
@@ -298,7 +295,9 @@ export default function FolderStack({ projects }) {
     }
     measure()
     const ro = new ResizeObserver(measure)
+    const sticky = el.querySelector('.folder-sticky')
     ro.observe(el)
+    if (sticky) ro.observe(sticky)
     return () => ro.disconnect()
   }, [total])
 
