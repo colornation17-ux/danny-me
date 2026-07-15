@@ -956,15 +956,18 @@ button {
 .road-trip__polaroid-hint {
   position: absolute;
   left: 50%;
-  bottom: 0.35rem;
+  bottom: 0.2rem;
   transform: translateX(-50%);
   font-family: var(--font-mono);
   font-size: 0.625rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  line-height: 1;
   color: #666;
   opacity: 0;
   transition: opacity 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1204,13 +1207,16 @@ button {
 
   .road-trip__polaroid {
     width: 5.75rem;
-    padding: 5px 5px 14px;
+    /* Extra bottom pad so VIEW sits in the white strip, not under the photo */
+    padding: 5px 5px 1.15rem;
     transform: rotate(-2deg);
   }
 
   .road-trip__polaroid-hint {
-    opacity: 0.85;
-    font-size: 0.55rem;
+    opacity: 0.9;
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    bottom: 0.28rem;
   }
 
   .travel-lightbox__img {
