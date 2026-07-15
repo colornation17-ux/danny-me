@@ -2,6 +2,7 @@
 import { useEffect } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
+import AstryxProvider from './providers/AstryxProvider'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import SiteRadioGate from './components/SiteRadioGate'
@@ -22,27 +23,29 @@ function ScrollToTop() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <Seo />
-      <div className="app">
-        <a className="skip-link" href="#main-content">
-          Skip to content
-        </a>
-        <Nav />
-        <main className="main" id="main-content" tabIndex={-1}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/play" element={<Play />} />
-            <Route path="/projects/:slug" element={<Project />} />
-          </Routes>
-        </main>
-        <SiteRadioGate />
-        <Footer />
-      </div>
-      {/* Visitors, pages, referrers, countries — view in Vercel → Analytics */}
-      <Analytics />
-      <SpeedInsights />
+      <AstryxProvider>
+        <ScrollToTop />
+        <Seo />
+        <div className="app">
+          <a className="skip-link" href="#main-content">
+            Skip to content
+          </a>
+          <Nav />
+          <main className="main" id="main-content" tabIndex={-1}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/play" element={<Play />} />
+              <Route path="/projects/:slug" element={<Project />} />
+            </Routes>
+          </main>
+          <SiteRadioGate />
+          <Footer />
+        </div>
+        {/* Visitors, pages, referrers, countries — view in Vercel → Analytics */}
+        <Analytics />
+        <SpeedInsights />
+      </AstryxProvider>
     </BrowserRouter>
   )
 }

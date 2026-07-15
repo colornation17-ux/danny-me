@@ -127,20 +127,20 @@ function ensureGraph(src = WIRE_RADIO.src) {
 
     // Short room reverb via delay feedback (no IR file)
     const delay = ctx.createDelay(1.0)
-    delay.delayTime.value = 0.085
+    delay.delayTime.value = 0.12
 
     const feedback = ctx.createGain()
-    feedback.gain.value = 0.28
+    feedback.gain.value = 0.38
 
     const wet = ctx.createGain()
-    wet.gain.value = 0.32
+    wet.gain.value = 0.44
 
     const dry = ctx.createGain()
-    dry.gain.value = 0.78
+    dry.gain.value = 0.68
 
     const reverbLow = ctx.createBiquadFilter()
     reverbLow.type = 'lowpass'
-    reverbLow.frequency.value = 1800
+    reverbLow.frequency.value = 1600
 
     masterGain = ctx.createGain()
     masterGain.gain.value = 0

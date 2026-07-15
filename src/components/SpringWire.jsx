@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import gsap from 'gsap'
 import {
   hasFoundWireRadio,
+  isWireRadioPlaying,
   markFoundWireRadio,
   toggleWireRadio,
   wireRadioDefaults,
@@ -85,6 +86,13 @@ export default function SpringWire({
     if (!wrap || !main || !ghost || !hint) return
 
     invitingRef.current = showInvite
+    let humming = false
+    let humPhase = 0
+    let humStartTimer = 0
+    let pointerOver = false
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const setPath = () => {
       const pts = pointsRef.current
@@ -92,6 +100,22 @@ export default function SpringWire({
       main.setAttribute('d', d)
       const ghostPts = pts.map((p) => ({ ...p, y: p.y + 0.85 }))
       ghost.setAttribute('d', buildPath(ghostPts))
+    }
+
+    /** Soft uneven hum while radio plays — settle to rest when pause */
+    const tickHum = () => {
+      if (!humming || pullingRef.current || pointerOver || reduceMotion) return
+      humPhase += 0.055
+      const pts = pointsRef.current
+      pts.forEach((p, i) => {
+        const amp = 0.42 + (i % 5) * 0.08
+        const wobble =
+          Math.sin(humPhase * 2.35 + i * 0.91) * amp +
+          Math.sin(humPhase * 5.7 + i * 1.63) * amp * 0.38 +
+          Math.sin(humPhase * 0.9 + seed + i * 0.3) * 0.18
+        p.y = p.oy + wobble
+      })
+      setPath()
     }
 
     const placeHint = (clientX) => {
@@ -269,16 +293,39 @@ export default function SpringWire({
     }
 
     const onPointerLeave = () => {
+      pointerOver = false
       if (pullingRef.current) return
       springHome()
     }
 
     const onPointerEnter = (e) => {
+      pointerOver = true
       if (pullingRef.current) return
       pullToward(e.clientX, e.clientY, HOVER_PULL)
     }
 
+    const onRadioHum = (e) => {
+      if (!hasRadio) return
+      const on = Boolean(e.detail?.playing)
+      window.clearTimeout(humStartTimer)
+      if (on) {
+        // Let pull-release elastic finish before the bed vibrates
+        humStartTimer = window.setTimeout(() => {
+          humming = true
+        }, 320)
+      } else {
+        humming = false
+        humPhase = 0
+        springHome()
+      }
+    }
+
     layout()
+    gsap.ticker.add(tickHum)
+    window.addEventListener('wire-radio', onRadioHum)
+    if (hasRadio && isWireRadioPlaying() && !reduceMotion) {
+      humming = true
+    }
 
     if (showInvite) {
       wrap.classList.add('spring-wire--invite')
@@ -316,6 +363,9 @@ export default function SpringWire({
     return () => {
       io?.disconnect()
       ro.disconnect()
+      window.clearTimeout(humStartTimer)
+      gsap.ticker.remove(tickHum)
+      window.removeEventListener('wire-radio', onRadioHum)
       wrap.removeEventListener('pointerdown', onPointerDown)
       wrap.removeEventListener('pointermove', onPointerMove)
       wrap.removeEventListener('pointerup', onPointerUp)

@@ -14,34 +14,34 @@ const OTHER_COLOR = '#f6f4ee'
 // Fractional position (0-1) within each stop's state bounding box, based on
 // the real-world location relative to that state's shape.
 const TRIP_STOPS = [
-  // Departure / midwest → west (photos pending for IN + OK)
+  // Departure / midwest → west (photos pending for IN)
   { id: 'indianapolis', title: 'Indianapolis', desc: 'Indiana, departure', state: 'IN', fx: 0.55, fy: 0.55, note: 'Packed the car. Twelve states waiting.' },
   { id: 'illinois', title: 'Chicago', desc: 'Illinois, kayaks under the bridge', state: 'IL', fx: 0.82, fy: 0.18, note: 'Lime kayaks, steel overhead, Chicago in the middle.', photo: '/travel/chicago-il.jpg' },
   { id: 'missouri', title: 'Missouri', desc: 'Crossing the Mississippi', state: 'MO', fx: 0.92, fy: 0.55, note: 'Somewhere past St. Louis, the trip finally felt real.', photo: '/travel/missouri.jpg' },
   { id: 'kansas', title: 'Fort Riley', desc: 'Junction City, Kansas', state: 'KS', fx: 0.55, fy: 0.38, note: 'Water tower and open sky. Midwestern mile marker.', photo: '/travel/fort-riley-ks.jpg' },
   { id: 'garden-of-gods', title: 'Garden of the Gods', desc: 'Colorado Springs', state: 'CO', fx: 0.55, fy: 0.62, note: 'Red rock spires, no crowds, just us and the wind.', photo: '/travel/garden-of-gods.jpg' },
   { id: 'cliff-dwellers', title: 'Manitou Cliff Dwellings', desc: 'Manitou Springs', state: 'CO', fx: 0.53, fy: 0.6, note: 'Ancient homes carved into sandstone, still standing.', photo: '/travel/cliff-dwellings.jpg' },
-  { id: 'pikes-peak', title: 'Pikes Peak', desc: 'America’s Mountain', state: 'CO', fx: 0.52, fy: 0.58 },
-  { id: 'fairplay', title: 'Fairplay', desc: 'South Park, Colorado', state: 'CO', fx: 0.42, fy: 0.5 },
-  { id: 'breckenridge', title: 'Breckenridge · Blue River', desc: 'Summit County', state: 'CO', fx: 0.38, fy: 0.38 },
+  { id: 'pikes-peak', title: 'Pikes Peak', desc: 'America’s Mountain', state: 'CO', fx: 0.52, fy: 0.58, note: 'Snow gate, map board, peaks waiting above.', photo: '/travel/pikes-peak.jpg' },
+  { id: 'fairplay', title: 'Fairplay', desc: 'South Park, Colorado', state: 'CO', fx: 0.42, fy: 0.5, note: 'Open road, red barn, snowline ahead.', photo: '/travel/fairplay-co.jpg' },
+  { id: 'breckenridge', title: 'Breckenridge · Blue River', desc: 'Summit County', state: 'CO', fx: 0.38, fy: 0.38, note: 'Snow walls on both sides. Summer, somehow.', photo: '/travel/breckenridge-blue-river.jpg' },
   { id: 'vail', title: 'Vail', desc: 'Driving through, snow on the pass', state: 'CO', fx: 0.3, fy: 0.35, note: 'Snow on the pass in July. Drove through anyway.', photo: '/travel/vail.jpg' },
-  { id: 'canyonlands', title: 'Canyonlands · Island in the Sky', desc: 'Potash off-roading, Mesa Arch', state: 'UT', fx: 0.85, fy: 0.65, note: 'Off-roading Potash Road, dust everywhere, worth it.', photo: '/travel/canyonlands.jpg' },
+  { id: 'canyonlands', title: 'Canyonlands', desc: 'Island in the Sky · Potash', state: 'UT', fx: 0.85, fy: 0.65, note: 'Off-roading Potash Road, dust everywhere, worth it.', photo: '/travel/canyonlands.jpg' },
+  { id: 'noahs-arc', title: 'Noah’s Arc', desc: 'Mesa Arch, Canyonlands', state: 'UT', fx: 0.8, fy: 0.62, note: 'Orange under the arch. Worth the early rise.', photo: '/travel/noahs-arc.jpg' },
   { id: 'monument-valley', title: 'Monument Valley', desc: 'Navajo Nation, UT/AZ', state: 'UT', fx: 0.75, fy: 0.95, note: 'The buttes from every movie, actually there.', photo: '/travel/monument-valley.jpg' },
-  { id: 'forrest-gump', title: 'Forrest Gump Point', desc: 'Highway 163', state: 'UT', fx: 0.73, fy: 0.93 },
-  { id: 'petroglyphs', title: 'Petroglyphs', desc: 'Ancient rock art, UT', state: 'UT', fx: 0.6, fy: 0.8 },
+  { id: 'forrest-gump', title: 'Forrest Gump Point', desc: 'Highway 163', state: 'UT', fx: 0.73, fy: 0.93, note: 'That straight shot everyone knows — we stood on it.', photo: '/travel/forrest-gump-point.jpg' },
   { id: 'antelope-canyon', title: 'Antelope Canyon', desc: 'Page, Arizona', state: 'AZ', fx: 0.55, fy: 0.08, note: 'Light beams cutting through the slot canyon walls.', photo: '/travel/antelope-canyon.jpg' },
   { id: 'horseshoe-bend', title: 'Horseshoe Bend', desc: 'Colorado River overlook', state: 'AZ', fx: 0.53, fy: 0.1, note: 'One wrong step from the edge. Best view of the trip.', photo: '/travel/horseshoe-bend.jpg' },
   { id: 'wirepass', title: 'Wire Pass Trail', desc: 'Paria Canyon', state: 'AZ', fx: 0.45, fy: 0.05, note: 'A slot canyon with no straight lines, just curves.', photo: '/travel/wirepass.jpg' },
   { id: 'white-pocket', title: 'White Pocket', desc: 'Vermilion Cliffs, after dark', state: 'AZ', fx: 0.4, fy: 0.07, note: 'Hiked in after dark, stars overhead, worth the risk.', photo: '/travel/white-pocket.jpg' },
-  { id: 'zion', title: 'Zion · Emerald Pools & The Narrows', desc: 'Zion National Park', state: 'UT', fx: 0.25, fy: 0.85, note: 'Emerald Pools, then the Narrows. Wet shoes for days.', photo: '/travel/zion.jpg' },
-  { id: 'vegas', title: 'Las Vegas', desc: 'The drive through', state: 'NV', fx: 0.75, fy: 0.92 },
-  { id: 'sequoia', title: 'Sequoia National Park', desc: 'California', state: 'CA', fx: 0.65, fy: 0.55, note: 'Trees older than any of our problems.', photo: '/travel/sequoia.jpg' },
-  { id: 'route66', title: 'Route 66 · End of the Trail', desc: 'Santa Monica Pier', state: 'CA', fx: 0.25, fy: 0.78, note: 'End of the road. Feet in the Pacific at last.', photo: '/travel/route66-santa-monica.jpg' },
+  { id: 'zion', title: 'Zion', desc: 'Emerald Pools & The Narrows', state: 'UT', fx: 0.25, fy: 0.85, note: 'Emerald Pools, then the Narrows. Wet shoes for days.', photo: '/travel/zion.jpg' },
+  { id: 'vegas', title: 'Las Vegas', desc: 'The drive through', state: 'NV', fx: 0.75, fy: 0.92, note: 'Sphere glowing on the night drive through.', photo: '/travel/las-vegas-sphere.jpg' },
+  { id: 'sequoia', title: 'Sequoia', desc: 'National Park, California', state: 'CA', fx: 0.65, fy: 0.55, note: 'Trees older than any of our problems.', photo: '/travel/sequoia.jpg' },
+  { id: 'route66', title: 'Route 66', desc: 'End of the Trail · Santa Monica', state: 'CA', fx: 0.25, fy: 0.78, note: 'End of the road. Feet in the Pacific at last.', photo: '/travel/route66-santa-monica.jpg' },
   { id: 'grand-canyon', title: 'Grand Canyon', desc: 'South Rim', state: 'AZ', fx: 0.25, fy: 0.15, note: 'Stood at the rim and still couldn’t believe the scale.', photo: '/travel/grand-canyon.jpg' },
   // Return leg
   { id: 'new-mexico', title: 'Santa Rosa', desc: 'New Mexico, sunrise on the highway', state: 'NM', fx: 0.72, fy: 0.38, note: 'Sun through the windshield. Still heading home.', photo: '/travel/santa-rosa-nm.jpg' },
   { id: 'texas', title: 'Big Texan', desc: 'Amarillo, Texas', state: 'TX', fx: 0.42, fy: 0.1, note: 'Flags, a yellow landmark, and a Texas-sized lunch.', photo: '/travel/amarillo-big-texan.jpg' },
-  { id: 'oklahoma', title: 'Oklahoma', desc: 'Almost back east', state: 'OK', fx: 0.55, fy: 0.45, note: 'Last open stretch before the map folds up.' },
+  { id: 'oklahoma', title: 'Oklahoma', desc: 'Almost back east', state: 'OK', fx: 0.55, fy: 0.45, note: 'Last open stretch before the map folds up.', photo: '/travel/oklahoma-drive.jpg' },
 ]
 
 // Full 12-state corridor — every state here has a stop so the marker visits it.
@@ -121,7 +121,23 @@ export default function RoadTrip() {
   }, [])
 
   return (
-    <div className="road-trip" ref={scrollerRef} aria-label="Cross-country road trip route, 12 states, 6,000 miles">
+    <div
+      className="road-trip"
+      ref={scrollerRef}
+      role="region"
+      aria-label={`Cross-country road trip, ${TRIP_STOPS.length} stops across ${ROUTE_STATES.length} states, about 6,000 miles`}
+    >
+      {/* Screen-reader itinerary — visual panels are motion-only */}
+      <ol className="sr-only">
+        {TRIP_STOPS.map((s) => (
+          <li key={`sr-${s.id}`}>
+            {s.title}
+            {s.desc ? ` — ${s.desc}` : ''}
+            {s.note ? `. ${s.note}` : ''}
+          </li>
+        ))}
+      </ol>
+
       <div className="road-trip__pin" ref={pinRef}>
         <svg ref={svgRef} viewBox={MAP_VIEWBOX} className="road-trip__map" aria-hidden="true">
           {ALL_STATE_CODES.map((code) => (
@@ -137,7 +153,7 @@ export default function RoadTrip() {
           <circle ref={markerRef} r="6" fill={ROUTE_COLOR} stroke="#fff" strokeWidth="2" className="road-trip__marker" />
         </svg>
 
-        <div className="road-trip__panel-stack">
+        <div className="road-trip__panel-stack" aria-hidden="true">
           {TRIP_STOPS.map((s) => (
             <div
               key={s.id}
@@ -146,7 +162,7 @@ export default function RoadTrip() {
             >
               {s.photo && (
                 <div className="road-trip__polaroid">
-                  <img src={s.photo} alt={`${s.title}, ${s.desc}`} loading="lazy" />
+                  <img src={s.photo} alt="" loading="lazy" />
                 </div>
               )}
               <div className="road-trip__panel-text">
@@ -158,8 +174,8 @@ export default function RoadTrip() {
           ))}
         </div>
 
-        <p className="road-trip__hint">
-          <span className="road-trip__hint-car" aria-hidden="true">🚗</span>
+        <p className="road-trip__hint" aria-hidden="true">
+          <span className="road-trip__hint-car">🚗</span>
           Scroll to drive it
         </p>
       </div>

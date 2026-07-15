@@ -907,17 +907,19 @@ button {
   border: 1px solid var(--folio-line, #d5dde5);
   border-radius: var(--radius-sm);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
-  padding: 1rem 1.4rem 1rem 0.75rem;
+  padding: 0.85rem 1.15rem 0.85rem 0.7rem;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 1.4rem;
+  gap: 1.1rem;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .road-trip__polaroid {
   flex-shrink: 0;
-  width: 160px;
-  padding: 10px 10px 26px;
+  width: 148px;
+  padding: 8px 8px 22px;
   background: #fff;
   border: 1px solid #e9e9e9;
   border-radius: var(--radius-xs);
@@ -938,6 +940,8 @@ button {
 .road-trip__panel-text {
   text-align: left;
   min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .road-trip__panel-eyebrow {
@@ -947,7 +951,10 @@ button {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #767676;
-  margin-bottom: 0.2rem;
+  margin: 0 0 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .road-trip__panel-title {
@@ -955,15 +962,26 @@ button {
   font-size: var(--text-body-lg);
   font-weight: 600;
   color: #111212;
-  margin-bottom: 0.4rem;
+  margin: 0 0 0.3rem;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .road-trip__panel-note {
   margin: 0;
   font-family: var(--font-script);
-  font-size: var(--text-body-lg);
+  font-size: var(--text-body);
   line-height: 1.25;
   color: #445;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .road-trip__hint {
@@ -1010,14 +1028,47 @@ button {
 @media (max-width: 700px) {
   .road-trip__pin {
     height: 100svh;
+    gap: 0.65rem;
+    padding: 0.5rem 0 max(3.25rem, calc(env(safe-area-inset-bottom) + 2.5rem));
   }
 
   .road-trip__map {
-    max-height: 52vh;
+    max-height: 42svh;
+    width: min(100%, 100%);
   }
 
   .road-trip__panel-stack {
-    height: 170px;
+    width: min(94%, 420px);
+    height: 11.5rem;
+  }
+
+  .road-trip__panel {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem 0.65rem 0.55rem;
+  }
+
+  .road-trip__polaroid {
+    width: 5.75rem;
+    padding: 5px 5px 14px;
+    transform: rotate(-2deg);
+  }
+
+  .road-trip__panel-title {
+    font-size: var(--text-body);
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .road-trip__panel-note {
+    font-size: var(--text-meta-lg);
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .road-trip__hint {
+    bottom: max(0.85rem, env(safe-area-inset-bottom));
   }
 }
 
@@ -5085,25 +5136,19 @@ body.game-embed .site-radio-gate {
   cursor: grabbing;
 }
 
+/* Radio wire: don't steal vertical scroll until the finger actually pulls */
+@media (pointer: coarse) {
+  .spring-wire--radio {
+    touch-action: pan-y;
+  }
+
+  .spring-wire--radio.spring-wire--pulling {
+    touch-action: none;
+  }
+}
+
 .spring-wire--playing .spring-wire__path--main {
   stroke: color-mix(in srgb, var(--ink, #111) 70%, #4f7cff);
-  animation: spring-wire-hum 1.8s ease-in-out infinite;
-}
-
-@keyframes spring-wire-hum {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.72;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .spring-wire--playing .spring-wire__path--main {
-    animation: none;
-  }
 }
 
 .spring-wire--pulling {
@@ -6306,24 +6351,79 @@ body:has(.folio--fullgrid) .site-footer {
     height: calc(var(--folder-count) * 42vh + (100vh - 74px));
   }
 
-  /* Stack text → image; keep native media ratio (no stretch-to-fill) */
+  /* Stack text → image; img consumes leftover viewport height */
   .folder-card__content {
-    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
     min-height: 0; /* override tablet 64vh min-height */
   }
 
+  .folder-card__text {
+    flex: 0 0 auto;
+    gap: 0.65rem;
+    padding: 0.85rem 1rem 0.35rem;
+  }
+
+  .folder-card__text-main {
+    gap: 0.35rem;
+  }
+
+  .folder-card__title {
+    font-size: clamp(1.55rem, 7vw, 2.1rem);
+  }
+
+  .folder-card__meta--sub {
+    display: none; /* reclaim space for media on phones */
+  }
+
+  .folder-card__blurb {
+    margin-top: 0.15rem;
+    max-width: none;
+    font-size: max(var(--text-meta-lg), 0.875rem);
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+
+  .folder-card__cta-row {
+    gap: 0.55rem;
+    flex-wrap: wrap;
+  }
+
+  .folder-card__cta,
+  .folder-card__live {
+    min-height: 2.75rem;
+    padding-block: 0.55rem;
+    align-items: center;
+  }
+
+  /* Sit tags under the CTA — auto was leaving a big empty band */
+  .folder-card__tags {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
   .folder-card__img {
-    min-height: auto;
-    padding: 0.35rem 0.75rem 0.7rem;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0.45rem 0.75rem 0.75rem;
     align-items: stretch;
   }
 
-  /* Same 16:9 CW frame for all landscape cards — cover fills the well */
+  /*
+   * Mobile only: fill leftover teal under copy/CTA.
+   * Desktop keeps locked 16:9 wells (see .folder-card__image--fill above).
+   */
   .folder-card__image--fill {
-    aspect-ratio: 16 / 9;
-    height: auto;
-    min-height: 0;
-    flex: none;
+    aspect-ratio: auto;
+    width: 100%;
+    height: 100%;
+    min-height: 10rem;
+    flex: 1 1 auto;
+    align-self: stretch;
     max-height: none;
   }
 
@@ -6333,40 +6433,16 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image--fill .motion-preview,
   .folder-card__image--fill .folder-card__placeholder {
     object-fit: cover;
+    object-position: center;
   }
 
   .folder-card__image--portrait {
-    aspect-ratio: 16 / 9;
-    height: auto;
-  }
-
-  .folder-card__text {
-    gap: 0.7rem;
-    padding: 0.9rem 1rem 0.4rem;
-  }
-
-  .folder-card__text-main {
-    gap: 0.4rem;
-  }
-
-  .folder-card__title {
-    font-size: clamp(1.6rem, 7vw, 2.2rem);
-  }
-
-  .folder-card__blurb {
-    margin-top: var(--space-1);
-    font-size: max(var(--text-meta-lg), 0.875rem);
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-  }
-
-  /* Sit tags under the CTA — auto was leaving a big empty band */
-  .folder-card__tags {
-    margin-top: 0;
-    padding-top: 0;
+    aspect-ratio: auto;
+    width: 100%;
+    height: 100%;
+    min-height: 10rem;
+    flex: 1 1 auto;
+    align-self: stretch;
   }
 }
 
