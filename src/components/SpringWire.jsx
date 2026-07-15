@@ -4,7 +4,6 @@ import {
   hasFoundWireRadio,
   isWireRadioPlaying,
   markFoundWireRadio,
-  playWireRadio,
   toggleWireRadio,
   wireRadioDefaults,
 } from '../lib/wireRadio'
@@ -298,13 +297,13 @@ export default function SpringWire({
       springHome()
 
       if (radioRef.current && (moved > pullPlayMinMove || held > pullPlayMinHold)) {
-        // Pull always starts radio (pause lives on the site-radio control)
+        // Pull toggles: play when off, pause when on
         invitingRef.current = false
         setFound(true)
         wrap.classList.remove('spring-wire--invite')
         wrap.classList.remove('spring-wire--invite-inview')
         markFoundWireRadio()
-        playWireRadio(radioRef.current).catch(() => {})
+        toggleWireRadio(radioRef.current).catch(() => {})
       }
     }
 
@@ -398,11 +397,11 @@ export default function SpringWire({
     : showInvite
       ? 'try pulling me'
       : radioOn
-        ? 'on air'
+        ? 'pull to pause'
         : 'pull to play'
 
   const wireLabel = hasRadio
-    ? `${label}. Pull to play a quiet radio clip. Pause from the radio control.`
+    ? `${label}. Pull to ${radioOn ? 'pause' : 'play'} a quiet radio clip.`
     : label
 
   return (
@@ -420,7 +419,6 @@ export default function SpringWire({
                 e.preventDefault()
                 setFound(true)
                 markFoundWireRadio()
-                // Keyboard: play if off, pause if on
                 toggleWireRadio(radioRef.current).catch(() => {})
               }
             }
