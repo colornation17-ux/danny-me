@@ -320,7 +320,7 @@ export default function Home() {
         </div>
 
         <p className="folio-hero__lead folio-hero__lead--center">
-          A product designer who ships AI into <em className="folio-lead__impact">real operations</em>.
+          A product designer who ships AI into <em className="folio-lead__impact">real operations</em>
         </p>
 
         <a className="folio-btn folio-btn--contact" href="#projects">
