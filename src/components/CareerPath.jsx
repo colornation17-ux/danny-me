@@ -87,9 +87,36 @@ const STOPS = [
 const TICK = 26   // connector line length from circle edge
 const LABEL_GAP = 8  // gap between tick end and text
 
+/** Classic Instant Polaroid proportions (SVG units, centered on photo point) */
+const POLAROID = {
+  frameW: 118,
+  frameH: 152,
+  padX: 7,
+  padTop: 7,
+  padBottom: 38, // thick Instant foot — must read clearly at thumbnail size
+}
+
+function polaroidGeometry() {
+  const { frameW, frameH, padX, padTop, padBottom } = POLAROID
+  const frame = {
+    x: -frameW / 2,
+    y: -frameH / 2,
+    w: frameW,
+    h: frameH,
+  }
+  const photo = {
+    x: frame.x + padX,
+    y: frame.y + padTop,
+    w: frameW - padX * 2,
+    h: frameH - padTop - padBottom,
+  }
+  return { frame, photo }
+}
+
 export default function CareerPath() {
   const svgRef = useRef(null)
   const progressRef = useRef(null)
+  const { frame: polaroidFrame, photo: polaroidPhoto } = polaroidGeometry()
 
   useEffect(() => {
     const svg = svgRef.current
@@ -207,14 +234,19 @@ export default function CareerPath() {
               <span className="career-path__desc">{s.desc}</span>
               {s.photos?.length ? (
                 <div className="career-path__photos">
-                  {s.photos.map((p) => (
-                    <img
+                  {s.photos.map((p, i) => (
+                    <figure
                       key={p.id}
-                      src={p.src}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                    />
+                      className="career-path__polaroid"
+                      style={{ '--rot': `${p.rot ?? (i % 2 === 0 ? -4 : 5)}deg` }}
+                    >
+                      <img
+                        src={p.src}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </figure>
                   ))}
                 </div>
               ) : null}
@@ -237,11 +269,18 @@ export default function CareerPath() {
         className="career-path__svg"
       >
         <defs>
-          <clipPath id="cp-photo-window">
-            <rect x="-62" y="-58" width="124" height="108" rx="2" />
+          <clipPath id="cp-polaroid-window">
+            <rect
+              x={polaroidPhoto.x}
+              y={polaroidPhoto.y}
+              width={polaroidPhoto.w}
+              height={polaroidPhoto.h}
+              rx="1"
+            />
           </clipPath>
-          <filter id="cp-photo-shadow" x="-60%" y="-60%" width="220%" height="220%">
-            <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.24" />
+          <filter id="cp-polaroid-shadow" x="-50%" y="-40%" width="200%" height="210%">
+            <feDropShadow dx="0" dy="5" stdDeviation="5" floodColor="#000" floodOpacity="0.22" />
+            <feDropShadow dx="1" dy="1" stdDeviation="0.6" floodColor="#000" floodOpacity="0.08" />
           </filter>
         </defs>
 
@@ -328,26 +367,60 @@ export default function CareerPath() {
                 </text>
               </g>
 
-              {/* Polaroid photos tied to this stop's moment */}
+              {/* Instant Polaroid frames tied to this stop */}
               {(s.photos || []).map((p) => (
                 <g
                   key={p.id}
                   id={`cp-photo-${p.id}`}
-                  className="cp-photo"
+                  className="cp-photo cp-polaroid"
                   transform={`translate(${p.x} ${p.y}) rotate(${p.rot})`}
                 >
                   <rect
-                    x="-72" y="-68" width="144" height="168" rx="4"
-                    fill="#fff"
-                    stroke="#e9e9e9"
+                    x={polaroidFrame.x}
+                    y={polaroidFrame.y}
+                    width={polaroidFrame.w}
+                    height={polaroidFrame.h}
+                    rx="2"
+                    fill="#fffcf7"
+                    stroke="#ddd6cb"
                     strokeWidth="1"
-                    filter="url(#cp-photo-shadow)"
+                    filter="url(#cp-polaroid-shadow)"
+                  />
+                  <rect
+                    x={polaroidPhoto.x}
+                    y={polaroidPhoto.y}
+                    width={polaroidPhoto.w}
+                    height={polaroidPhoto.h}
+                    fill="#dfe3e8"
                   />
                   <image
                     href={p.src}
-                    x="-62" y="-58" width="124" height="108"
-                    preserveAspectRatio="xMidYMid meet"
-                    clipPath="url(#cp-photo-window)"
+                    x={polaroidPhoto.x}
+                    y={polaroidPhoto.y}
+                    width={polaroidPhoto.w}
+                    height={polaroidPhoto.h}
+                    preserveAspectRatio="xMidYMid slice"
+                    clipPath="url(#cp-polaroid-window)"
+                  />
+                  {/* Emulsion edge */}
+                  <rect
+                    x={polaroidPhoto.x}
+                    y={polaroidPhoto.y}
+                    width={polaroidPhoto.w}
+                    height={polaroidPhoto.h}
+                    fill="none"
+                    stroke="rgba(17,18,18,0.08)"
+                    strokeWidth="0.75"
+                  />
+                  {/* Foot accent line — Instant Polaroid cue */}
+                  <line
+                    x1={polaroidFrame.x + 10}
+                    y1={polaroidFrame.y + polaroidFrame.h - 14}
+                    x2={polaroidFrame.x + polaroidFrame.w - 10}
+                    y2={polaroidFrame.y + polaroidFrame.h - 14}
+                    stroke="rgba(17,18,18,0.06)"
+                    strokeWidth="1"
+                    strokeLinecap="round"
                   />
                 </g>
               ))}

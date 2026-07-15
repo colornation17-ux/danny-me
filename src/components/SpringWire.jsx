@@ -9,8 +9,9 @@ import {
 const POINT_COUNT = 20
 const VIEW_H = 52
 const BASE_Y = VIEW_H / 2
-/** Show hover hint when pointer is in the right slice of the wire */
-const HINT_FROM = 0.72
+/** Hover follow strength — full-width, not just the right tip */
+const HOVER_PULL = 0.72
+const HINT_EDGE_PAD = 56
 
 function restY(i, seed) {
   const n =
@@ -92,20 +93,39 @@ export default function SpringWire({
       ghost.setAttribute('d', buildPath(ghostPts))
     }
 
-    const setHint = (visible) => {
-      // Invite cue stays readable — never fade it during scroll/hover
+    const placeHint = (clientX) => {
+      const rect = wrap.getBoundingClientRect()
+      const x = gsap.utils.clamp(
+        HINT_EDGE_PAD,
+        Math.max(HINT_EDGE_PAD, rect.width - HINT_EDGE_PAD),
+        clientX - rect.left,
+      )
+      gsap.set(hint, {
+        left: x,
+        xPercent: -50,
+        yPercent: -50,
+        top: '50%',
+      })
+    }
+
+    const setHint = (visible, clientX) => {
+      // Invite cue stays readable — never fade it during scroll
       if (invitingRef.current) {
         gsap.set(hint, { opacity: 1, y: 0 })
         wrap.classList.add('spring-wire--hint')
+        if (typeof clientX === 'number') placeHint(clientX)
         return
       }
+      if (visible && typeof clientX === 'number') placeHint(clientX)
       gsap.to(hint, {
         opacity: visible ? 1 : 0,
-        y: visible ? 0 : 4,
-        duration: 0.28,
+        y: visible ? 0 : 6,
+        duration: 0.22,
         ease: 'power2.out',
         overwrite: 'auto',
       })
+      if (visible) wrap.classList.add('spring-wire--hint')
+      else wrap.classList.remove('spring-wire--hint')
     }
 
     const layout = () => {
@@ -139,7 +159,7 @@ export default function SpringWire({
     }
 
     const pullToward = (clientX, clientY, strength = 1) => {
-      const { x, y, nx } = localPoint(clientX, clientY)
+      const { x, y } = localPoint(clientX, clientY)
       const pts = pointsRef.current
       let nearest = 0
       let best = Infinity
@@ -153,42 +173,38 @@ export default function SpringWire({
 
       pts.forEach((p, i) => {
         const dist = Math.abs(i - nearest)
-        const falloff = Math.max(0, 1 - dist / 5.5) ** 1.25
+        const falloff = Math.max(0, 1 - dist / 5.5) ** 1.2
         if (falloff <= 0) return
-        const pull = Math.min(strength, 0.92) * falloff
+        const pull = Math.min(strength, 0.95) * falloff
         const targetY = gsap.utils.clamp(
-          4,
-          VIEW_H - 4,
+          3,
+          VIEW_H - 3,
           gsap.utils.interpolate(p.oy, y, pull),
         )
         gsap.to(p, {
           y: targetY,
-          duration: pullingRef.current ? 0.1 : 0.28,
+          duration: pullingRef.current ? 0.08 : 0.2,
           ease: pullingRef.current ? 'power3.out' : 'power2.out',
           overwrite: 'auto',
           onUpdate: setPath,
         })
       })
 
-      if (invitingRef.current) {
-        setHint(true)
-        return
-      }
-
-      if (!pullingRef.current && nx >= HINT_FROM) {
-        setHint(true)
-        wrap.classList.add('spring-wire--hint')
-      } else if (!pullingRef.current) {
-        setHint(false)
-        wrap.classList.remove('spring-wire--hint')
+      // Hint + emphasis wherever the pointer is on the wire
+      if (!pullingRef.current) {
+        setHint(true, clientX)
+      } else if (invitingRef.current) {
+        setHint(true, clientX)
       }
     }
 
     const springHome = () => {
       if (!invitingRef.current) {
         setHint(false)
-        wrap.classList.remove('spring-wire--hint')
       } else {
+        // Re-center invite label when pointer leaves
+        const rect = wrap.getBoundingClientRect()
+        placeHint(rect.left + rect.width / 2)
         setHint(true)
       }
       wrap.classList.remove('spring-wire--pulling')
@@ -208,18 +224,23 @@ export default function SpringWire({
       pointerIdRef.current = e.pointerId
       pullStartRef.current = { x: e.clientX, y: e.clientY, t: performance.now() }
       wrap.classList.add('spring-wire--pulling')
-      if (!invitingRef.current) setHint(false)
+      placeHint(e.clientX)
+      if (!invitingRef.current) {
+        gsap.to(hint, { opacity: 0.35, duration: 0.15, overwrite: 'auto' })
+      }
       wrap.setPointerCapture?.(e.pointerId)
       pullToward(e.clientX, e.clientY, 1)
     }
 
     const onPointerMove = (e) => {
       if (pullingRef.current && pointerIdRef.current === e.pointerId) {
+        placeHint(e.clientX)
         pullToward(e.clientX, e.clientY, 1)
         return
       }
-      if (e.pointerType === 'mouse' && !pullingRef.current) {
-        pullToward(e.clientX, e.clientY, 0.48)
+      // Hover: wire follows cursor along the full length
+      if (!pullingRef.current) {
+        pullToward(e.clientX, e.clientY, HOVER_PULL)
       }
     }
 
@@ -250,17 +271,23 @@ export default function SpringWire({
     const onPointerLeave = () => {
       if (pullingRef.current) return
       springHome()
-      if (invitingRef.current) setHint(true)
+    }
+
+    const onPointerEnter = (e) => {
+      if (pullingRef.current) return
+      pullToward(e.clientX, e.clientY, HOVER_PULL)
     }
 
     layout()
 
     if (showInvite) {
       wrap.classList.add('spring-wire--invite')
+      const rect = wrap.getBoundingClientRect()
+      placeHint(rect.left + rect.width / 2)
       gsap.set(hint, { opacity: 1, y: 0 })
       wrap.classList.add('spring-wire--hint')
     } else {
-      gsap.set(hint, { opacity: 0, y: 4 })
+      gsap.set(hint, { opacity: 0, y: 6, xPercent: -50, yPercent: -50, left: '50%', top: '50%' })
     }
 
     let io
@@ -284,6 +311,7 @@ export default function SpringWire({
     wrap.addEventListener('pointerup', onPointerUp)
     wrap.addEventListener('pointercancel', onPointerUp)
     wrap.addEventListener('pointerleave', onPointerLeave)
+    wrap.addEventListener('pointerenter', onPointerEnter)
 
     return () => {
       io?.disconnect()
@@ -293,6 +321,7 @@ export default function SpringWire({
       wrap.removeEventListener('pointerup', onPointerUp)
       wrap.removeEventListener('pointercancel', onPointerUp)
       wrap.removeEventListener('pointerleave', onPointerLeave)
+      wrap.removeEventListener('pointerenter', onPointerEnter)
       gsap.killTweensOf(pointsRef.current)
       gsap.killTweensOf(hint)
     }

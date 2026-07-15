@@ -301,7 +301,9 @@ export default function Home() {
 
         <p className="folio-hero__avail folio-hero__avail--dot">
           <span className="folio-dot" aria-hidden="true" />
-          Open to full-time product design roles
+          <span className="folio-hero__avail-text">
+            Open to full-time product design roles
+          </span>
         </p>
 
         <div className="folio-sticker folio-sticker--green" style={{ '--rot': '14deg' }}>
