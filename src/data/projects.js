@@ -17,11 +17,12 @@ export const work = [
     team: 'Solo design & build',
     skills: ['Product design', 'Conversation design', 'WhatsApp CRM', 'PWA'],
     accent: '#1FA97A',
+    href: 'https://la-bodega-lola.vercel.app/',
     liveUrl: 'https://la-bodega-lola.vercel.app/',
     whatsappUrl: 'https://wa.me/14043238325?text=Hi%20Lola',
     connectUrl: 'https://wacrm-i9f2.vercel.app/',
     connectCta: 'Lola Connect',
-    liveCta: 'View product site',
+    liveCta: 'View case study',
     cover: '/work/lola/journey.png',
     hero: '/work/lola/service.png',
     gallery: [
