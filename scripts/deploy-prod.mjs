@@ -53,8 +53,9 @@ function extractUrl(text) {
 
 function inspectStatus(url) {
   const { stdout } = runCapture(['vercel', 'inspect', url])
-  const status = stdout.match(/status\s+(\S+)/i)?.[1] || 'UNKNOWN'
-  return status.replace(/[^\w]/g, '')
+  // Output looks like: "status  ● Ready" — ignore the bullet glyph
+  const match = stdout.match(/status[^\w]*(Ready|Error|Canceled|Building|Queued|UNKNOWN)/i)
+  return match?.[1] || 'UNKNOWN'
 }
 
 run(['vercel', 'pull', '--yes', '--environment=production'], 'Pull project settings')

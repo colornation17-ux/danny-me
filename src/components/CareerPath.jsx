@@ -338,7 +338,7 @@ export default function CareerPath() {
                 <text
                   x={textX} y={s.cy - 10}
                   fontSize="8.5"
-                  fontFamily="DM Mono, monospace"
+                  fontFamily="DM Sans, sans-serif"
                   fontWeight="600"
                   fill="#888"
                   letterSpacing="0.08em"
@@ -349,7 +349,7 @@ export default function CareerPath() {
                 <text
                   x={textX} y={s.cy + 4}
                   fontSize="11.5"
-                  fontFamily="DM Mono, monospace"
+                  fontFamily="DM Sans, sans-serif"
                   fontWeight="700"
                   fill="#111212"
                   textAnchor={anchor}
@@ -359,7 +359,7 @@ export default function CareerPath() {
                 <text
                   x={textX} y={s.cy + 17}
                   fontSize="8.5"
-                  fontFamily="DM Mono, monospace"
+                  fontFamily="DM Sans, sans-serif"
                   fill="#666"
                   textAnchor={anchor}
                 >
@@ -430,7 +430,7 @@ export default function CareerPath() {
 
         {/* End dot */}
         <circle cx="200" cy="1385" r="5" fill="#111212" />
-        <text x="200" y="1405" fontSize="8" fontFamily="DM Mono, monospace" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
+        <text x="200" y="1405" fontSize="8" fontFamily="DM Sans, sans-serif" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
       </svg>
     </div>
   )

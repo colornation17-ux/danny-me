@@ -12,6 +12,7 @@
     "deploy:prod": "node scripts/deploy-prod.mjs"
   },
   "dependencies": {
+    "@fontsource/dm-sans": "^5.2.8",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "geist": "^1.7.2",

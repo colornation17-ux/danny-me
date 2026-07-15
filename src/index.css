@@ -13,9 +13,40 @@
      text, not for small text). */
   --accent-text: #cd4919;
   --ok: #2f9b7a;
+  /* Type stack: DM Sans · Season · Chubby · Just Me
+     Exceptions: Pixelify (Lola), Press Start (pill stickers), Cubao (skills) */
   --font-display: "Season Mix TRIAL", sans-serif;
+  --font-brand: "Chubby And Groovy", "Season Mix TRIAL", sans-serif;
+  --font-script: "Just Me Again Down Here", cursive;
   --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "DM Mono", ui-monospace, monospace;
+  --font-label: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-label);
+  --font-pixel: "Press Start 2P", var(--font-label);
+  --font-chip: "Cubao", var(--font-sans);
+  --font-lola: "Pixelify Sans", var(--font-display);
+  /* Type ladder — prefer these over one-off rem sizes */
+  --text-meta-xs: 0.68rem;
+  --text-meta: 0.75rem;
+  --text-meta-lg: 0.85rem;
+  --text-body: 1rem;
+  --text-body-lg: 1.1rem;
+  --text-pixel: 0.58rem; /* Press Start pills only */
+  --text-h3: clamp(1.35rem, 2.5vw, 1.85rem);
+  --text-h2: clamp(1.6rem, 4vw, 2.6rem);
+  --text-h1: clamp(2.2rem, 5vw, 3.6rem);
+  --text-display: clamp(3.4rem, 12vw, 7.5rem);
+  --text-folder: clamp(2.8rem, 6vw, 5rem);
+  --text-script: clamp(1.25rem, 2.5vw, 1.65rem);
+  /* Spacing ladder */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --section-y: clamp(2.5rem, 6vw, 4rem);
   --max: 72rem;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
   --radius: 0.75rem;
@@ -131,7 +162,7 @@ button {
 .nav-brand {
   font-family: var(--font-sans);
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: var(--text-body-lg);
   letter-spacing: -0.01em;
   color: var(--ink);
 }
@@ -151,7 +182,7 @@ button {
 
 .nav-links a {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: var(--text-meta-lg);
   font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -179,7 +210,7 @@ button {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
   font-weight: 600;
   color: var(--accent-text);
   transition: background 0.2s var(--ease);
@@ -218,7 +249,7 @@ button {
   align-items: center;
   gap: 0.55rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -254,7 +285,7 @@ button {
 .hero__support {
   max-width: 38rem;
   color: var(--muted);
-  font-size: 1.125rem;
+  font-size: var(--text-body-lg);
   margin-bottom: 2rem;
 }
 
@@ -282,7 +313,7 @@ button {
 
 .experience-item__year {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.06em;
   color: var(--accent-text);
 }
@@ -294,7 +325,7 @@ button {
 
 .experience-item__org {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-body-lg);
 }
 
 /* ── Sections ────────────────────────────────────── */
@@ -313,7 +344,7 @@ button {
 
 .section__head h2 {
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
   font-weight: 500;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -321,7 +352,7 @@ button {
 }
 
 .section__head a {
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
   font-weight: 600;
   color: var(--muted);
 }
@@ -395,7 +426,7 @@ button {
   bottom: 0.85rem;
   z-index: 1;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
@@ -426,7 +457,7 @@ button {
   left: 1rem;
   bottom: 1rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.78);
@@ -443,7 +474,7 @@ button {
 .project-card__meta {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
@@ -457,7 +488,7 @@ button {
 .project-card__layer {
   margin: 0.1rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--card-accent, var(--accent-text));
@@ -475,7 +506,7 @@ button {
 .project-card__blurb {
   margin: 0.35rem 0 0;
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: var(--text-body);
   line-height: 1.45;
   max-width: 36rem;
 }
@@ -484,7 +515,7 @@ button {
   display: inline-flex;
   align-self: flex-start;
   margin-top: 0.35rem;
-  font-size: 0.75rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   padding: 0.28rem 0.6rem;
   border-radius: 999px;
@@ -548,7 +579,7 @@ button {
 
 .play-card__meta {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
@@ -557,7 +588,7 @@ button {
 
 .play-card h3 {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: var(--text-body-lg);
   font-weight: 500;
   letter-spacing: -0.02em;
   margin-bottom: 0.35rem;
@@ -565,14 +596,14 @@ button {
 
 .play-card p {
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-body-lg);
 }
 
 .play-card__cta {
   display: inline-block;
   margin-top: 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.04em;
   color: #111212;
 }
@@ -596,7 +627,7 @@ button {
 }
 
 .about-lead {
-  font-size: 1.25rem;
+  font-size: var(--text-body-lg);
   max-width: 34rem;
   margin-bottom: 1.25rem;
 }
@@ -632,7 +663,7 @@ button {
 
 .about-box h2 {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   margin-bottom: 0.85rem;
 }
 
@@ -670,8 +701,8 @@ button {
 }
 
 .about-section__eyebrow {
-  font-family: var(--font-mono, 'DM Mono', monospace);
-  font-size: 0.72rem;
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -690,7 +721,7 @@ button {
   position: absolute;
   width: 235px;
   padding: 1.4rem 1.3rem 1.2rem;
-  font-family: var(--font-mono, 'DM Mono', monospace);
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
   color: #3a2c1a;
   box-shadow:
     0 14px 28px rgba(35, 24, 10, 0.16),
@@ -743,8 +774,8 @@ button {
 }
 
 .sticky-note__heading {
-  font-family: 'Just Me Again Down Here', cursive;
-  font-size: 1.65rem;
+  font-family: var(--font-script);
+  font-size: var(--text-script);
   font-weight: 400;
   line-height: 1.1;
   margin: 0.3rem 0 0.85rem;
@@ -755,7 +786,7 @@ button {
   list-style: none;
   margin: 0;
   padding: 0;
-  font-size: 0.78rem;
+  font-size: var(--text-meta);
   line-height: 1.7;
 }
 
@@ -770,7 +801,7 @@ button {
 
 .sticky-note__footer {
   margin: 0.65rem 0 0;
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   font-style: italic;
   opacity: 0.75;
 }
@@ -799,8 +830,8 @@ button {
 }
 
 .about-travel__story {
-  font-family: 'Just Me Again Down Here', cursive;
-  font-size: 1.55rem;
+  font-family: var(--font-script);
+  font-size: var(--text-script);
   line-height: 1.5;
   max-width: 38rem;
   color: var(--ink, #12151a);
@@ -892,8 +923,8 @@ button {
 }
 
 .road-trip__panel-eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--text-meta-xs);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -903,7 +934,7 @@ button {
 
 .road-trip__panel-title {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: var(--text-body-lg);
   font-weight: 600;
   color: #111212;
   margin-bottom: 0.4rem;
@@ -911,8 +942,8 @@ button {
 
 .road-trip__panel-note {
   margin: 0;
-  font-family: 'Just Me Again Down Here', cursive;
-  font-size: 1.15rem;
+  font-family: var(--font-script);
+  font-size: var(--text-body-lg);
   line-height: 1.25;
   color: #445;
 }
@@ -925,8 +956,8 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: var(--font-mono, 'DM Mono', monospace);
-  font-size: 0.72rem;
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
+  font-size: var(--text-meta);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted, #747272);
@@ -936,7 +967,7 @@ button {
 
 .road-trip__hint-car {
   display: inline-block;
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   letter-spacing: 0;
   text-transform: none;
   animation: road-trip-car-nudge 1.5s ease-in-out infinite;
@@ -1029,8 +1060,8 @@ button {
 .solo-bento__cell figcaption,
 .solo-bento__video-link {
   margin-top: 0.4rem;
-  font-family: var(--font-mono, 'DM Mono', monospace);
-  font-size: 0.72rem;
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
+  font-size: var(--text-meta);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1147,8 +1178,8 @@ button {
 }
 
 .about-photobook__label {
-  font-family: 'Just Me Again Down Here', cursive;
-  font-size: 1.6rem;
+  font-family: var(--font-script);
+  font-size: var(--text-h3);
   color: #111212;
   margin-bottom: 0.75rem;
 }
@@ -1172,8 +1203,8 @@ button {
 .about-photobook__external {
   display: inline-flex;
   margin-top: 0.85rem;
-  font-family: var(--font-mono, 'DM Mono', monospace);
-  font-size: 0.72rem;
+  font-family: var(--font-mono, 'DM Sans', sans-serif);
+  font-size: var(--text-meta);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted, #747272);
@@ -1211,7 +1242,7 @@ button {
   align-items: center;
   gap: 0.35rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1241,7 +1272,7 @@ button {
 }
 
 .cs-rail__back-arrow {
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
   line-height: 1;
   letter-spacing: 0;
 }
@@ -1272,7 +1303,7 @@ button {
 
 .cs-hero__meta {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1303,7 +1334,7 @@ button {
 .cs-hero__blurb {
   max-width: 40rem;
   color: var(--muted);
-  font-size: 1.1rem;
+  font-size: var(--text-body-lg);
   margin-bottom: 1.5rem;
 }
 
@@ -1321,7 +1352,7 @@ button {
 
 .cs-meta-row dt {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1331,7 +1362,7 @@ button {
 .cs-meta-row dd {
   margin: 0;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: var(--text-body-lg);
 }
 
 .cs-banner {
@@ -1402,7 +1433,7 @@ button {
 .cs-inline-shot figcaption,
 .cs-gallery figcaption {
   margin-top: 0.55rem;
-  font-size: 0.88rem;
+  font-size: var(--text-meta-lg);
   color: var(--muted);
 }
 
@@ -1438,7 +1469,7 @@ button {
 
 .cs-section__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent-text);
@@ -1482,7 +1513,7 @@ button {
 
 .cs-metric__value {
   font-family: var(--font-display);
-  font-size: 1.65rem;
+  font-size: var(--text-script);
   font-weight: 500;
   letter-spacing: -0.02em;
   margin-bottom: 0.2rem;
@@ -1490,7 +1521,7 @@ button {
 
 .cs-metric__label {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
 }
 
 .cs-actions {
@@ -1527,7 +1558,7 @@ button {
 
 .cs-gallery__item figcaption {
   padding: 0.5rem 0.75rem;
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   font-family: var(--font-mono);
   color: var(--muted);
   letter-spacing: 0.02em;
@@ -1562,7 +1593,7 @@ button {
 
 .cs-mobile-mockup figcaption {
   padding: 0.75rem;
-  font-size: 0.8rem;
+  font-size: var(--text-meta-lg);
   font-family: var(--font-mono);
   color: var(--muted);
   text-align: center;
@@ -1595,7 +1626,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   font-family: var(--font-mono);
   color: var(--muted);
   letter-spacing: 0.04em;
@@ -1677,7 +1708,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cs-pager__cta {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1685,27 +1716,27 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cs-pager__title {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: var(--text-body-lg);
   font-weight: 700;
   color: var(--ink);
   line-height: 1.25;
 }
 
 .cs-pager__blurb {
-  font-size: 0.88rem;
+  font-size: var(--text-meta-lg);
   line-height: 1.45;
   color: var(--muted);
   max-width: 36rem;
 }
 
 .cs-pager__link--prev .cs-pager__title {
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   font-weight: 600;
   color: color-mix(in srgb, var(--ink) 72%, var(--muted));
 }
 
 .cs-pager__link--next .cs-pager__title {
-  font-size: 1.25rem;
+  font-size: var(--text-body-lg);
 }
 
 .cs-pager__link:hover .cs-pager__cta,
@@ -1770,7 +1801,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   justify-content: space-between;
   align-items: center;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
 }
 
 .site-footer__links {
@@ -1822,7 +1853,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   background: var(--ink);
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
   font-weight: 600;
   border-radius: var(--radius);
   text-decoration: none;
@@ -1954,7 +1985,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-hero-chapters__label {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   color: var(--ink);
   display: flex;
   align-items: center;
@@ -2031,7 +2062,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-toc__link {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted);
@@ -2085,7 +2116,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
     display: flex;
     align-items: center;
     border-radius: 0;
-    font-size: 0.7rem;
+    font-size: var(--text-meta);
   }
 
   .cw-toc__link--active {
@@ -2127,7 +2158,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-brief__goals p {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
   color: var(--muted);
   line-height: 1.4;
   max-width: none;
@@ -2138,7 +2169,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   align-items: center;
   width: fit-content;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   padding: 0.15rem 0.5rem;
@@ -2162,7 +2193,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-cs__story p {
   max-width: 42rem;
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: var(--text-body);
   line-height: 1.6;
   margin: 0 0 1rem;
 }
@@ -2205,7 +2236,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cs-banner__caption {
   margin: 0.65rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   color: var(--muted);
 }
 
@@ -2225,7 +2256,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-cs__hook-num {
   margin-top: 1rem;
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   color: var(--ink);
 }
 
@@ -2238,7 +2269,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-cs__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--muted);
@@ -2247,7 +2278,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-cs__job {
   color: var(--muted);
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   margin: 0.75rem 0 1rem;
   max-width: 40rem;
 }
@@ -2269,7 +2300,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-cs__proof li {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   padding: 0.28rem 0.5rem;
   border-radius: 999px;
   background: color-mix(in srgb, var(--cs-accent, #166534) 12%, #fff);
@@ -2281,7 +2312,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   margin-top: 1.25rem;
   padding-top: 1rem;
   border-top: 1px solid var(--line);
-  font-size: 0.95rem;
+  font-size: var(--text-body-lg);
   color: var(--muted);
   max-width: 40rem;
 }
@@ -2289,7 +2320,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-cs__decision span {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink);
@@ -2316,7 +2347,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-modules-hint {
   margin: 0 0 0.85rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   color: var(--muted);
   letter-spacing: 0.02em;
 }
@@ -2406,13 +2437,13 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-module__n {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   color: var(--muted);
 }
 
 .cw-module h3 {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: var(--text-body-lg);
   font-weight: 500;
   letter-spacing: -0.02em;
   margin: 0;
@@ -2421,7 +2452,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-module > p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
   line-height: 1.45;
   color: var(--muted);
   max-width: none;
@@ -2437,7 +2468,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   justify-content: space-between;
   gap: 0.5rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   color: var(--muted);
   margin-bottom: 0.35rem;
 }
@@ -2472,7 +2503,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-module__tags li {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: var(--text-meta-xs);
   padding: 0.2rem 0.42rem;
   border-radius: 0.35rem;
   border: 0;
@@ -2483,7 +2514,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-module__cta {
   margin-top: 0.4rem;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-meta-xs);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -2588,7 +2619,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-cs__signature span {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   color: var(--muted);
 }
 
@@ -2607,14 +2638,14 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-cs__decisions-block h3 {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: var(--text-h3);
   font-weight: 500;
   margin: 0 0 0.25rem;
 }
 
 .cw-decisions h4 {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: var(--text-body-lg);
   font-weight: 500;
   margin: 0 0 0.45rem;
 }
@@ -2623,7 +2654,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   margin: 2rem 0 0;
   max-width: 42rem;
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: var(--text-body);
   line-height: 1.55;
 }
 
@@ -2637,7 +2668,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-cs__support-card h3 {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--text-body-lg);
   font-weight: 500;
   margin: 0.85rem 0 0.4rem;
 }
@@ -2645,7 +2676,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-cs__support-card p {
   margin: 0 0 0.75rem;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-body-lg);
   max-width: 40rem;
 }
 
@@ -2665,7 +2696,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-cs__foundation h3 {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--text-body-lg);
   font-weight: 500;
   margin: 0 0 0.4rem;
 }
@@ -2682,7 +2713,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cs-hero__note {
   margin: 0.75rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   color: var(--muted);
   max-width: 36rem;
 }
@@ -2723,7 +2754,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-cs__stats dd {
   margin: 0.2rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   color: var(--muted);
   letter-spacing: 0.02em;
 }
@@ -2751,7 +2782,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   border: 0;
   background: transparent;
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
   font-weight: 600;
   padding: 0.45rem 0.9rem;
   border-radius: 999px;
@@ -2795,7 +2826,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-brief__n {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   color: var(--muted);
   margin-bottom: 0.35rem;
 }
@@ -2806,7 +2837,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-brief__card h3 {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: var(--text-body-lg);
   font-weight: 500;
   margin: 0 0 0.4rem;
   letter-spacing: -0.015em;
@@ -2814,7 +2845,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-brief__card p {
   margin: 0;
-  font-size: 0.92rem;
+  font-size: var(--text-body);
   color: var(--muted);
   line-height: 1.45;
   max-width: none;
@@ -2843,7 +2874,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-loop__n {
   display: block;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   color: var(--cs-accent, #166534);
   margin-bottom: 0.35rem;
 }
@@ -2851,14 +2882,14 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-loop strong {
   display: block;
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: var(--text-body-lg);
   font-weight: 500;
   margin-bottom: 0.35rem;
 }
 
 .cw-loop p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
   color: var(--muted);
   max-width: none;
 }
@@ -2882,7 +2913,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-decisions h3 {
   font-family: var(--font-display);
-  font-size: 1.15rem;
+  font-size: var(--text-body-lg);
   font-weight: 500;
   margin: 0 0 0.45rem;
 }
@@ -2890,7 +2921,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-decisions p {
   margin: 0;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: var(--text-body-lg);
   max-width: none;
 }
 
@@ -2898,7 +2929,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   margin: 1.5rem 0 0;
   max-width: 40rem;
   color: var(--muted);
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   line-height: 1.5;
 }
 
@@ -2929,7 +2960,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   --folio-line: #d5dde5;
   margin-inline: calc(var(--gutter) * -1);
   width: calc(100% + 2 * var(--gutter));
-  padding: 0 clamp(1rem, 3vw, 1.75rem) 4rem;
+  padding: 0 var(--gutter) var(--space-8);
   color: var(--folio-ink);
   background-color: #f4f7fa;
   border-inline: 1px solid var(--folio-line);
@@ -2943,7 +2974,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   max-width: 100%;
   margin-left: 0;
   margin-right: 0;
-  padding-inline: clamp(0.75rem, 3vw, 2rem);
+  padding-inline: var(--gutter);
   border-inline: 0;
   min-height: 100vh;
   overflow-x: clip;
@@ -2982,9 +3013,9 @@ body:has(.folio--fullgrid) .app {
 }
 
 .nav-brand__text--full {
-  font-family: "Chubby And Groovy", var(--font-display);
+  font-family: var(--font-brand);
   font-weight: 400;
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   color: #111212;
   letter-spacing: 0;
 }
@@ -3007,8 +3038,8 @@ body:has(.folio--fullgrid) .app {
   gap: 0.35rem;
   padding: 0.4rem 0.75rem;
   border-radius: 0.4rem;
-  font-family: "Chubby And Groovy", var(--font-display);
-  font-size: 0.95rem;
+  font-family: var(--font-brand);
+  font-size: var(--text-body-lg);
   font-weight: 400;
   letter-spacing: 0.01em;
   text-transform: none;
@@ -3047,7 +3078,7 @@ body:has(.folio--fullgrid) .app {
   display: inline-flex;
   align-items: center;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: var(--text-meta-lg);
   font-weight: 800;
   letter-spacing: 0.04em;
   color: #0077B5;
@@ -3065,7 +3096,7 @@ body:has(.folio--fullgrid) .app {
   display: inline-flex;
   align-items: center;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -3087,7 +3118,7 @@ body:has(.folio--fullgrid) .app {
   border-radius: 0.45rem;
   padding: 0.4rem 0.85rem;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -3108,7 +3139,7 @@ body:has(.folio--fullgrid) .app {
   border-radius: 0.45rem;
   padding: 0.45rem 0.85rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   background: #fff;
@@ -3122,8 +3153,8 @@ body:has(.folio--fullgrid) .app {
 
 .folio-hero {
   display: grid;
-  gap: 1.5rem;
-  padding: clamp(2rem, 6vw, 4rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  gap: var(--space-5);
+  padding: var(--section-y) 0;
   border-bottom: 0;
 }
 
@@ -3137,11 +3168,11 @@ body:has(.folio--fullgrid) .app {
 
 .folio-hero__kicker {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.08em;
   text-transform: lowercase;
   color: var(--folio-muted);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .folio-hero__name {
@@ -3155,11 +3186,11 @@ body:has(.folio--fullgrid) .app {
 
 .folio-hero__creds {
   list-style: none;
-  margin: 1.25rem 0 0;
+  margin: var(--space-5) 0 0;
   padding: 0;
   display: grid;
-  gap: 0.45rem;
-  font-size: 0.95rem;
+  gap: var(--space-2);
+  font-size: var(--text-meta-lg);
   color: var(--folio-muted);
 }
 
@@ -3180,9 +3211,9 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-hero__avail {
-  margin-top: 1.5rem;
+  margin-top: var(--space-5);
   font-family: var(--font-mono);
-  font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+  font-size: var(--text-meta-lg);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--folio-ink);
@@ -3198,11 +3229,11 @@ body:has(.folio--fullgrid) .app {
 
 .folio-hero__lead {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.5vw, 2.35rem);
+  font-size: var(--text-h2);
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.02em;
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-5);
 }
 
 .folio-hero__lead em {
@@ -3214,13 +3245,13 @@ body:has(.folio--fullgrid) .app {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: var(--space-2);
   min-height: 44px;
   padding: 0.7rem 1.1rem;
   border: 1px solid var(--folio-ink);
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: var(--text-meta);
   font-weight: 500;
   letter-spacing: 0.04em;
   background: #fff;
@@ -3272,14 +3303,14 @@ body:has(.folio--fullgrid) .app {
   border: 1px solid var(--folio-line);
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.04em;
   color: var(--folio-muted);
   background: #f7f9fb;
 }
 
 .folio-about {
-  padding: clamp(2.5rem, 6vw, 4rem) 0;
+  padding: var(--section-y) 0;
   border-bottom: 0;
 }
 
@@ -3300,24 +3331,24 @@ body:has(.folio--fullgrid) .app {
 
 .folio-about__year {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: var(--text-meta-lg);
   color: var(--folio-muted);
 }
 
 .folio-about__body {
   max-width: 42rem;
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   line-height: 1.55;
   color: var(--folio-muted);
 }
 
 .folio-skills {
   list-style: none;
-  margin: 1.5rem 0 0;
+  margin: var(--space-5) 0 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .folio-skills li {
@@ -3326,29 +3357,29 @@ body:has(.folio--fullgrid) .app {
   border-radius: 0.45rem;
   background: #fff;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .folio-work {
-  padding: clamp(2.5rem, 6vw, 4rem) 0;
+  padding: var(--section-y) 0;
 }
 
 .folio-work__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: var(--text-meta);
   color: var(--folio-muted);
-  margin-bottom: 0.35rem;
+  margin-bottom: var(--space-1);
 }
 
 .folio-work__title {
-  font-family: "Highfat", var(--font-display);
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-family: var(--font-brand);
+  font-size: var(--text-h2);
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .folio-work__support {
@@ -3403,7 +3434,7 @@ body:has(.folio--fullgrid) .app {
   justify-content: space-between;
   gap: 1rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--folio-muted);
@@ -3440,7 +3471,7 @@ body:has(.folio--fullgrid) .app {
   border-radius: 999px;
   border: 1px solid var(--folio-ink);
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.04em;
   background: #fff;
 }
@@ -3464,7 +3495,7 @@ body:has(.folio--fullgrid) .app {
   border-radius: 999px;
   border: 1px solid var(--folio-line);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.04em;
   color: var(--folio-muted);
   background: #f7f9fb;
@@ -3503,14 +3534,14 @@ body:has(.folio--fullgrid) .app {
     linear-gradient(160deg, #0f172a, #1e293b);
   color: #e2e8f0;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .folio-contact {
   margin-top: 0;
-  padding: clamp(3rem, 8vw, 5.5rem) clamp(1.5rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3.5rem);
+  padding: var(--section-y) 0;
   border: 0;
   border-radius: 0;
   /* Stay on graph paper — black slab was fighting the folio system */
@@ -3553,17 +3584,17 @@ body:has(.folio--fullgrid) .app {
 
 /* ── Recommendations ─────────────────────────────────────────────── */
 .folio-recs {
-  padding: clamp(3rem, 8vw, 6rem) var(--page-x, 1.5rem);
+  padding: var(--section-y) 0;
   background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: var(--space-6);
 }
 
 .folio-recs__label {
-  font-family: var(--font-mono, "DM Mono", monospace);
-  font-size: 0.72rem;
+  font-family: var(--font-mono, "DM Sans", sans-serif);
+  font-size: var(--text-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #aaa;
@@ -3583,7 +3614,7 @@ body:has(.folio--fullgrid) .app {
 /* Twitter / X post card */
 .rec-card {
   background: #fff;
-  padding: 1.1rem 1.25rem 0.9rem;
+  padding: var(--space-4) var(--space-5) var(--space-3);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -3625,14 +3656,14 @@ body:has(.folio--fullgrid) .app {
 }
 
 .rec-card__name {
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
   font-weight: 700;
   color: #0f1419;
   line-height: 1.25;
 }
 
 .rec-card__role {
-  font-size: 0.82rem;
+  font-size: var(--text-meta-lg);
   color: #536471;
   font-family: var(--font-sans, system-ui);
 }
@@ -3653,7 +3684,7 @@ body:has(.folio--fullgrid) .app {
 }
 
 .rec-card__quote {
-  font-size: 0.93rem;
+  font-size: var(--text-body);
   line-height: 1.6;
   color: #0f1419;
   border: none;
@@ -3680,8 +3711,8 @@ body:has(.folio--fullgrid) .app {
 .rec-card__action {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.78rem;
+  gap: var(--space-1);
+  font-size: var(--text-meta);
   color: #536471;
   background: none;
   border: none;
@@ -3698,8 +3729,8 @@ body:has(.folio--fullgrid) .app {
 .rec-card__source-bar {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.72rem;
+  gap: var(--space-2);
+  font-size: var(--text-meta);
   color: #536471;
   padding-top: 0.65rem;
   margin-top: 0.15rem;
@@ -3712,7 +3743,7 @@ body:has(.folio--fullgrid) .app {
 .folio-contact__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(2rem, 6vw, 5rem);
+  gap: clamp(var(--space-6), 6vw, var(--space-8));
   align-items: center;
   max-width: 72rem;
   margin-inline: auto;
@@ -3732,21 +3763,21 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-contact__eyebrow {
-  font-family: var(--font-mono, "DM Mono", monospace);
-  font-size: 0.72rem;
+  font-family: var(--font-mono, "DM Sans", sans-serif);
+  font-size: var(--text-meta);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #4f7cff;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .folio-contact__title {
-  font-family: "Chubby And Groovy", "Highfat", var(--font-display);
-  font-size: clamp(2.2rem, 5.2vw, 3.6rem);
+  font-family: var(--font-brand);
+  font-size: var(--text-h1);
   font-weight: 400;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
   color: #111212;
   line-height: 0.95;
   position: relative;
@@ -3756,8 +3787,8 @@ body:has(.folio--fullgrid) .app {
   max-width: 34rem;
   color: #4a5560;
   margin-bottom: 0;
-  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
-  font-family: "Just Me Again Down Here", "Cubao", cursive;
+  font-size: var(--text-script);
+  font-family: var(--font-script);
   font-weight: 400;
   line-height: 1.45;
   position: relative;
@@ -3767,15 +3798,15 @@ body:has(.folio--fullgrid) .app {
 .folio-contact__right {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-5);
   align-items: flex-start;
 }
 
 .folio-contact__cta {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 1.35rem 1.6rem;
+  gap: var(--space-1);
+  padding: var(--space-5) var(--space-6);
   background: #4f7cff;
   border: 2px solid #111212;
   border-radius: 0.9rem 0.9rem 0.9rem 0.35rem;
@@ -3801,8 +3832,8 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-contact__cta-label {
-  font-family: "Chubby And Groovy", "Highfat", var(--font-display);
-  font-size: clamp(1.35rem, 3vw, 1.85rem);
+  font-family: var(--font-brand);
+  font-size: var(--text-h3);
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -3810,20 +3841,20 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-contact__cta-sub {
-  font-family: var(--font-mono, "DM Mono", monospace);
-  font-size: 0.78rem;
+  font-family: var(--font-mono, "DM Sans", sans-serif);
+  font-size: var(--text-meta);
   opacity: 0.9;
 }
 
 .folio-contact__links {
   display: flex;
-  gap: 1.5rem;
+  gap: var(--space-5);
   padding-left: 0.15rem;
 }
 
 .folio-contact__links a {
-  font-family: var(--font-mono, "DM Mono", monospace);
-  font-size: 0.82rem;
+  font-family: var(--font-mono, "DM Sans", sans-serif);
+  font-size: var(--text-meta-lg);
   color: #5a6570;
   text-decoration: none;
   transition: color 0.15s;
@@ -3931,8 +3962,8 @@ body:has(.folio--fullgrid) .app {
   align-items: center;
   gap: 0.6rem;
   padding: 0.75rem 1.25rem;
-  font-family: "Chubby And Groovy", var(--font-display);
-  font-size: 1.05rem;
+  font-family: var(--font-brand);
+  font-size: var(--text-body-lg);
   font-weight: 400;
   color: #111212;
   text-decoration: none;
@@ -3958,8 +3989,8 @@ body:has(.folio--fullgrid) .app {
   height: auto !important;
   border-radius: 0.45rem !important;
   padding: 0.4rem 0.85rem !important;
-  font-family: var(--font-mono, "DM Mono", monospace);
-  font-size: 0.7rem;
+  font-family: var(--font-mono, "DM Sans", sans-serif);
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -4024,30 +4055,20 @@ body:has(.folio--fullgrid) .app {
   }
 
   .rec-card__quote {
-    font-size: 0.88rem;
+    font-size: var(--text-meta-lg);
   }
 
   .rec-card__actions {
     gap: 1rem;
   }
 
-  /* Contact: tighten on mobile */
-  .folio-contact {
-    padding: 2.5rem 1.25rem;
-  }
-
   .folio-contact__cta-label {
-    font-size: 1.3rem;
+    font-size: var(--text-h3);
   }
 
   .folio-contact__links {
     flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  /* About: tighten padding */
-  .folio-about {
-    padding-inline: 1.25rem;
+    gap: var(--space-2);
   }
 
   /* Hero: scale down stickers a bit */
@@ -4056,9 +4077,8 @@ body:has(.folio--fullgrid) .app {
     transform-origin: center;
   }
 
-  /* Recs section: remove horizontal padding overflow */
   .folio-recs {
-    padding-inline: 1rem;
+    padding-inline: 0;
   }
 
   .folio-recs__grid {
@@ -4091,7 +4111,7 @@ body:has(.folio--fullgrid) .app {
   border-radius: 0.85rem 0.85rem 0.85rem 0.2rem;
   background: var(--folio-cyan);
   font-family: var(--font-sans);
-  font-size: 1.05rem;
+  font-size: var(--text-body-lg);
   font-weight: 600;
   color: #111;
   box-shadow: 4px 4px 0 #111;
@@ -4223,11 +4243,11 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-float span {
-  padding: 0.4rem 0.7rem;
+  padding: var(--space-2) var(--space-3);
   border: 1.5px solid #111;
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -4285,12 +4305,12 @@ body:has(.folio--fullgrid) .app {
 .folio-select {
   display: inline-flex;
   align-items: center;
-  padding: 0.35rem 0.7rem;
+  padding: var(--space-1) var(--space-3);
   border: 1.5px dashed #4f7cff;
   background: color-mix(in srgb, #4f7cff 8%, #fff);
   color: #2440b8;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: var(--text-meta);
   box-shadow:
     -3px -3px 0 0 #4f7cff,
     3px -3px 0 0 #4f7cff,
@@ -4343,9 +4363,9 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-polaroid figcaption {
-  margin-top: 0.45rem;
+  margin-top: var(--space-2);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.02em;
   color: var(--folio-muted);
   text-align: center;
@@ -4357,18 +4377,18 @@ body:has(.folio--fullgrid) .app {
 .career-path {
   width: 100%;
   max-width: 640px;
-  margin: 2.5rem auto 1rem;
+  margin: var(--space-7) auto var(--space-4);
 }
 
 .career-path__eyebrow {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--folio-muted, #888);
   text-align: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
 }
 
 .career-path__svg {
@@ -4389,7 +4409,7 @@ body:has(.folio--fullgrid) .app {
 
 .career-path__item {
   position: relative;
-  padding: 0 0 1.15rem 1rem;
+  padding: 0 0 var(--space-5) var(--space-4);
 }
 
 .career-path__item:last-child {
@@ -4422,24 +4442,24 @@ body:has(.folio--fullgrid) .app {
 }
 
 .career-path__year {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.06em;
   color: #888;
 }
 
 .career-path__title {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.92rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--text-body);
   font-weight: 700;
   line-height: 1.3;
   color: #111212;
 }
 
 .career-path__desc {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.78rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: var(--text-meta);
   color: #666;
   line-height: 1.35;
 }
@@ -4447,9 +4467,9 @@ body:has(.folio--fullgrid) .app {
 .career-path__photos {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.9rem;
-  margin-top: 0.85rem;
-  padding-block: 0.25rem 0.5rem;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+  padding-block: var(--space-1) var(--space-2);
 }
 
 /* Instant Polaroid — thin sides/top, thick white foot, slight tilt */
@@ -4512,7 +4532,7 @@ body:has(.folio--fullgrid) .app {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.3rem;
+  gap: var(--space-2);
   width: 100%;
   max-width: 52rem;
   margin-inline: auto;
@@ -4536,12 +4556,13 @@ body:has(.folio--fullgrid) .app {
 .folio-skills--rich li span:first-child {
   display: flex;
   align-items: center;
-  padding: 0 1.1rem;
-  font-family: "Cubao", var(--font-sans);
-  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  line-height: 1.2;
+  padding: 0 var(--space-4);
+  font-family: var(--font-chip);
+  font-size: var(--text-body-lg);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.15;
   color: #111;
   white-space: nowrap;
   text-align: center;
@@ -4569,12 +4590,12 @@ body:has(.folio--fullgrid) .app {
 .folio-work__head {
   position: relative;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-6);
 }
 
 .folio-work__eyebrow {
-  font-family: "Just Me Again Down Here", cursive, var(--font-sans);
-  font-size: 1.05rem;
+  font-family: var(--font-script);
+  font-size: var(--text-body-lg);
   color: #111;
   text-decoration: underline;
   text-decoration-thickness: 2px;
@@ -4583,13 +4604,13 @@ body:has(.folio--fullgrid) .app {
 
 .folio-sticky {
   display: inline-block;
-  margin: 0.85rem auto 0;
-  padding: 0.7rem 0.95rem;
+  margin: var(--space-3) auto 0;
+  padding: var(--space-3) var(--space-4);
   max-width: 28rem;
   background: #fff3a3;
   border: 1px solid #e6d56a;
   box-shadow: 3px 3px 0 color-mix(in srgb, #111 12%, transparent);
-  font-size: 0.92rem;
+  font-size: var(--text-body-lg);
   color: #4a4318;
   transform: rotate(-1.5deg);
 }
@@ -4678,7 +4699,7 @@ body:has(.folio--fullgrid) .app {
   background: #111;
   color: #fff;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.06em;
 }
 
@@ -4696,7 +4717,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-comment__label {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--folio-muted);
@@ -4712,14 +4733,14 @@ body:has(.folio--fullgrid) .app {
 
 .folio-comment__row strong {
   display: block;
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
   margin-bottom: 0.2rem;
 }
 
 .folio-comment__row p {
   margin: 0;
   color: var(--folio-muted);
-  font-size: 0.92rem;
+  font-size: var(--text-body);
 }
 
 .folio-comment__avatar {
@@ -4731,19 +4752,19 @@ body:has(.folio--fullgrid) .app {
   background: var(--folio-cyan);
   border: 1px solid #111;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-meta-xs);
   font-weight: 600;
 }
 
 .folio-comment__avatar--you {
   background: #fff;
-  font-size: 0.58rem;
+  font-size: var(--text-meta-xs);
 }
 
 .folio-comment__hint {
   align-self: center;
   color: var(--folio-muted);
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
 }
 
 .folio-dock {
@@ -4764,10 +4785,10 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-dock a {
-  padding: 0.45rem 0.75rem;
+  padding: var(--space-2) var(--space-3);
   border-radius: 999px;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--folio-muted);
@@ -4981,14 +5002,14 @@ body:has(.folio--fullgrid) .app {
 
 .site-radio__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
 .site-radio__label {
-  font-size: 0.82rem;
+  font-size: var(--text-meta-lg);
   font-weight: 600;
 }
 
@@ -5103,7 +5124,7 @@ body.game-embed .site-radio-gate {
   border-radius: 0;
   background: none;
   box-shadow: none;
-  font-family: "Just Me Again Down Here", cursive;
+  font-family: var(--font-script);
   /* Same size for try pulling me / pull to play / pull to pause */
   font-size: clamp(1.35rem, 3.6vw, 1.75rem);
   letter-spacing: 0.01em;
@@ -5245,7 +5266,7 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folio--rich {
   position: relative;
-  padding-bottom: 5.5rem;
+  padding-bottom: var(--space-8);
 }
 
 .folio--rich .folio-hero {
@@ -5262,8 +5283,8 @@ body:has(.folio--fullgrid) .site-footer {
   grid-template-columns: none !important;
   align-items: center !important;
   text-align: center;
-  gap: 1rem;
-  padding: clamp(3rem, 10vw, 6rem) 1rem clamp(3rem, 8vw, 5rem);
+  gap: var(--space-4);
+  padding: var(--section-y) 0;
   min-height: min(92vh, 56rem);
   justify-content: center;
   max-width: none !important;
@@ -5271,8 +5292,8 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folio-hero__kicker--script {
-  font-family: "Just Me Again Down Here", cursive;
-  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-family: var(--font-script);
+  font-size: var(--text-h2);
   letter-spacing: 0.01em;
   text-transform: none;
   color: #333;
@@ -5312,8 +5333,8 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folio-hero__name--display {
   margin: 0;
-  font-family: "Chubby And Groovy", var(--font-display);
-  font-size: clamp(3.4rem, 12.5vw, 7.5rem);
+  font-family: var(--font-brand);
+  font-size: var(--text-display);
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 1;
@@ -5328,32 +5349,35 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folio-hero__avail--dot {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
+  gap: var(--space-2);
+  width: fit-content;
   max-width: min(22rem, 92vw);
-  margin: 0.35rem auto 1.25rem;
+  margin: var(--space-1) auto var(--space-5);
   padding: 0;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #111212;
-  text-align: left;
+  text-align: center;
   line-height: 1.45;
 }
 
 .folio-hero__avail--dot .folio-dot {
   /* Optical center in the halo ring against multi-line copy */
   align-self: center;
+  flex-shrink: 0;
   translate: 0 0.02em;
 }
 
 .folio-hero__avail-text {
   display: block;
   min-width: 0;
+  text-align: center;
   text-wrap: balance;
 }
 
@@ -5366,13 +5390,13 @@ body:has(.folio--fullgrid) .site-footer {
 .folio-sticker {
   position: absolute;
   z-index: 2;
-  padding: 0.6rem 1rem;
+  padding: var(--space-2) var(--space-4);
   border: 2px solid #111;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-family: var(--font-label);
+  font-size: var(--text-meta-lg);
   font-weight: 700;
   letter-spacing: 0.03em;
-  line-height: 1.4;
+  line-height: 1.35;
   box-shadow: 3px 3px 0 #111;
   /* Base tilt before GSAP float takes over transform */
   transform: rotate(var(--rot, 0deg));
@@ -5384,11 +5408,12 @@ body:has(.folio--fullgrid) .site-footer {
 .folio-sticker--pill {
   border-radius: 999px;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  font-family: "Press Start 2P", var(--font-mono);
-  font-size: 0.55rem;
+  letter-spacing: 0.06em;
+  font-family: var(--font-pixel);
+  font-size: var(--text-pixel);
+  font-weight: 400;
   line-height: 1.5;
-  padding: 0.6rem 1.15rem;
+  padding: var(--space-2) var(--space-4);
 }
 
 .folio-sticker--green {
@@ -5448,8 +5473,8 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folio-about__script {
-  font-family: "Just Me Again Down Here", cursive, var(--font-sans);
-  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  font-family: var(--font-script);
+  font-size: var(--text-script);
   margin: 0 0 1rem;
   transform: rotate(-4deg);
   width: fit-content;
@@ -5460,7 +5485,7 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folio-about__body--lead {
-  font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+  font-size: var(--text-script);
   line-height: 1.4;
   color: var(--folio-ink);
   text-align: center;
@@ -5539,7 +5564,7 @@ body:has(.folio--fullgrid) .site-footer {
 /* "impact" word in hero lead — cursive accent */
 .folio-lead__impact,
 .folio-hero__lead em.folio-lead__impact {
-  font-family: "Just Me Again Down Here", cursive;
+  font-family: var(--font-script);
   font-style: italic;
   font-size: 1.25em;
   color: #4f7cff !important;
@@ -5547,18 +5572,18 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folio-about__hello {
-  font-family: "Chubby And Groovy", var(--font-display);
-  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-family: var(--font-brand);
+  font-size: var(--text-h1);
   font-weight: 400;
   text-align: center;
-  margin: 0 0 1.5rem;
+  margin: 0 0 var(--space-5);
   letter-spacing: -0.01em;
 }
 
 /* About bio in handwritten font */
 .folio-about__body--handwritten {
-  font-family: "Just Me Again Down Here", cursive;
-  font-size: clamp(1.4rem, 2.8vw, 1.85rem);
+  font-family: var(--font-script);
+  font-size: var(--text-script);
   line-height: 1.5;
   letter-spacing: 0.01em;
 }
@@ -5581,11 +5606,12 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folio-work--folders {
   max-width: none;
-  padding-bottom: 2rem;
+  padding-block: var(--section-y);
+  padding-bottom: var(--space-6);
 }
 
 .folio-work--folders .folio-work__head {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-5);
 }
 
 .folder-stack {
@@ -5673,7 +5699,7 @@ body:has(.folio--fullgrid) .site-footer {
   background: var(--folder-fill);
   color: var(--folder-ink);
   clip-path: none;
-  font-family: "Chubby And Groovy", var(--font-display);
+  font-family: var(--font-brand);
   font-size: clamp(0.78rem, 1.35vw, 0.95rem);
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -5737,9 +5763,9 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__progress {
-  margin: 0 0 0.35rem;
+  margin: 0 0 var(--space-1);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   opacity: 0.55;
@@ -5775,24 +5801,24 @@ body:has(.folio--fullgrid) .site-footer {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 1.15rem;
-  padding: clamp(1.5rem, 4vw, 2.75rem);
-  padding-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  gap: var(--space-5);
+  padding: clamp(var(--space-5), 4vw, var(--space-7));
+  padding-bottom: clamp(var(--space-5), 4vw, var(--space-6));
 }
 
 .folder-card__text-main {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: var(--space-2);
 }
 
 .folder-card__date {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.02em;
   text-transform: none;
 }
@@ -5808,7 +5834,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__title {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-size: var(--text-folder);
   font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 1.02;
@@ -5816,18 +5842,18 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__title[data-font="chubby"] {
-  font-family: "Chubby And Groovy", var(--font-display);
+  font-family: var(--font-brand);
   font-weight: 400;
 }
 
 .folder-card__title[data-font="tiempos"] {
-  font-family: "Tiempos Text", var(--font-display);
+  font-family: var(--font-display);
   font-weight: 500;
   letter-spacing: -0.01em;
 }
 
 .folder-card__title[data-font="pixelify"] {
-  font-family: "Pixelify Sans", "Funnel Sans", var(--font-display);
+  font-family: var(--font-lola);
   font-weight: 500;
   letter-spacing: 0.02em;
   font-synthesis: none;
@@ -5835,9 +5861,9 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__meta {
-  margin: 0.4rem 0 0;
+  margin: var(--space-2) 0 0;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 1.35;
@@ -5852,9 +5878,9 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__blurb {
-  margin: 0.55rem 0 0;
+  margin: var(--space-2) 0 0;
   max-width: 34ch;
-  font-size: clamp(0.98rem, 1.8vw, 1.15rem);
+  font-size: var(--text-body);
   line-height: 1.45;
   opacity: 0.92;
 }
@@ -5862,12 +5888,12 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--space-1);
   width: fit-content;
   padding: 0.35rem 0;
   border-bottom: 1.5px solid currentColor;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-meta);
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -5881,25 +5907,25 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__cta-arrow {
   font-style: normal;
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
 }
 
 .folder-card__cta-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
   flex-wrap: wrap;
 }
 
 .folder-card__live {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--space-1);
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
   border: 1px solid currentColor;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-meta-xs);
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -5943,9 +5969,9 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: var(--space-2);
   margin-top: auto;
-  padding-top: 1.5rem;
+  padding-top: var(--space-5);
 }
 
 .folder-card__tag {
@@ -5960,7 +5986,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__tag-label {
   padding: 0.4rem 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--text-meta-xs);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -6105,17 +6131,17 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__file {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: var(--space-3);
+  right: var(--space-3);
   z-index: 3;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--space-1);
   padding: 0.28rem 0.45rem 0.28rem 0.28rem;
   background: #fff;
   color: #111212;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.04em;
   pointer-events: none;
 }
@@ -6136,7 +6162,7 @@ body:has(.folio--fullgrid) .site-footer {
     linear-gradient(160deg, #111, #1f2937);
   color: #e2e8f0;
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -6159,7 +6185,7 @@ body:has(.folio--fullgrid) .site-footer {
     justify-content: center;
     gap: 0;
     padding: 0;
-    font-size: 0.7rem;
+    font-size: var(--text-meta);
     overflow: hidden;
   }
 
@@ -6268,8 +6294,8 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__blurb {
-    margin-top: 0.25rem;
-    font-size: 0.82rem;
+    margin-top: var(--space-1);
+    font-size: var(--text-meta-lg);
     -webkit-line-clamp: 3;
     line-clamp: 3;
     overflow: hidden;
@@ -6338,8 +6364,8 @@ body:has(.folio--fullgrid) .site-footer {
 
 .cs-rail-mobile__brand {
   display: none;
-  font-family: "Chubby And Groovy", var(--font-display);
-  font-size: 0.9rem;
+  font-family: var(--font-brand);
+  font-size: var(--text-meta-lg);
   color: var(--ink);
   white-space: nowrap;
 }
@@ -6375,13 +6401,13 @@ body:has(.folio--fullgrid) .site-footer {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.85rem;
+  font-size: var(--text-meta-lg);
   font-weight: 500;
 }
 
 .cs-rail-mobile__num {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--text-meta-xs);
   letter-spacing: 0.06em;
   color: var(--muted);
 }
@@ -6413,7 +6439,7 @@ body:has(.folio--fullgrid) .site-footer {
   text-decoration: none;
   color: var(--muted);
   border-radius: 0.35rem;
-  font-size: 0.9rem;
+  font-size: var(--text-meta-lg);
 }
 
 .cs-rail-mobile__option:hover,
@@ -6455,7 +6481,7 @@ body:has(.folio--fullgrid) .site-footer {
     margin: 0 0 0.15rem 0.55rem;
     padding: 0 0 0.45rem;
     border-bottom: 1px solid var(--folio-line, #d5dde5);
-    font-family: "Chubby And Groovy", var(--font-display);
+    font-family: var(--font-brand);
     font-size: 1rem;
     color: var(--ink);
     text-decoration: none;
@@ -6548,7 +6574,7 @@ body:has(.folio--fullgrid) .site-footer {
 
   .cs-rail__num {
     font-family: var(--font-mono);
-    font-size: 0.55rem;
+    font-size: var(--text-meta-xs);
     font-weight: 600;
     letter-spacing: 0.06em;
     line-height: 1;
@@ -6556,7 +6582,7 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .cs-rail__label {
-    font-size: 0.68rem;
+    font-size: var(--text-meta-xs);
     font-weight: 600;
     letter-spacing: 0.01em;
     line-height: 1.15;
@@ -6643,11 +6669,11 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .cs-pager__title {
-    font-size: 1.05rem;
+    font-size: var(--text-body-lg);
   }
 
   .cs-pager__link--next .cs-pager__title {
-    font-size: 1.15rem;
+    font-size: var(--text-body-lg);
   }
 
   .cs--cw .cs-metrics {
@@ -6661,7 +6687,7 @@ body:has(.folio--fullgrid) .site-footer {
 
 @media (max-width: 419px) {
   .cs-rail-mobile__value {
-    font-size: 0.8rem;
+    font-size: var(--text-meta-lg);
   }
 
   .cs-actions .folio-btn {

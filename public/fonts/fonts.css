@@ -1,67 +1,21 @@
-/* ── DM Mono ─────────────────────────────────────────────────────── */
-@font-face {
-  font-family: "DM Mono";
-  src: url("/fonts/dm-mono/DMMono-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Mono";
-  src: url("/fonts/dm-mono/DMMono-LightItalic.ttf") format("truetype");
-  font-weight: 300;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Mono";
-  src: url("/fonts/dm-mono/DMMono-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Mono";
-  src: url("/fonts/dm-mono/DMMono-Italic.ttf") format("truetype");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Mono";
-  src: url("/fonts/dm-mono/DMMono-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "DM Mono";
-  src: url("/fonts/dm-mono/DMMono-MediumItalic.ttf") format("truetype");
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
+/* Folio type stack (4 + scoped exceptions):
+ *   DM Sans              — body + labels
+ *   Season Mix TRIAL     — display / case titles
+ *   Chubby And Groovy    — brand moments
+ *   Just Me Again…       — script accents
+ *   Pixelify Sans        — Lola folder title only
+ *   Press Start 2P       — hero pill stickers only
+ *   Cubao                — skill chips only
+ */
 
-/* ── Just Me Again Down Here ─────────────────────────────────────── */
 @font-face {
   font-family: "Just Me Again Down Here";
   src: url("/fonts/just-me-again/JustMeAgainDownHere-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  /* Preloaded in index.html — optional avoids a late typography pop */
   font-display: optional;
 }
 
-/* ── Press Start 2P ──────────────────────────────────────────────── */
-@font-face {
-  font-family: "Press Start 2P";
-  src: url("/fonts/press-start-2p/PressStart2P-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* ── Chubby And Groovy ───────────────────────────────────────────── */
 @font-face {
   font-family: "Chubby And Groovy";
   src: url("/fonts/chubby-and-groovy/Chubby And Groovy.ttf") format("truetype");
@@ -70,7 +24,6 @@
   font-display: optional;
 }
 
-/* ── Pixelify Sans — self-hosted, avoids @import-after-rule parse failure ── */
 @font-face {
   font-family: "Pixelify Sans";
   font-style: normal;
@@ -100,32 +53,14 @@
   src: url("/fonts/pixelify-sans/PixelifySans-Bold.ttf") format("truetype");
 }
 
-/* ── Tiempos Text — ported from the Lola case study ─────────────── */
 @font-face {
-  font-family: "Tiempos Text";
-  src: url("/fonts/tiempos/TestTiemposText-Regular.otf") format("opentype");
+  font-family: "Press Start 2P";
+  src: url("/fonts/press-start-2p/PressStart2P-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
-@font-face {
-  font-family: "Tiempos Text";
-  src: url("/fonts/tiempos/TestTiemposText-Medium.otf") format("opentype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
 
-/* ── Highfat ─────────────────────────────────────────────────────── */
-@font-face {
-  font-family: "Highfat";
-  src: url("/fonts/highfat/Highfat.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: optional;
-}
-
-/* ── Cubao Free ──────────────────────────────────────────────────── */
 @font-face {
   font-family: "Cubao";
   src: url("/fonts/cubao/Cubao_Free_Narrow.otf") format("opentype");

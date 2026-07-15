@@ -45,8 +45,8 @@ export const featured = [
     outcome:
       'Ops recovery + tool: barcode/receiving pipeline and scanner app. Checkout <30s, SKU recognition ~100% in 72 hrs',
     tags: ['Service design', 'Ops'],
-    cover: '/work/bodega-ops/scanner-app-1.jpg',
-    coverAlt: 'Scanner app UI for SKU lookup on the store floor',
+    cover: '/work/bodega-ops/store-floor.jpg',
+    coverAlt: 'La Bodega store floor during checkout ops recovery',
   },
   {
     ...bySlug['code19'],
@@ -57,8 +57,8 @@ export const featured = [
     outcome:
       'Website redesign: UI/UX, IA, content & SEO for fans, sponsors, engineers, and drivers. 1,500+ monthly sessions · −36% organic bounce · seed $150K→$500K',
     tags: ['Website redesign', 'SEO'],
-    cover: '/work/code19/final-screens.png',
-    coverAlt: 'CODE19 website UI screens from the redesign',
+    cover: '/work/code19/hero-2.jpg',
+    coverAlt: 'CODE19 Racing website hero — race car and brand',
     folderFill: '#111212',
     folderInk: '#ffffff',
   },
@@ -87,8 +87,8 @@ export const featured = [
       'Concept: on-device vehicle AI UX: local inference, driver data controls (target <20ms edge latency)',
     tags: ['Edge AI', 'Concept'],
     reel: '/work/edge-ai/demo-1.mp4',
-    cover: '/work/edge-ai/screen-2.png',
-    coverAlt: 'Wing Edge AI on-device interface concept',
+    cover: '/work/edge-ai/hero.jpg',
+    coverAlt: 'Wing Edge AI vehicle concept',
     folderFill: '#0891B2',
     folderInk: '#ffffff',
   },
