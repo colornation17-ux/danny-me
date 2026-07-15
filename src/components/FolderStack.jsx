@@ -281,13 +281,18 @@ export default function FolderStack({ projects }) {
     if (!el) return
     const measure = () => {
       const width = el.clientWidth
-      const usable = Math.max(280, width * 0.92)
-      // Mobile: keep tabs narrow enough that all N numbers fit in the row.
-      // Desktop: wider tabs with room for titles.
       const compact = width < 700
-      const minW = compact ? 36 : 100
-      const maxW = compact ? 56 : 180
-      setTabW(Math.floor(Math.min(maxW, Math.max(minW, usable / total))))
+      // On mobile, reserve slope width and divide the REST evenly so
+      // all N number tabs always fit (01…06 visible at once).
+      if (compact) {
+        const slope = 22
+        const pad = 8
+        const usable = Math.max(240, width - slope - pad)
+        setTabW(Math.max(28, Math.floor(usable / total)))
+        return
+      }
+      const usable = Math.max(300, width * 0.85)
+      setTabW(Math.floor(Math.min(180, Math.max(100, usable / total))))
     }
     measure()
     const ro = new ResizeObserver(measure)
