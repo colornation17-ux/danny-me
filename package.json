@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "record:cw": "node scripts/record-cw-beats.mjs"
+    "record:cw": "node scripts/record-cw-beats.mjs",
+    "deploy:prod": "node scripts/deploy-prod.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
