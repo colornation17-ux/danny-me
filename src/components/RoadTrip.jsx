@@ -254,23 +254,25 @@ export default function RoadTrip() {
               aria-hidden="true"
             >
               {s.photo && (
-                <button
-                  type="button"
-                  className="road-trip__polaroid"
-                  aria-label={`View ${s.title} photo full size`}
-                  onClick={() => openLightbox(s)}
-                >
-                  <img
-                    src={s.photo}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <span className="road-trip__polaroid-cue" aria-hidden="true">
-                    <span className="road-trip__polaroid-cue--click">click to view</span>
-                    <span className="road-trip__polaroid-cue--tap">tap to view</span>
+                <div className="road-trip__media">
+                  <button
+                    type="button"
+                    className="road-trip__polaroid"
+                    aria-label={`View ${s.title} photo full size`}
+                    onClick={() => openLightbox(s)}
+                  >
+                    <img
+                      src={s.photo}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </button>
+                  <span className="road-trip__view-cue" aria-hidden="true">
+                    <span className="road-trip__view-cue--click">click to view</span>
+                    <span className="road-trip__view-cue--tap">tap to view</span>
                   </span>
-                </button>
+                </div>
               )}
               <div className="road-trip__panel-text">
                 <p className="road-trip__panel-eyebrow">{s.desc}</p>
