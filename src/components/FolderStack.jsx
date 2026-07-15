@@ -19,7 +19,7 @@ export const FOLDER_TONES = [
   { fill: '#F5DDA1', ink: '#111212' },
 ]
 
-// Nav height in px — must match site-nav height in CSS
+// Nav height in px — default; runtime measurement syncs --folder-nav-h
 const NAV_H = 74
 
 function StairsIcon({ size = 14 }) {
@@ -163,6 +163,13 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
             <p className="folder-card__blurb">
               {project.outcome || project.blurb}
             </p>
+            {project.connectSpine?.length > 0 && (
+              <ul className="folder-card__spine" aria-label="Lola Connect navigation">
+                {project.connectSpine.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="folder-card__cta-row">
@@ -276,30 +283,28 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
 }
 
 /**
- * Single sticky container holds all 6 cards at the same viewport position.
+ * Single sticky container holds all N cards at the same viewport position.
  * Scroll tracking advances the active card index; past cards stay visible
  * under the active card so their tab buttons show through indent holes,
  * building the full tab row naturally. Future cards wait off-screen below.
  *
- * Stack height = N × 70vh + (100vh − NAV_H), giving each card 70vh of
- * dedicated scroll space with clean math: scrollRange = N × 70vh.
+ * Index mapping uses round(progress * (N-1)) so first/last cards land cleanly
+ * on tab jumps (avoids floor(progress * N) starving the last card).
  */
 export default function FolderStack({ projects }) {
   const stackRef = useRef(null)
   const [tabW, setTabW] = useState(100)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [navH, setNavH] = useState(NAV_H)
   const total = projects.length
 
   useEffect(() => {
     const el = stackRef.current
     if (!el) return
     const measure = () => {
-      // Use the sticky viewport (actual card width), not the padded stack.
       const sticky = el.querySelector('.folder-sticky')
       const width = sticky?.clientWidth || el.clientWidth
       const compact = width < 700 || window.innerWidth < 700
-      // On mobile, reserve the fold slope and divide the rest evenly so
-      // all N number tabs always fit (01…06 visible at once).
       if (compact) {
         const slope = 16
         const safety = 4
@@ -316,45 +321,79 @@ export default function FolderStack({ projects }) {
     return () => ro.disconnect()
   }, [total])
 
+  // Measure real nav height (mobile can differ from the 74px desktop assumption)
+  useEffect(() => {
+    const nav = document.querySelector('.site-nav--folio, .site-nav')
+    if (!nav) return undefined
+    const read = () => {
+      const h = Math.round(nav.getBoundingClientRect().height) || NAV_H
+      setNavH(h)
+      if (stackRef.current) {
+        stackRef.current.style.setProperty('--folder-nav-h', `${h}px`)
+      }
+    }
+    read()
+    const ro = new ResizeObserver(read)
+    ro.observe(nav)
+    window.visualViewport?.addEventListener('resize', read)
+    return () => {
+      ro.disconnect()
+      window.visualViewport?.removeEventListener('resize', read)
+    }
+  }, [])
+
   const activeIndexRef = useRef(0)
 
   useEffect(() => {
     const stack = stackRef.current
-    if (!stack) return
+    if (!stack) return undefined
 
+    let raf = 0
     const onScroll = () => {
-      const rect = stack.getBoundingClientRect()
-      const scrolled = -(rect.top - NAV_H)
-      const scrollRange = stack.offsetHeight - (window.innerHeight - NAV_H)
-      if (scrollRange <= 0) return
-      const progress = Math.max(0, Math.min(1, scrolled / scrollRange))
-      const idx = Math.min(Math.floor(progress * total), total - 1)
-      // Only re-render when index actually changes
-      if (idx !== activeIndexRef.current) {
-        activeIndexRef.current = idx
-        setActiveIndex(idx)
-      }
+      if (raf) return
+      raf = window.requestAnimationFrame(() => {
+        raf = 0
+        const rect = stack.getBoundingClientRect()
+        const scrolled = -(rect.top - navH)
+        const stickyH = window.innerHeight - navH
+        const scrollRange = stack.offsetHeight - stickyH
+        if (scrollRange <= 0 || total <= 1) {
+          if (activeIndexRef.current !== 0) {
+            activeIndexRef.current = 0
+            setActiveIndex(0)
+          }
+          return
+        }
+        const progress = Math.max(0, Math.min(1, scrolled / scrollRange))
+        const idx = Math.round(progress * (total - 1))
+        if (idx !== activeIndexRef.current) {
+          activeIndexRef.current = idx
+          setActiveIndex(idx)
+        }
+      })
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    window.visualViewport?.addEventListener('resize', onScroll)
     onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [total])
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      window.visualViewport?.removeEventListener('resize', onScroll)
+      if (raf) window.cancelAnimationFrame(raf)
+    }
+  }, [total, navH])
 
-  // GSAP entrance — useLayoutEffect runs before paint so the card is already
-  // at y:105% when the browser first renders the new activeIndex frame,
-  // eliminating the flash caused by CSS class change → paint → GSAP override.
   const prevActive = useRef(0)
   useLayoutEffect(() => {
     const prev = prevActive.current
     prevActive.current = activeIndex
-    // Only animate forward advances; backward jumps snap via CSS
     if (activeIndex <= prev) return
     const stack = stackRef.current
     if (!stack) return
     const card = stack.querySelector(`[data-index="${activeIndex}"]`)
     if (!card) return
-    // Kill any in-progress tween on this card before starting a new one
     gsap.killTweensOf(card)
     gsap.fromTo(
       card,
@@ -366,20 +405,26 @@ export default function FolderStack({ projects }) {
   const jumpTo = useCallback(
     (index) => {
       const stack = stackRef.current
-      if (!stack) return
+      if (!stack || total <= 0) return
       const stackAbsTop = stack.getBoundingClientRect().top + window.scrollY
-      const scrollRange = stack.offsetHeight - (window.innerHeight - NAV_H)
-      const targetScroll = stackAbsTop - NAV_H + (index / total) * scrollRange
+      const stickyH = window.innerHeight - navH
+      const scrollRange = Math.max(0, stack.offsetHeight - stickyH)
+      const progress = total <= 1 ? 0 : index / (total - 1)
+      const targetScroll = stackAbsTop - navH + progress * scrollRange
       window.scrollTo({ top: targetScroll, behavior: 'smooth' })
     },
-    [total],
+    [total, navH],
   )
 
   return (
     <div
       className="folder-stack"
       ref={stackRef}
-      style={{ '--folder-count': total, '--folder-tab-w': `${tabW}px` }}
+      style={{
+        '--folder-count': total,
+        '--folder-tab-w': `${tabW}px`,
+        '--folder-nav-h': `${navH}px`,
+      }}
     >
       <div className="folder-sticky">
         {projects.map((project, index) => {

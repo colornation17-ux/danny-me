@@ -34,11 +34,12 @@ export const CW_CLIPS = [
     n: '02',
     label: 'Competitor deals',
     job: 'What are the chains advertising?',
-    problem: 'Live Flipp index with meat winners surfaced first.',
+    problem:
+      'Live Flipp index across ZIP markets: meat winners first, plus combo packs and national ranking for Thursday merchandising.',
     signature: '144',
     signatureLabel: 'Ads indexed',
-    proof: ['15 chains', 'Meat winners', 'ZIP markets'],
-    caption: 'Competitor deals: live Flipp index, meat winners first.',
+    proof: ['ZIP markets / chains', 'Meat winners', 'Combo packs', 'National rank'],
+    caption: 'Competitor deals: winners, combo packs, and national rank — not a flat price dump.',
     decision:
       'Surface meat winners first: the category where independents lose weekends to mainstream and Latino competitors.',
   },
@@ -57,9 +58,26 @@ export const CW_CLIPS = [
       'Turn the forecast into push/skip language, not another weather widget operators ignore.',
   },
   {
+    id: 'competitive-pricing',
+    file: 'CW-07-CompetitivePricing',
+    ext: 'webm',
+    n: '04',
+    label: 'Competitive pricing',
+    job: 'Are we above or below the ad floor?',
+    problem:
+      'Shelf / checkout averages vs live competitor ad lows — the pricing call that Thursday ads force.',
+    signature: 'Shelf vs ad',
+    signatureLabel: 'Checkout vs market floor',
+    proof: ['Avg vs floor', 'Meat basket risk', 'Same-day price calls'],
+    caption: 'Competitive pricing: shelf avg vs live ad floor before the order window.',
+    decision:
+      'Problem #1 was pricing blindness — this surface is the proof, not another deals scrape.',
+    posterOverride: `${BASE}/CW-02-CompetitorDeals.png`,
+  },
+  {
     id: 'demand-forecast',
     file: 'CW-04-SalesForecast',
-    n: '04',
+    n: '05',
     label: 'Demand forecast',
     job: 'How much will we sell?',
     problem:
@@ -74,25 +92,26 @@ export const CW_CLIPS = [
   {
     id: 'customers-rfm',
     file: 'CW-05-CustomersRetention',
-    n: '05',
+    n: '06',
     label: 'Customers · RFM · Retention',
     job: 'Who are my shoppers & who’s slipping?',
     problem:
-      'ML segments by RFM (recency, frequency, spend) plus next-visit predictions.',
+      'K-means RFM tiers (Champion, Loyal, Potential, At risk, Hibernating) plus visit-rhythm / replenishment nudges — not ML next-visit forecasts.',
     signature: '277',
-    signatureLabel: 'Due to return',
-    proof: ['1,469 customers', '5 RFM tiers', 'Win-back'],
-    caption: 'Customers: RFM segments and who is due back.',
+    signatureLabel: 'Due for a replenishment nudge',
+    proof: ['1,469 customers', 'Champion → Hibernating', 'Win-back'],
+    caption: 'Customers: labeled RFM tiers and who is due a visit-rhythm nudge.',
     decision:
       'Win-back starts with who is slipping, not another anonymous coupon blast.',
   },
   {
     id: 'whatsapp-crm',
     file: 'CW-06-WhatsAppCrm',
-    n: '06',
+    n: '07',
     label: 'WhatsApp attribution',
     job: 'Did the outreach work?',
-    problem: 'Every message matched to a POS visit within seven days, proof on the channel the store already runs.',
+    problem:
+      'Every message matched to a POS visit within seven days, proof on the channel the store already runs.',
     signature: '2,088',
     signatureLabel: 'Attributed visits',
     proof: ['8,369 sent', '65.9% read', '7-day match'],
@@ -100,16 +119,20 @@ export const CW_CLIPS = [
     decision:
       'Attribution is the product: close the loop with loyalty/Lola outreach, don’t rebuild CRM from scratch.',
   },
-].map((clip) => ({
-  ...clip,
-  src: `${BASE}/${clip.file}.mp4`,
-  poster: `${BASE}/${clip.file}.png`,
-  duration: 6000,
-}))
+].map((clip) => {
+  const ext = clip.ext || 'mp4'
+  return {
+    ...clip,
+    src: `${BASE}/${clip.file}.${ext}`,
+    poster: clip.posterOverride || `${BASE}/${clip.file}.png`,
+    duration: 6000,
+  }
+})
 
-/** Case-study proof order — deals first for wow, pulse last as foundation. */
+/** Case-study proof order — pricing early so problem #1 has visible proof. */
 export const CW_GALLERY_ORDER = [
   'competitor-deals',
+  'competitive-pricing',
   'weekend-playbook',
   'demand-forecast',
   'customers-rfm',
@@ -123,12 +146,12 @@ export function clipById(id) {
 
 export const CW_GALLERY_CLIPS = CW_GALLERY_ORDER.map(clipById).filter(Boolean)
 
-/** All six proofs in module number order (01→06) for deep-dives. */
+/** All proofs in module number order for deep-dives. */
 export const CW_PROOF_CLIPS = [...CW_CLIPS].sort((a, b) => a.n.localeCompare(b.n))
 
 /** @deprecated */
 export const CW_HERO_CLIPS = CW_CLIPS.filter((c) =>
-  ['competitor-deals', 'demand-forecast', 'whatsapp-crm'].includes(c.id),
+  ['competitor-deals', 'competitive-pricing', 'demand-forecast', 'whatsapp-crm'].includes(c.id),
 )
 export const CW_SUPPORT_CLIPS = CW_CLIPS.filter((c) =>
   ['weekend-playbook', 'customers-rfm'].includes(c.id),

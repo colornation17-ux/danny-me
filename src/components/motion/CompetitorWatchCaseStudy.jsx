@@ -15,9 +15,10 @@ const BRIEF_PROBLEM = [
   {
     n: '01',
     title: 'Blind vs the chains',
-    body: 'Thursday ads rewrite the weekend. Without a live competitor view, the owner prices and features meat by gut, while mainstream and Latino chains set the floor, and the store finds out it was wrong on Saturday.',
-    user: 'Know in one glance if pricing and features are competitive, before the ad window closes.',
-    business: "Turn Thursday's chain ads into same-day pricing calls, not gut instinct.",
+    body: 'Thursday ads rewrite the weekend. Without shelf-vs-market pricing and a live competitor view, the owner prices and features meat by gut, while mainstream and Latino chains set the floor — and the store finds out on Saturday.',
+    user: 'Know in one glance if shelf prices sit above or below the live ad floor, before the window closes.',
+    business: "Turn Thursday's chain ads into same-day shelf-vs-floor pricing calls, not gut instinct.",
+    proofId: 'competitive-pricing',
   },
   {
     n: '02',
@@ -45,8 +46,8 @@ const BRIEF_PROBLEM = [
 const BRIEF_SOLUTION = [
   {
     n: '01',
-    title: 'Competitor benchmarks',
-    body: 'Live Flipp index across markets: meat winners surfaced first so independents can answer the chains on price and pack.',
+    title: 'Deals + shelf-vs-floor pricing',
+    body: 'Live Flipp across ZIP markets (winners, combo packs, national rank) plus competitive pricing: checkout averages vs the live ad floor.',
   },
   {
     n: '02',
@@ -55,13 +56,13 @@ const BRIEF_SOLUTION = [
   },
   {
     n: '03',
-    title: 'Sales + demand in one loop',
-    body: 'Store pulse beside 7-day forecast bands and buy/hold/reduce lists: decision support, not another report dump.',
+    title: 'Pulse, trends, and demand in one loop',
+    body: 'Store pulse and market-trends (Latino vs mainstream national pulse) beside 7-day buy/hold/reduce bands — decision support, not another report dump.',
   },
   {
     n: '04',
     title: 'Attribution on the channel they run',
-    body: 'Segment who is slipping, message on WhatsApp, match POS visits in seven days; close the loop with the engagement layer already in market.',
+    body: 'Labeled RFM tiers, visit-rhythm nudges, WhatsApp outreach, then POS visits in seven days — close the loop with loyalty/Lola.',
   },
 ]
 
@@ -182,6 +183,26 @@ function BriefToggle() {
                     <span className="cw-goals__tag cw-goals__tag--business">Business</span>
                     {item.business}
                   </p>
+                  {item.proofId && (
+                    <p>
+                      <a
+                        className="cw-brief__proof-link"
+                        href={`#cw-feature-${item.proofId}`}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          const el = document.getElementById(`cw-feature-${item.proofId}`)
+                          if (!el) return
+                          el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                          el.classList.add('cw-feature--flash')
+                          window.history.replaceState(null, '', `#cw-feature-${item.proofId}`)
+                          el.focus({ preventScroll: true })
+                          window.setTimeout(() => el.classList.remove('cw-feature--flash'), 1200)
+                        }}
+                      >
+                        See competitive pricing proof ↓
+                      </a>
+                    </p>
+                  )}
                 </div>
               )}
             </article>
@@ -196,19 +217,22 @@ function FoundationSection() {
   return (
     <section className="cs-section cw-cs__story" id="cw-foundation">
       <p className="cs-section__eyebrow">Foundation</p>
-      <h2>Two weeks, one builder, five tabs of IA</h2>
+      <h2>MVP in ~2 weeks · ongoing production</h2>
       <p>
         I started with the Thursday window (the twelve minutes between the chains&apos; ad drop and
         La Bodega&apos;s order call) and mapped every question the owner needed answered inside it:
-        what are they advertising, what should we push, will we sell it, who&apos;s slipping, did the
-        outreach land. That became the IA: five tabs, one story each.
+        what are they advertising, how do our shelves compare, what should we push, will we sell it,
+        who&apos;s slipping, did the outreach land. That became the IA: five primary tabs (Dashboard,
+        Weekend playbook, Competitor deals, Your store data, Market trends) plus nested owner tools
+        and store chat — a larger surface than a two-week MVP alone.
       </p>
       <p>
-        Solo build, React frontend + Python backend (StatsForecast ensemble), MVP to production in
-        two weeks. The hard calls weren&apos;t visual; they were legibility: making avg-vs-floor
-        pricing readable in seconds, keeping the guest view honest without gating the owner&apos;s
-        real numbers, and drawing a hard line between engagement (already owned by loyalty/Lola) and
-        decision support (this product) so Competitor Watch never turned into a second CRM.
+        Solo design &amp; build, React frontend + Python backend (StatsForecast ensemble). MVP reached
+        production in about two weeks; the full system kept growing in production after that. The hard
+        calls weren&apos;t visual; they were legibility: making avg-vs-floor pricing readable in
+        seconds, keeping the guest view honest without gating the owner&apos;s real numbers, and
+        drawing a hard line between engagement (already owned by loyalty/Lola) and decision support
+        (this product) so Competitor Watch never turned into a second CRM.
       </p>
       <p>
         Designed for the model&apos;s real output shape (buy / hold / reduce plus bands, not a
@@ -294,11 +318,12 @@ export default function CompetitorWatchCaseStudy() {
 
       <section className="cs-section cw-cs__system" id="cw-product">
         <p className="cs-section__eyebrow">Product</p>
-        <h2>Six surfaces for one planning call</h2>
+        <h2>Seven proof surfaces for one planning call</h2>
         <p>
-          Watch competitors → set the weekend → forecast demand → see who&apos;s slipping → message
-          on WhatsApp → prove the visit. Engagement stays with loyalty and Lola; this product owns
-          visibility and proof.
+          Watch competitors and shelf-vs-floor pricing → set the weekend → forecast demand → see
+          who&apos;s slipping → message on WhatsApp → prove the visit. Market trends (Latino vs
+          mainstream national pulse) lives in the live app as a fifth primary tab; clip recording is
+          next. Engagement stays with loyalty and Lola; this product owns visibility and proof.
         </p>
         <CwModulesGrid />
       </section>

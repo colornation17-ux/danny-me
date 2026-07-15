@@ -2421,6 +2421,13 @@ body.game-embed .main { padding: 0; overflow: visible; }
   max-width: none;
 }
 
+.cw-brief__proof-link {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .cw-goals__tag {
   display: inline-flex;
   align-items: center;
@@ -2619,13 +2626,18 @@ body.game-embed .main { padding: 0; overflow: visible; }
     grid-template-columns: 1fr 1fr;
   }
 
-  .cw-modules--six {
+  .cw-modules--six,
+  .cw-modules--seven {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (min-width: 1100px) {
   .cw-modules--six {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cw-modules--seven {
     grid-template-columns: repeat(3, 1fr);
   }
 }
@@ -5881,20 +5893,22 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-stack {
   --folder-tab-h: 2.55rem;
+  --folder-nav-h: 74px;
+  --folder-vh: 100dvh;
   position: relative;
   width: 100%;
   max-width: none;
   margin-inline: auto;
   padding-inline: clamp(0.5rem, 2vw, 1.25rem);
-  /* Each card gets 70 vh of scroll space; sticky container fills (100vh - 74px) */
-  height: calc(var(--folder-count) * 70vh + (100vh - 74px));
+  /* Each card gets 70dvh of scroll; sticky fills (100dvh − nav) — dvh avoids mobile URL-bar jank */
+  height: calc(var(--folder-count) * 70dvh + (var(--folder-vh) - var(--folder-nav-h)));
 }
 
 /* Single sticky viewport holding all cards at the same position */
 .folder-sticky {
   position: sticky;
-  top: 74px;
-  height: calc(100vh - 74px);
+  top: var(--folder-nav-h);
+  height: calc(var(--folder-vh) - var(--folder-nav-h));
   overflow: hidden;
 }
 
@@ -6148,6 +6162,26 @@ body:has(.folio--fullgrid) .site-footer {
   font-size: max(var(--text-body), 1rem);
   line-height: 1.45;
   opacity: 0.92;
+}
+
+.folder-card__spine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  max-width: 36ch;
+}
+
+.folder-card__spine li {
+  font-family: var(--font-mono);
+  font-size: max(0.62rem, 0.68rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--folder-ink) 30%, transparent);
+  opacity: 0.88;
 }
 
 .folder-card__cta {
@@ -6537,7 +6571,7 @@ body:has(.folio--fullgrid) .site-footer {
 @media (max-width: 600px) {
   /* Shorter sticky scrub — less scroll tax on phones */
   .folder-stack {
-    height: calc(var(--folder-count) * 42vh + (100vh - 74px));
+    height: calc(var(--folder-count) * 42dvh + (var(--folder-vh) - var(--folder-nav-h)));
   }
 
   /* Stack text → image; img consumes leftover viewport height */
@@ -6575,6 +6609,10 @@ body:has(.folio--fullgrid) .site-footer {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
+  }
+
+  .folder-card__spine {
+    display: none; /* reclaim space for media on phones — Connect CTA still present */
   }
 
   .folder-card__cta-row {

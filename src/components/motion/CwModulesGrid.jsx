@@ -1,7 +1,7 @@
 import { useId, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 
-/** Six core Competitor Watch features — clickable proof jump cards. */
+/** Competitor Watch proof jump cards — mirrors CW_PROOF_CLIPS surfaces. */
 const MODULES = [
   {
     id: 'sales-summary',
@@ -19,11 +19,11 @@ const MODULES = [
     id: 'competitor-deals',
     n: '02',
     title: 'Competitor deals',
-    body: 'What are the chains advertising? Live Flipp index with meat winners surfaced first.',
+    body: 'What are the chains advertising? ZIP-market Flipp index — meat winners, combo packs, national rank.',
     metricLabel: 'Ads indexed',
     metricDisplay: '144',
     metric: 90,
-    tags: ['15 chains', 'Meat winners', 'ZIP markets'],
+    tags: ['ZIP markets', 'Combos', 'National rank'],
     tone: 'blue',
     icon: 'scan',
   },
@@ -40,8 +40,20 @@ const MODULES = [
     icon: 'weather',
   },
   {
-    id: 'demand-forecast',
+    id: 'competitive-pricing',
     n: '04',
+    title: 'Competitive pricing',
+    body: 'Are we above or below the ad floor? Shelf / checkout avg vs live competitor lows.',
+    metricLabel: 'Shelf vs ad',
+    metricDisplay: 'Floor',
+    metric: 84,
+    tags: ['Avg vs floor', 'Meat basket', 'Same-day calls'],
+    tone: 'violet',
+    icon: 'pricing',
+  },
+  {
+    id: 'demand-forecast',
+    n: '05',
     title: 'Demand forecast',
     body: 'How much will we sell? Live 7-day outlook with per-SKU buy / hold / reduce.',
     metricLabel: 'Prediction band',
@@ -53,21 +65,21 @@ const MODULES = [
   },
   {
     id: 'customers-rfm',
-    n: '05',
+    n: '06',
     title: 'Customers · RFM · Retention',
-    body: 'Who are my shoppers & who’s slipping? Segments by recency, frequency, spend, plus next-visit predictions.',
-    metricLabel: 'Due to return',
+    body: 'Who’s slipping? Labeled RFM tiers plus visit-rhythm / replenishment nudges — not next-visit ML forecasts.',
+    metricLabel: 'Due for a nudge',
     metricDisplay: '277',
     metric: 74,
-    tags: ['1,469 customers', '5 RFM tiers', 'Win-back'],
+    tags: ['Champion→Hibernating', '1,469 shoppers', 'Win-back'],
     tone: 'teal',
     icon: 'users',
   },
   {
     id: 'whatsapp-crm',
-    n: '06',
+    n: '07',
     title: 'WhatsApp attribution',
-    body: 'Did the outreach work? Match each message to a POS visit within seven days, proof for the channel loyalty and Lola already use.',
+    body: 'Did the outreach work? Match each message to a POS visit within seven days.',
     metricLabel: 'Attributed visits',
     metricDisplay: '2,088',
     metric: 66,
@@ -113,6 +125,13 @@ function ModuleIcon({ name }) {
       </svg>
     )
   }
+  if (name === 'pricing') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h16M4 12h10M4 17h13M16 10.5l3 3-3 3" {...stroke} />
+      </svg>
+    )
+  }
   if (name === 'forecast') {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -137,14 +156,12 @@ function ModuleIcon({ name }) {
   )
 }
 
-  function focusFeature(id) {
+function focusFeature(id) {
   const el = document.getElementById(`cw-feature-${id}`)
   if (!el) return
   el.scrollIntoView({ behavior: 'smooth', block: 'center' })
   el.classList.add('cw-feature--flash')
   window.history.replaceState(null, '', `#cw-feature-${id}`)
-  // Move focus, not just scroll — keyboard/screen-reader users get a signal
-  // the click actually did something, not just sighted mouse users.
   el.focus({ preventScroll: true })
   window.setTimeout(() => el.classList.remove('cw-feature--flash'), 1200)
 }
@@ -160,7 +177,7 @@ export default function CwModulesGrid() {
         Click a module to jump to its proof clip
       </p>
       <motion.div
-        className="cw-modules cw-modules--six"
+        className="cw-modules cw-modules--seven"
         role="list"
         aria-labelledby={labelId}
         initial={reduceMotion ? false : 'hidden'}

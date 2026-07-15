@@ -30,8 +30,8 @@ export default function LolaMotion() {
 
           <div className="lola-motion__buttons lola-motion__buttons--1">
             <span>See specials</span>
-            <span>Store hours</span>
-            <span>Place order</span>
+            <span>Place pickup</span>
+            <span>Reminders</span>
           </div>
 
           <div className="lola-motion__bubble lola-motion__bubble--out lola-motion__bubble--2">
@@ -57,7 +57,7 @@ export default function LolaMotion() {
 
           <div className="lola-motion__staff">
             <span className="lola-motion__staff-ping" />
-            Staff alerted · quote ready
+            Connect · Orders · draft buzz → confirm
           </div>
         </div>
       </div>

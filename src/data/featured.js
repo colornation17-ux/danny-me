@@ -13,8 +13,9 @@ export const featured = [
     displayTitle: 'Competitor Watch',
     company: 'La Bodega',
     folderDate: 'Jun 10, 2026',
-    outcome: 'Retail planning web app: competitor intel, demand forecast, and WhatsApp→POS attribution (2,088 visits)',
-    tags: ['Web app', 'Retail'],
+    outcome:
+      'Solo React+Python: Flipp deals + combos, shelf-vs-floor pricing, market trends, weekend playbook, forecast, RFM visit-rhythm nudges, WhatsApp→POS (2,088 visits)',
+    tags: ['Web app', 'Full-stack', 'Retail'],
     reel: '/work/competitor-watch/motion/CompetitorWatch-Reel.mp4',
     folderFill: '#166534',
     folderInk: '#ffffff',
@@ -26,15 +27,16 @@ export const featured = [
     company: 'La Bodega',
     folderDate: 'Jun 28, 2026',
     outcome:
-      'WhatsApp CRM + Lola Connect PWA: bilingual deals, pickup orders, reminders, voice, and staff inbox/handoff (1,600+ CRM customers · 97.7% replies <2 min)',
+      'Designed flows + built Lola Connect solo (Home · Inbox · Orders · Tickets · Reminders): bilingual deals, buttons-first pickup, reminders, staff handoff (~1,200 loyalty · 96.3% closed without staff)',
     blurb:
-      'Customers stay on WhatsApp; staff run orders, reminders, and handoff from Lola Connect — a mobile PWA. Research-backed from real threads before ship.',
-    tags: ['WhatsApp CRM', 'PWA'],
+      'Six guest WhatsApp flows; staff run the Connect PWA spine. Flyer-grounded answers — no invented prices. Research-backed from real threads before ship.',
+    tags: ['WhatsApp', 'PWA', 'Full-stack'],
     reel: '/work/lola/motion/Lola-Reel.mp4',
     reelPortrait: true,
     folderFill: '#290545',
     folderInk: '#ffffff',
     folderTitleFont: 'pixelify',
+    connectSpine: ['Home', 'Inbox', 'Orders', 'Tickets', 'Reminders'],
   },
   {
     ...bySlug['bodega-ops'],
