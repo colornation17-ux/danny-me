@@ -5782,11 +5782,13 @@ body:has(.folio--fullgrid) .site-footer {
 
 @media (max-width: 699px) {
   /*
-   * Numbers-only equal tabs fill 100% of the card.
-   * Slope/ledge hidden so they can't push 06 off-screen.
+   * Equal-width number slots for every tab so 01–06 all stay in view.
+   * Active name is overlaid into the slope/ledge — never widens the slot
+   * (widening was pushing 04–06 off-screen).
+   * Ledge min-width must be 0 or the flex row overflows the sticky card.
    */
   .folder-card__chrome {
-    min-height: 44px;
+    min-height: 48px;
     width: 100%;
     max-width: 100%;
     overflow: hidden;
@@ -5795,9 +5797,8 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__tab {
     justify-content: center;
     gap: 0;
-    margin: 0;
     padding: 0;
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     overflow: hidden;
   }
 
@@ -5809,13 +5810,16 @@ body:has(.folio--fullgrid) .site-footer {
     display: none;
   }
 
-  .folder-card__tab-slope,
+  .folder-card__tab-slope {
+    width: 16px;
+  }
+
   .folder-card__ledge {
-    display: none;
+    min-width: 0;
   }
 
   .folder-card--active .folder-card__tab-label {
-    display: none;
+    display: none; /* numbers-only on narrow phones — name is in the card body */
   }
 }
 
@@ -5859,81 +5863,34 @@ body:has(.folio--fullgrid) .site-footer {
   /* Shorter sticky scrub — less scroll tax on phones */
   .folder-stack {
     height: calc(var(--folder-count) * 42vh + (100vh - 74px));
-    padding-inline: 0.65rem;
   }
 
   /* Stack text → image vertically, constrained to card width */
   .folder-card__content {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-
-  .folder-card__chrome {
-    min-height: 40px;
-    height: 2.15rem;
   }
 
   .folder-card__img {
-    min-height: 0;
-    padding: 0.35rem 0.75rem 0.7rem;
-    align-items: stretch;
+    min-height: auto;
+    padding: 0 0.75rem 0.75rem;
+    align-items: flex-start;
   }
 
   .folder-card__text {
-    gap: 0.65rem;
-    padding: 0.7rem 0.85rem 0.35rem;
-  }
-
-  .folder-card__text-main {
-    gap: 0.35rem;
-  }
-
-  .folder-card__progress {
-    margin: 0 0 0.1rem;
+    padding: 1rem 1rem 0.75rem;
   }
 
   .folder-card__title {
-    font-size: clamp(1.45rem, 6.5vw, 1.95rem);
-  }
-
-  .folder-card__meta {
-    margin: 0.15rem 0 0;
-    font-size: 0.68rem;
-  }
-
-  .folder-card__meta--sub {
-    margin-top: 0;
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
   }
 
   .folder-card__blurb {
-    margin: 0.3rem 0 0;
-    font-size: 0.8rem;
-    line-height: 1.35;
-    max-width: none;
+    font-size: 0.82rem;
     -webkit-line-clamp: 3;
     line-clamp: 3;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-  }
-
-  .folder-card__cta-row {
-    gap: 0.45rem;
-  }
-
-  /* Keep tags under the CTA instead of shoved to the bottom gap */
-  .folder-card__tags {
-    margin-top: 0.15rem;
-    padding-top: 0;
-  }
-
-  .folder-card__tag-label {
-    padding: 0.32rem 0.55rem;
-    font-size: 0.62rem;
-  }
-
-  .folder-card__image {
-    max-height: min(38vh, 14rem);
   }
 }
 
