@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import STATE_PATHS from '../data/usStatePaths.json'
@@ -48,17 +49,90 @@ const TRIP_STOPS = [
 const ROUTE_STATES = [...new Set(TRIP_STOPS.map((s) => s.state))]
 const ALL_STATE_CODES = Object.keys(STATE_PATHS)
 
+function TravelLightbox({ open, stop, onClose, labelId }) {
+  const dialogRef = useRef(null)
+  const closeBtnRef = useRef(null)
+
+  useEffect(() => {
+    if (!open) return undefined
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const t = window.setTimeout(() => closeBtnRef.current?.focus(), 30)
+
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.clearTimeout(t)
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open, onClose])
+
+  if (!open || !stop?.photo || typeof document === 'undefined') return null
+
+  return createPortal(
+    <div
+      className="travel-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={labelId}
+      ref={dialogRef}
+      onClick={onClose}
+    >
+      <button
+        ref={closeBtnRef}
+        type="button"
+        className="travel-lightbox__close"
+        aria-label="Close photo"
+        onClick={onClose}
+      >
+        Close
+      </button>
+      <figure
+        className="travel-lightbox__frame"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <img
+          className="travel-lightbox__img"
+          src={stop.photo}
+          alt={`${stop.title}${stop.desc ? ` — ${stop.desc}` : ''}`}
+          decoding="async"
+        />
+        <figcaption id={labelId} className="travel-lightbox__cap">
+          <span className="travel-lightbox__title">{stop.title}</span>
+          {stop.note ? <span className="travel-lightbox__note">{stop.note}</span> : null}
+        </figcaption>
+      </figure>
+    </div>,
+    document.body,
+  )
+}
+
 export default function RoadTrip() {
   const svgRef = useRef(null)
   const scrollerRef = useRef(null)
   const pinRef = useRef(null)
   const markerRef = useRef(null)
   const panelRefs = useRef({})
+  const [lightbox, setLightbox] = useState(null)
+  const lightboxLabelId = useId()
+
+  const closeLightbox = useCallback(() => setLightbox(null), [])
+  const openLightbox = useCallback((stop) => {
+    if (!stop?.photo) return
+    setLightbox(stop)
+  }, [])
 
   useEffect(() => {
     const svg = svgRef.current
     const marker = markerRef.current
     if (!svg || !marker) return
+
+    const reduceMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     const ctx = gsap.context(() => {
       // Real geographic position for each stop, resolved from its state's
@@ -72,42 +146,60 @@ export default function RoadTrip() {
       gsap.set(marker, { attr: { cx: stops[0].cx, cy: stops[0].cy }, autoAlpha: 0 })
       gsap.set(Object.values(panelRefs.current).filter(Boolean), { autoAlpha: 0 })
 
+      // Longer scroll + softer scrub = smoother photo card handoffs
+      const stopGap = reduceMotion ? 0.7 : 1
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: scrollerRef.current,
           start: 'top top',
-          end: () => `+=${Math.max(3600, window.innerHeight * (2.2 + TRIP_STOPS.length * 0.12))}`,
-          scrub: 1,
+          end: () =>
+            `+=${Math.max(5200, window.innerHeight * (3.2 + TRIP_STOPS.length * 0.22))}`,
+          scrub: reduceMotion ? 0.35 : 1.85,
           pin: pinRef.current,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       })
 
       let lastState = null
       stops.forEach((s, i) => {
-        const t = i
+        const t = i * stopGap
         const panel = panelRefs.current[s.id]
         const statePath = svg.querySelector(`#us-${s.state}`)
 
         if (s.state !== lastState) {
           if (lastState) {
             const prevPath = svg.querySelector(`#us-${lastState}`)
-            tl.to(prevPath, { attr: { fill: VISITED_COLOR }, duration: 0.3 }, t)
+            tl.to(prevPath, { attr: { fill: VISITED_COLOR }, duration: 0.45, ease: 'none' }, t)
           }
-          tl.to(statePath, { attr: { fill: ROUTE_COLOR }, duration: 0.3 }, t)
+          tl.to(statePath, { attr: { fill: ROUTE_COLOR }, duration: 0.45, ease: 'none' }, t)
           lastState = s.state
         }
 
-        tl.to(marker, {
-          attr: { cx: s.cx, cy: s.cy },
-          autoAlpha: 1,
-          duration: 0.4,
-          ease: 'power2.out',
-        }, t)
+        tl.to(
+          marker,
+          {
+            attr: { cx: s.cx, cy: s.cy },
+            autoAlpha: 1,
+            duration: 0.55,
+            ease: 'none',
+          },
+          t,
+        )
 
         if (panel) {
-          tl.to(panel, { autoAlpha: 1, duration: 0.3 }, t + 0.1)
-          tl.to(panel, { autoAlpha: 0, duration: 0.3 }, t + 0.85)
+          // Soft crossfade windows so cards don't pop hard mid-scrub
+          tl.fromTo(
+            panel,
+            { autoAlpha: 0, y: 14 },
+            { autoAlpha: 1, y: 0, duration: 0.4, ease: 'none' },
+            t + 0.08,
+          )
+          tl.to(
+            panel,
+            { autoAlpha: 0, y: -10, duration: 0.38, ease: 'none' },
+            t + stopGap * 0.78,
+          )
         }
       })
     }, scrollerRef)
@@ -153,17 +245,31 @@ export default function RoadTrip() {
           <circle ref={markerRef} r="6" fill={ROUTE_COLOR} stroke="#fff" strokeWidth="2" className="road-trip__marker" />
         </svg>
 
-        <div className="road-trip__panel-stack" aria-hidden="true">
+        <div className="road-trip__panel-stack">
           {TRIP_STOPS.map((s) => (
             <div
               key={s.id}
               ref={(el) => { panelRefs.current[s.id] = el }}
               className="road-trip__panel"
+              aria-hidden="true"
             >
               {s.photo && (
-                <div className="road-trip__polaroid">
-                  <img src={s.photo} alt="" loading="lazy" />
-                </div>
+                <button
+                  type="button"
+                  className="road-trip__polaroid"
+                  aria-label={`View ${s.title} photo full size`}
+                  onClick={() => openLightbox(s)}
+                >
+                  <img
+                    src={s.photo}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span className="road-trip__polaroid-hint" aria-hidden="true">
+                    View
+                  </span>
+                </button>
               )}
               <div className="road-trip__panel-text">
                 <p className="road-trip__panel-eyebrow">{s.desc}</p>
@@ -179,6 +285,13 @@ export default function RoadTrip() {
           Scroll to drive it
         </p>
       </div>
+
+      <TravelLightbox
+        open={Boolean(lightbox)}
+        stop={lightbox}
+        onClose={closeLightbox}
+        labelId={lightboxLabelId}
+      />
     </div>
   )
 }

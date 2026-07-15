@@ -1,6 +1,6 @@
 /**
  * Shared “distant shop radio” bed — SpringWire pulls + SiteRadio.
- * Muffled + short room reverb. No hard clipping.
+ * Megaphone-ish: midrange punch + slap echo. No hard clipping.
  */
 
 export const WIRE_RADIO = {
@@ -108,62 +108,90 @@ function ensureGraph(src = WIRE_RADIO.src) {
   if (!connected && ctx) {
     const source = ctx.createMediaElementSource(audio)
 
-    // Muffle = distant speaker through a store (not crushed)
+    // Megaphone / tin horn: cut mud + air, boost nasal mid scoop
     const highpass = ctx.createBiquadFilter()
     highpass.type = 'highpass'
-    highpass.frequency.value = 140
-    highpass.Q.value = 0.4
+    highpass.frequency.value = 480
+    highpass.Q.value = 0.7
 
     const lowpass = ctx.createBiquadFilter()
     lowpass.type = 'lowpass'
-    lowpass.frequency.value = 2400
-    lowpass.Q.value = 0.65
+    lowpass.frequency.value = 2200
+    lowpass.Q.value = 0.85
 
-    const midCut = ctx.createBiquadFilter()
-    midCut.type = 'peaking'
-    midCut.frequency.value = 900
-    midCut.Q.value = 0.7
-    midCut.gain.value = -1.5
+    const megaphonePeak = ctx.createBiquadFilter()
+    megaphonePeak.type = 'peaking'
+    megaphonePeak.frequency.value = 1250
+    megaphonePeak.Q.value = 1.1
+    megaphonePeak.gain.value = 7.5
 
-    // Short room reverb via delay feedback (no IR file)
-    const delay = ctx.createDelay(1.0)
-    delay.delayTime.value = 0.12
+    // Mild grit (not crushed) — soft curve waveshaper
+    const grit = ctx.createWaveShaper()
+    grit.curve = makeMegaphoneCurve(0.28)
+    grit.oversample = '2x'
+
+    // Plaza slap + longer feedback so the reverb reads as megaphone bounce
+    const delay = ctx.createDelay(1.5)
+    delay.delayTime.value = 0.22
 
     const feedback = ctx.createGain()
-    feedback.gain.value = 0.38
+    feedback.gain.value = 0.48
 
     const wet = ctx.createGain()
-    wet.gain.value = 0.44
+    wet.gain.value = 0.55
 
     const dry = ctx.createGain()
-    dry.gain.value = 0.68
+    dry.gain.value = 0.58
 
     const reverbLow = ctx.createBiquadFilter()
     reverbLow.type = 'lowpass'
-    reverbLow.frequency.value = 1600
+    reverbLow.frequency.value = 1900
+
+    // Second tap for a clearer “hall / parking lot” echo
+    const delay2 = ctx.createDelay(1.5)
+    delay2.delayTime.value = 0.41
+    const wet2 = ctx.createGain()
+    wet2.gain.value = 0.22
 
     masterGain = ctx.createGain()
     masterGain.gain.value = 0
 
     source.connect(highpass)
-    highpass.connect(midCut)
-    midCut.connect(lowpass)
+    highpass.connect(megaphonePeak)
+    megaphonePeak.connect(lowpass)
+    lowpass.connect(grit)
 
-    lowpass.connect(dry)
+    grit.connect(dry)
     dry.connect(masterGain)
 
-    lowpass.connect(delay)
+    grit.connect(delay)
     delay.connect(reverbLow)
     reverbLow.connect(feedback)
     feedback.connect(delay)
     reverbLow.connect(wet)
     wet.connect(masterGain)
 
+    grit.connect(delay2)
+    delay2.connect(wet2)
+    wet2.connect(masterGain)
+
     masterGain.connect(ctx.destination)
     connected = true
   }
 
   return { audio, ctx, masterGain }
+}
+
+/** Soft saturation curve — megaphone grit without brickwall clipping */
+function makeMegaphoneCurve(amount = 0.25) {
+  const n = 256
+  const curve = new Float32Array(n)
+  const k = Math.max(0.01, amount) * 40
+  for (let i = 0; i < n; i++) {
+    const x = (i * 2) / (n - 1) - 1
+    curve[i] = ((1 + k) * x) / (1 + k * Math.abs(x))
+  }
+  return curve
 }
 
 function fadeGain(to, duration = 0.9) {
