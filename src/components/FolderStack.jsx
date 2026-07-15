@@ -241,7 +241,13 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
             ) : motion ? (
               <ProjectMotionPreview slug={project.slug} size="card" />
             ) : project.cover ? (
-              <img src={project.cover} alt={mediaAlt} loading="lazy" />
+              <img
+                src={project.cover}
+                alt={mediaAlt}
+                loading={cardState === 'active' ? 'eager' : 'lazy'}
+                decoding="async"
+                fetchPriority={cardState === 'active' ? 'high' : 'auto'}
+              />
             ) : (
               <div className="folder-card__placeholder" aria-hidden="true">
                 <span>{title}</span>

@@ -95,3 +95,14 @@
 .cs--with-rail .cs-rail__brand {
   color: var(--cs-ink);
 }
+
+.cs--with-rail .cs-rail__back:hover,
+.cs--with-rail .cs-rail__back:focus-visible {
+  color: var(--cs-accent, var(--cs-ink));
+}
+
+@media (max-width: 1023px) {
+  .cs .cs-section {
+    scroll-margin-top: 7.25rem;
+  }
+}

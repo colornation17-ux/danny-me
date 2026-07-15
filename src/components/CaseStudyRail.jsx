@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useScrollSpy } from '../hooks/useScrollSpy'
 
 /** Stable section ids from case-study eyebrows */
@@ -35,9 +36,22 @@ function Chevron({ open }) {
   )
 }
 
-function RailAside({ brand, steps, activeId, activeIdx, fillPct }) {
+function BackLink({ to, label }) {
+  if (!to) return null
+  return (
+    <Link to={to} className="cs-rail__back">
+      <span className="cs-rail__back-arrow" aria-hidden="true">
+        ←
+      </span>
+      <span>{label}</span>
+    </Link>
+  )
+}
+
+function RailAside({ brand, steps, activeId, activeIdx, fillPct, backTo, backLabel }) {
   return (
     <aside className="cs-rail" aria-label="Case study timeline">
+      <BackLink to={backTo} label={backLabel || 'Work'} />
       {brand ? (
         <a href={`#${steps[0].id}`} className="cs-rail__brand" title={brand}>
           {brand}
@@ -81,7 +95,7 @@ function RailAside({ brand, steps, activeId, activeIdx, fillPct }) {
   )
 }
 
-function MobileBar({ brand, steps, activeId, activeIdx }) {
+function MobileBar({ brand, steps, activeId, activeIdx, backTo, backLabel }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef(null)
   const triggerRef = useRef(null)
@@ -111,6 +125,7 @@ function MobileBar({ brand, steps, activeId, activeIdx }) {
   return (
     <div className="cs-rail-mobile" ref={rootRef}>
       <div className="cs-rail-mobile__inner">
+        <BackLink to={backTo} label={backLabel || 'Work'} />
         {brand ? <span className="cs-rail-mobile__brand">{brand}</span> : null}
         <button
           ref={triggerRef}
@@ -152,8 +167,9 @@ function MobileBar({ brand, steps, activeId, activeIdx }) {
 
 /**
  * Single scroll-spy owner — desktop rail + mobile picker stay in sync.
+ * Back link lives in the chrome so ← Work matches the case-study system.
  */
-export function CaseStudyNav({ brand, steps }) {
+export function CaseStudyNav({ brand, steps, backTo, backLabel = 'Work' }) {
   const ids = useMemo(() => steps.map((s) => s.id), [steps])
   const { activeId, activeIdx, fillPct } = useScrollSpy(ids)
 
@@ -161,13 +177,22 @@ export function CaseStudyNav({ brand, steps }) {
 
   return (
     <>
-      <MobileBar brand={brand} steps={steps} activeId={activeId} activeIdx={activeIdx} />
+      <MobileBar
+        brand={brand}
+        steps={steps}
+        activeId={activeId}
+        activeIdx={activeIdx}
+        backTo={backTo}
+        backLabel={backLabel}
+      />
       <RailAside
         brand={brand}
         steps={steps}
         activeId={activeId}
         activeIdx={activeIdx}
         fillPct={fillPct}
+        backTo={backTo}
+        backLabel={backLabel}
       />
     </>
   )

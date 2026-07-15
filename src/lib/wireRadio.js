@@ -1,15 +1,18 @@
 /**
- * Shared “pocket radio” bed — SpringWire pulls + SiteRadio button.
- * Self-hosted clip at /audio/wire-radio.mp3
+ * Shared “distant shop radio” bed — SpringWire pulls + SiteRadio.
+ * Muffled + short room reverb. No hard clipping.
  */
 
 export const WIRE_RADIO = {
   src: '/audio/wire-radio.mp3',
   startAt: 63, // 1:03
-  volume: 0.14,
+  volume: 0.5, // default slider 0–1
+  maxGain: 0.62,
   title: 'Radio',
   track: 'I Had Some Help',
 }
+
+export const WIRE_RADIO_FOUND_KEY = 'wire-radio-found'
 
 let audio = null
 let ctx = null
@@ -18,13 +21,41 @@ let connected = false
 let fadeTween = null
 let playing = false
 let startAt = WIRE_RADIO.startAt
+let userVolume = WIRE_RADIO.volume
 
 function emit() {
   window.dispatchEvent(
     new CustomEvent('wire-radio', {
-      detail: { playing, title: WIRE_RADIO.track },
+      detail: {
+        playing,
+        title: WIRE_RADIO.track,
+        volume: userVolume,
+        found: hasFoundWireRadio(),
+      },
     }),
   )
+}
+
+export function hasFoundWireRadio() {
+  try {
+    return window.localStorage.getItem(WIRE_RADIO_FOUND_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+export function markFoundWireRadio() {
+  try {
+    window.localStorage.setItem(WIRE_RADIO_FOUND_KEY, '1')
+  } catch {
+    /* ignore */
+  }
+  window.dispatchEvent(new CustomEvent('wire-radio-found'))
+  emit()
+}
+
+function gainFromSlider(v = userVolume) {
+  return Math.max(0, Math.min(1, v)) * WIRE_RADIO.maxGain
 }
 
 function ensureGraph(src = WIRE_RADIO.src) {
@@ -64,47 +95,62 @@ function ensureGraph(src = WIRE_RADIO.src) {
   if (!connected && ctx) {
     const source = ctx.createMediaElementSource(audio)
 
-    const band = ctx.createBiquadFilter()
-    band.type = 'bandpass'
-    band.frequency.value = 1350
-    band.Q.value = 0.85
+    // Muffle = distant speaker through a store (not crushed)
+    const highpass = ctx.createBiquadFilter()
+    highpass.type = 'highpass'
+    highpass.frequency.value = 140
+    highpass.Q.value = 0.4
 
-    const low = ctx.createBiquadFilter()
-    low.type = 'highpass'
-    low.frequency.value = 280
+    const lowpass = ctx.createBiquadFilter()
+    lowpass.type = 'lowpass'
+    lowpass.frequency.value = 2400
+    lowpass.Q.value = 0.65
 
-    const high = ctx.createBiquadFilter()
-    high.type = 'lowpass'
-    high.frequency.value = 3200
+    const midCut = ctx.createBiquadFilter()
+    midCut.type = 'peaking'
+    midCut.frequency.value = 900
+    midCut.Q.value = 0.7
+    midCut.gain.value = -1.5
 
-    const shaper = ctx.createWaveShaper()
-    shaper.curve = makeSoftClip(0.35)
-    shaper.oversample = '2x'
+    // Short room reverb via delay feedback (no IR file)
+    const delay = ctx.createDelay(1.0)
+    delay.delayTime.value = 0.085
+
+    const feedback = ctx.createGain()
+    feedback.gain.value = 0.28
+
+    const wet = ctx.createGain()
+    wet.gain.value = 0.32
+
+    const dry = ctx.createGain()
+    dry.gain.value = 0.78
+
+    const reverbLow = ctx.createBiquadFilter()
+    reverbLow.type = 'lowpass'
+    reverbLow.frequency.value = 1800
 
     masterGain = ctx.createGain()
     masterGain.gain.value = 0
 
-    source.connect(low)
-    low.connect(band)
-    band.connect(high)
-    high.connect(shaper)
-    shaper.connect(masterGain)
+    source.connect(highpass)
+    highpass.connect(midCut)
+    midCut.connect(lowpass)
+
+    lowpass.connect(dry)
+    dry.connect(masterGain)
+
+    lowpass.connect(delay)
+    delay.connect(reverbLow)
+    reverbLow.connect(feedback)
+    feedback.connect(delay)
+    reverbLow.connect(wet)
+    wet.connect(masterGain)
+
     masterGain.connect(ctx.destination)
     connected = true
   }
 
   return { audio, ctx, masterGain }
-}
-
-function makeSoftClip(amount) {
-  const n = 256
-  const curve = new Float32Array(n)
-  const k = amount * 50 + 1
-  for (let i = 0; i < n; i += 1) {
-    const x = (i * 2) / (n - 1) - 1
-    curve[i] = ((1 + k) * x) / (1 + k * Math.abs(x))
-  }
-  return curve
 }
 
 function fadeGain(to, duration = 0.9) {
@@ -113,7 +159,7 @@ function fadeGain(to, duration = 0.9) {
   const now = ctx.currentTime
   g.cancelScheduledValues(now)
   g.setValueAtTime(g.value, now)
-  g.linearRampToValueAtTime(to, now + duration)
+  g.linearRampToValueAtTime(to, now + Math.max(0.05, duration))
 }
 
 async function resumeCtx() {
@@ -126,15 +172,27 @@ async function resumeCtx() {
   }
 }
 
-/** Warm metadata so first play seeks faster */
 export function prefetchWireRadio(src = WIRE_RADIO.src) {
   ensureGraph(src)
+}
+
+export function setWireRadioVolume(next) {
+  userVolume = Math.max(0, Math.min(1, Number(next) || 0))
+  ensureGraph()
+  if (playing && masterGain && ctx) {
+    fadeGain(gainFromSlider(userVolume), 0.12)
+  }
+  emit()
+  return userVolume
+}
+
+export function getWireRadioVolume() {
+  return userVolume
 }
 
 export async function playWireRadio({
   src = WIRE_RADIO.src,
   startAt: start = WIRE_RADIO.startAt,
-  volume = WIRE_RADIO.volume,
 } = {}) {
   const graph = ensureGraph(src)
   if (!graph?.audio) return false
@@ -143,7 +201,10 @@ export async function playWireRadio({
   const { audio: el } = graph
   await resumeCtx()
 
-  if (playing && !el.paused) return true
+  if (playing && !el.paused) {
+    markFoundWireRadio()
+    return true
+  }
 
   const needsSeek = el.paused && (el.currentTime < start - 0.5 || el.ended || el.currentTime === 0)
   if (needsSeek) {
@@ -168,8 +229,9 @@ export async function playWireRadio({
     return false
   }
 
-  fadeGain(volume, 1.1)
+  fadeGain(gainFromSlider(userVolume), 1.15)
   playing = true
+  markFoundWireRadio()
   emit()
   return true
 }
@@ -205,6 +267,6 @@ export function wireRadioDefaults() {
   return {
     src: WIRE_RADIO.src,
     startAt: WIRE_RADIO.startAt,
-    volume: WIRE_RADIO.volume,
+    volume: userVolume,
   }
 }

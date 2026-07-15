@@ -1,15 +1,18 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { toggleWireRadio } from '../lib/wireRadio'
+import {
+  hasFoundWireRadio,
+  toggleWireRadio,
+  wireRadioDefaults,
+} from '../lib/wireRadio'
 
 const POINT_COUNT = 20
 const VIEW_H = 52
 const BASE_Y = VIEW_H / 2
-/** Show "drag me" when pointer is in the right slice of the wire */
+/** Show hover hint when pointer is in the right slice of the wire */
 const HINT_FROM = 0.72
 
 function restY(i, seed) {
-  // Slightly taller wave so the pencil reads as a drawn rule, not a hairline
   const n =
     Math.sin(i * 1.7 + seed * 2.1) * 2.1 +
     Math.sin(i * 0.55 + seed) * 1.05 +
@@ -35,15 +38,15 @@ function buildPath(pts) {
 }
 
 /**
- * Full-bleed pencil rule. Stronger hover/drag response.
- * "drag me" hint fades in only when the pointer is near the right end.
- * Optional `radio` — pull toggles a subtle self-hosted radio bed.
+ * Full-bleed pencil rule. Optional radio: pull toggles the shared bed.
+ * `invite` — first-visit “try pulling me” cue (readable on fast scroll).
  */
 export default function SpringWire({
   className = '',
   label = 'Hand-drawn section rule',
   seed = 1,
-  radio = null, // { src, startAt, volume } — self-hosted clip only
+  radio = false,
+  invite = false,
 }) {
   const wrapRef = useRef(null)
   const mainRef = useRef(null)
@@ -53,11 +56,17 @@ export default function SpringWire({
   const pullingRef = useRef(false)
   const pointerIdRef = useRef(null)
   const pullStartRef = useRef(null)
-  const radioRef = useRef(radio)
-  radioRef.current = radio
+  const invitingRef = useRef(false)
+  const radioOpts = radio === true ? wireRadioDefaults() : radio || null
+  const radioRef = useRef(radioOpts)
+  radioRef.current = radioOpts
   const filterId = useId().replace(/:/g, '')
   const [radioOn, setRadioOn] = useState(false)
+  const [found, setFound] = useState(() =>
+    typeof window !== 'undefined' ? hasFoundWireRadio() : false,
+  )
   const hasRadio = Boolean(radio)
+  const showInvite = hasRadio && invite && !found
 
   useEffect(() => {
     if (!hasRadio) return undefined
@@ -73,6 +82,8 @@ export default function SpringWire({
     const hint = hintRef.current
     if (!wrap || !main || !ghost || !hint) return
 
+    invitingRef.current = showInvite
+
     const setPath = () => {
       const pts = pointsRef.current
       const d = buildPath(pts)
@@ -82,6 +93,12 @@ export default function SpringWire({
     }
 
     const setHint = (visible) => {
+      // Invite cue stays readable — never fade it during scroll/hover
+      if (invitingRef.current) {
+        gsap.set(hint, { opacity: 1, y: 0 })
+        wrap.classList.add('spring-wire--hint')
+        return
+      }
       gsap.to(hint, {
         opacity: visible ? 1 : 0,
         y: visible ? 0 : 4,
@@ -153,7 +170,11 @@ export default function SpringWire({
         })
       })
 
-      // Near the right end: nudge tip + show hint
+      if (invitingRef.current) {
+        setHint(true)
+        return
+      }
+
       if (!pullingRef.current && nx >= HINT_FROM) {
         setHint(true)
         wrap.classList.add('spring-wire--hint')
@@ -164,8 +185,13 @@ export default function SpringWire({
     }
 
     const springHome = () => {
-      setHint(false)
-      wrap.classList.remove('spring-wire--hint', 'spring-wire--pulling')
+      if (!invitingRef.current) {
+        setHint(false)
+        wrap.classList.remove('spring-wire--hint')
+      } else {
+        setHint(true)
+      }
+      wrap.classList.remove('spring-wire--pulling')
       pointsRef.current.forEach((p, i) => {
         gsap.to(p, {
           y: p.oy,
@@ -182,7 +208,7 @@ export default function SpringWire({
       pointerIdRef.current = e.pointerId
       pullStartRef.current = { x: e.clientX, y: e.clientY, t: performance.now() }
       wrap.classList.add('spring-wire--pulling')
-      setHint(false)
+      if (!invitingRef.current) setHint(false)
       wrap.setPointerCapture?.(e.pointerId)
       pullToward(e.clientX, e.clientY, 1)
     }
@@ -209,19 +235,47 @@ export default function SpringWire({
       pullStartRef.current = null
       springHome()
 
-      // Intentional tug (not a glance hover) toggles the radio bed
       if (radioRef.current && (moved > 10 || held > 120)) {
-        toggleWireRadio(radioRef.current).catch(() => {})
+        toggleWireRadio(radioRef.current)
+          .then(() => {
+            invitingRef.current = false
+            setFound(true)
+            wrap.classList.remove('spring-wire--invite')
+            wrap.classList.remove('spring-wire--invite-inview')
+          })
+          .catch(() => {})
       }
     }
 
     const onPointerLeave = () => {
       if (pullingRef.current) return
       springHome()
+      if (invitingRef.current) setHint(true)
     }
 
-    gsap.set(hint, { opacity: 0, y: 4 })
     layout()
+
+    if (showInvite) {
+      wrap.classList.add('spring-wire--invite')
+      gsap.set(hint, { opacity: 1, y: 0 })
+      wrap.classList.add('spring-wire--hint')
+    } else {
+      gsap.set(hint, { opacity: 0, y: 4 })
+    }
+
+    let io
+    if (showInvite && typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry) return
+          wrap.classList.toggle('spring-wire--invite-inview', entry.isIntersecting)
+          if (entry.isIntersecting) setHint(true)
+        },
+        { threshold: [0, 0.15, 0.4], rootMargin: '0px 0px -8% 0px' },
+      )
+      io.observe(wrap)
+    }
+
     const ro = new ResizeObserver(layout)
     ro.observe(wrap)
 
@@ -232,6 +286,7 @@ export default function SpringWire({
     wrap.addEventListener('pointerleave', onPointerLeave)
 
     return () => {
+      io?.disconnect()
       ro.disconnect()
       wrap.removeEventListener('pointerdown', onPointerDown)
       wrap.removeEventListener('pointermove', onPointerMove)
@@ -241,7 +296,15 @@ export default function SpringWire({
       gsap.killTweensOf(pointsRef.current)
       gsap.killTweensOf(hint)
     }
-  }, [seed, hasRadio])
+  }, [seed, hasRadio, showInvite])
+
+  const hintCopy = !hasRadio
+    ? 'drag me'
+    : showInvite
+      ? 'try pulling me'
+      : radioOn
+        ? 'pull to pause'
+        : 'pull to play'
 
   const wireLabel = hasRadio
     ? `${label}. Pull to ${radioOn ? 'pause' : 'play'} a quiet radio clip.`
@@ -250,7 +313,7 @@ export default function SpringWire({
   return (
     <div
       ref={wrapRef}
-      className={`spring-wire${hasRadio ? ' spring-wire--radio' : ''}${radioOn ? ' spring-wire--playing' : ''} ${className}`.trim()}
+      className={`spring-wire${hasRadio ? ' spring-wire--radio' : ''}${radioOn ? ' spring-wire--playing' : ''}${showInvite ? ' spring-wire--invite' : ''} ${className}`.trim()}
       role={hasRadio ? 'button' : 'img'}
       tabIndex={hasRadio ? 0 : undefined}
       aria-label={wireLabel}
@@ -260,7 +323,9 @@ export default function SpringWire({
           ? (e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()
-                toggleWireRadio(radioRef.current).catch(() => {})
+                toggleWireRadio(radioRef.current)
+                  .then(() => setFound(true))
+                  .catch(() => {})
               }
             }
           : undefined
@@ -310,7 +375,7 @@ export default function SpringWire({
         />
       </svg>
       <span ref={hintRef} className="spring-wire__hint" aria-hidden="true">
-        {hasRadio ? (radioOn ? 'pull to pause' : 'pull for radio') : 'drag me'}
+        {hintCopy}
       </span>
     </div>
   )

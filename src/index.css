@@ -1204,18 +1204,46 @@ button {
 
 /* ── Case study ──────────────────────────────────── */
 
-.cs-back {
+/* Standalone back (studies without a timeline rail) — matches rail chrome */
+.cs-back,
+.cs-rail__back {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  margin-top: 1.75rem;
-  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
   font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
   color: var(--muted);
+  white-space: nowrap;
+  border-radius: 0.25rem;
 }
 
-.cs-back:hover {
-  color: var(--accent-text);
+.cs-back {
+  margin-top: 1.75rem;
+  min-height: 2.25rem;
+  padding: 0.35rem 0;
+}
+
+.cs-back:hover,
+.cs-rail__back:hover,
+.cs-back:focus-visible,
+.cs-rail__back:focus-visible {
+  color: var(--ink);
+}
+
+.cs-back:focus-visible,
+.cs-rail__back:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.cs-rail__back-arrow {
+  font-size: 0.85rem;
+  line-height: 1;
+  letter-spacing: 0;
 }
 
 .cs-hero {
@@ -1601,18 +1629,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 }
 
 .cs--game .cs-back {
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  margin: 0;
-  z-index: 50;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.cs--game .cs-back:hover {
-  color: var(--accent-text);
+  margin-top: 0;
 }
 
 /* Adjacent project pager (prev + next) */
@@ -4426,6 +4443,26 @@ body:has(.folio--fullgrid) .app {
   line-height: 1.35;
 }
 
+.career-path__photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 0.65rem;
+}
+
+.career-path__photos img {
+  width: min(42vw, 9.5rem);
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.25rem 0.7rem;
+  box-shadow: 0 3px 10px rgba(17, 18, 18, 0.08);
+}
+
 @media (max-width: 600px) {
   .career-path {
     max-width: 100%;
@@ -4796,47 +4833,97 @@ body:has(.folio--fullgrid) .app {
   isolation: isolate;
 }
 
-/* Persistent radio — available on every page / case study */
-.site-radio {
+/* Revealed after first wire pull */
+.site-radio-gate {
   position: fixed;
   right: max(0.85rem, env(safe-area-inset-right));
   bottom: max(0.85rem, env(safe-area-inset-bottom));
   z-index: 60;
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
 
-.site-radio__btn {
+.site-radio-gate.is-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
   pointer-events: auto;
+}
+
+/* Persistent radio — available after the wire gem is found */
+.site-radio {
+  pointer-events: none;
+}
+
+.site-radio__panel {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.45rem 0.55rem 0.55rem;
+  border: 1px solid var(--folio-line, #d5dde5);
+  border-radius: 1rem;
+  background: color-mix(in srgb, #fff 94%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(17, 18, 18, 0.08);
+  min-width: 10.5rem;
+}
+
+.site-radio__panel.is-playing {
+  border-color: color-mix(in srgb, #4f7cff 45%, #d5dde5);
+}
+
+.site-radio__btn {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  min-height: 2.75rem;
-  padding: 0.4rem 0.85rem 0.4rem 0.65rem;
-  border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 999px;
-  background: color-mix(in srgb, #fff 92%, transparent);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(17, 18, 18, 0.08);
+  min-height: 2.4rem;
+  padding: 0.2rem 0.35rem;
+  border: 0;
+  border-radius: 0.65rem;
+  background: transparent;
   color: var(--ink, #111);
   font: inherit;
   cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  transition: background 0.2s ease;
+  width: 100%;
+  text-align: left;
 }
 
 .site-radio__btn:hover,
 .site-radio__btn:focus-visible {
-  border-color: #111;
-  transform: translateY(-1px);
+  background: #f3f5f7;
 }
 
 .site-radio__btn:focus-visible {
   outline: 2px solid #111;
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 .site-radio__btn.is-playing {
-  border-color: color-mix(in srgb, #4f7cff 55%, #111);
-  background: #fff;
+  background: transparent;
+}
+
+.site-radio__vol {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.35rem 0.1rem;
+}
+
+.site-radio__vol-icon {
+  display: inline-flex;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.site-radio__slider {
+  flex: 1;
+  width: 100%;
+  height: 0.3rem;
+  accent-color: #4f7cff;
+  cursor: pointer;
 }
 
 .site-radio__icon {
@@ -4906,7 +4993,7 @@ body:has(.folio--fullgrid) .app {
   }
 }
 
-body.game-embed .site-radio {
+body.game-embed .site-radio-gate {
   display: none;
 }
 
@@ -4977,18 +5064,93 @@ body.game-embed .site-radio {
 
 .spring-wire__hint {
   position: absolute;
-  z-index: 2;
-  right: clamp(0.85rem, 4vw, 2.5rem);
+  z-index: 3;
+  left: 50%;
   top: 50%;
-  margin-top: -0.95rem;
+  transform: translate(-50%, -50%);
+  margin-top: 0;
+  right: auto;
+  padding: 0.2rem 0.55rem 0.15rem;
+  border-radius: 0.35rem;
+  background: color-mix(in srgb, #fff 88%, transparent);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
   font-family: "Just Me Again Down Here", "Segoe Print", cursive;
-  font-size: 1.1rem;
-  letter-spacing: 0.02em;
-  color: #4a5560;
+  font-size: clamp(1.15rem, 3.2vw, 1.55rem);
+  letter-spacing: 0.01em;
+  line-height: 1;
+  color: #2a3038;
   opacity: 0;
   pointer-events: none;
   white-space: nowrap;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
+  text-shadow: none;
+}
+
+/* First-visit invite — always on, centered over the string so fast scroll still catches it */
+.spring-wire--invite {
+  min-height: 3.6rem;
+}
+
+.spring-wire--invite .spring-wire__hint,
+.spring-wire--invite.spring-wire--hint .spring-wire__hint {
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) !important;
+  color: #111212;
+  background: #fff;
+  border: 1px solid #d5dde5;
+  padding: 0.28rem 0.7rem 0.22rem;
+  font-size: clamp(1.25rem, 3.6vw, 1.7rem);
+  box-shadow: 0 4px 14px rgba(17, 18, 18, 0.08);
+}
+
+.spring-wire--invite.spring-wire--hint .spring-wire__path--main {
+  animation: spring-wire-invite 2.2s ease-in-out infinite;
+  stroke-width: 1.85;
+}
+
+.spring-wire--invite-inview .spring-wire__hint {
+  animation: spring-wire-invite-pop 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes spring-wire-invite {
+  0%,
+  100% {
+    stroke: #3d4652;
+  }
+  50% {
+    stroke: #4f7cff;
+  }
+}
+
+@keyframes spring-wire-invite-pop {
+  from {
+    transform: translate(-50%, -40%) scale(0.94);
+    opacity: 0.55;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spring-wire--invite.spring-wire--hint .spring-wire__path--main,
+  .spring-wire--invite-inview .spring-wire__hint {
+    animation: none;
+  }
+}
+
+/* After discovery, hint sits to the right again (hover / play states) */
+.spring-wire--radio:not(.spring-wire--invite) .spring-wire__hint {
+  left: auto;
+  right: clamp(0.85rem, 4vw, 2.5rem);
+  transform: none;
+  margin-top: -0.95rem;
+  top: 50%;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  font-size: 1.1rem;
+  color: #4a5560;
 }
 
 /* Edge-to-edge across the viewport (parent clips overflow) */
@@ -5784,7 +5946,7 @@ body:has(.folio--fullgrid) .site-footer {
   aspect-ratio: 16 / 9;
   overflow: hidden;
   /* Match folder fill — no black video letterbox / frame stroke */
-  background: var(--folder-fill, transparent);
+  background: color-mix(in srgb, #fff 22%, var(--folder-fill, #f3f5f7));
   border: 0;
   outline: none;
   box-shadow: none;
@@ -5799,7 +5961,12 @@ body:has(.folio--fullgrid) .site-footer {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* Full frame visible — no heavy crop on UI/photos */
+  object-fit: contain;
+  object-position: center;
+  image-rendering: auto;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .folder-card__image video {
@@ -5807,6 +5974,7 @@ body:has(.folio--fullgrid) .site-footer {
   inset: 0;
   width: 100%;
   height: 100%;
+  /* Reels fill the frame; still covers use contain above */
   object-fit: cover;
   border: 0;
   outline: none;
@@ -6104,26 +6272,39 @@ body:has(.folio--fullgrid) .site-footer {
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--folio-line, #d5dde5);
   margin: 0 calc(var(--gutter) * -1);
-  padding: 0.55rem var(--gutter);
+  padding: 0.5rem var(--gutter);
 }
 
 .cs--with-rail .cs-rail-mobile {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
 
 .cs-rail-mobile__inner {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.55rem;
   max-width: var(--max);
   margin: 0 auto;
 }
 
+.cs-rail-mobile .cs-rail__back {
+  flex-shrink: 0;
+  min-height: 2.5rem;
+  padding: 0 0.15rem;
+}
+
 .cs-rail-mobile__brand {
+  display: none;
   font-family: "Chubby And Groovy", var(--font-display);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--ink);
   white-space: nowrap;
+}
+
+@media (min-width: 420px) {
+  .cs-rail-mobile__brand {
+    display: inline;
+  }
 }
 
 .cs-rail-mobile__trigger {
@@ -6132,6 +6313,7 @@ body:has(.folio--fullgrid) .site-footer {
   justify-content: space-between;
   gap: 0.5rem;
   flex: 1;
+  min-width: 0;
   min-height: 2.5rem;
   padding: 0.35rem 0.75rem;
   border: 1px solid var(--folio-line, #d5dde5);
@@ -6146,6 +6328,10 @@ body:has(.folio--fullgrid) .site-footer {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -6201,7 +6387,7 @@ body:has(.folio--fullgrid) .site-footer {
   .cs-rail {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.55rem;
     position: fixed;
     top: calc(4.5rem + 1rem);
     left: 0.85rem;
@@ -6209,6 +6395,14 @@ body:has(.folio--fullgrid) .site-footer {
     width: 6.75rem;
     max-height: calc(100vh - 6rem);
     pointer-events: none;
+  }
+
+  .cs-rail__back {
+    pointer-events: auto;
+    width: fit-content;
+    margin: 0 0 0.1rem 0.55rem;
+    min-height: 1.5rem;
+    padding: 0.15rem 0;
   }
 
   .cs-rail__brand {
@@ -6347,5 +6541,88 @@ body:has(.folio--fullgrid) .site-footer {
   .cs--with-rail.cs,
   .cs-game-body.cs--with-rail {
     padding-left: min(7.25rem, 10vw);
+  }
+}
+
+/* Case study mobile polish — CTAs, type, sticky chrome */
+@media (max-width: 719px) {
+  .cs-hero {
+    padding: 1.15rem 0 1.5rem;
+  }
+
+  .cs-hero h1 {
+    max-width: none;
+    font-size: clamp(1.85rem, 8.5vw, 2.45rem);
+  }
+
+  .cs-hero__blurb {
+    font-size: 1rem;
+    margin-bottom: 1.15rem;
+  }
+
+  .cs-meta-row {
+    gap: 0.85rem 1rem;
+  }
+
+  .cs-actions {
+    gap: 0.6rem;
+    margin-top: 1.1rem;
+  }
+
+  .cs-actions .folio-btn {
+    flex: 1 1 auto;
+    min-width: min(100%, 10.5rem);
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cs-section {
+    scroll-margin-top: 7.25rem;
+  }
+
+  .cs--with-rail .cs-hero,
+  .cs-game-body.cs--with-rail .cs-hero {
+    padding-top: 0.85rem;
+  }
+
+  .cs-game-body {
+    padding: 1.25rem 1.1rem 2rem;
+  }
+
+  .cs-gallery__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cs-pager {
+    margin-top: 2rem;
+    padding-top: 1.35rem;
+    gap: 1rem;
+  }
+
+  .cs-pager__title {
+    font-size: 1.05rem;
+  }
+
+  .cs-pager__link--next .cs-pager__title {
+    font-size: 1.15rem;
+  }
+
+  .cs--cw .cs-metrics {
+    gap: 0.75rem;
+  }
+
+  .cs-metrics--hook {
+    gap: 1.1rem;
+  }
+}
+
+@media (max-width: 419px) {
+  .cs-rail-mobile__value {
+    font-size: 0.8rem;
+  }
+
+  .cs-actions .folio-btn {
+    width: 100%;
+    min-width: 0;
   }
 }

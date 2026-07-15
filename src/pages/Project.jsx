@@ -91,7 +91,10 @@ export default function Project() {
           That case study isn’t in the selected set.
         </p>
         <Link className="cs-back" to="/">
-          ← Back to work
+          <span className="cs-rail__back-arrow" aria-hidden="true">
+            ←
+          </span>
+          <span>Work</span>
         </Link>
       </div>
     )
@@ -112,7 +115,7 @@ export default function Project() {
   }
 
   const backTo = isLab ? '/play' : '/'
-  const backLabel = isLab ? '← Lab' : '← Work'
+  const backLabel = isLab ? 'Lab' : 'Work'
   const layout = project.layout || 'default'
   const motion = hasMotionPreview(project.slug)
   const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)
@@ -159,8 +162,21 @@ export default function Project() {
         )}
 
         <div id="case-study" className={`cs-game-body${showRail ? ' cs--with-rail' : ''}`}>
-          {showRail ? <CaseStudyNav brand={railBrand} steps={railSteps} /> : null}
-          <Link className="cs-back" to={backTo}>{backLabel}</Link>
+          {showRail ? (
+            <CaseStudyNav
+              brand={railBrand}
+              steps={railSteps}
+              backTo={backTo}
+              backLabel={backLabel}
+            />
+          ) : (
+            <Link className="cs-back" to={backTo}>
+              <span className="cs-rail__back-arrow" aria-hidden="true">
+                ←
+              </span>
+              <span>{backLabel}</span>
+            </Link>
+          )}
           <header className="cs-hero cs-hero--default">
             <div className="cs-hero__copy">
               <p className="cs-hero__meta">{project.meta}</p>
@@ -231,10 +247,21 @@ export default function Project() {
       className={`cs cs--${layout}${isCwCase ? ' cs--cw' : ''}${showRail ? ' cs--with-rail' : ''}`}
       style={{ '--cs-accent': project.accent }}
     >
-      {showRail ? <CaseStudyNav brand={railBrand} steps={railSteps} /> : null}
-      <Link className="cs-back" to={backTo}>
-        {backLabel}
-      </Link>
+      {showRail ? (
+        <CaseStudyNav
+          brand={railBrand}
+          steps={railSteps}
+          backTo={backTo}
+          backLabel={backLabel}
+        />
+      ) : (
+        <Link className="cs-back" to={backTo}>
+          <span className="cs-rail__back-arrow" aria-hidden="true">
+            ←
+          </span>
+          <span>{backLabel}</span>
+        </Link>
+      )}
 
       <header className={`cs-hero cs-hero--${layout}`}>
         <div className="cs-hero__copy">

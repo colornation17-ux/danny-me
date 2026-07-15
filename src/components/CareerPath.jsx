@@ -48,7 +48,7 @@ const STOPS = [
     color: '#7c3aed',
     photos: [
       // Inner pocket so outer labels stay clear
-      { id: 'grad', src: '/timeline/graduation.jpg', x: 175, y: 700, rot: -4 },
+      { id: 'grad', src: '/timeline/graduation.jpg', x: 155, y: 695, rot: -4 },
     ],
   },
   {
@@ -69,8 +69,8 @@ const STOPS = [
     dir: 'right',
     color: '#EA580C',
     photos: [
-      { id: 'track', src: '/timeline/code19-track.jpg', x: 165, y: 1055, rot: 6 },
-      { id: 'poster', src: '/timeline/code19-poster.jpg', x: 190, y: 1105, rot: -7 },
+      { id: 'track', src: '/timeline/code19-track.jpg', x: 145, y: 1045, rot: 6 },
+      { id: 'poster', src: '/timeline/code19-poster.jpg', x: 175, y: 1120, rot: -7 },
     ],
   },
   {
@@ -205,6 +205,19 @@ export default function CareerPath() {
               <span className="career-path__year">{s.year}</span>
               <span className="career-path__title">{s.title}</span>
               <span className="career-path__desc">{s.desc}</span>
+              {s.photos?.length ? (
+                <div className="career-path__photos">
+                  {s.photos.map((p) => (
+                    <img
+                      key={p.id}
+                      src={p.src}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ))}
+                </div>
+              ) : null}
             </div>
           </li>
         ))}
@@ -225,7 +238,7 @@ export default function CareerPath() {
       >
         <defs>
           <clipPath id="cp-photo-window">
-            <rect x="-46" y="-44" width="92" height="80" rx="1" />
+            <rect x="-62" y="-58" width="124" height="108" rx="2" />
           </clipPath>
           <filter id="cp-photo-shadow" x="-60%" y="-60%" width="220%" height="220%">
             <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.24" />
@@ -324,7 +337,7 @@ export default function CareerPath() {
                   transform={`translate(${p.x} ${p.y}) rotate(${p.rot})`}
                 >
                   <rect
-                    x="-54" y="-52" width="108" height="128" rx="3"
+                    x="-72" y="-68" width="144" height="168" rx="4"
                     fill="#fff"
                     stroke="#e9e9e9"
                     strokeWidth="1"
@@ -332,8 +345,8 @@ export default function CareerPath() {
                   />
                   <image
                     href={p.src}
-                    x="-46" y="-44" width="92" height="80"
-                    preserveAspectRatio="xMidYMid slice"
+                    x="-62" y="-58" width="124" height="108"
+                    preserveAspectRatio="xMidYMid meet"
                     clipPath="url(#cp-photo-window)"
                   />
                 </g>
