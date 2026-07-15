@@ -5780,6 +5780,45 @@ body:has(.folio--fullgrid) .site-footer {
   text-transform: uppercase;
 }
 
+@media (max-width: 699px) {
+  /* Number-only tabs so 01–06 all fit; active tab expands to show name */
+  .folder-card__tab {
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0 0.28rem;
+    font-size: 0.7rem;
+  }
+
+  .folder-card__tab-num {
+    opacity: 1;
+  }
+
+  .folder-card__tab-label {
+    display: none;
+  }
+
+  .folder-card__tab-slope {
+    width: 22px;
+  }
+
+  .folder-card--active .folder-card__tab {
+    justify-content: flex-start;
+    gap: 0.35rem;
+    padding: 0 0.55rem 0 0.4rem;
+    width: max(var(--folder-tab-w), min(46vw, 10.5rem));
+    max-width: min(50vw, 11rem);
+    flex: 0 0 auto;
+  }
+
+  .folder-card--active .folder-card__tab-label {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+}
+
 @media (max-width: 899px) {
   .folder-stack {
     --folder-tab-h: 2.4rem;
@@ -5793,11 +5832,6 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-pin:last-child {
     min-height: 90vh;
-  }
-
-  .folder-card__tab {
-    font-size: 0.52rem;
-    padding: 0 0.5rem 0 0.45rem;
   }
 
   .folder-card__tab-icon {
@@ -5816,10 +5850,6 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 @media (max-width: 520px) {
-  .folder-card__tab {
-    padding-inline: 0.4rem;
-  }
-
   .folder-card__title {
     font-size: clamp(1.85rem, 9vw, 2.6rem);
   }
@@ -5829,10 +5859,6 @@ body:has(.folio--fullgrid) .site-footer {
   /* Shorter sticky scrub — less scroll tax on phones */
   .folder-stack {
     height: calc(var(--folder-count) * 42vh + (100vh - 74px));
-  }
-
-  .folder-card__tab {
-    font-size: 0.62rem;
   }
 
   /* Stack text → image vertically, constrained to card width */
