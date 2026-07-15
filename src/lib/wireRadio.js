@@ -14,6 +14,15 @@ export const WIRE_RADIO = {
 
 export const WIRE_RADIO_FOUND_KEY = 'wire-radio-found'
 
+/** Resets on every page load (incl. hard refresh) — not localStorage */
+let foundThisSession = false
+
+try {
+  window.localStorage.removeItem(WIRE_RADIO_FOUND_KEY)
+} catch {
+  /* ignore */
+}
+
 let audio = null
 let ctx = null
 let masterGain = null
@@ -37,19 +46,15 @@ function emit() {
 }
 
 export function hasFoundWireRadio() {
-  try {
-    return window.localStorage.getItem(WIRE_RADIO_FOUND_KEY) === '1'
-  } catch {
-    return false
-  }
+  return foundThisSession
 }
 
 export function markFoundWireRadio() {
-  try {
-    window.localStorage.setItem(WIRE_RADIO_FOUND_KEY, '1')
-  } catch {
-    /* ignore */
+  if (foundThisSession) {
+    emit()
+    return
   }
+  foundThisSession = true
   window.dispatchEvent(new CustomEvent('wire-radio-found'))
   emit()
 }
