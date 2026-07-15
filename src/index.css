@@ -3096,26 +3096,27 @@ body:has(.folio--fullgrid) .app {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.35rem !important;
-  height: 2.35rem !important;
-  padding: 0 !important;
-  border: 1.5px solid #0077b5;
-  border-radius: var(--radius-sm);
-  background: #fff;
+  width: auto !important;
+  height: auto !important;
+  min-width: 0;
+  padding: 0.2rem 0.35rem !important;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta-lg);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
   color: #0077b5;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition: background 0.2s, color 0.2s;
 }
 
 .nav-cta--linkedin:hover,
 .nav-cta--linkedin:focus-visible {
   background: #0077b5;
-  border-color: #0077b5;
   color: #fff;
-}
-
-.nav-cta--linkedin__icon {
-  display: block;
-  flex-shrink: 0;
+  opacity: 1;
 }
 
 .nav-cta--resume {
