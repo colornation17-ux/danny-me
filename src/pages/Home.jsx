@@ -336,9 +336,10 @@ export default function Home() {
         <h2 className="folio-about__hello" id="about-hello-heading">Hello World</h2>
 
         <p className="folio-about__body folio-about__body--lead folio-about__body--handwritten">
-          Hi, I&apos;m Danny, product designer between Indy and Georgia. I care about
-          interfaces that survive real floors: bilingual shoppers, broken SKUs,
-          Thursday ad drops, and staff who need answers before the line forms.
+          Hi, I&apos;m Danny, a product designer working between Indianapolis and
+          Georgia. I translate complex problem spaces into clear, useful experiences
+          that bridge customer needs and business goals across conversational AI,
+          retail operations, mobility, and high-performance interfaces.
         </p>
 
         <CareerPath />
@@ -363,7 +364,6 @@ export default function Home() {
         aria-labelledby="work-heading"
       >
         <div className="folio-work__head">
-          <p className="folio-work__eyebrow">Selected work</p>
           <h2 id="work-heading" className="folio-work__title folio-work__title--block">
             Featured work
           </h2>

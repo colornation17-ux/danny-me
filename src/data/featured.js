@@ -47,6 +47,7 @@ export const featured = [
     tags: ['Service design', 'Ops'],
     cover: '/work/bodega-ops/store-floor.jpg',
     coverAlt: 'La Bodega store floor during checkout ops recovery',
+    coverFill: true,
   },
   {
     ...bySlug['code19'],
@@ -59,6 +60,7 @@ export const featured = [
     tags: ['Website redesign', 'SEO'],
     cover: '/work/code19/hero-2.jpg',
     coverAlt: 'CODE19 Racing website hero — race car and brand',
+    coverFill: true,
     folderFill: '#111212',
     folderInk: '#ffffff',
   },

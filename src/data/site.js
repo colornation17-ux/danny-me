@@ -5,7 +5,7 @@ export const SITE = {
   url: 'https://danny-me-rho.vercel.app',
   email: 'dannyvr172@gmail.com',
   linkedIn: 'https://www.linkedin.com/in/dannvarg/',
-  resume: '/resume/danny-varghese-resume.pdf',
+  resume: '/resume/Danny_Varghese_Senior_Product_Designer.pdf',
   location: 'Indianapolis, IN',
   hero: {
     line: "I'm Danny, a product designer who ships AI into real operations.",
@@ -19,9 +19,9 @@ export const SITE = {
   ],
   about: {
     lead:
-      "I'm Danny, a product designer and design technologist who optimizes for what actually ships.",
+      "I'm Danny, a product designer working between Indianapolis and Georgia.",
     body: [
-      'Based between Indianapolis and Georgia. HCI from Indiana University. I care about interfaces that survive real floors: bilingual shoppers, broken SKUs, Thursday ad drops, and staff who need answers before the line forms.',
+      'I translate complex problem spaces into clear, useful experiences that bridge customer needs and business goals across conversational AI, retail operations, mobility, and high-performance interfaces.',
       "At La Bodega I'm putting AI into grocery ops people can trust. I'm also into agentic and conversational products that hand off cleanly to humans, and open to design technologist, product design, and conversational AI roles.",
     ],
     seeking:

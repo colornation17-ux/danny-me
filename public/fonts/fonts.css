@@ -1,13 +1,22 @@
 /* Folio type stack (4 + scoped exceptions):
  *   DM Sans              — body + labels
  *   Season Mix TRIAL     — display / case titles
- *   Chubby And Groovy    — brand moments
+ *   Chubby And Groovy    — brand moments (Danny, Hello)
  *   Just Me Again…       — script accents
+ *   Highfat              — Featured work title
  *   Pixelify Sans        — Lola folder title only
  *   Press Start 2P       — hero pill stickers only
  *   Cubao                — skill chips only
  *   DM Mono              — rect stickers only (Currently shipping / Previously…)
  */
+
+@font-face {
+  font-family: "Highfat";
+  src: url("/fonts/highfat/Highfat.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
 
 @font-face {
   font-family: "DM Mono";

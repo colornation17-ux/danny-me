@@ -14,7 +14,8 @@
   --accent-text: #cd4919;
   --ok: #2f9b7a;
   /* Type stack: DM Sans · Season · Chubby · Just Me
-     Exceptions: Pixelify (Lola), Press Start (pills), Cubao (skills), DM Mono (rect stickers) */
+     Exceptions: Highfat (Featured work), Pixelify (Lola), Press Start (pills),
+     Cubao (skills), DM Mono (rect stickers) */
   --font-display: "Season Mix TRIAL", sans-serif;
   --font-brand: "Chubby And Groovy", "Season Mix TRIAL", sans-serif;
   --font-script: "Just Me Again Down Here", cursive;
@@ -24,6 +25,8 @@
   --font-pixel: "Press Start 2P", var(--font-label);
   --font-chip: "Cubao", var(--font-sans);
   --font-lola: "Pixelify Sans", var(--font-display);
+  --font-featured: "Highfat", var(--font-display); /* Featured work title */
+  --font-sticker: "DM Mono", ui-monospace, monospace; /* rect stickers only */
   /* Type ladder — prefer these over one-off rem sizes
      Floor ≥12px at default 16px root for AA-friendly small text */
   --text-meta-xs: 0.75rem;   /* 12px min */
@@ -38,7 +41,6 @@
   --text-display: clamp(3.4rem, 12vw, 7.5rem);
   --text-folder: clamp(2.8rem, 6vw, 5rem);
   --text-script: clamp(1.25rem, 2.5vw, 1.65rem);
-  --font-sticker: "DM Mono", ui-monospace, monospace; /* rect stickers only */
   /* Spacing ladder */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -3376,7 +3378,7 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-work__title {
-  font-family: var(--font-brand);
+  font-family: var(--font-featured);
   font-size: max(1.75rem, var(--text-h2));
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -6052,6 +6054,35 @@ body:has(.folio--fullgrid) .site-footer {
   background: transparent;
 }
 
+/* Photo covers that should bleed the media well (Checkout ops, CODE19) */
+.folder-card__img:has(.folder-card__image--fill) {
+  align-items: stretch;
+}
+
+.folder-card__image--fill {
+  aspect-ratio: auto;
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-height: 16rem;
+  align-self: stretch;
+  background: transparent;
+}
+
+.folder-card__image--fill img {
+  object-fit: cover !important;
+  object-position: center;
+  /* Crop baked letterbox margins in composite covers (e.g. CODE19) */
+  transform: scale(1.06);
+  transform-origin: center center;
+}
+
+@media (min-width: 900px) {
+  .folder-card__image--fill {
+    min-height: 100%;
+  }
+}
+
 .folder-card__image--portrait {
   background: var(--folder-fill, transparent);
   display: flex;
@@ -6280,6 +6311,16 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image .motion-preview,
   .folder-card__image .folder-card__placeholder {
     object-fit: contain; /* full frame visible — don’t crop */
+  }
+
+  .folder-card__image--fill img {
+    object-fit: cover !important;
+  }
+
+  .folder-card__image--fill {
+    aspect-ratio: 16 / 9;
+    height: auto;
+    min-height: 0;
   }
 
   .folder-card__text {
