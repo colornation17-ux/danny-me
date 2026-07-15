@@ -24,6 +24,13 @@ dist-ssr
 *.sw?
 
 .vercel
+exports
+
+# Local-only radio bed (do not publish copyrighted audio to git)
+public/audio/*.mp3
+public/audio/*.m4a
+public/audio/*.ogg
+public/audio/*.wav
 
 # Env
 .env

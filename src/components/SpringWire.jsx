@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import gsap from 'gsap'
+import { toggleWireRadio } from '../lib/wireRadio'
 
 const POINT_COUNT = 20
 const VIEW_H = 52
@@ -36,11 +37,13 @@ function buildPath(pts) {
 /**
  * Full-bleed pencil rule. Stronger hover/drag response.
  * "drag me" hint fades in only when the pointer is near the right end.
+ * Optional `radio` — pull toggles a subtle self-hosted radio bed.
  */
 export default function SpringWire({
   className = '',
   label = 'Hand-drawn section rule',
   seed = 1,
+  radio = null, // { src, startAt, volume } — self-hosted clip only
 }) {
   const wrapRef = useRef(null)
   const mainRef = useRef(null)
@@ -49,7 +52,19 @@ export default function SpringWire({
   const pointsRef = useRef([])
   const pullingRef = useRef(false)
   const pointerIdRef = useRef(null)
+  const pullStartRef = useRef(null)
+  const radioRef = useRef(radio)
+  radioRef.current = radio
   const filterId = useId().replace(/:/g, '')
+  const [radioOn, setRadioOn] = useState(false)
+  const hasRadio = Boolean(radio)
+
+  useEffect(() => {
+    if (!hasRadio) return undefined
+    const onRadio = (e) => setRadioOn(Boolean(e.detail?.playing))
+    window.addEventListener('wire-radio', onRadio)
+    return () => window.removeEventListener('wire-radio', onRadio)
+  }, [hasRadio])
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -165,6 +180,7 @@ export default function SpringWire({
     const onPointerDown = (e) => {
       pullingRef.current = true
       pointerIdRef.current = e.pointerId
+      pullStartRef.current = { x: e.clientX, y: e.clientY, t: performance.now() }
       wrap.classList.add('spring-wire--pulling')
       setHint(false)
       wrap.setPointerCapture?.(e.pointerId)
@@ -183,9 +199,20 @@ export default function SpringWire({
 
     const onPointerUp = (e) => {
       if (pointerIdRef.current != null && e.pointerId !== pointerIdRef.current) return
+      const start = pullStartRef.current
+      const moved = start
+        ? Math.hypot(e.clientX - start.x, e.clientY - start.y)
+        : 0
+      const held = start ? performance.now() - start.t : 0
       pullingRef.current = false
       pointerIdRef.current = null
+      pullStartRef.current = null
       springHome()
+
+      // Intentional tug (not a glance hover) toggles the radio bed
+      if (radioRef.current && (moved > 10 || held > 120)) {
+        toggleWireRadio(radioRef.current).catch(() => {})
+      }
     }
 
     const onPointerLeave = () => {
@@ -214,14 +241,30 @@ export default function SpringWire({
       gsap.killTweensOf(pointsRef.current)
       gsap.killTweensOf(hint)
     }
-  }, [seed])
+  }, [seed, hasRadio])
+
+  const wireLabel = hasRadio
+    ? `${label}. Pull to ${radioOn ? 'pause' : 'play'} a quiet radio clip.`
+    : label
 
   return (
     <div
       ref={wrapRef}
-      className={`spring-wire ${className}`.trim()}
-      role="img"
-      aria-label={label}
+      className={`spring-wire${hasRadio ? ' spring-wire--radio' : ''}${radioOn ? ' spring-wire--playing' : ''} ${className}`.trim()}
+      role={hasRadio ? 'button' : 'img'}
+      tabIndex={hasRadio ? 0 : undefined}
+      aria-label={wireLabel}
+      aria-pressed={hasRadio ? radioOn : undefined}
+      onKeyDown={
+        hasRadio
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                toggleWireRadio(radioRef.current).catch(() => {})
+              }
+            }
+          : undefined
+      }
     >
       <svg
         className="spring-wire__svg"
@@ -267,7 +310,7 @@ export default function SpringWire({
         />
       </svg>
       <span ref={hintRef} className="spring-wire__hint" aria-hidden="true">
-        drag me
+        {hasRadio ? (radioOn ? 'pull to pause' : 'pull for radio') : 'drag me'}
       </span>
     </div>
   )

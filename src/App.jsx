@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
+import SiteRadio from './components/SiteRadio'
 import Seo from './components/Seo'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/projects/:slug" element={<Project />} />
           </Routes>
         </main>
+        <SiteRadio />
         <Footer />
       </div>
       {/* Visitors, pages, referrers, countries — view in Vercel → Analytics */}

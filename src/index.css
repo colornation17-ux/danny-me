@@ -4796,6 +4796,149 @@ body:has(.folio--fullgrid) .app {
   isolation: isolate;
 }
 
+/* Persistent radio — available on every page / case study */
+.site-radio {
+  position: fixed;
+  right: max(0.85rem, env(safe-area-inset-right));
+  bottom: max(0.85rem, env(safe-area-inset-bottom));
+  z-index: 60;
+  pointer-events: none;
+}
+
+.site-radio__btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0.4rem 0.85rem 0.4rem 0.65rem;
+  border: 1px solid var(--folio-line, #d5dde5);
+  border-radius: 999px;
+  background: color-mix(in srgb, #fff 92%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(17, 18, 18, 0.08);
+  color: var(--ink, #111);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.site-radio__btn:hover,
+.site-radio__btn:focus-visible {
+  border-color: #111;
+  transform: translateY(-1px);
+}
+
+.site-radio__btn:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
+.site-radio__btn.is-playing {
+  border-color: color-mix(in srgb, #4f7cff 55%, #111);
+  background: #fff;
+}
+
+.site-radio__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.site-radio__btn.is-playing .site-radio__icon {
+  background: #4f7cff;
+}
+
+.site-radio__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.05rem;
+  line-height: 1.1;
+}
+
+.site-radio__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.site-radio__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.site-radio__bars {
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-left: 0.15rem;
+  background:
+    linear-gradient(currentColor, currentColor) 0 100% / 2px 40% no-repeat,
+    linear-gradient(currentColor, currentColor) 4px 100% / 2px 80% no-repeat,
+    linear-gradient(currentColor, currentColor) 8px 100% / 2px 55% no-repeat;
+  color: #4f7cff;
+  animation: site-radio-bars 0.85s ease-in-out infinite;
+}
+
+@keyframes site-radio-bars {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scaleY(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-radio__bars {
+    animation: none;
+  }
+}
+
+body.game-embed .site-radio {
+  display: none;
+}
+
+.spring-wire--radio {
+  cursor: grab;
+}
+
+.spring-wire--radio:active {
+  cursor: grabbing;
+}
+
+.spring-wire--playing .spring-wire__path--main {
+  stroke: color-mix(in srgb, var(--ink, #111) 70%, #4f7cff);
+  animation: spring-wire-hum 1.8s ease-in-out infinite;
+}
+
+@keyframes spring-wire-hum {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spring-wire--playing .spring-wire__path--main {
+    animation: none;
+  }
+}
+
 .spring-wire--pulling {
   cursor: grabbing;
 }
