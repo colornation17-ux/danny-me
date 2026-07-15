@@ -5865,24 +5865,42 @@ body:has(.folio--fullgrid) .site-footer {
     height: calc(var(--folder-count) * 42vh + (100vh - 74px));
   }
 
-  /* Stack text → image vertically, constrained to card width */
+  /*
+   * Text + media stacked. Kill the tablet min-height so content doesn’t
+   * force a tall empty band; let the media row fill leftover viewport.
+   */
   .folder-card__content {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 0;
   }
 
   .folder-card__img {
-    min-height: auto;
-    padding: 0.45rem 0.75rem 0.75rem;
-    align-items: flex-start;
+    min-height: 0;
+    height: 100%;
+    padding: 0.35rem 0.75rem 0.7rem;
+    align-items: stretch;
+  }
+
+  .folder-card__image {
+    aspect-ratio: auto;
+    min-height: 11rem;
+    height: 100%;
+    max-height: none;
+  }
+
+  .folder-card__image--portrait {
+    max-width: min(100%, 18rem);
+    margin-inline: auto;
   }
 
   .folder-card__text {
-    gap: 0.7rem;
-    padding: 0.9rem 1rem 0.45rem;
+    gap: 0.65rem;
+    padding: 0.85rem 1rem 0.25rem;
   }
 
   .folder-card__text-main {
-    gap: 0.4rem;
+    gap: 0.35rem;
   }
 
   .folder-card__title {
@@ -5890,7 +5908,7 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__blurb {
-    margin-top: 0.25rem;
+    margin-top: 0.2rem;
     font-size: 0.82rem;
     -webkit-line-clamp: 3;
     line-clamp: 3;
