@@ -25,7 +25,7 @@
   --font-pixel: "Press Start 2P", var(--font-label);
   --font-chip: "Cubao", var(--font-sans);
   --font-lola: "Pixelify Sans", var(--font-display);
-  --font-featured: "Highfat", var(--font-display); /* Featured work title */
+  --font-featured: "Highfat", Impact, "Arial Black", sans-serif; /* Featured work — never Season Mix */
   --font-sticker: "DM Mono", ui-monospace, monospace; /* rect stickers only */
   /* Type ladder — prefer these over one-off rem sizes
      Floor ≥12px at default 16px root for AA-friendly small text */
@@ -53,7 +53,17 @@
   --section-y: clamp(2.5rem, 6vw, 4rem);
   --max: 72rem;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
-  --radius: 0.75rem;
+  /* Radius ladder — buttons/chips sm · surfaces lg · capsules pill */
+  --radius-sharp: 0;
+  --radius-xs: 0.2rem;
+  --radius-sm: 0.45rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-pill: 999px;
+  --radius-sticker: 0.9rem 0.9rem 0.9rem 0.35rem;
+  --radius-folder-ledge: 0 0.85rem 0 0;
+  --radius-folder-body: 0 0 1.15rem 1.15rem;
+  --radius: var(--radius-md);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   /* motion-site-builder playful / interaction craft */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -213,7 +223,7 @@ button {
   gap: 0.4rem;
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: var(--text-meta-lg);
   font-weight: 600;
   color: var(--accent-text);
@@ -232,7 +242,7 @@ button {
   .nav-cta {
     width: auto;
     height: auto;
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     padding: 0.4rem 0.1rem;
   }
 
@@ -379,7 +389,7 @@ button {
   gap: 0;
   background: var(--bg-elevated);
   border: 1px solid var(--line);
-  border-radius: calc(var(--radius) + 0.15rem);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.35s var(--ease);
 }
@@ -436,7 +446,7 @@ button {
   color: #fff;
   background: rgba(11, 18, 32, 0.72);
   padding: 0.35rem 0.6rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 .project-card__orb {
@@ -444,7 +454,7 @@ button {
   inset: auto auto 12% 10%;
   width: 58%;
   aspect-ratio: 4 / 3;
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--card-accent, var(--accent)) 22%, #0b1220);
   box-shadow: 0 20px 40px rgba(11, 18, 32, 0.18);
   transform: rotate(-4deg) translateY(8px);
@@ -522,7 +532,7 @@ button {
   font-size: var(--text-meta);
   font-weight: 600;
   padding: 0.28rem 0.6rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--accent-soft);
   color: var(--accent-text);
 }
@@ -550,7 +560,7 @@ button {
 .play-card {
   background: var(--bg-elevated);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   padding: 1.25rem 1.3rem;
   transition: border-color 0.25s var(--ease), transform 0.25s var(--ease);
 }
@@ -570,7 +580,7 @@ button {
   margin: -1.25rem -1.3rem 1rem;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  border-radius: var(--radius) var(--radius) 0 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
   background: #0b1220;
 }
 
@@ -661,7 +671,7 @@ button {
 .about-box {
   background: var(--bg-elevated);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   padding: 1.4rem 1.5rem;
 }
 
@@ -839,6 +849,10 @@ button {
   line-height: 1.5;
   max-width: 38rem;
   color: var(--ink, #12151a);
+  margin: 0 0 0.85rem;
+}
+
+.about-travel__story:last-of-type {
   margin-bottom: 1.75rem;
 }
 
@@ -891,7 +905,7 @@ button {
   inset: 0;
   background: rgba(255, 255, 255, 0.94);
   border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
   padding: 1rem 1.4rem 1rem 0.75rem;
   display: flex;
@@ -906,7 +920,7 @@ button {
   padding: 10px 10px 26px;
   background: #fff;
   border: 1px solid #e9e9e9;
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
   transform: rotate(-3deg);
   overflow: hidden;
@@ -1030,7 +1044,7 @@ button {
 
 .solo-bento__frame {
   flex: 1;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid var(--folio-line, #d5dde5);
   background: #f0f2f5;
@@ -1190,7 +1204,7 @@ button {
 
 .about-photobook__frame-wrap {
   border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   background: #fff;
   box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
@@ -1253,7 +1267,7 @@ button {
   text-decoration: none;
   color: var(--muted);
   white-space: nowrap;
-  border-radius: 0.25rem;
+  border-radius: var(--radius-xs);
 }
 
 .cs-back {
@@ -1372,7 +1386,7 @@ button {
 .cs-banner {
   margin: 1.75rem 0 0;
   min-height: 14rem;
-  border-radius: calc(var(--radius) + 0.2rem);
+  border-radius: var(--radius-lg);
   border: 1px solid var(--line);
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--cs-accent, var(--accent)) 28%, #fff), #f3f5f8 60%),
@@ -1429,7 +1443,7 @@ button {
   width: 100%;
   max-height: 480px;
   object-fit: cover;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   border: 1px solid var(--line);
   display: block;
 }
@@ -1455,7 +1469,7 @@ button {
 
 .cs-gallery__grid img {
   width: 100%;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   border: 1px solid var(--line);
   background: #fff;
   display: block;
@@ -1511,7 +1525,7 @@ button {
 .cs-metric {
   background: var(--bg-elevated);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   padding: 1.1rem 1.15rem;
 }
 
@@ -1548,7 +1562,7 @@ button {
 }
 
 .cs-gallery__item {
-  border-radius: 0.5rem;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   background: rgba(255, 255, 255, 0.04);
 }
@@ -1581,7 +1595,7 @@ button {
   flex: 0 0 auto;
   width: 240px;
   aspect-ratio: 9 / 16;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid var(--line);
   background: #f9f9f9;
@@ -1702,7 +1716,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   text-decoration: none;
   color: inherit;
   min-width: 0;
-  border-radius: 0.35rem;
+  border-radius: var(--radius-xs);
 }
 
 .cs-pager__link:focus-visible {
@@ -1859,7 +1873,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   font-family: var(--font-sans);
   font-size: var(--text-meta-lg);
   font-weight: 600;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   text-decoration: none;
   transition: top 0.15s var(--ease);
 }
@@ -1909,7 +1923,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   background: transparent;
   border: 0;
   outline: 0;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: none;
   transition:
@@ -1957,7 +1971,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-hero-chapters__stage {
   width: 100%;
   overflow: hidden;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   background: #fff;
 }
 
@@ -2059,7 +2073,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   padding: 0.4rem;
   background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(8px);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   width: fit-content;
   max-width: 100%;
 }
@@ -2072,7 +2086,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   color: var(--muted);
   text-decoration: none;
   padding: 0.35rem 0.7rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 .cw-toc__link:hover {
@@ -2177,7 +2191,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   letter-spacing: 0.05em;
   text-transform: uppercase;
   padding: 0.15rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-right: 0.5rem;
   vertical-align: middle;
 }
@@ -2306,7 +2320,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   font-family: var(--font-mono);
   font-size: var(--text-meta);
   padding: 0.28rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--cs-accent, #166534) 12%, #fff);
   color: var(--cs-accent, #166534);
   border: 1px solid color-mix(in srgb, var(--cs-accent, #166534) 28%, transparent);
@@ -2386,7 +2400,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   width: 100%;
   padding: 1.1rem 1.15rem 1.15rem;
   margin: 0;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   background: #fff;
   border: 0;
   box-shadow: none;
@@ -2427,7 +2441,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-module__icon {
   width: 2.1rem;
   height: 2.1rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-sm);
   display: grid;
   place-items: center;
   background: color-mix(in srgb, var(--mod) 12%, #fff);
@@ -2484,7 +2498,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-module__bar {
   height: 0.3rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, var(--mod) 12%, #eef1f4);
   overflow: hidden;
 }
@@ -2509,7 +2523,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   font-family: var(--font-mono);
   font-size: var(--text-meta-xs);
   padding: 0.2rem 0.42rem;
-  border-radius: 0.35rem;
+  border-radius: var(--radius-xs);
   border: 0;
   background: color-mix(in srgb, var(--mod) 8%, #f4f6f8);
   color: var(--muted);
@@ -2553,7 +2567,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 #cw-feature-customers-rfm,
 #cw-feature-whatsapp-crm {
   scroll-margin-top: 5rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2767,7 +2781,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 .cw-brief {
   margin-top: 1.35rem;
   padding: 1rem;
-  border-radius: calc(var(--radius) + 0.25rem);
+  border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--line) 55%, #fff);
   border: 1px solid var(--line);
 }
@@ -2776,7 +2790,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   display: inline-flex;
   gap: 0.25rem;
   padding: 0.2rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #fff;
   border: 1px solid var(--line);
   margin-bottom: 1rem;
@@ -2789,7 +2803,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   font-size: var(--text-meta-lg);
   font-weight: 600;
   padding: 0.45rem 0.9rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--muted);
   cursor: pointer;
 }
@@ -2817,7 +2831,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .cw-brief__card {
   background: #fff;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   padding: 1rem 1.05rem 1.1rem;
   border: 1px solid var(--line);
   border-top: 3px solid var(--accent);
@@ -3030,7 +3044,7 @@ body:has(.folio--fullgrid) .app {
   gap: 0.35rem;
   padding: 0.25rem;
   border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 0.55rem;
+  border-radius: var(--radius-sm);
   background: #fff;
   list-style: none;
   margin: 0;
@@ -3041,7 +3055,7 @@ body:has(.folio--fullgrid) .app {
   align-items: center;
   gap: 0.35rem;
   padding: 0.4rem 0.75rem;
-  border-radius: 0.4rem;
+  border-radius: var(--radius-sm);
   font-family: var(--font-brand);
   font-size: var(--text-body-lg);
   font-weight: 400;
@@ -3119,7 +3133,7 @@ body:has(.folio--fullgrid) .app {
   display: inline-flex;
   align-items: center;
   border: 1.5px solid var(--folio-ink, #12151a);
-  border-radius: 0.45rem;
+  border-radius: var(--radius-sm);
   padding: 0.4rem 0.85rem;
   font-family: var(--font-mono);
   font-size: var(--text-meta);
@@ -3140,7 +3154,7 @@ body:has(.folio--fullgrid) .app {
   width: auto;
   height: auto;
   border: 1px solid var(--folio-ink, #12151a);
-  border-radius: 0.45rem;
+  border-radius: var(--radius-sm);
   padding: 0.45rem 0.85rem;
   font-family: var(--font-mono);
   font-size: var(--text-meta);
@@ -3225,7 +3239,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-hero__panel {
   border: 1px solid var(--folio-line);
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
   background: var(--folio-panel);
   padding: clamp(1.25rem, 3vw, 1.75rem);
   box-shadow: 0 12px 40px color-mix(in srgb, #0f172a 6%, transparent);
@@ -3253,7 +3267,7 @@ body:has(.folio--fullgrid) .app {
   min-height: 44px;
   padding: 0.7rem 1.1rem;
   border: 1px solid var(--folio-ink);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--text-meta);
   font-weight: 500;
@@ -3305,7 +3319,7 @@ body:has(.folio--fullgrid) .app {
 .folio-hero__chips span {
   padding: 0.3rem 0.65rem;
   border: 1px solid var(--folio-line);
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--text-meta);
   letter-spacing: 0.04em;
@@ -3358,7 +3372,7 @@ body:has(.folio--fullgrid) .app {
 .folio-skills li {
   padding: 0.45rem 0.8rem;
   border: 1px solid var(--folio-line);
-  border-radius: 0.45rem;
+  border-radius: var(--radius-sm);
   background: #fff;
   font-family: var(--font-mono);
   font-size: var(--text-meta);
@@ -3381,9 +3395,11 @@ body:has(.folio--fullgrid) .app {
   font-family: var(--font-featured);
   font-size: max(1.75rem, var(--text-h2));
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   margin-bottom: var(--space-3);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 .folio-work__support {
@@ -3402,7 +3418,7 @@ body:has(.folio--fullgrid) .app {
   gap: 1rem;
   padding: 1.25rem;
   border: 1px solid var(--folio-line);
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
   background: #fff;
   transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
@@ -3472,7 +3488,7 @@ body:has(.folio--fullgrid) .app {
   align-items: center;
   gap: 0.4rem;
   padding: 0.55rem 0.9rem;
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--folio-ink);
   font-family: var(--font-mono);
   font-size: var(--text-meta);
@@ -3496,7 +3512,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-card__tag {
   padding: 0.28rem 0.55rem;
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--folio-line);
   font-family: var(--font-mono);
   font-size: var(--text-meta-xs);
@@ -3513,7 +3529,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-card__media {
   min-height: 14rem;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--folio-line);
   background: #0b1220;
@@ -3611,7 +3627,7 @@ body:has(.folio--fullgrid) .app {
   width: 100%;
   max-width: 600px;
   border: 1px solid #e6e6e6;
-  border-radius: 1.25rem;
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -3776,7 +3792,7 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-contact__title {
-  font-family: var(--font-brand);
+  font-family: var(--font-featured);
   font-size: var(--text-h1);
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -3785,6 +3801,8 @@ body:has(.folio--fullgrid) .app {
   color: #111212;
   line-height: 0.95;
   position: relative;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 .folio-contact__body {
@@ -3813,7 +3831,7 @@ body:has(.folio--fullgrid) .app {
   padding: var(--space-5) var(--space-6);
   background: #4f7cff;
   border: 2px solid #111212;
-  border-radius: 0.9rem 0.9rem 0.9rem 0.35rem;
+  border-radius: var(--radius-sticker);
   color: #fff;
   text-decoration: none;
   box-shadow: 5px 5px 0 #111212;
@@ -3931,7 +3949,7 @@ body:has(.folio--fullgrid) .app {
   display: block;
   height: 2px;
   background: currentColor;
-  border-radius: 2px;
+  border-radius: var(--radius-xs);
   transition: transform 0.2s, opacity 0.2s;
   transform-origin: center;
 }
@@ -3991,7 +4009,7 @@ body:has(.folio--fullgrid) .app {
 .nav-cta--contact {
   width: auto !important;
   height: auto !important;
-  border-radius: 0.45rem !important;
+  border-radius: var(--radius-sm) !important;
   padding: 0.4rem 0.85rem !important;
   font-family: var(--font-mono, "DM Sans", sans-serif);
   font-size: var(--text-meta);
@@ -4086,7 +4104,7 @@ body:has(.folio--fullgrid) .app {
   }
 
   .folio-recs__grid {
-    border-radius: 0.85rem;
+    border-radius: var(--radius-lg);
   }
 }
 
@@ -4112,7 +4130,7 @@ body:has(.folio--fullgrid) .app {
   min-width: 5.5rem;
   padding: 0.85rem 1.1rem;
   border: 1.5px solid #111;
-  border-radius: 0.85rem 0.85rem 0.85rem 0.2rem;
+  border-radius: var(--radius-sticker);
   background: var(--folio-cyan);
   font-family: var(--font-sans);
   font-size: var(--text-body-lg);
@@ -4154,7 +4172,7 @@ body:has(.folio--fullgrid) .app {
   width: 3.25rem;
   height: 3.25rem;
   border: 1.5px solid #111;
-  border-radius: 1rem 1rem 1rem 0.25rem;
+  border-radius: var(--radius-sticker);
   background: var(--folio-cyan);
   overflow: hidden;
   box-shadow: 3px 3px 0 #111;
@@ -4170,7 +4188,7 @@ body:has(.folio--fullgrid) .app {
 .folio-hero__stage {
   position: relative;
   border: 1px solid var(--folio-line);
-  border-radius: 1.1rem;
+  border-radius: var(--radius-lg);
   background: #fff;
   padding: clamp(1.5rem, 4vw, 2.25rem);
   text-align: center;
@@ -4183,7 +4201,7 @@ body:has(.folio--fullgrid) .app {
   height: 1.15em;
   margin: 0 0.15em;
   vertical-align: -0.2em;
-  border-radius: 0.3em;
+  border-radius: var(--radius-xs);
   border: 1.5px solid #111;
 }
 
@@ -4201,7 +4219,7 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-btn--contact {
-  border-radius: 0.55rem;
+  border-radius: var(--radius-sm);
   border-width: 1.5px;
   font-weight: 600;
   text-transform: uppercase;
@@ -4232,7 +4250,7 @@ body:has(.folio--fullgrid) .app {
 .folio-btn__arrows {
   width: 1.15rem;
   height: 1.15rem;
-  border-radius: 0.2rem;
+  border-radius: var(--radius-xs);
   background:
     linear-gradient(135deg, var(--folio-cyan) 50%, transparent 50%),
     linear-gradient(135deg, transparent 50%, #ff4d7a 50%);
@@ -4249,7 +4267,7 @@ body:has(.folio--fullgrid) .app {
 .folio-float span {
   padding: var(--space-2) var(--space-3);
   border: 1.5px solid #111;
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: var(--text-meta-xs);
   font-weight: 600;
@@ -4350,7 +4368,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-polaroid__photo {
   aspect-ratio: 1;
-  border-radius: 0.2rem;
+  border-radius: var(--radius-xs);
   background: #dbe4ee center/cover no-repeat;
 }
 
@@ -4484,7 +4502,7 @@ body:has(.folio--fullgrid) .app {
   padding: 0.4rem 0.4rem 1.85rem; /* bottom foot ≈ Instant blank strip */
   background: #fffcf7;
   border: 1px solid #ddd6cb;
-  border-radius: 0.12rem;
+  border-radius: var(--radius-xs);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.95) inset,
     0 10px 22px rgba(17, 18, 18, 0.16);
@@ -4550,7 +4568,7 @@ body:has(.folio--fullgrid) .app {
   align-items: stretch;
   padding: 0;
   border: 2px solid #111;
-  border-radius: 0.45rem;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   box-shadow: 3px 3px 0 #111;
   min-height: 48px;
@@ -4715,7 +4733,7 @@ body:has(.folio--fullgrid) .app {
   margin: 0 0 1.35rem;
   padding: 1rem 1.1rem;
   border: 1px solid var(--folio-line);
-  border-radius: 0.85rem;
+  border-radius: var(--radius-lg);
   background: #f8fafc;
 }
 
@@ -4750,7 +4768,7 @@ body:has(.folio--fullgrid) .app {
 .folio-comment__avatar {
   width: 2rem;
   height: 2rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   display: grid;
   place-items: center;
   background: var(--folio-cyan);
@@ -4782,7 +4800,7 @@ body:has(.folio--fullgrid) .app {
   margin-top: 2rem;
   padding: 0.4rem;
   border: 1px solid var(--folio-line);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: color-mix(in srgb, #fff 90%, transparent);
   backdrop-filter: blur(10px);
   box-shadow: 0 10px 30px color-mix(in srgb, #0f172a 10%, transparent);
@@ -4790,7 +4808,7 @@ body:has(.folio--fullgrid) .app {
 
 .folio-dock a {
   padding: var(--space-2) var(--space-3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-family: var(--font-mono);
   font-size: var(--text-meta-xs);
   letter-spacing: 0.05em;
@@ -4917,7 +4935,7 @@ body:has(.folio--fullgrid) .app {
   gap: 0.45rem;
   padding: 0.45rem 0.55rem 0.55rem;
   border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 1rem;
+  border-radius: var(--radius-lg);
   background: color-mix(in srgb, #fff 94%, transparent);
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 24px rgba(17, 18, 18, 0.08);
@@ -4935,7 +4953,7 @@ body:has(.folio--fullgrid) .app {
   min-height: 2.4rem;
   padding: 0.2rem 0.35rem;
   border: 0;
-  border-radius: 0.65rem;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--ink, #111);
   font: inherit;
@@ -4986,7 +5004,7 @@ body:has(.folio--fullgrid) .app {
   justify-content: center;
   width: 1.75rem;
   height: 1.75rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #111;
   color: #fff;
   flex-shrink: 0;
@@ -5316,7 +5334,7 @@ body:has(.folio--fullgrid) .site-footer {
   /* Extra side pad — Chubby glyphs overhang their metric box (Y was clipping) */
   padding: 0.75rem 1.7rem 0.9rem 1.5rem;
   border: 2.5px solid #4f7cff;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   box-shadow: 6px 6px 0 0 #111;
   background: #fff;
   overflow: visible;
@@ -5396,6 +5414,7 @@ body:has(.folio--fullgrid) .site-footer {
   z-index: 2;
   padding: var(--space-2) var(--space-4);
   border: 2px solid #111;
+  border-radius: var(--radius-sharp);
   font-family: var(--font-sticker);
   font-size: max(var(--text-meta-lg), 0.875rem);
   font-weight: 700;
@@ -5410,7 +5429,7 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folio-sticker--pill {
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-family: var(--font-pixel);
@@ -5759,7 +5778,7 @@ body:has(.folio--fullgrid) .site-footer {
   flex: 1 1 auto;
   min-width: 1.25rem;
   background: var(--folder-fill);
-  border-radius: 0 0.85rem 0 0;
+  border-radius: var(--radius-folder-ledge);
   clip-path: polygon(0.9rem 0, 100% 0, 100% 100%, 0 100%);
   margin-left: -2px;
   pointer-events: none;
@@ -5787,7 +5806,7 @@ body:has(.folio--fullgrid) .site-footer {
   color: var(--folder-ink);
   border: 0;
   outline: none;
-  border-radius: 0 0 1.15rem 1.15rem;
+  border-radius: var(--radius-folder-body);
   overflow: hidden;
   box-shadow: none;
   /* Avoid compositing seam that reads as a white hairline on the grid */
@@ -5830,7 +5849,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__date-dot {
   width: 0.55rem;
   height: 0.55rem;
-  border-radius: 8px;
+  border-radius: 50%;
   background: currentColor;
   flex-shrink: 0;
 }
@@ -5926,7 +5945,7 @@ body:has(.folio--fullgrid) .site-footer {
   align-items: center;
   gap: var(--space-1);
   padding: 0.25rem 0.6rem;
-  border-radius: 999px;
+  border-radius: var(--radius-sm);
   border: 1px solid currentColor;
   font-family: var(--font-mono);
   font-size: var(--text-meta-xs);
@@ -5982,7 +6001,7 @@ body:has(.folio--fullgrid) .site-footer {
   display: inline-flex;
   align-items: center;
   overflow: hidden;
-  border-radius: 0.2rem;
+  border-radius: var(--radius-xs);
   background: var(--folder-ink);
   color: var(--folder-fill);
 }
@@ -6002,31 +6021,33 @@ body:has(.folio--fullgrid) .site-footer {
   min-height: 18rem;
   padding: 1rem;
   display: flex;
+  align-items: stretch;
 }
 
 @media (min-width: 900px) {
   .folder-card__img {
     min-height: 100%;
     padding: 1.15rem 1.15rem 1.15rem 0.85rem;
-    align-items: flex-start;
+    align-items: stretch;
     align-self: stretch;
   }
 }
 
+/* Landscape frame — Competitor Watch size; everything except Lola fills this well */
 .folder-card__image {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  /* Match folder fill — no black video letterbox / frame stroke */
   background: color-mix(in srgb, #fff 22%, var(--folder-fill, #f3f5f7));
   border: 0;
   outline: none;
   box-shadow: none;
-  border-radius: 0.15rem;
+  border-radius: var(--radius-xs);
 }
 
 .folder-card__image img,
+.folder-card__image video,
 .folder-card__image canvas,
 .folder-card__image .motion-preview,
 .folder-card__image .folder-card__placeholder {
@@ -6034,46 +6055,30 @@ body:has(.folio--fullgrid) .site-footer {
   inset: 0;
   width: 100%;
   height: 100%;
-  /* Full frame visible — no heavy crop on UI/photos */
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   image-rendering: auto;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-}
-
-.folder-card__image video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  /* Reels fill the frame; still covers use contain above */
-  object-fit: cover;
   border: 0;
   outline: none;
   background: transparent;
 }
 
-/* Photo covers that should bleed the media well (Checkout ops, CODE19) */
-.folder-card__img:has(.folder-card__image--fill) {
-  align-items: stretch;
-}
-
+/* Stretch landscape media to the full folder media column (same as CW) */
 .folder-card__image--fill {
   aspect-ratio: auto;
   flex: 1 1 auto;
+  align-self: stretch;
   width: 100%;
   height: 100%;
   min-height: 16rem;
-  align-self: stretch;
   background: transparent;
 }
 
 .folder-card__image--fill img {
-  object-fit: cover !important;
-  object-position: center;
-  /* Crop baked letterbox margins in composite covers (e.g. CODE19) */
-  transform: scale(1.06);
+  /* Crop baked margins in composite stills (CODE19 etc.) */
+  transform: scale(1.04);
   transform-origin: center center;
 }
 
@@ -6083,7 +6088,12 @@ body:has(.folio--fullgrid) .site-footer {
   }
 }
 
+/* Lola only — portrait phone reel stays centered, not stretched */
 .folder-card__image--portrait {
+  aspect-ratio: 16 / 9;
+  flex: none;
+  height: auto;
+  min-height: 0;
   background: var(--folder-fill, transparent);
   display: flex;
   align-items: center;
@@ -6092,6 +6102,7 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__image--portrait video {
   object-fit: contain;
+  transform: none;
 }
 
 .folder-card__portrait-wrap {
@@ -6103,7 +6114,7 @@ body:has(.folio--fullgrid) .site-footer {
   border: 0;
   outline: none;
   box-shadow: none;
-  border-radius: 0.15rem;
+  border-radius: var(--radius-xs);
   background: transparent;
 }
 
@@ -6264,7 +6275,7 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-card__content {
     min-height: min(64vh, 32rem);
-    border-radius: 0 0 0.9rem 0.9rem;
+    border-radius: var(--radius-folder-body);
   }
 
   .folder-card__text {
@@ -6294,33 +6305,28 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__img {
     min-height: auto;
     padding: 0.35rem 0.75rem 0.7rem;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
-  .folder-card__image {
-    /* Native 16/9 — never stretch taller to fill the sticky card */
-    aspect-ratio: 16 / 9;
-    width: 100%;
-    height: auto;
-    max-height: none;
-  }
-
-  .folder-card__image img,
-  .folder-card__image video,
-  .folder-card__image canvas,
-  .folder-card__image .motion-preview,
-  .folder-card__image .folder-card__placeholder {
-    object-fit: contain; /* full frame visible — don’t crop */
-  }
-
-  .folder-card__image--fill img {
-    object-fit: cover !important;
-  }
-
+  /* Same 16:9 landscape frame as desktop CW — except Lola portrait */
   .folder-card__image--fill {
     aspect-ratio: 16 / 9;
     height: auto;
     min-height: 0;
+    flex: none;
+  }
+
+  .folder-card__image--fill img,
+  .folder-card__image--fill video,
+  .folder-card__image--fill canvas,
+  .folder-card__image--fill .motion-preview,
+  .folder-card__image--fill .folder-card__placeholder {
+    object-fit: cover;
+  }
+
+  .folder-card__image--portrait {
+    aspect-ratio: 16 / 9;
+    height: auto;
   }
 
   .folder-card__text {
@@ -6429,7 +6435,7 @@ body:has(.folio--fullgrid) .site-footer {
   min-height: 2.5rem;
   padding: 0.35rem 0.75rem;
   border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 0.45rem;
+  border-radius: var(--radius-sm);
   background: #fff;
   font: inherit;
   cursor: pointer;
@@ -6468,7 +6474,7 @@ body:has(.folio--fullgrid) .site-footer {
   margin: 0.45rem 0 0;
   padding: 0.35rem;
   border: 1px solid var(--folio-line, #d5dde5);
-  border-radius: 0.45rem;
+  border-radius: var(--radius-sm);
   background: #fff;
   max-width: var(--max);
   margin-inline: auto;
@@ -6481,7 +6487,7 @@ body:has(.folio--fullgrid) .site-footer {
   padding: 0.65rem 0.7rem;
   text-decoration: none;
   color: var(--muted);
-  border-radius: 0.35rem;
+  border-radius: var(--radius-xs);
   font-size: var(--text-meta-lg);
 }
 
@@ -6553,7 +6559,7 @@ body:has(.folio--fullgrid) .site-footer {
     position: relative;
     width: 2px;
     height: 100%;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--folio-line, #d5dde5);
     overflow: hidden;
   }
@@ -6563,7 +6569,7 @@ body:has(.folio--fullgrid) .site-footer {
     top: 0;
     left: 0;
     width: 100%;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--cs-accent, #111) 75%, #111);
     /* No transition — keeps fill locked to scroll (sticky tracks + spy) */
   }
@@ -6595,13 +6601,13 @@ body:has(.folio--fullgrid) .site-footer {
   .cs-rail__step:focus-visible {
     outline: 2px solid #111;
     outline-offset: 3px;
-    border-radius: 0.25rem;
+    border-radius: var(--radius-xs);
   }
 
   .cs-rail__dot {
     width: 0.45rem;
     height: 0.45rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     border: 1.5px solid currentColor;
     background: #fff;
     flex-shrink: 0;

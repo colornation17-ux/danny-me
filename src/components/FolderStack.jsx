@@ -222,7 +222,13 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
         </div>
 
         <div className="folder-card__img">
-          <div className={`folder-card__image${project.reelPortrait ? ' folder-card__image--portrait' : ''}${project.coverFill ? ' folder-card__image--fill' : ''}`}>
+          <div
+            className={`folder-card__image${
+              project.reelPortrait
+                ? ' folder-card__image--portrait'
+                : ' folder-card__image--fill'
+            }`}
+          >
             {project.reel && project.reelPortrait ? (
               <div className="folder-card__portrait-wrap">
                 <video src={project.reel} autoPlay muted loop playsInline />

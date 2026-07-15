@@ -68,8 +68,9 @@ function ensureGraph(src = WIRE_RADIO.src) {
 
   if (!audio) {
     audio = new Audio()
-    audio.preload = 'metadata'
-    audio.crossOrigin = 'anonymous'
+    audio.preload = 'auto'
+    // Same-origin static file — leave crossOrigin unset so playback
+    // isn't blocked when the CDN omits CORS headers.
     audio.loop = false
     audio.addEventListener('ended', () => {
       if (!playing) return
@@ -84,11 +85,18 @@ function ensureGraph(src = WIRE_RADIO.src) {
         emit()
       }
     })
+    audio.addEventListener('error', () => {
+      playing = false
+      emit()
+      if (typeof console !== 'undefined') {
+        console.warn('[wire-radio] failed to load', WIRE_RADIO.src)
+      }
+    })
   }
 
   const absolute = new URL(src, window.location.origin).href
   if (audio.src !== absolute) {
-    audio.src = src
+    audio.src = absolute
   }
 
   if (!ctx) {

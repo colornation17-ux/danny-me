@@ -12,10 +12,12 @@
 
 @font-face {
   font-family: "Highfat";
-  src: url("/fonts/highfat/Highfat.ttf") format("truetype");
+  src:
+    url("/fonts/highfat/Highfat.ttf") format("truetype"),
+    url("/fonts/highfat/Highfat.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
 }
 
 @font-face {

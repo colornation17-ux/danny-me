@@ -26,7 +26,7 @@
   --cs-sans: var(--font-sans);
   --cs-brand: var(--font-brand);
   --cs-script: var(--font-script);
-  --cs-radius: 0.45rem;
+  --cs-radius: var(--radius-sm, 0.45rem);
   --cs-gutter: var(--gutter);
   --cs-max: var(--max);
   --cs-rail-w: 6.75rem;

@@ -97,12 +97,17 @@ export default function About() {
       <section className="about-travel">
         <p className="about-section__eyebrow">Solo, and not so solo</p>
         <p className="about-travel__story">
-          I travel solo when I want to get lost in a city with just a camera, and in a
-          group when the plan is to just go. This one started as a phone wallpaper, a
-          photo of Arizona red rock I couldn&apos;t stop looking at. By the next
-          afternoon, four of us were in a car with no real itinerary. Twelve states,
-          eleven days, and about 6,000 miles later, we&apos;d stood at the Grand Canyon,
-          camped under a sky full of stars, and hit the end of Route 66.
+          I travel solo when I want to get lost in a city with just a camera.
+        </p>
+        <p className="about-travel__story">
+          And in a group when the plan is to just go.
+        </p>
+        <p className="about-travel__story">
+          This one started as a phone wallpaper, a photo of Arizona red rock I
+          couldn&apos;t stop looking at. By the next afternoon, four of us were in a
+          car with no real itinerary. Twelve states, eleven days, and about 6,000
+          miles later, we&apos;d stood at the Grand Canyon, camped under a sky full of
+          stars, and hit the end of Route 66.
         </p>
 
         <RoadTrip />
