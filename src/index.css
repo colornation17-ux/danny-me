@@ -1,4 +1,5 @@
 ﻿:root {
+  color-scheme: light;
   --bg: #fdfdfd;
   --bg-elevated: #ffffff;
   --ink: #0d0d0d;
@@ -3322,6 +3323,7 @@ body:has(.folio--fullgrid) .app {
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin-bottom: var(--space-5);
+  color: var(--ink, #0d0d0d);
 }
 
 .folio-hero__lead em {
@@ -5416,11 +5418,13 @@ body:has(.folio--fullgrid) .site-footer {
   text-transform: uppercase;
   overflow: visible;
   padding-inline: 0.04em;
+  color: var(--ink, #0d0d0d);
 }
 
 .folio-hero__name--display .gs-char {
   overflow: visible;
   will-change: transform;
+  color: inherit;
 }
 
 .folio-hero__avail--dot {
