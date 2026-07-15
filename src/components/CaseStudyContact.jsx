@@ -1,0 +1,52 @@
+import { Link } from 'react-router-dom'
+import { SITE } from '../data/site'
+
+/** Portfolio contact strip — shared across home + case studies */
+export default function CaseStudyContact({
+  id = 'contact',
+  headingId = 'contact-heading',
+  eyebrow = 'Get in touch',
+  title = (
+    <>
+      Let&apos;s build
+      <br />
+      something real.
+    </>
+  ),
+  body = 'Open to contract work, full-time roles, and hard design problems. I read every note.',
+  ctaLabel = 'Send a note',
+  className = '',
+}) {
+  return (
+    <section
+      id={id}
+      className={`folio-contact cs-folio-contact${className ? ` ${className}` : ''}`}
+      aria-labelledby={headingId}
+    >
+      <div className="folio-contact__inner">
+        <div className="folio-contact__left">
+          <p className="folio-contact__eyebrow">{eyebrow}</p>
+          <h2 id={headingId} className="folio-contact__title">
+            {title}
+          </h2>
+          <p className="folio-contact__body">{body}</p>
+        </div>
+        <div className="folio-contact__right">
+          <a className="folio-contact__cta" href={`mailto:${SITE.email}`}>
+            <span className="folio-contact__cta-label">{ctaLabel}</span>
+            <span className="folio-contact__cta-sub">{SITE.email}</span>
+          </a>
+          <div className="folio-contact__links">
+            <a href={SITE.linkedIn} target="_blank" rel="noopener noreferrer">
+              LinkedIn ↗
+            </a>
+            <Link to="/play">Playground ↗</Link>
+            <a href={SITE.resume} target="_blank" rel="noopener noreferrer">
+              Resume ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

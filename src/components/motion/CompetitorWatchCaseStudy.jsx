@@ -2,8 +2,6 @@ import { useEffect, useId, useState } from 'react'
 import CwModulesGrid from './CwModulesGrid'
 import CwVideoFrame from './CwVideoFrame'
 import { CW_PROOF_CLIPS } from '../../data/competitorWatchMotion'
-import { SITE } from '../../data/site'
-
 export const CW_RAIL_STEPS = [
   { id: 'cw-brief', num: '00', label: 'Problem' },
   { id: 'cw-foundation', num: '01', label: 'Foundation' },
@@ -323,28 +321,10 @@ export default function CompetitorWatchCaseStudy() {
           outreach is measured as register visits, not send counts alone.
         </p>
         <ImpactStats />
-      </section>
-
-      <section className="cw-cs__close" id="cw-close">
-        <h2>Intelligence for the call operators actually make.</h2>
-        <p>
-          Looking to bring the same problem-framing (engagement layer + decision layer) to product
-          teams.
+        <p className="cw-cs__impact-closer">
+          Intelligence for the call operators actually make — engagement stays with loyalty and Lola;
+          this product owns visibility and proof.
         </p>
-        <div className="cs-actions">
-          <a className="btn btn--primary" href={`mailto:${SITE.email}`}>
-            Get in touch
-          </a>
-          <a
-            className="btn btn--ghost"
-            href="https://competitor-watch-1.onrender.com"
-            target="_blank"
-            rel="noreferrer"
-            title="First load on Render can take about 60 seconds"
-          >
-            Open live app
-          </a>
-        </div>
       </section>
       </div>
     </div>

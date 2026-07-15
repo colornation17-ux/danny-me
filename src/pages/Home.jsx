@@ -7,6 +7,7 @@ import { featured } from '../data/featured'
 import FolderStack from '../components/FolderStack'
 import SpringWire from '../components/SpringWire'
 import CareerPath from '../components/CareerPath'
+import CaseStudyContact from '../components/CaseStudyContact'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -414,35 +415,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Contact ──────────────────────────────────────────────────── */}
-      <section
-        className="folio-contact"
-        id="contact"
-        aria-labelledby="contact-heading"
-      >
-        <div className="folio-contact__inner">
-          <div className="folio-contact__left">
-            <p className="folio-contact__eyebrow">Get in touch</p>
-            <h2 id="contact-heading" className="folio-contact__title">
-              Let&apos;s build<br />something real.
-            </h2>
-            <p className="folio-contact__body">
-              Open to contract work, full-time roles, and hard design problems.
-              I read every note.
-            </p>
-          </div>
-          <div className="folio-contact__right">
-            <a className="folio-contact__cta" href={`mailto:${SITE.email}`}>
-              <span className="folio-contact__cta-label">Send a note</span>
-              <span className="folio-contact__cta-sub">{SITE.email}</span>
-            </a>
-            <div className="folio-contact__links">
-              <a href={SITE.linkedIn} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-              <Link to="/play">Playground ↗</Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CaseStudyContact />
 
     </div>
   )

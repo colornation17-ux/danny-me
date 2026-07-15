@@ -22,7 +22,7 @@ export const work = [
     whatsappUrl: 'https://wa.me/14043238325?text=Hi%20Lola',
     connectUrl: 'https://wacrm-i9f2.vercel.app/',
     connectCta: 'Lola Connect',
-    liveCta: 'View case study',
+    liveCta: 'View case study', // primary folder CTA for external case study
     cover: '/work/lola/journey.png',
     hero: '/work/lola/service.png',
     gallery: [

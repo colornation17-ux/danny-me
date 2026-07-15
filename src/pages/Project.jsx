@@ -9,15 +9,79 @@ import CompetitorWatchCaseStudy, {
 } from '../components/motion/CompetitorWatchCaseStudy'
 import CwHeroChapters from '../components/motion/CwHeroChapters'
 import {
-  CaseStudyMobileBar,
-  CaseStudyRail,
+  CaseStudyNav,
   sectionAnchorId,
   stepsFromSections,
 } from '../components/CaseStudyRail'
+import CaseStudyContact from '../components/CaseStudyContact'
+import CaseStudyNext from '../components/CaseStudyNext'
+import CaseStudyVideo from '../components/CaseStudyVideo'
+import {
+  projectLiveCtaLabel,
+  projectNavLabel,
+} from '../lib/projectLinks'
 
 export default function Project() {
   const { slug } = useParams()
   const project = getProjectBySlug(slug)
+  const [gameActive, setGameActive] = useState(true)
+
+  const isLab = project?.collection === 'lab'
+  const featuredBySlug = useMemo(
+    () => Object.fromEntries(featured.map((p) => [p.slug, p])),
+    [],
+  )
+  const featuredOrder = useMemo(() => featured.map((p) => p.slug), [])
+  const featuredIndex = project ? featuredOrder.indexOf(project.slug) : -1
+
+  const { prev, next } = useMemo(() => {
+    if (!project) return { prev: null, next: null }
+    const resolveNav = (s) => featuredBySlug[s] || getProjectBySlug(s)
+    if (isLab) {
+      const i = lab.findIndex((p) => p.slug === project.slug)
+      const len = lab.length
+      return { prev: lab[(i - 1 + len) % len], next: lab[(i + 1) % len] }
+    }
+    if (featuredIndex === -1) {
+      const i = work.findIndex((p) => p.slug === project.slug)
+      const len = work.length
+      return { prev: work[(i - 1 + len) % len], next: work[(i + 1) % len] }
+    }
+    const len = featuredOrder.length
+    return {
+      prev: resolveNav(featuredOrder[(featuredIndex - 1 + len) % len]),
+      next: resolveNav(featuredOrder[(featuredIndex + 1) % len]),
+    }
+  }, [project, isLab, featuredIndex, featuredBySlug, featuredOrder])
+
+  const isCwCase = project?.caseStudyBody === 'competitor-watch'
+  const isGameCase = project?.slug === 'bodega-ops'
+  const railSteps = useMemo(() => {
+    if (!project) return []
+    if (isCwCase) return CW_RAIL_STEPS
+    return stepsFromSections(project.sections)
+  }, [project, isCwCase])
+
+  // External full case studies (e.g. Lola) — never keep the short on-site stub.
+  const externalHref =
+    project && typeof project.href === 'string' && /^https?:\/\//i.test(project.href)
+      ? project.href
+      : null
+
+  useEffect(() => {
+    if (!externalHref) return undefined
+    window.location.replace(externalHref)
+    return undefined
+  }, [externalHref])
+
+  useEffect(() => {
+    if (isGameCase && gameActive) {
+      document.body.classList.add('game-embed')
+    } else {
+      document.body.classList.remove('game-embed')
+    }
+    return () => document.body.classList.remove('game-embed')
+  }, [isGameCase, gameActive])
 
   if (!project) {
     return (
@@ -33,32 +97,25 @@ export default function Project() {
     )
   }
 
-  const isLab = project.collection === 'lab'
-  // Lab case studies cycle within Lab. Work cycles the homepage-featured set
-  // so "up next" never lands on a project visitors cannot find from Home.
-  const featuredOrder = featured.map((p) => p.slug)
-  const featuredIndex = featuredOrder.indexOf(project.slug)
-  let next
-  if (isLab) {
-    const i = lab.findIndex((p) => p.slug === project.slug)
-    next = lab[(i + 1) % lab.length]
-  } else if (featuredIndex === -1) {
-    next = work[(work.findIndex((p) => p.slug === project.slug) + 1) % work.length]
-  } else {
-    next = getProjectBySlug(featuredOrder[(featuredIndex + 1) % featuredOrder.length])
+  if (externalHref) {
+    return (
+      <div className="cs-missing">
+        <h1>{project.title || 'Opening case study…'}</h1>
+        <p style={{ color: 'var(--muted)', marginTop: '0.75rem' }}>
+          Taking you to the full case study.
+        </p>
+        <a className="folio-btn folio-btn--solid" href={externalHref}>
+          Continue →
+        </a>
+      </div>
+    )
   }
+
   const backTo = isLab ? '/play' : '/'
   const backLabel = isLab ? '← Lab' : '← Work'
   const layout = project.layout || 'default'
   const motion = hasMotionPreview(project.slug)
-  const isCwCase = project.caseStudyBody === 'competitor-watch'
-  const isGameCase = project.slug === 'bodega-ops'
   const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)
-  const [gameActive, setGameActive] = useState(true)
-  const railSteps = useMemo(() => {
-    if (isCwCase) return CW_RAIL_STEPS
-    return stepsFromSections(project.sections)
-  }, [isCwCase, project.sections])
   const railBrand =
     project.slug === 'competitor-watch'
       ? 'CW'
@@ -68,14 +125,8 @@ export default function Project() {
           ? 'Edge'
           : project.title?.split(' ')[0] || project.title
   const showRail = railSteps.length >= 2
-
-  useEffect(() => {
-    if (isGameCase && gameActive) {
-      document.body.classList.add('game-embed')
-    } else {
-      document.body.classList.remove('game-embed')
-    }
-  }, [isGameCase, gameActive])
+  const contactId = isCwCase ? 'cw-close' : 'contact'
+  const contactHeadingId = isCwCase ? 'cw-contact-heading' : 'contact-heading'
 
   if (isGameCase) {
     return (
@@ -108,17 +159,15 @@ export default function Project() {
         )}
 
         <div id="case-study" className={`cs-game-body${showRail ? ' cs--with-rail' : ''}`}>
-          {showRail ? (
-            <>
-              <CaseStudyMobileBar brand={railBrand} steps={railSteps} />
-              <CaseStudyRail brand={railBrand} steps={railSteps} />
-            </>
-          ) : null}
+          {showRail ? <CaseStudyNav brand={railBrand} steps={railSteps} /> : null}
           <Link className="cs-back" to={backTo}>{backLabel}</Link>
           <header className="cs-hero cs-hero--default">
             <div className="cs-hero__copy">
               <p className="cs-hero__meta">{project.meta}</p>
-              <h1>{project.outcome}</h1>
+              <h1>{projectNavLabel(project)}</h1>
+              {project.outcome && project.outcome !== project.title ? (
+                <p className="cs-hero__outcome">{project.outcome}</p>
+              ) : null}
               <p className="cs-hero__blurb">{project.blurb}</p>
               <dl className="cs-meta-row">
                 <div><dt>Role</dt><dd>{project.role}</dd></div>
@@ -127,7 +176,7 @@ export default function Project() {
                 <div><dt>Skills</dt><dd>{project.skills.join(' · ')}</dd></div>
               </dl>
               <div className="cs-actions">
-                <a className="btn btn--primary" href={`mailto:${SITE.email}`}>Ask about this work</a>
+                <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>Ask about this work</a>
               </div>
             </div>
           </header>
@@ -170,13 +219,8 @@ export default function Project() {
             </section>
           ))}
 
-          <aside className="cs-next">
-            <div>
-              <p>Up next</p>
-              <strong>{next.outcome}</strong>
-            </div>
-            <Link to={`/projects/${next.slug}`}>View project →</Link>
-          </aside>
+          <CaseStudyContact />
+          <CaseStudyNext prev={prev} next={next} />
         </div>
       </article>
     )
@@ -187,12 +231,7 @@ export default function Project() {
       className={`cs cs--${layout}${isCwCase ? ' cs--cw' : ''}${showRail ? ' cs--with-rail' : ''}`}
       style={{ '--cs-accent': project.accent }}
     >
-      {showRail ? (
-        <>
-          <CaseStudyMobileBar brand={railBrand} steps={railSteps} />
-          <CaseStudyRail brand={railBrand} steps={railSteps} />
-        </>
-      ) : null}
+      {showRail ? <CaseStudyNav brand={railBrand} steps={railSteps} /> : null}
       <Link className="cs-back" to={backTo}>
         {backLabel}
       </Link>
@@ -200,7 +239,10 @@ export default function Project() {
       <header className={`cs-hero cs-hero--${layout}`}>
         <div className="cs-hero__copy">
           <p className="cs-hero__meta">{project.meta}</p>
-          <h1>{project.outcome}</h1>
+          <h1>{projectNavLabel(project)}</h1>
+          {project.outcome && project.outcome !== project.title ? (
+            <p className="cs-hero__outcome">{project.outcome}</p>
+          ) : null}
           <p className="cs-hero__blurb">{project.blurb}</p>
           <dl className="cs-meta-row">
             <div>
@@ -221,63 +263,43 @@ export default function Project() {
             </div>
           </dl>
           <div className="cs-actions">
-            {project.slug === 'competitor-watch' ? (
-              <>
-                <a className="btn btn--primary" href={`mailto:${SITE.email}`}>
-                  Ask about this work
-                </a>
-                {project.liveUrl && (
-                  <a
-                    className="btn btn--ghost"
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    title="First load on Render can take about 60 seconds"
-                  >
-                    Open live app
-                  </a>
-                )}
-              </>
-            ) : (
-              <>
-                {project.liveUrl && (
-                  <a
-                    className="btn btn--primary"
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {project.liveCta
-                      || (project.slug === 'lola' ? 'Open full case study' : 'View live site')}
-                  </a>
-                )}
-                {project.connectUrl && (
-                  <a
-                    className="btn btn--ghost"
-                    href={project.connectUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {project.connectCta || 'Lola Connect'} ↗
-                  </a>
-                )}
-                {project.whatsappUrl && (
-                  <a
-                    className="btn btn--ghost"
-                    href={project.whatsappUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Try on WhatsApp ↗
-                  </a>
-                )}
-                <a
-                  className={project.liveUrl ? 'btn btn--ghost' : 'btn btn--primary'}
-                  href={`mailto:${SITE.email}`}
-                >
-                  Ask about this work
-                </a>
-              </>
+            <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>
+              Ask about this work
+            </a>
+            {project.liveUrl && (
+              <a
+                className="folio-btn"
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                title={
+                  project.slug === 'competitor-watch'
+                    ? 'First load on Render can take about 60 seconds'
+                    : undefined
+                }
+              >
+                {projectLiveCtaLabel(project)}
+              </a>
+            )}
+            {project.connectUrl && (
+              <a
+                className="folio-btn"
+                href={project.connectUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {project.connectCta || 'Lola Connect'} ↗
+              </a>
+            )}
+            {project.whatsappUrl && (
+              <a
+                className="folio-btn"
+                href={project.whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Try on WhatsApp ↗
+              </a>
             )}
           </div>
         </div>
@@ -291,13 +313,12 @@ export default function Project() {
             ) : motion ? (
               <ProjectMotionPreview slug={project.slug} size="hero" />
             ) : project.reel ? (
-              <video
+              <CaseStudyVideo
                 src={project.reel}
-                autoPlay
-                muted
-                loop
-                playsInline
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                poster={project.hero || project.cover}
+                label={`${project.title} demo`}
+                mode="ambient"
+                className="cs-banner__video"
               />
             ) : (
               <img
@@ -353,13 +374,8 @@ export default function Project() {
         </section>
       )}
 
-      <aside className="cs-next">
-        <div>
-          <p>Up next</p>
-          <strong>{next.outcome}</strong>
-        </div>
-        <Link to={`/projects/${next.slug}`}>View project →</Link>
-      </aside>
+      <CaseStudyContact id={contactId} headingId={contactHeadingId} />
+      <CaseStudyNext prev={prev} next={next} />
     </article>
   )
 }

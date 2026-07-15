@@ -1,5 +1,7 @@
 ﻿import { Link } from 'react-router-dom'
 import { play } from '../data/projects'
+import CaseStudyContact from '../components/CaseStudyContact'
+import { projectCaseCtaLabel, projectDestination } from '../lib/projectLinks'
 
 export default function Play() {
   return (
@@ -11,6 +13,8 @@ export default function Play() {
       </p>
       <div className="play-grid">
         {play.map((item) => {
+          const dest = projectDestination(item)
+          const cta = `${projectCaseCtaLabel(item)} →`
           const inner = (
             <>
               {item.cover && (
@@ -21,21 +25,40 @@ export default function Play() {
               <p className="play-card__meta">{item.meta}</p>
               <h3>{item.title}</h3>
               <p>{item.blurb}</p>
-              {item.href && <span className="play-card__cta">Open case study →</span>}
+              {dest && <span className="play-card__cta">{cta}</span>}
             </>
           )
 
-          return item.href ? (
-            <Link className="play-card play-card--link" to={item.href} key={item.slug}>
+          if (!dest) {
+            return (
+              <article className="play-card" key={item.slug}>
+                {inner}
+              </article>
+            )
+          }
+
+          if (dest.external) {
+            return (
+              <a
+                className="play-card play-card--link"
+                href={dest.to}
+                target="_blank"
+                rel="noreferrer"
+                key={item.slug}
+              >
+                {inner}
+              </a>
+            )
+          }
+
+          return (
+            <Link className="play-card play-card--link" to={dest.to} key={item.slug}>
               {inner}
             </Link>
-          ) : (
-            <article className="play-card" key={item.slug}>
-              {inner}
-            </article>
           )
         })}
       </div>
+      <CaseStudyContact />
     </div>
   )
 }

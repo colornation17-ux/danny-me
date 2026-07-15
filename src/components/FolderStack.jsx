@@ -2,6 +2,12 @@ import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import ProjectMotionPreview, { hasMotionPreview } from './motion/ProjectMotionPreview'
+import {
+  projectCaseCtaLabel,
+  projectDestination,
+  projectLiveCtaLabel,
+  projectNavLabel,
+} from '../lib/projectLinks'
 
 // color-cyan-58 · color-grey-7 · color-orange-55 · color-rose-50 · color-spring-green-45 · color-orange-80
 export const FOLDER_TONES = [
@@ -67,25 +73,21 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
   const tone = project.folderFill
     ? { fill: project.folderFill, ink: project.folderInk ?? baseTone.ink }
     : baseTone
-  const to = project.href || `/projects/${project.slug}`
-  const isExternalCase = typeof to === 'string' && /^https?:\/\//i.test(to)
+  const dest = projectDestination(project)
+  const to = dest?.to || `/projects/${project.slug}`
+  const isExternalCase = Boolean(dest?.external)
   const motion = hasMotionPreview(project.slug)
-  const cta = project.placeholder
-    ? 'Case study soon'
-    : project.conceptOnly
-      ? 'View in Play'
-      : 'View case study'
+  const cta = projectCaseCtaLabel(project)
+  const title = projectNavLabel(project)
   const label = project.index || String(index + 1).padStart(2, '0')
   const tags = project.tags || project.skills?.slice(0, 2) || []
-  const mediaAlt = project.coverAlt || `${project.displayTitle} preview`
+  const mediaAlt = project.coverAlt || `${title} preview`
   const company =
     project.company ||
     (project.meta ? project.meta.split('·')[0].trim() : null)
   const status = project.status || null
   const role = project.role || null
-  const liveLabel =
-    project.liveCta ||
-    (project.whatsappUrl && project.liveUrl ? 'View product site' : 'Open live demo')
+  const liveLabel = projectLiveCtaLabel(project)
 
   // Past cards sit underneath the active card — their tab buttons stay visible
   // through the transparent indent holes in the active card's chrome row.
@@ -106,7 +108,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
       className={`folder-card folder-card--${cardState}`}
       id={`pj${index + 1}`}
       data-index={index}
-      aria-label={`Project ${label}: ${project.displayTitle}`}
+      aria-label={`Project ${label}: ${title}`}
       aria-hidden={cardState === 'future' ? 'true' : undefined}
       style={{
         '--folder-fill': tone.fill,
@@ -123,12 +125,12 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
         <button
           type="button"
           className="folder-card__tab"
-          aria-label={`Project ${label}: ${project.displayTitle}`}
+          aria-label={`Project ${label}: ${title}`}
           onClick={() => onJump(index)}
           tabIndex={cardState === 'future' ? -1 : 0}
         >
           <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
-          <span className="folder-card__tab-label">{project.displayTitle}</span>
+          <span className="folder-card__tab-label">{title}</span>
         </button>
         <div className="folder-card__tab-slope" aria-hidden="true" />
         <div className="folder-card__ledge" aria-hidden="true" />
@@ -147,7 +149,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
             <h3
             className="folder-card__title"
             data-font={project.folderTitleFont || ''}
-          >{project.displayTitle}</h3>
+          >{title}</h3>
             {(role || company || status) && (
               <p className="folder-card__meta">
                 {[role, company, status].filter(Boolean).join(' · ')}
@@ -181,7 +183,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
                 tabIndex={cardState === 'active' ? 0 : -1}
                 onClick={(e) => e.stopPropagation()}
               >
-                {liveLabel || 'Open live demo'} ↗
+                {liveLabel} ↗
               </a>
             )}
             {project.whatsappUrl && (
@@ -242,7 +244,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
               <img src={project.cover} alt={mediaAlt} loading="lazy" />
             ) : (
               <div className="folder-card__placeholder" aria-hidden="true">
-                <span>{project.displayTitle}</span>
+                <span>{title}</span>
               </div>
             )}
 

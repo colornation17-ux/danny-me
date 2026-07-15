@@ -9,7 +9,9 @@
  *   Components (.cs-section, .cs-rail, .cs-hero, …)
  *
  * Project accent is injected as --cs-accent on <article class="cs">.
- * Shared navigation: CaseStudyRail (+ mobile bar) — use across all studies.
+ * Shared chrome across studies:
+ *   CaseStudyNav (rail + mobile picker)
+ *   CaseStudyVideo, CaseStudyContact, CaseStudyNext
  */
 
 .cs {

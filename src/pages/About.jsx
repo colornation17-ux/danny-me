@@ -56,11 +56,11 @@ export default function About() {
             <h2>Currently</h2>
             <p className="about-seeking">{SITE.about.seeking}</p>
             <div className="contact-row">
-              <a className="btn btn--primary" href={`mailto:${SITE.email}`}>
-                Email me
+              <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>
+                Send a note
               </a>
               <a
-                className="btn btn--ghost"
+                className="folio-btn"
                 href={SITE.linkedIn}
                 target="_blank"
                 rel="noreferrer"
@@ -68,7 +68,7 @@ export default function About() {
                 LinkedIn
               </a>
               <a
-                className="btn btn--ghost"
+                className="folio-btn"
                 href={SITE.resume}
                 target="_blank"
                 rel="noreferrer"

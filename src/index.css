@@ -1202,44 +1202,6 @@ button {
   margin-top: 2rem;
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0.75rem 1.15rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  border: 1px solid transparent;
-  transition: transform 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-}
-
-.btn--primary {
-  background: var(--ink);
-  color: #fff;
-}
-
-.btn--primary:hover {
-  background: var(--accent);
-  color: #fff;
-}
-
-.btn--ghost {
-  background: transparent;
-  border-color: var(--line);
-  color: var(--ink);
-}
-
-.btn--ghost:hover {
-  border-color: var(--accent);
-  color: var(--accent-text);
-}
-
 /* ── Case study ──────────────────────────────────── */
 
 .cs-back {
@@ -1297,6 +1259,17 @@ button {
   line-height: 1.1;
   max-width: 16ch;
   margin-bottom: 1rem;
+}
+
+.cs-hero__outcome {
+  max-width: 40rem;
+  margin: 0 0 0.65rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: var(--ink);
 }
 
 .cs-hero__blurb {
@@ -1642,40 +1615,121 @@ body.game-embed .main { padding: 0; overflow: visible; }
   color: var(--accent-text);
 }
 
-.cs-next {
+/* Adjacent project pager (prev + next) */
+.cs-pager {
   margin-top: 3rem;
-  padding: 1.5rem;
-  border-radius: var(--radius);
-  background: var(--ink);
-  color: #fff;
+  padding: 1.75rem 0 0;
+  border-top: 1px solid var(--folio-line, #d5dde5);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 720px) {
+  .cs-pager {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+    align-items: start;
+    gap: 2rem;
+  }
+}
+
+.cs-pager__spacer {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .cs-pager__spacer {
+    display: block;
+  }
+}
+
+.cs-pager__link {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+  border-radius: 0.35rem;
 }
 
-.cs-next p {
-  color: rgba(255, 255, 255, 0.7);
-  max-width: 28rem;
+.cs-pager__link:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 4px;
 }
 
-.cs-next strong {
-  display: block;
+.cs-pager__cta {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cs-pager__title {
   font-family: var(--font-display);
-  font-size: 1.2rem;
-  color: #fff;
-  margin-bottom: 0.25rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
 }
 
-.cs-next a {
-  color: #fff;
+.cs-pager__blurb {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 36rem;
+}
+
+.cs-pager__link--prev .cs-pager__title {
+  font-size: 1.05rem;
   font-weight: 600;
-  border-bottom: 1px solid var(--accent);
+  color: color-mix(in srgb, var(--ink) 72%, var(--muted));
 }
 
-.cs-next a:hover {
-  color: var(--accent-text);
+.cs-pager__link--next .cs-pager__title {
+  font-size: 1.25rem;
+}
+
+.cs-pager__link:hover .cs-pager__cta,
+.cs-pager__link:focus-visible .cs-pager__cta {
+  color: var(--ink);
+}
+
+.cs-pager__link:hover .cs-pager__title,
+.cs-pager__link:focus-visible .cs-pager__title {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.cs-folio-contact {
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--folio-line, #d5dde5);
+}
+
+.cs-banner__video.cs-video,
+.cs-banner .cs-video {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.cs-banner .cs-video video,
+.cs-banner .cs-video img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#cw-brief,
+#cw-foundation,
+#cw-product,
+#cw-proof,
+#cw-impact,
+#cw-close,
+[id^='cs-'] {
+  scroll-margin-top: 5.5rem;
 }
 
 .cs-missing {
@@ -1709,47 +1763,6 @@ body.game-embed .main { padding: 0; overflow: visible; }
 
 .site-footer a:hover {
   color: var(--accent-text);
-}
-
-/* ── Home close CTA ──────────────────────────────── */
-
-.home-cta {
-  margin-top: 3.5rem;
-  padding: 2rem 1.75rem;
-  border-radius: calc(var(--radius) + 0.2rem);
-  background: var(--ink);
-  color: #fff;
-  display: grid;
-  gap: 1rem;
-}
-
-@media (min-width: 720px) {
-  .home-cta {
-    grid-template-columns: 1.4fr auto;
-    align-items: center;
-  }
-}
-
-.home-cta h2 {
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 3vw, 1.85rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.4rem;
-}
-
-.home-cta p {
-  color: rgba(255, 255, 255, 0.68);
-  max-width: 34rem;
-}
-
-.home-cta .btn--primary {
-  background: var(--accent);
-}
-
-.home-cta .btn--primary:hover {
-  background: #fff;
-  color: var(--ink);
 }
 
 @keyframes rise {
@@ -2864,26 +2877,21 @@ body.game-embed .main { padding: 0; overflow: visible; }
   max-width: none;
 }
 
-.cw-cs__close {
-  margin: 2.5rem 0 1rem;
-  padding: 2rem 0 0;
-  border-top: 1px solid var(--line);
-}
-
-.cw-cs__close h2 {
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
-  font-weight: 500;
-  letter-spacing: -0.025em;
-  max-width: 16ch;
-  margin: 0 0 0.75rem;
-}
-
-.cw-cs__close p {
+.cw-cs__impact-closer {
+  margin: 1.5rem 0 0;
+  max-width: 40rem;
   color: var(--muted);
-  max-width: 36rem;
-  margin: 0 0 1.25rem;
   font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+/* Contact target for CW timeline — room to scroll into view */
+.cs--cw .cs-folio-contact#cw-close {
+  scroll-margin-top: 5.5rem;
+  min-height: min(52vh, 28rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 @media (min-width: 1100px) {
@@ -6108,7 +6116,7 @@ body:has(.folio--fullgrid) .site-footer {
     width: 100%;
     border-radius: 999px;
     background: color-mix(in srgb, var(--cs-accent, #111) 75%, #111);
-    transition: height 0.25s ease-out;
+    /* No transition — keeps fill locked to scroll (sticky tracks + spy) */
   }
 
   .cs-rail__steps {

@@ -35,17 +35,7 @@ function Chevron({ open }) {
   )
 }
 
-/** Compact fixed left timeline — desktop */
-export function CaseStudyRail({ brand, steps }) {
-  const ids = useMemo(() => steps.map((s) => s.id), [steps])
-  const { activeId, activeIdx } = useScrollSpy(ids)
-  const fillPct =
-    steps.length <= 1
-      ? 100
-      : ((Math.max(activeIdx, 0) + 0.5) / steps.length) * 100
-
-  if (steps.length < 2) return null
-
+function RailAside({ brand, steps, activeId, activeIdx, fillPct }) {
   return (
     <aside className="cs-rail" aria-label="Case study timeline">
       {brand ? (
@@ -57,7 +47,10 @@ export function CaseStudyRail({ brand, steps }) {
       <div className="cs-rail__body">
         <div className="cs-rail__progress" aria-hidden="true">
           <div className="cs-rail__track">
-            <div className="cs-rail__fill" style={{ height: `${Math.min(100, fillPct)}%` }} />
+            <div
+              className="cs-rail__fill"
+              style={{ height: `${Math.min(100, Math.max(0, fillPct))}%` }}
+            />
           </div>
         </div>
 
@@ -88,10 +81,7 @@ export function CaseStudyRail({ brand, steps }) {
   )
 }
 
-/** Mobile phase picker under the portfolio nav */
-export function CaseStudyMobileBar({ brand, steps }) {
-  const ids = useMemo(() => steps.map((s) => s.id), [steps])
-  const { activeId, activeIdx } = useScrollSpy(ids)
+function MobileBar({ brand, steps, activeId, activeIdx }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef(null)
   const triggerRef = useRef(null)
@@ -117,8 +107,6 @@ export function CaseStudyMobileBar({ brand, steps }) {
       document.removeEventListener('keydown', onKey)
     }
   }, [open, close])
-
-  if (steps.length < 2) return null
 
   return (
     <div className="cs-rail-mobile" ref={rootRef}>
@@ -160,4 +148,37 @@ export function CaseStudyMobileBar({ brand, steps }) {
       ) : null}
     </div>
   )
+}
+
+/**
+ * Single scroll-spy owner — desktop rail + mobile picker stay in sync.
+ */
+export function CaseStudyNav({ brand, steps }) {
+  const ids = useMemo(() => steps.map((s) => s.id), [steps])
+  const { activeId, activeIdx, fillPct } = useScrollSpy(ids)
+
+  if (steps.length < 2) return null
+
+  return (
+    <>
+      <MobileBar brand={brand} steps={steps} activeId={activeId} activeIdx={activeIdx} />
+      <RailAside
+        brand={brand}
+        steps={steps}
+        activeId={activeId}
+        activeIdx={activeIdx}
+        fillPct={fillPct}
+      />
+    </>
+  )
+}
+
+/** @deprecated use CaseStudyNav */
+export function CaseStudyRail(props) {
+  return <CaseStudyNav {...props} />
+}
+
+/** @deprecated use CaseStudyNav */
+export function CaseStudyMobileBar() {
+  return null
 }
