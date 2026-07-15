@@ -266,6 +266,10 @@ export default function RoadTrip() {
                     loading="lazy"
                     decoding="async"
                   />
+                  <span className="road-trip__polaroid-cue" aria-hidden="true">
+                    <span className="road-trip__polaroid-cue--click">click to view</span>
+                    <span className="road-trip__polaroid-cue--tap">tap to view</span>
+                  </span>
                 </button>
               )}
               <div className="road-trip__panel-text">

@@ -926,7 +926,7 @@ button {
   flex-shrink: 0;
   width: 148px;
   margin: 0;
-  padding: 8px 8px 22px;
+  padding: 8px 8px 1.65rem;
   background: #fff;
   border: 1px solid #e9e9e9;
   border-radius: var(--radius-xs);
@@ -953,12 +953,52 @@ button {
   pointer-events: none;
 }
 
+/* Soft invite in the polaroid bottom strip — Just Me, not mono UI chrome */
+.road-trip__polaroid-cue {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.2rem;
+  display: block;
+  text-align: center;
+  font-family: var(--font-script);
+  font-size: 0.95rem;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  color: #5a6270;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.road-trip__polaroid-cue--tap {
+  display: none;
+}
+
+.road-trip__polaroid-cue--click {
+  display: inline;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .road-trip__polaroid:hover,
   .road-trip__polaroid:focus-visible {
     transform: rotate(-1deg) scale(1.08);
     box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
     z-index: 5;
+  }
+
+  .road-trip__polaroid:hover .road-trip__polaroid-cue,
+  .road-trip__polaroid:focus-visible .road-trip__polaroid-cue {
+    color: #2a3038;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .road-trip__polaroid-cue--click {
+    display: none;
+  }
+
+  .road-trip__polaroid-cue--tap {
+    display: inline;
   }
 }
 
@@ -1185,8 +1225,13 @@ button {
 
   .road-trip__polaroid {
     width: 5.75rem;
-    padding: 5px 5px 14px;
+    padding: 5px 5px 1.35rem;
     transform: rotate(-2deg);
+  }
+
+  .road-trip__polaroid-cue {
+    font-size: 0.8rem;
+    bottom: 0.12rem;
   }
 
   .travel-lightbox__img {
