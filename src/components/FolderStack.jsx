@@ -280,15 +280,17 @@ export default function FolderStack({ projects }) {
     const el = stackRef.current
     if (!el) return
     const measure = () => {
-      const width = el.clientWidth
-      const compact = width < 700
-      // On mobile, reserve slope width and divide the REST evenly so
+      // Use the sticky viewport (actual card width), not the padded stack.
+      const sticky = el.querySelector('.folder-sticky')
+      const width = sticky?.clientWidth || el.clientWidth
+      const compact = width < 700 || window.innerWidth < 700
+      // On mobile, reserve the fold slope and divide the rest evenly so
       // all N number tabs always fit (01…06 visible at once).
       if (compact) {
-        const slope = 22
-        const pad = 8
-        const usable = Math.max(240, width - slope - pad)
-        setTabW(Math.max(28, Math.floor(usable / total)))
+        const slope = 16
+        const safety = 4
+        const usable = Math.max(180, width - slope - safety)
+        setTabW(Math.max(24, Math.floor(usable / total)))
         return
       }
       const usable = Math.max(300, width * 0.85)
