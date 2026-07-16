@@ -27,7 +27,7 @@ export const SITE = {
     seeking:
       'Open to design technologist, product design, and conversational AI roles.',
     outside: [
-      'Solo street photography. Camera comes on every trip',
+      'Solo street photography — SF shot featured by Sony Alpha Australia; NYC by Sony Alpha India',
       'Cross-country drives with no itinerary and too many parks',
       'Coffee experiments: drip, espresso, questionable cold foam',
     ],

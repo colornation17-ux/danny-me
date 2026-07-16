@@ -6,7 +6,7 @@ const SOLO_SHOTS = [
   {
     src: '/travel/sf-cable-car.jpg',
     alt: 'San Francisco cable car with the Bay Bridge behind it',
-    caption: 'San Francisco',
+    caption: 'San Francisco · featured by Sony Alpha Australia',
     size: 'hero',
   },
   {
@@ -115,6 +115,10 @@ export default function About() {
 
       <section className="about-solo-trips">
         <p className="about-section__eyebrow">Street photography, solo</p>
+        <p className="about-travel__story">
+          Two frames got picked up on Sony Alpha Stories — the SF cable car on
+          Australia, the NYC night work on India.
+        </p>
 
         <div className="solo-bento">
           {SOLO_SHOTS.map((shot) => (
