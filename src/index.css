@@ -6405,6 +6405,7 @@ body:has(.folio--fullgrid) .site-footer {
 /* Portrait phone fills height of the shared well */
 .folder-card__image--portrait .folder-card__portrait-wrap video {
   object-fit: cover;
+  object-position: top center;
 }
 
 .folder-card__connect-strip {
@@ -6469,6 +6470,7 @@ body:has(.folio--fullgrid) .site-footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top center;
   border: 0;
   outline: none;
   background: transparent;
