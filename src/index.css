@@ -6367,6 +6367,11 @@ body:has(.folio--fullgrid) .site-footer {
   background: color-mix(in srgb, #fff 22%, var(--folder-fill, #f3f5f7));
 }
 
+.folder-card__image--pos-top video,
+.folder-card__image--pos-top img {
+  object-position: top center;
+}
+
 @media (min-width: 900px) {
   .folder-card__img {
     align-items: center;

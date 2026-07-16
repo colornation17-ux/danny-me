@@ -234,7 +234,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
               project.reelPortrait
                 ? ' folder-card__image--portrait'
                 : ' folder-card__image--fill'
-            }`}
+            }${project.reelObjectPosition === 'top' ? ' folder-card__image--pos-top' : ''}`}
           >
             {project.reel && project.reelPortrait ? (
               <div className="folder-card__portrait-wrap">
