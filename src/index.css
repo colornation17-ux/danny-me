@@ -6403,6 +6403,15 @@ body:has(.folio--fullgrid) .site-footer {
   z-index: 2;
 }
 
+/* Sit on top of a full-bleed reel so Lola fills the same well as other cards */
+.folder-card__connect-strip--overlay {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.55rem;
+  width: min(28%, 6.75rem);
+  pointer-events: none;
+}
+
 .folder-card__connect-clip {
   margin: 0;
   overflow: hidden;

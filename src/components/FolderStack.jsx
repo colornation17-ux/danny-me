@@ -265,7 +265,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
             )}
 
             {project.connectPreviews?.length > 0 && (
-              <div className="folder-card__connect-strip" aria-label="Lola Connect preview">
+              <div className="folder-card__connect-strip folder-card__connect-strip--overlay" aria-label="Lola Connect preview">
                 {project.connectPreviews.map((clip) => (
                   <figure key={clip.label} className="folder-card__connect-clip">
                     <video
