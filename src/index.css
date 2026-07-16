@@ -6492,8 +6492,9 @@ body:has(.folio--fullgrid) .site-footer {
   position: absolute;
   width: 1.1rem;
   height: 1.1rem;
-  /* Always white — never inherit dark folder ink (e.g. Checkout ops) */
+  /* White L + dark hairline so corners read on light UIs (e.g. Lola Orders) */
   border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px rgba(17, 18, 18, 0.45);
   filter: none;
 }
 
