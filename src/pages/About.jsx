@@ -18,7 +18,7 @@ const SOLO_SHOTS = [
   {
     src: '/travel/nyc-dumbo.jpg',
     alt: 'DUMBO, Brooklyn, with the Manhattan Bridge behind',
-    caption: 'New York · featured by Sony Alpha India',
+    caption: 'New York',
     size: 'std',
   },
   {
@@ -30,7 +30,7 @@ const SOLO_SHOTS = [
   {
     src: '/travel/nyc-delmonicos.jpg',
     alt: "Delmonico's at night, financial district, New York",
-    caption: 'New York · Sony Alpha Stories (India)',
+    caption: 'New York',
     size: 'tall',
   },
 ]
