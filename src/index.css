@@ -3333,6 +3333,19 @@ body:has(.folio--fullgrid) .app {
   box-shadow: none;
 }
 
+/* Folio tabs must beat .nav-links a (DM Sans / uppercase) */
+.nav-links--folio a.nav-tab {
+  font-family: var(--font-brand);
+  font-size: var(--text-body-lg);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: #555;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
 .site-nav--folio .nav-brand span {
   color: inherit;
 }
