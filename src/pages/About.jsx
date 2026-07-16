@@ -6,7 +6,7 @@ const SOLO_SHOTS = [
   {
     src: '/travel/sf-cable-car.jpg',
     alt: 'San Francisco cable car with the Bay Bridge behind it',
-    caption: 'San Francisco',
+    caption: 'San Francisco · featured by Sony Alpha Australia',
     size: 'hero',
   },
   {
