@@ -6309,8 +6309,8 @@ body:has(.folio--fullgrid) .site-footer {
   }
 }
 
-/* Landscape frame — same size for every project except Lola (portrait).
-   Media covers the locked 16:9 well so cards never stretch taller and side-crop. */
+/* Shared landscape well — same 16:9 size as Lola’s card frame.
+   contain = full frame visible, no crop (letterbox/pillarbox ok). */
 .folder-card__image {
   position: relative;
   width: 100%;
@@ -6332,8 +6332,7 @@ body:has(.folio--fullgrid) .site-footer {
   inset: 0;
   width: 100%;
   height: 100%;
-  /* Fill the shared 16:9 well — frame is locked so CW doesn't side-crop */
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   image-rendering: auto;
   -webkit-backface-visibility: hidden;
@@ -6344,7 +6343,7 @@ body:has(.folio--fullgrid) .site-footer {
   transform: none;
 }
 
-/* Shared CW-sized well: fixed 16:9 frame; media object-fit: cover fills it */
+/* Same locked 16:9 well for every landscape project */
 .folder-card__image--fill {
   aspect-ratio: 16 / 9;
   flex: none;
@@ -6360,19 +6359,19 @@ body:has(.folio--fullgrid) .site-footer {
     align-items: center;
   }
 
-  .folder-card__image--fill {
-    /* Match across cards: same frame, never stretch taller and crop */
+  .folder-card__image--fill,
+  .folder-card__image--portrait {
     max-height: min(100%, 28rem);
   }
 }
 
-/* Lola only — portrait phone reel stays centered, not forced to CW landscape */
+/* Lola — same 16:9 well as other cards; phone + Connect strip sit inside */
 .folder-card__image--portrait {
   aspect-ratio: 16 / 9;
   flex: none;
   height: auto;
   min-height: 0;
-  background: var(--folder-fill, transparent);
+  background: color-mix(in srgb, #fff 12%, var(--folder-fill, transparent));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6380,9 +6379,19 @@ body:has(.folio--fullgrid) .site-footer {
   position: relative;
 }
 
-.folder-card__image--portrait video {
-  object-fit: contain;
-  transform: none;
+.folder-card__image--portrait > .folder-card__portrait-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.folder-card__image--portrait > .folder-card__connect-strip {
+  position: relative;
+  z-index: 1;
+}
+
+/* Portrait phone fills height of the shared well */
+.folder-card__image--portrait .folder-card__portrait-wrap video {
+  object-fit: cover;
 }
 
 .folder-card__connect-strip {
@@ -6699,7 +6708,7 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image--fill canvas,
   .folder-card__image--fill .motion-preview,
   .folder-card__image--fill .folder-card__placeholder {
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
   }
 
