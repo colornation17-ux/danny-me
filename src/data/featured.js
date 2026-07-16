@@ -31,8 +31,7 @@ export const featured = [
     blurb:
       'Six guest WhatsApp flows; staff run the Connect PWA spine. Flyer-grounded answers — no invented prices. Research-backed from real threads before ship.',
     tags: ['WhatsApp', 'PWA', 'Full-stack'],
-    reel: '/work/lola/motion/connect/Orders.mp4',
-    reelObjectPosition: 'top',
+    reel: '/work/lola/motion/Lola-Reel-Horizontal.mp4',
     folderFill: '#290545',
     folderInk: '#ffffff',
     folderTitleFont: 'pixelify',
