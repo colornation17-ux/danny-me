@@ -6376,11 +6376,47 @@ body:has(.folio--fullgrid) .site-footer {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.65rem;
+  position: relative;
 }
 
 .folder-card__image--portrait video {
   object-fit: contain;
   transform: none;
+}
+
+.folder-card__connect-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: min(34%, 8.25rem);
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.folder-card__connect-clip {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--folder-ink) 22%, transparent);
+  background: #0b0b0b;
+}
+
+.folder-card__connect-clip video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  height: auto;
+  object-fit: cover;
+}
+
+.folder-card__connect-clip figcaption {
+  padding: 0.2rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: color-mix(in srgb, #000 55%, transparent);
 }
 
 .folder-card__portrait-wrap {
@@ -6613,6 +6649,10 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-card__spine {
     display: none; /* reclaim space for media on phones — Connect CTA still present */
+  }
+
+  .folder-card__connect-strip {
+    display: none; /* phone reel only on narrow screens */
   }
 
   .folder-card__cta-row {

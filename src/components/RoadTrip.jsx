@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import STATE_PATHS from '../data/usStatePaths.json'
+import { track } from '../lib/track'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -29,6 +30,7 @@ const TRIP_STOPS = [
   { id: 'canyonlands', title: 'Canyonlands', desc: 'Island in the Sky · Potash', state: 'UT', fx: 0.85, fy: 0.65, note: 'Off-roading Potash Road, dust everywhere, worth it.', photo: '/travel/canyonlands.jpg' },
   { id: 'noahs-arc', title: 'Noah’s Arc', desc: 'Mesa Arch, Canyonlands', state: 'UT', fx: 0.8, fy: 0.62, note: 'Orange under the arch. Worth the early rise.', photo: '/travel/noahs-arc.jpg' },
   { id: 'monument-valley', title: 'Monument Valley', desc: 'Navajo Nation, UT/AZ', state: 'UT', fx: 0.75, fy: 0.95, note: 'The buttes from every movie, actually there.', photo: '/travel/monument-valley.jpg' },
+  { id: 'frybread', title: 'Frybread', desc: 'Monument Valley roadside', state: 'UT', fx: 0.74, fy: 0.94, note: 'Hot frybread after the buttes. Best lunch of the trip.', photo: '/travel/monument-valley-frybread.jpg' },
   { id: 'forrest-gump', title: 'Forrest Gump Point', desc: 'Highway 163', state: 'UT', fx: 0.73, fy: 0.93, note: 'That straight shot everyone knows — we stood on it.', photo: '/travel/forrest-gump-point.jpg' },
   { id: 'antelope-canyon', title: 'Antelope Canyon', desc: 'Page, Arizona', state: 'AZ', fx: 0.55, fy: 0.08, note: 'Light beams cutting through the slot canyon walls.', photo: '/travel/antelope-canyon.jpg' },
   { id: 'horseshoe-bend', title: 'Horseshoe Bend', desc: 'Colorado River overlook', state: 'AZ', fx: 0.53, fy: 0.1, note: 'One wrong step from the edge. Best view of the trip.', photo: '/travel/horseshoe-bend.jpg' },
@@ -123,6 +125,7 @@ export default function RoadTrip() {
   const openLightbox = useCallback((stop) => {
     if (!stop?.photo) return
     setLightbox(stop)
+    track('photo_map', { action: 'lightbox', stop: stop.id || stop.title || 'unknown' })
   }, [])
 
   useEffect(() => {
@@ -158,6 +161,11 @@ export default function RoadTrip() {
           pin: pinRef.current,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          onUpdate(self) {
+            if (self.progress > 0.08) {
+              track('photo_map', { action: 'scroll' }, { once: 'photo_map_scroll' })
+            }
+          },
         },
       })
 

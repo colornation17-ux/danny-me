@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { track } from '../lib/track'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -173,6 +174,11 @@ export default function CareerPath() {
             start: 'top 80%',
             end: 'bottom 20%',
             scrub: 1.5,
+            onUpdate(self) {
+              if (self.progress > 0.1) {
+                track('career_timeline', { action: 'scroll' }, { once: 'career_timeline_scroll' })
+              }
+            },
           },
         })
 

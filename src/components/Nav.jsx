@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { SITE } from '../data/site'
+import { track } from '../lib/track'
 
 const links = [
   { to: '/', label: 'Home', end: true, icon: 'home' },
@@ -110,6 +111,7 @@ export default function Nav() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn profile"
+            onClick={() => track('contact_click', { source: 'nav', channel: 'linkedin' })}
           >
             in
           </a>
@@ -118,10 +120,15 @@ export default function Nav() {
             href={SITE.resume}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => track('contact_click', { source: 'nav', channel: 'resume' })}
           >
             Resume
           </a>
-          <a className="nav-cta nav-cta--contact" href={`mailto:${SITE.email}`}>
+          <a
+            className="nav-cta nav-cta--contact"
+            href={`mailto:${SITE.email}`}
+            onClick={() => track('contact_click', { source: 'nav', channel: 'email' })}
+          >
             Contact
           </a>
           {/* Hamburger — mobile only */}

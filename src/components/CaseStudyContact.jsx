@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { SITE } from '../data/site'
+import { track } from '../lib/track'
 
 /** Portfolio contact strip — shared across home + case studies */
 export default function CaseStudyContact({
@@ -32,16 +33,35 @@ export default function CaseStudyContact({
           <p className="folio-contact__body">{body}</p>
         </div>
         <div className="folio-contact__right">
-          <a className="folio-contact__cta" href={`mailto:${SITE.email}`}>
+          <a
+            className="folio-contact__cta"
+            href={`mailto:${SITE.email}`}
+            onClick={() => track('contact_click', { source: id || 'contact', channel: 'email' })}
+          >
             <span className="folio-contact__cta-label">{ctaLabel}</span>
             <span className="folio-contact__cta-sub">{SITE.email}</span>
           </a>
           <div className="folio-contact__links">
-            <a href={SITE.linkedIn} target="_blank" rel="noopener noreferrer">
+            <a
+              href={SITE.linkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track('contact_click', { source: id || 'contact', channel: 'linkedin' })}
+            >
               LinkedIn ↗
             </a>
-            <Link to="/play">Playground ↗</Link>
-            <a href={SITE.resume} target="_blank" rel="noopener noreferrer">
+            <Link
+              to="/play"
+              onClick={() => track('contact_click', { source: id || 'contact', channel: 'play' })}
+            >
+              Playground ↗
+            </Link>
+            <a
+              href={SITE.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => track('contact_click', { source: id || 'contact', channel: 'resume' })}
+            >
               Resume ↗
             </a>
           </div>

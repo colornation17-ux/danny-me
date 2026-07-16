@@ -7,6 +7,7 @@ import {
   toggleWireRadio,
   wireRadioDefaults,
 } from '../lib/wireRadio'
+import { track } from '../lib/track'
 
 const POINT_COUNT = 20
 const VIEW_H = 52
@@ -303,6 +304,7 @@ export default function SpringWire({
         wrap.classList.remove('spring-wire--invite')
         wrap.classList.remove('spring-wire--invite-inview')
         markFoundWireRadio()
+        track('pull_wire', { action: radioOn ? 'pause' : 'play', input: 'pull' })
         toggleWireRadio(radioRef.current).catch(() => {})
       }
     }
@@ -419,6 +421,7 @@ export default function SpringWire({
                 e.preventDefault()
                 setFound(true)
                 markFoundWireRadio()
+                track('pull_wire', { action: radioOn ? 'pause' : 'play', input: 'keyboard' })
                 toggleWireRadio(radioRef.current).catch(() => {})
               }
             }

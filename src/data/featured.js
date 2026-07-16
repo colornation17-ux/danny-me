@@ -37,6 +37,10 @@ export const featured = [
     folderInk: '#ffffff',
     folderTitleFont: 'pixelify',
     connectSpine: ['Home', 'Inbox', 'Orders', 'Tickets', 'Reminders'],
+    connectPreviews: [
+      { label: 'Inbox', src: '/work/lola/motion/connect/Inbox.mp4' },
+      { label: 'Orders', src: '/work/lola/motion/connect/Orders.mp4' },
+    ],
   },
   {
     ...bySlug['bodega-ops'],

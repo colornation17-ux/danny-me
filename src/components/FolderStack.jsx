@@ -267,6 +267,23 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
               </div>
             )}
 
+            {project.connectPreviews?.length > 0 && (
+              <div className="folder-card__connect-strip" aria-label="Lola Connect preview">
+                {project.connectPreviews.map((clip) => (
+                  <figure key={clip.label} className="folder-card__connect-clip">
+                    <video
+                      src={clip.src}
+                      autoPlay={cardState === 'active'}
+                      muted
+                      loop
+                      playsInline
+                      preload={cardState === 'active' ? 'metadata' : 'none'}
+                    />
+                    <figcaption>{clip.label}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            )}
             {!project.reelPortrait && (
               <div className="folder-card__corners" aria-hidden="true">
                 <span />

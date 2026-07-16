@@ -29,6 +29,12 @@ export const work = [
       { src: '/work/lola/portrait.png', caption: 'Lola, the face of the weekly thread' },
       { src: '/work/lola/store.png', caption: 'Store-grounded broadcast art' },
     ],
+    connectClips: [
+      { src: '/work/lola/motion/connect/Home.mp4', caption: 'Connect · Home' },
+      { src: '/work/lola/motion/connect/Inbox.mp4', caption: 'Connect · Inbox' },
+      { src: '/work/lola/motion/connect/Orders.mp4', caption: 'Connect · Orders' },
+      { src: '/work/lola/motion/connect/Tickets.mp4', caption: 'Connect · Tickets' },
+    ],
     layout: 'character',
     connectSpine: ['Home', 'Inbox', 'Orders', 'Tickets', 'Reminders'],
     guestFlows: [

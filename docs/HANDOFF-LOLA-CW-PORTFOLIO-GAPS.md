@@ -151,5 +151,6 @@ Use these La Bodega bullets (do not weaken back to “shipped / designed dashboa
 - [x] CW case study shows pricing (+ deals depth in copy: combos / national rank). Market trends called out in product IA; dedicated clip still TBD
 - [x] Lola card/CS clearly shows Connect spine (Home · Inbox · Orders · Tickets · Reminders) + six guest flows + craft/metrics honesty in project data
 - [x] No “prediction” language for visit-rhythm; no ~39% expire on danny-me
+- [x] Lola Connect Inbox + Orders preview clips on homepage card (desktop)
 - [ ] Resume bullets still match what visitors can click and see (re-read after Market trends clip ships)
 - [ ] CW Market trends + owner ops clips recorded per `HANDOFF-cw-portfolio-motion.md`

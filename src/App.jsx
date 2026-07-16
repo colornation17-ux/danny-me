@@ -40,7 +40,8 @@ export default function App() {
         <SiteRadioGate />
         <Footer />
       </div>
-      {/* Visitors, pages, referrers, countries — view in Vercel → Analytics */}
+      {/* Visitors, pages, referrers, countries — Vercel → Analytics.
+          Custom events (pull_wire, career_timeline, photo_map) need Pro → Events tab. */}
       <Analytics />
       <SpeedInsights />
     </BrowserRouter>
