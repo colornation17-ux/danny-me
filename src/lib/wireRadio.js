@@ -1,13 +1,14 @@
 /**
- * Shared “shop radio” bed — SpringWire pulls + SiteRadio.
- * Clean band-limit + compressor glue + short room. No distortion.
+ * Shared “cable-car pull cord” bed — SpringWire pulls + SiteRadio.
+ * Small onboard speaker: clean band-limit + compressor glue + short air.
+ * No distortion — physical, charming, portfolio-quiet.
  */
 
 export const WIRE_RADIO = {
   src: '/audio/wire-radio.mp3',
   startAt: 63, // 1:03
-  volume: 0.5, // default slider 0–1
-  maxGain: 0.68,
+  volume: 0.15, // default slider ~15%
+  maxGain: 0.62,
   title: 'Radio',
   track: 'I Had Some Help',
 }
@@ -64,53 +65,67 @@ function gainFromSlider(v = userVolume) {
 }
 
 /**
- * Wireless-speaker filter chain — clean band-limit + compressor glue,
- * light room reflection. No distortion. Source → chain → masterGain.
+ * Cable-car / transit pull-cord radio.
+ *
+ * Nearby small speaker:
+ * - limited bass and treble
+ * - gentle midrange character
+ * - controlled dynamics
+ * - subtle open-air reflection
+ *
+ * Do not connect `source` directly to `masterGain`,
+ * or the unfiltered audio will play alongside this effect.
  */
-export function createShopRadioEffect(ctx, source, masterGain) {
-  // Remove deep bass
+export function createCableCarRadioEffect(ctx, source, masterGain) {
+  // Remove deep vehicle and street rumble
   const highpass = ctx.createBiquadFilter()
   highpass.type = 'highpass'
-  highpass.frequency.value = 140
+  highpass.frequency.value = 160
   highpass.Q.value = 0.5
 
-  // Soften high frequencies like a small speaker
+  // Small transit-speaker bandwidth
   const lowpass = ctx.createBiquadFilter()
   lowpass.type = 'lowpass'
-  lowpass.frequency.value = 3200
+  lowpass.frequency.value = 2800
   lowpass.Q.value = 0.6
 
-  // Reduce boxy frequencies
+  // Reduce hollow, cardboard-like boxiness
   const boxCut = ctx.createBiquadFilter()
   boxCut.type = 'peaking'
-  boxCut.frequency.value = 700
-  boxCut.Q.value = 0.8
-  boxCut.gain.value = -2
+  boxCut.frequency.value = 650
+  boxCut.Q.value = 0.9
+  boxCut.gain.value = -1.8
 
-  // Keep vocals understandable
+  // Slight presence so vocals remain understandable
   const presence = ctx.createBiquadFilter()
   presence.type = 'peaking'
-  presence.frequency.value = 1800
-  presence.Q.value = 0.9
-  presence.gain.value = 1.5
+  presence.frequency.value = 1650
+  presence.Q.value = 0.85
+  presence.gain.value = 1.2
 
-  // Contain the dynamics like a small speaker (glue, no clipping)
+  // Soft dynamics like a small onboard speaker
   const compressor = ctx.createDynamicsCompressor()
-  compressor.threshold.value = -22
+  compressor.threshold.value = -24
   compressor.knee.value = 18
   compressor.ratio.value = 3
   compressor.attack.value = 0.015
   compressor.release.value = 0.22
 
-  // Short room reflection
+  // Direct speaker signal
+  const dryGain = ctx.createGain()
+  dryGain.gain.value = 0.88
+
+  // Short street/open-air reflection
   const delay = ctx.createDelay(1)
-  delay.delayTime.value = 0.075
+  delay.delayTime.value = 0.065
 
   const feedback = ctx.createGain()
-  feedback.gain.value = 0.06
+  feedback.gain.value = 0.045
 
-  const dryGain = ctx.createGain()
-  dryGain.gain.value = 0.9
+  const wetFilter = ctx.createBiquadFilter()
+  wetFilter.type = 'lowpass'
+  wetFilter.frequency.value = 2100
+  wetFilter.Q.value = 0.5
 
   const wetGain = ctx.createGain()
   wetGain.gain.value = 0.1
@@ -122,13 +137,16 @@ export function createShopRadioEffect(ctx, source, masterGain) {
     .connect(presence)
     .connect(compressor)
 
+  // Dry path
   compressor.connect(dryGain)
   dryGain.connect(masterGain)
 
+  // Short reflected path
   compressor.connect(delay)
   delay.connect(feedback)
   feedback.connect(delay)
-  delay.connect(wetGain)
+  delay.connect(wetFilter)
+  wetFilter.connect(wetGain)
   wetGain.connect(masterGain)
 
   return {
@@ -137,10 +155,24 @@ export function createShopRadioEffect(ctx, source, masterGain) {
     boxCut,
     presence,
     compressor,
+    dryGain,
     delay,
     feedback,
-    dryGain,
+    wetFilter,
     wetGain,
+    disconnect() {
+      source.disconnect()
+      highpass.disconnect()
+      lowpass.disconnect()
+      boxCut.disconnect()
+      presence.disconnect()
+      compressor.disconnect()
+      dryGain.disconnect()
+      delay.disconnect()
+      feedback.disconnect()
+      wetFilter.disconnect()
+      wetGain.disconnect()
+    },
   }
 }
 
@@ -192,7 +224,7 @@ function ensureGraph(src = WIRE_RADIO.src) {
     masterGain = ctx.createGain()
     masterGain.gain.value = 0
 
-    createShopRadioEffect(ctx, source, masterGain)
+    createCableCarRadioEffect(ctx, source, masterGain)
 
     masterGain.connect(ctx.destination)
     connected = true
