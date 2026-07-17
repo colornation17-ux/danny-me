@@ -210,6 +210,24 @@ export function createCableCarRadioEffect(ctx, source, masterGain) {
   }
 }
 
+function mediaUrl(src, startSeconds = WIRE_RADIO.startAt) {
+  const absolute = new URL(src, window.location.origin).href
+  const t = Math.max(0, Math.floor(Number(startSeconds) || 0))
+  // #t= hints mobile browsers to decode near the entry point on first load
+  return t > 0 ? `${absolute}#t=${t}` : absolute
+}
+
+function sameMediaFile(currentSrc, src) {
+  if (!currentSrc) return false
+  try {
+    const a = new URL(currentSrc, window.location.origin)
+    const b = new URL(src, window.location.origin)
+    return a.origin === b.origin && a.pathname === b.pathname
+  } catch {
+    return currentSrc.includes(src)
+  }
+}
+
 function ensureAudioElement(src = WIRE_RADIO.src) {
   if (typeof window === 'undefined') return null
 
@@ -246,9 +264,8 @@ function ensureAudioElement(src = WIRE_RADIO.src) {
     })
   }
 
-  const absolute = new URL(src, window.location.origin).href
-  if (audio.src !== absolute) {
-    audio.src = absolute
+  if (!sameMediaFile(audio.src, src)) {
+    audio.src = mediaUrl(src, WIRE_RADIO.startAt)
   }
 
   return audio
@@ -355,22 +372,103 @@ function seekToStart(el, start) {
   try {
     const latestStart = Math.max(0, el.duration - 1)
     el.currentTime = Math.min(start, latestStart)
-    hasStartedRadio = true
     return true
   } catch {
     return false
   }
 }
 
+function nearStart(el, start, slop = 0.85) {
+  return (
+    !!el &&
+    Number.isFinite(el.currentTime) &&
+    Math.abs(el.currentTime - start) <= slop
+  )
+}
+
 function queueSeekToStart(el, start) {
   if (hasStartedRadio) return
-  if (seekToStart(el, start)) return
   const trySeek = () => {
-    if (!hasStartedRadio) seekToStart(el, start)
+    if (hasStartedRadio) return
+    if (seekToStart(el, start) && nearStart(el, start, 1.25)) {
+      hasStartedRadio = true
+    }
   }
   el.addEventListener('loadedmetadata', trySeek, { once: true })
   el.addEventListener('durationchange', trySeek, { once: true })
   el.addEventListener('canplay', trySeek, { once: true })
+  el.addEventListener('seeked', trySeek, { once: true })
+}
+
+/**
+ * Wait until currentTime is at startAt (or timeout).
+ * Keeps first audible fade aligned on mobile + desktop.
+ */
+async function ensureStartOffset(el, start, timeoutMs = 2000) {
+  if (hasStartedRadio) return true
+  if (nearStart(el, start)) {
+    hasStartedRadio = true
+    return true
+  }
+
+  if (!Number.isFinite(el.duration) || el.duration < 2) {
+    await Promise.race([
+      new Promise((resolve) => {
+        const done = () => {
+          if (Number.isFinite(el.duration) && el.duration >= 2) {
+            el.removeEventListener('loadedmetadata', done)
+            el.removeEventListener('durationchange', done)
+            resolve()
+          }
+        }
+        el.addEventListener('loadedmetadata', done)
+        el.addEventListener('durationchange', done)
+      }),
+      new Promise((resolve) => window.setTimeout(resolve, timeoutMs)),
+    ])
+  }
+
+  if (!Number.isFinite(el.duration) || el.duration < 2) {
+    queueSeekToStart(el, start)
+    return false
+  }
+
+  const target = Math.min(start, Math.max(0, el.duration - 1))
+
+  await new Promise((resolve) => {
+    let settled = false
+    const finish = () => {
+      if (settled) return
+      settled = true
+      el.removeEventListener('seeked', onSeeked)
+      window.clearTimeout(timer)
+      resolve()
+    }
+    const onSeeked = () => finish()
+    const timer = window.setTimeout(finish, timeoutMs)
+    el.addEventListener('seeked', onSeeked)
+    try {
+      el.currentTime = target
+      // Some engines apply the seek sync and never fire seeked
+      if (nearStart(el, target)) finish()
+    } catch {
+      finish()
+    }
+  })
+
+  if (nearStart(el, target, 1.25)) {
+    hasStartedRadio = true
+    return true
+  }
+
+  try {
+    el.currentTime = target
+  } catch {
+    /* ignore */
+  }
+  hasStartedRadio = nearStart(el, target, 1.5)
+  if (!hasStartedRadio) queueSeekToStart(el, target)
+  return hasStartedRadio
 }
 
 /**
@@ -426,12 +524,9 @@ export async function playWireRadio({
     return true
   }
 
-  // Seek if we can; otherwise queue — never block play on metadata
-  if (!hasStartedRadio) {
-    if (!seekToStart(el, start)) queueSeekToStart(el, start)
-  }
-
-  if (masterGain) masterGain.gain.value = 0.001
+  // Stay silent until the start offset is confirmed — mobile often begins at 0
+  // while desktop already has metadata and seeks to startAt before you hear it.
+  if (masterGain) masterGain.gain.value = 0
 
   // Fire resume + play in the same turn (keeps mobile gesture alive)
   const resumeP = resumeCtx()
@@ -454,7 +549,9 @@ export async function playWireRadio({
   void resumeP.then(() => resumeCtx())
   await resumeCtx()
 
-  if (!hasStartedRadio) queueSeekToStart(el, start)
+  if (!hasStartedRadio) {
+    await ensureStartOffset(el, start)
+  }
 
   fadeInGain(gainFromSlider(userVolume), WIRE_RADIO.fadeIn)
   playing = true
