@@ -5227,112 +5227,228 @@ body:has(.folio--fullgrid) .app {
   isolation: isolate;
 }
 
-/* Revealed after first wire pull */
+/* Revealed after first wire pull — opacity only (no transform; child is position:fixed) */
 .site-radio-gate {
-  position: fixed;
-  right: max(0.85rem, env(safe-area-inset-right));
-  bottom: max(0.85rem, env(safe-area-inset-bottom));
-  z-index: 60;
   opacity: 0;
-  transform: translateY(10px) scale(0.96);
-  transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.45s ease;
   pointer-events: none;
 }
 
 .site-radio-gate.is-in {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-}
-
-/* Persistent radio — available after the wire gem is found */
-.site-radio {
   pointer-events: none;
 }
 
-.site-radio__panel {
+/* Collapsible / draggable radio — quiet pill by default */
+.site-radio {
+  position: fixed;
+  z-index: 60;
   pointer-events: auto;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  max-width: min(16rem, calc(100vw - 1.7rem));
+}
+
+.site-radio--br {
+  right: max(0.85rem, env(safe-area-inset-right));
+  bottom: max(0.85rem, env(safe-area-inset-bottom));
+  left: auto;
+  top: auto;
+}
+
+.site-radio--bl {
+  left: max(0.85rem, env(safe-area-inset-left));
+  bottom: max(0.85rem, env(safe-area-inset-bottom));
+  right: auto;
+  top: auto;
+}
+
+.site-radio--tr {
+  right: max(0.85rem, env(safe-area-inset-right));
+  top: max(0.85rem, env(safe-area-inset-top));
+  left: auto;
+  bottom: auto;
+}
+
+.site-radio--tl {
+  left: max(0.85rem, env(safe-area-inset-left));
+  top: max(0.85rem, env(safe-area-inset-top));
+  right: auto;
+  bottom: auto;
+}
+
+/* Mobile expanded = bottom sheet */
+.site-radio--sheet {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  max-width: none;
+  width: 100%;
+  padding: 0;
+  z-index: 70;
+}
+
+.site-radio__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: color-mix(in srgb, var(--ink) 28%, transparent);
+  cursor: pointer;
+}
+
+.site-radio.is-dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.site-radio__panel {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
-  padding: 0.45rem 0.55rem 0.55rem;
+  padding: 0.35rem;
   border: 1px solid var(--folio-line, var(--line-cool));
   border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--white) 94%, transparent);
   backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(17, 18, 18, 0.08);
-  min-width: 10.5rem;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 10%, transparent);
 }
 
-.site-radio__panel.is-playing {
+.site-radio--sheet .site-radio__panel {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border-bottom: 0;
+  padding: 0.65rem 0.85rem calc(0.85rem + env(safe-area-inset-bottom));
+  max-width: none;
+  box-shadow: 0 -10px 32px color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+.site-radio.is-dragging .site-radio__panel {
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+.site-radio.is-playing .site-radio__panel {
   border-color: color-mix(in srgb, var(--accent-cool) 45%, var(--line-cool));
 }
 
-.site-radio__btn {
+.site-radio.is-collapsed .site-radio__panel {
+  padding: 0.28rem;
+  border-radius: 999px;
+  min-width: 0;
+}
+
+.site-radio__row {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.site-radio__grip {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  min-height: 2.4rem;
-  padding: 0.2rem 0.35rem;
+  justify-content: center;
+  width: 1.65rem;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
   background: transparent;
-  color: var(--ink, var(--black));
+  color: var(--muted);
+  cursor: grab;
+  flex-shrink: 0;
+  touch-action: none;
+}
+
+.site-radio__grip:active {
+  cursor: grabbing;
+}
+
+.site-radio__grip-dots {
+  width: 0.7rem;
+  height: 0.95rem;
+  background:
+    radial-gradient(circle, currentColor 1.1px, transparent 1.25px) 0 0 / 0.35rem 0.35rem,
+    radial-gradient(circle, currentColor 1.1px, transparent 1.25px) 0.35rem 0 / 0.35rem 0.35rem;
+  background-repeat: repeat-y;
+  opacity: 0.55;
+}
+
+.site-radio__play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  padding: 0.2rem 0.3rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
   font: inherit;
   cursor: pointer;
-  transition: background 0.2s ease;
-  width: 100%;
   text-align: left;
+  touch-action: manipulation;
 }
 
-.site-radio__btn:hover,
-.site-radio__btn:focus-visible {
-  background: #f3f5f7;
+.site-radio.is-expanded .site-radio__play {
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-start;
+  padding-inline: 0.25rem 0.35rem;
+  border-radius: var(--radius-sm);
 }
 
-.site-radio__btn:focus-visible {
-  outline: 2px solid var(--black);
+.site-radio__play:hover,
+.site-radio__play:focus-visible,
+.site-radio__expand:hover,
+.site-radio__expand:focus-visible,
+.site-radio__grip:hover,
+.site-radio__grip:focus-visible {
+  background: color-mix(in srgb, var(--bg-folio) 80%, transparent);
+}
+
+.site-radio__play:focus-visible,
+.site-radio__expand:focus-visible,
+.site-radio__grip:focus-visible {
+  outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
 
-.site-radio__btn.is-playing {
-  background: transparent;
-}
-
-.site-radio__vol {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0 0.35rem 0.1rem;
-}
-
-.site-radio__vol-icon {
+.site-radio__expand {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
   color: var(--muted);
-  flex-shrink: 0;
-}
-
-.site-radio__slider {
-  flex: 1;
-  width: 100%;
-  height: 0.3rem;
-  accent-color: var(--accent-cool);
   cursor: pointer;
+  flex-shrink: 0;
+  touch-action: manipulation;
 }
 
 .site-radio__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: var(--radius-pill);
-  background: var(--black);
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px;
+  background: var(--ink);
   color: var(--white);
   flex-shrink: 0;
 }
 
-.site-radio__btn.is-playing .site-radio__icon {
+.site-radio__play.is-playing .site-radio__icon {
   background: var(--accent-cool);
 }
 
@@ -5342,6 +5458,7 @@ body:has(.folio--fullgrid) .app {
   align-items: flex-start;
   gap: 0.05rem;
   line-height: 1.1;
+  min-width: 0;
 }
 
 .site-radio__eyebrow {
@@ -5357,16 +5474,73 @@ body:has(.folio--fullgrid) .app {
   font-weight: 600;
 }
 
+.site-radio__extras {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.15rem 0.45rem 0.35rem;
+}
+
+.site-radio--sheet .site-radio__extras {
+  padding-inline: 0.15rem;
+}
+
+.site-radio__track {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta-xs);
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.site-radio__hint {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--muted) 80%, transparent);
+}
+
+.site-radio__vol {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+}
+
+.site-radio__vol-icon {
+  display: inline-flex;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.site-radio__slider {
+  flex: 1;
+  width: 100%;
+  height: 0.35rem;
+  accent-color: var(--accent-cool);
+  cursor: pointer;
+  touch-action: none;
+}
+
 .site-radio__bars {
   width: 0.85rem;
   height: 0.85rem;
-  margin-left: 0.15rem;
+  margin-left: 0.1rem;
   background:
     linear-gradient(currentColor, currentColor) 0 100% / 2px 40% no-repeat,
     linear-gradient(currentColor, currentColor) 4px 100% / 2px 80% no-repeat,
     linear-gradient(currentColor, currentColor) 8px 100% / 2px 55% no-repeat;
   color: var(--accent-cool);
   animation: site-radio-bars 0.85s ease-in-out infinite;
+}
+
+.site-radio__bars--row {
+  margin: 0;
+  align-self: flex-start;
 }
 
 @keyframes site-radio-bars {
@@ -5385,16 +5559,42 @@ body:has(.folio--fullgrid) .app {
   .site-radio__bars {
     animation: none;
   }
+
+  .site-radio-gate {
+    transition: none;
+  }
 }
 
-body.game-embed .site-radio-gate {
+@media (max-width: 600px) {
+  .site-radio.is-collapsed {
+    max-width: none;
+  }
+
+  .site-radio.is-collapsed .site-radio__panel {
+    padding: 0.35rem;
+  }
+
+  .site-radio__play {
+    min-height: 2.85rem;
+    min-width: 2.85rem;
+  }
+
+  .site-radio__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+body.game-embed .site-radio-gate,
+body.game-embed .site-radio {
   display: none;
 }
 
 .spring-wire--radio {
+  position: relative;
   cursor: grab;
-  /* touch-action must be none from gesture start — browsers ignore mid-pull changes */
-  touch-action: none;
+  /* Preserve vertical page scroll; tram handle takes the gesture */
+  touch-action: pan-y;
 }
 
 .spring-wire--radio:active {
@@ -5403,7 +5603,7 @@ body.game-embed .site-radio-gate {
 
 @media (pointer: coarse) {
   .spring-wire--radio {
-    /* Taller grab band on phones — easier to pluck without hunting */
+    /* Taller grab band on phones — easier to find the tram handle */
     padding-block: 1.15rem;
   }
 }
@@ -5412,8 +5612,7 @@ body.game-embed .site-radio-gate {
   stroke: color-mix(in srgb, var(--ink, var(--black)) 70%, var(--accent-cool));
 }
 
-/* Tiny cable car — grip locked to the live wire path while radio plays */
-/* Cable car — sits on top of the wire (no stem) */
+/* Cable car — sits on top of the wire; mobile pull handle */
 .spring-wire__tram {
   position: absolute;
   z-index: 2;
@@ -5424,16 +5623,44 @@ body.game-embed .site-radio-gate {
   color: color-mix(in srgb, var(--accent) 78%, var(--ink));
   opacity: 0;
   transform: translate3d(0, 0, 0) translate(-50%, -100%);
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
   will-change: transform, opacity;
   transition: opacity 0.4s var(--ease-out, ease);
 }
 
+.spring-wire__tram:active {
+  cursor: grabbing;
+}
+
+.spring-wire__tram-hit-area {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 48px;
+  height: 48px;
+  transform: translate(-50%, -50%);
+  touch-action: none;
+}
+
+@media (pointer: coarse) {
+  .spring-wire__tram-hit-area {
+    width: 56px;
+    height: 56px;
+  }
+}
+
 .spring-wire__tram-svg {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
   overflow: visible;
+  pointer-events: none;
   filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--white) 75%, transparent));
 }
 
