@@ -9,7 +9,7 @@ export const WIRE_RADIO = {
   startAt: 20,
   volume: 0.12,
   maxGain: 1,
-  fadeIn: 1.4,
+  fadeIn: 0.7,
   fadeOut: 0.35,
   title: 'Radio',
   track: 'I Got Better',
