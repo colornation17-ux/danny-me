@@ -32,6 +32,7 @@ export const featured = [
       'Six guest WhatsApp flows; staff run the Connect PWA spine. Flyer-grounded answers — no invented prices. Research-backed from real threads before ship.',
     tags: ['WhatsApp', 'PWA', 'Full-stack'],
     reel: '/work/lola/motion/Lola-Reel-Horizontal.mp4',
+    reelAudioControl: true,
     folderFill: '#290545',
     folderInk: '#ffffff',
     folderTitleFont: 'pixelify',
@@ -76,7 +77,7 @@ export const featured = [
     cover: '/work/wing-hmi/hero.png',
     coverAlt: 'Wing automotive HMI cluster and HUD concept',
     folderFill: '#EA580C',
-    folderInk: '#ffffff',
+    folderInk: '#111212',
   },
   {
     ...bySlug['edge-ai'],
@@ -91,6 +92,6 @@ export const featured = [
     cover: '/work/edge-ai/hero.jpg',
     coverAlt: 'Wing Edge AI vehicle concept',
     folderFill: '#0891B2',
-    folderInk: '#ffffff',
+    folderInk: '#111212',
   },
 ]

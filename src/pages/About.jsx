@@ -1,6 +1,7 @@
-﻿import { SITE } from '../data/site'
+import { SITE } from '../data/site'
 import CoffeeNotes from '../components/CoffeeNotes'
 import RoadTrip from '../components/RoadTrip'
+import StickerContactLink from '../components/StickerContactLink'
 
 const SOLO_SHOTS = [
   {
@@ -55,26 +56,27 @@ export default function About() {
           <div className="about-box">
             <h2>Currently</h2>
             <p className="about-seeking">{SITE.about.seeking}</p>
-            <div className="contact-row">
-              <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>
-                Send a note
-              </a>
-              <a
-                className="folio-btn"
-                href={SITE.linkedIn}
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn
-              </a>
-              <a
-                className="folio-btn"
-                href={SITE.resume}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Resume
-              </a>
+            <div className="about-contact">
+              <StickerContactLink
+                className="about-contact__sticker"
+                source="about"
+              />
+              <div className="folio-contact__links about-contact__links">
+                <a
+                  href={SITE.linkedIn}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LinkedIn ↗
+                </a>
+                <a
+                  href={SITE.resume}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Resume ↗
+                </a>
+              </div>
             </div>
 
             <hr className="about-box__divider" />

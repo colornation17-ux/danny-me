@@ -2,32 +2,64 @@
 
 Project-specific guidance for AI coding agents.
 
-<!-- ASTRYX:START -->
-Astryx v0.1.6 · 149 components
-CLI: run every command as `npx astryx <cmd>` (shown below as `astryx ...`).
+## Stack
 
-SETUP (once, in your app entry e.g. main.tsx) — without these, components render unstyled:
-  import "@astryxdesign/core/reset.css";
-  import "@astryxdesign/core/astryx.css";
+- React 19 + Vite portfolio site (`src/`)
+- Styling: custom CSS in `src/index.css` (+ `src/styles/case-study-system.css`, `src/styles/motion-previews.css`)
+- Motion: GSAP / Motion where needed
+- Deploy: `npm run deploy:prod` → Vercel production
 
-WORKFLOW — discover, don't guess. Before writing UI:
-1. `astryx build "<idea>"` — START HERE: returns a kit (closest [page] + [block]s + [component]s). No args = full playbook.
-2. `astryx template <name> [--skeleton]` — scaffold the [page]/[block]s it named, or study their layout. Templates are reference code.
-3. `astryx component <Name>` — props + examples for every component you use.
+**Astryx** (`@astryxdesign/*`) is **opt-in only** via `src/providers/AstryxProvider.jsx`. Do **not** wrap the whole app or import Astryx global CSS in `main.jsx` — it breaks light-theme ink under OS dark mode. Ignore any Astryx “no div / AppShell” rules for this repo.
 
-RULES:
-- No <div> — components do all layout/spacing. Full page → AppShell; sidebar nav → SideNav.
-- Frame first: pick the shell (AppShell / Layout+LayoutPanel) and budget regions in px BEFORE writing content (`astryx docs layout`).
-- Dense data = rows (Table, List/Item) edge-to-edge — never Card-wrapped list items. Card = dashboard widgets, galleries, settings groups only.
-- Status → StatusDot/Token; Badge only for counts and enumerated states, never decoration.
-- Custom styling: component props first; else style/className with tokens — var(--color-*|--spacing-*|--radius-*). No raw hex/px. (No StyleX/Tailwind compiler here — don't use xstyle/utility classes.)
-- Tokens for every value (`astryx docs tokens`). Brand/accent via `astryx theme` — never override --color-* in :root.
+## Design tokens
 
-MORE CLI:
-  search "<query>"   find any component / hook / doc / template / block
-  component --list   149 components by category
-  template --list    page + block recipes
-  docs <topic>       color, elevation, icons, illustrations, layout, migration, motion, principles, shape, spacing, styling, theme, tokens, typography
-  swizzle <Name>     eject component source for deep customization
-  upgrade --apply    run after any @astryxdesign/core bump
-<!-- ASTRYX:END -->
+Single source: `:root` in `src/index.css`.
+
+### Layers
+
+| Layer | Examples | Rule |
+|-------|----------|------|
+| Primitive | `--white`, `--black` | Raw values only here |
+| Semantic | `--bg`, `--ink`, `--muted`, `--line`, `--accent`, `--accent-cool`, `--ok` | Intent, not appearance |
+| Compat aliases | `--folio-*` → semantic | Prefer semantic names in new CSS |
+| Component | `--cs-*` on `.cs`, `--folder-*` inline | Scope to a surface |
+
+### Color (use these — no new raw hex in chrome CSS)
+
+```css
+/* Surface */
+--bg --bg-elevated --bg-paper --bg-folio
+
+/* Text */
+--ink --ink-soft --muted --muted-cool
+
+/* Line / grid */
+--line --line-cool --grid --grid-light
+
+/* Accent */
+--accent --accent-soft --accent-text
+--accent-cool --accent-cool-ink
+--ok --tone-forest --tone-slate --tone-navy
+
+/* Folio aliases (compat) */
+--folio-ink --folio-muted --folio-line --folio-cyan …
+```
+
+Also: `--font-*`, `--text-*`, `--space-*`, `--radius-*`, `--ease*`, `--dur-*`, `--focus-ring`.
+
+### Rules for UI work
+
+1. Prefer `var(--token)` over hex/px for color, space, radius, type.
+2. Project brand fills (folder cards) may stay as data (`featured.js`) injected via `--folder-fill` / `--folder-ink`.
+3. Mock UI chrome in `motion-previews.css` may keep product-specific hex; shared brand colors should still use tokens.
+4. Run `npm run lint:tokens` before shipping CSS — fails on new unallowlisted hex in `index.css` / `case-study-system.css`.
+
+## Scripts
+
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Local Vite |
+| `npm run build` | Production build |
+| `npm run lint` | oxlint + CSS token check |
+| `npm run lint:tokens` | Hex-outside-`:root` guard |
+| `npm run deploy:prod` | Build + Vercel production |

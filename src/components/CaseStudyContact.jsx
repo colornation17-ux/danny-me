@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { SITE } from '../data/site'
 import { track } from '../lib/track'
+import StickerContactLink from './StickerContactLink'
 
 /** Portfolio contact strip — shared across home + case studies */
 export default function CaseStudyContact({
@@ -9,7 +10,7 @@ export default function CaseStudyContact({
   eyebrow = 'Get in touch',
   title = (
     <>
-      Let&apos;s build
+      Let&apos;s build{' '}
       <br />
       something real.
     </>
@@ -33,14 +34,7 @@ export default function CaseStudyContact({
           <p className="folio-contact__body">{body}</p>
         </div>
         <div className="folio-contact__right">
-          <a
-            className="folio-contact__cta"
-            href={`mailto:${SITE.email}`}
-            onClick={() => track('contact_click', { source: id || 'contact', channel: 'email' })}
-          >
-            <span className="folio-contact__cta-label">{ctaLabel}</span>
-            <span className="folio-contact__cta-sub">{SITE.email}</span>
-          </a>
+          <StickerContactLink label={ctaLabel} source={id || 'contact'} />
           <div className="folio-contact__links">
             <a
               href={SITE.linkedIn}

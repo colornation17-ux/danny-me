@@ -4,7 +4,7 @@ Expected file (local / CLI deploy only — **not committed**):
 
 `wire-radio.mp3`
 
-Starts at **1:03**, soft radio EQ, shared by:
+Starts at **1:03**, bus-cabin EQ (muffled speaker + soft clip), shared by:
 - Homepage spring wire (pull)
 - Floating **Radio** play/pause on every page
 

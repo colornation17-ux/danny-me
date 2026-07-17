@@ -49,7 +49,14 @@ const STOPS = [
     color: '#7c3aed',
     photos: [
       // Inner pocket so outer labels stay clear
-      { id: 'grad', src: '/timeline/graduation.jpg', x: 155, y: 695, rot: -4 },
+      {
+        id: 'grad',
+        src: '/timeline/graduation.jpg',
+        alt: 'Danny at his Indiana University HCI graduation',
+        x: 155,
+        y: 695,
+        rot: -4,
+      },
     ],
   },
   {
@@ -70,8 +77,22 @@ const STOPS = [
     dir: 'right',
     color: '#EA580C',
     photos: [
-      { id: 'track', src: '/timeline/code19-track.jpg', x: 145, y: 1045, rot: 6 },
-      { id: 'poster', src: '/timeline/code19-poster.jpg', x: 175, y: 1120, rot: -7 },
+      {
+        id: 'track',
+        src: '/timeline/code19-track.jpg',
+        alt: 'CODE19 Racing trackside work',
+        x: 145,
+        y: 1045,
+        rot: 6,
+      },
+      {
+        id: 'poster',
+        src: '/timeline/code19-poster.jpg',
+        alt: 'CODE19 Racing project poster',
+        x: 175,
+        y: 1120,
+        rot: -7,
+      },
     ],
   },
   {
@@ -248,7 +269,7 @@ export default function CareerPath() {
                     >
                       <img
                         src={p.src}
-                        alt=""
+                        alt={p.alt}
                         loading="lazy"
                         decoding="async"
                       />

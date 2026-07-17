@@ -2,25 +2,22 @@
  * Case study design system — folio-aligned (danny-me portfolio)
  *
  * Layering:
- *   Portfolio primitives (:root --ink, --muted, --line, --font-*)
+ *   Portfolio tokens (:root — see AGENTS.md)
  *        ↓
  *   Semantic case tokens (.cs --cs-*)
  *        ↓
  *   Components (.cs-section, .cs-rail, .cs-hero, …)
  *
  * Project accent is injected as --cs-accent on <article class="cs">.
- * Shared chrome across studies:
- *   CaseStudyNav (rail + mobile picker)
- *   CaseStudyVideo, CaseStudyContact, CaseStudyNext
  */
 
 .cs {
   --cs-ink: var(--ink);
   --cs-muted: var(--muted);
-  --cs-line: var(--line, #e4e9ee);
-  --cs-line-strong: var(--folio-line, #d5dde5);
+  --cs-line: var(--line);
+  --cs-line-strong: var(--folio-line);
   --cs-bg: var(--bg);
-  --cs-surface: var(--bg-elevated, #fff);
+  --cs-surface: var(--bg-elevated);
   --cs-mono: var(--font-label, var(--font-mono));
   --cs-display: var(--font-display);
   --cs-sans: var(--font-sans);

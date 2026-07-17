@@ -69,7 +69,18 @@ function FolderTag({ label }) {
   )
 }
 
-function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, onJump }) {
+function FolderCard({
+  project,
+  index,
+  total,
+  tone: baseTone,
+  tabW,
+  cardState,
+  onJump,
+  reduceMotion,
+}) {
+  const mediaVideoRef = useRef(null)
+  const [isAudioOn, setIsAudioOn] = useState(false)
   const tone = project.folderFill
     ? { fill: project.folderFill, ink: project.folderInk ?? baseTone.ink }
     : baseTone
@@ -88,6 +99,41 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
   const status = project.status || null
   const role = project.role || null
   const liveLabel = projectLiveCtaLabel(project)
+  const hasAudioControl = Boolean(project.reelAudioControl && project.reel)
+  const isActive = cardState === 'active'
+
+  useEffect(() => {
+    const video = mediaVideoRef.current
+    if (!video) return
+
+    if (isActive && !reduceMotion) {
+      video.play().catch(() => {})
+      return
+    }
+
+    video.pause()
+    video.muted = true
+    if (isAudioOn) setIsAudioOn(false)
+  }, [isActive, reduceMotion, isAudioOn])
+
+  const toggleAudio = useCallback(async () => {
+    const video = mediaVideoRef.current
+    if (!video) return
+
+    const nextAudioState = !isAudioOn
+    video.muted = !nextAudioState
+    video.volume = nextAudioState ? 1 : 0
+
+    try {
+      if (nextAudioState) {
+        await video.play()
+      }
+      setIsAudioOn(nextAudioState)
+    } catch {
+      video.muted = true
+      setIsAudioOn(false)
+    }
+  }, [isAudioOn])
 
   // Past cards sit underneath the active card — their tab buttons stay visible
   // through the transparent indent holes in the active card's chrome row.
@@ -109,7 +155,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
       id={`pj${index + 1}`}
       data-index={index}
       aria-label={`Project ${label}: ${title}`}
-      aria-hidden={cardState === 'future' ? 'true' : undefined}
+      aria-hidden={!reduceMotion && cardState === 'future' ? 'true' : undefined}
       style={{
         '--folder-fill': tone.fill,
         '--folder-ink': tone.ink,
@@ -127,7 +173,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
           className="folder-card__tab"
           aria-label={`Project ${label}: ${title}`}
           onClick={() => onJump(index)}
-          tabIndex={cardState === 'future' ? -1 : 0}
+          tabIndex={!reduceMotion && cardState === 'future' ? -1 : 0}
         >
           <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
           <span className="folder-card__tab-label">{title}</span>
@@ -172,11 +218,17 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
             )}
           </div>
 
-          <div className="folder-card__cta-row">
+          <div
+            className={`folder-card__cta-row${
+              project.whatsappUrl && project.connectUrl
+                ? ' folder-card__cta-row--split'
+                : ''
+            }`}
+          >
             <CtaEl
               {...ctaProps}
               className="folder-card__cta"
-              tabIndex={cardState === 'active' ? 0 : -1}
+              tabIndex={reduceMotion || isActive ? 0 : -1}
             >
               <span>{cta}</span>
               <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
@@ -187,7 +239,7 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
                 target="_blank"
                 rel="noreferrer"
                 className="folder-card__live"
-                tabIndex={cardState === 'active' ? 0 : -1}
+                tabIndex={reduceMotion || isActive ? 0 : -1}
                 onClick={(e) => e.stopPropagation()}
               >
                 {liveLabel} ↗
@@ -198,8 +250,8 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
                 href={project.whatsappUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="folder-card__live"
-                tabIndex={cardState === 'active' ? 0 : -1}
+                className="folder-card__live folder-card__live--secondary"
+                tabIndex={reduceMotion || isActive ? 0 : -1}
                 onClick={(e) => e.stopPropagation()}
               >
                 Try on WhatsApp ↗
@@ -210,8 +262,8 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
                 href={project.connectUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="folder-card__live"
-                tabIndex={cardState === 'active' ? 0 : -1}
+                className="folder-card__live folder-card__live--secondary"
+                tabIndex={reduceMotion || isActive ? 0 : -1}
                 onClick={(e) => e.stopPropagation()}
               >
                 {project.connectCta || 'Lola Connect'} ↗
@@ -238,15 +290,25 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
           >
             {project.reel && project.reelPortrait ? (
               <div className="folder-card__portrait-wrap">
-                <video src={project.reel} autoPlay muted loop playsInline />
+                <video
+                  ref={mediaVideoRef}
+                  src={project.reel}
+                  autoPlay={isActive && !reduceMotion}
+                  muted={!isAudioOn}
+                  loop
+                  playsInline
+                  preload={isActive ? 'metadata' : 'none'}
+                />
               </div>
             ) : project.reel ? (
               <video
+                ref={mediaVideoRef}
                 src={project.reel}
-                autoPlay
-                muted
+                autoPlay={isActive && !reduceMotion}
+                muted={!isAudioOn}
                 loop
                 playsInline
+                preload={isActive ? 'metadata' : 'none'}
               />
             ) : motion ? (
               <ProjectMotionPreview slug={project.slug} size="card" />
@@ -264,17 +326,28 @@ function FolderCard({ project, index, total, tone: baseTone, tabW, cardState, on
               </div>
             )}
 
+            {hasAudioControl && isActive && !reduceMotion && (
+              <button
+                type="button"
+                className="folder-card__audio"
+                onClick={toggleAudio}
+                aria-pressed={isAudioOn}
+              >
+                {isAudioOn ? 'Audio on' : 'Play audio'}
+              </button>
+            )}
+
             {project.connectPreviews?.length > 0 && (
               <div className="folder-card__connect-strip folder-card__connect-strip--overlay" aria-label="Lola Connect preview">
                 {project.connectPreviews.map((clip) => (
                   <figure key={clip.label} className="folder-card__connect-clip">
                     <video
                       src={clip.src}
-                      autoPlay={cardState === 'active'}
+                      autoPlay={isActive && !reduceMotion}
                       muted
                       loop
                       playsInline
-                      preload={cardState === 'active' ? 'metadata' : 'none'}
+                      preload={isActive ? 'metadata' : 'none'}
                     />
                     <figcaption>{clip.label}</figcaption>
                   </figure>
@@ -309,7 +382,16 @@ export default function FolderStack({ projects }) {
   const [tabW, setTabW] = useState(100)
   const [activeIndex, setActiveIndex] = useState(0)
   const [navH, setNavH] = useState(NAV_H)
+  const [reduceMotion, setReduceMotion] = useState(false)
   const total = projects.length
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const read = () => setReduceMotion(mq.matches)
+    read()
+    mq.addEventListener('change', read)
+    return () => mq.removeEventListener('change', read)
+  }, [])
 
   useEffect(() => {
     const el = stackRef.current
@@ -319,6 +401,7 @@ export default function FolderStack({ projects }) {
       const width = sticky?.clientWidth || el.clientWidth
       const compact = width < 700 || window.innerWidth < 700
       if (compact) {
+        // Leave room for slope so past tabs stay visible through the indent
         const slope = 16
         const safety = 4
         const usable = Math.max(180, width - slope - safety)
@@ -400,6 +483,7 @@ export default function FolderStack({ projects }) {
 
   const prevActive = useRef(0)
   useLayoutEffect(() => {
+    if (reduceMotion) return
     const prev = prevActive.current
     prevActive.current = activeIndex
     if (activeIndex <= prev) return
@@ -413,7 +497,7 @@ export default function FolderStack({ projects }) {
       { y: '105%' },
       { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
     )
-  }, [activeIndex])
+  }, [activeIndex, reduceMotion])
 
   const jumpTo = useCallback(
     (index) => {
@@ -424,9 +508,12 @@ export default function FolderStack({ projects }) {
       const scrollRange = Math.max(0, stack.offsetHeight - stickyH)
       const progress = total <= 1 ? 0 : index / (total - 1)
       const targetScroll = stackAbsTop - navH + progress * scrollRange
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' })
+      window.scrollTo({
+        top: targetScroll,
+        behavior: reduceMotion ? 'auto' : 'smooth',
+      })
     },
-    [total, navH],
+    [total, navH, reduceMotion],
   )
 
   return (
@@ -457,6 +544,7 @@ export default function FolderStack({ projects }) {
               tabW={tabW}
               cardState={cardState}
               onJump={jumpTo}
+              reduceMotion={reduceMotion}
             />
           )
         })}
