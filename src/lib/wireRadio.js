@@ -210,15 +210,20 @@ export function createCableCarRadioEffect(ctx, source, masterGain) {
   }
 }
 
-function ensureGraph(src = WIRE_RADIO.src) {
+function ensureAudioElement(src = WIRE_RADIO.src) {
   if (typeof window === 'undefined') return null
 
   if (!audio) {
     audio = new Audio()
     audio.preload = 'auto'
+    audio.loop = false
+    // iOS: keep element volume at 1 — level is controlled by Web Audio gain
+    audio.volume = 1
+    audio.playsInline = true
+    audio.setAttribute('playsinline', '')
+    audio.setAttribute('webkit-playsinline', '')
     // Same-origin static file — leave crossOrigin unset so playback
     // isn't blocked when the CDN omits CORS headers.
-    audio.loop = false
     audio.addEventListener('ended', () => {
       if (!playing) return
       try {
@@ -246,14 +251,23 @@ function ensureGraph(src = WIRE_RADIO.src) {
     audio.src = absolute
   }
 
+  return audio
+}
+
+function ensureGraph(src = WIRE_RADIO.src) {
+  if (typeof window === 'undefined') return null
+
+  const el = ensureAudioElement(src)
+  if (!el) return null
+
   if (!ctx) {
     const AC = window.AudioContext || window.webkitAudioContext
-    if (!AC) return { audio, ctx: null, masterGain: null }
+    if (!AC) return { audio: el, ctx: null, masterGain: null }
     ctx = new AC()
   }
 
   if (!connected && ctx) {
-    const source = ctx.createMediaElementSource(audio)
+    const source = ctx.createMediaElementSource(el)
 
     masterGain = ctx.createGain()
     masterGain.gain.value = 0
@@ -264,7 +278,7 @@ function ensureGraph(src = WIRE_RADIO.src) {
     connected = true
   }
 
-  return { audio, ctx, masterGain }
+  return { audio: el, ctx, masterGain }
 }
 
 function fadeGain(to, duration = 0.9) {
@@ -278,6 +292,11 @@ function fadeGain(to, duration = 0.9) {
 
 function fadeInGain(to, duration = WIRE_RADIO.fadeIn) {
   if (!masterGain || !ctx) return
+  // Never schedule automation while suspended — ramps land in the past → silence on iOS
+  if (ctx.state !== 'running') {
+    masterGain.gain.value = Math.max(0.001, to)
+    return
+  }
   const g = masterGain.gain
   const now = ctx.currentTime
   const target = Math.max(0.001, to)
@@ -288,6 +307,10 @@ function fadeInGain(to, duration = WIRE_RADIO.fadeIn) {
 
 function fadeOutGain(duration = WIRE_RADIO.fadeOut) {
   if (!masterGain || !ctx) return
+  if (ctx.state !== 'running') {
+    masterGain.gain.value = 0.001
+    return
+  }
   const g = masterGain.gain
   const now = ctx.currentTime
   const current = Math.max(g.value, 0.001)
@@ -297,17 +320,19 @@ function fadeOutGain(duration = WIRE_RADIO.fadeOut) {
 }
 
 async function resumeCtx() {
-  if (ctx?.state === 'suspended') {
-    try {
-      await ctx.resume()
-    } catch {
-      /* ignore */
-    }
+  if (!ctx) return false
+  if (ctx.state === 'running') return true
+  try {
+    await ctx.resume()
+  } catch {
+    /* ignore */
   }
+  return ctx.state === 'running'
 }
 
 export function prefetchWireRadio(src = WIRE_RADIO.src) {
-  ensureGraph(src)
+  // Warm the file only — create AudioContext on the pull gesture (mobile unlock).
+  ensureAudioElement(src)
 }
 
 export function setWireRadioVolume(next) {
@@ -324,24 +349,38 @@ export function getWireRadioVolume() {
   return userVolume
 }
 
+/** Seek only when duration is real — mobile often reports 0/NaN early. */
 function seekToStart(el, start) {
+  if (!el || !Number.isFinite(el.duration) || el.duration < 2) return false
   try {
-    const latestStart = Number.isFinite(el.duration)
-      ? Math.max(0, el.duration - 1)
-      : start
+    const latestStart = Math.max(0, el.duration - 1)
     el.currentTime = Math.min(start, latestStart)
     hasStartedRadio = true
+    return true
   } catch {
-    /* ignore seek failures */
+    return false
   }
+}
+
+function queueSeekToStart(el, start) {
+  if (hasStartedRadio) return
+  if (seekToStart(el, start)) return
+  const trySeek = () => {
+    if (!hasStartedRadio) seekToStart(el, start)
+  }
+  el.addEventListener('loadedmetadata', trySeek, { once: true })
+  el.addEventListener('durationchange', trySeek, { once: true })
+  el.addEventListener('canplay', trySeek, { once: true })
 }
 
 /**
  * Unlock AudioContext during a user gesture (pointerdown).
- * Mobile Safari voids play() if we await metadata first — unlock early instead.
+ * Must run inside the gesture so iOS allows resume + later play.
  */
 export function unlockWireRadio(src = WIRE_RADIO.src) {
-  ensureGraph(src)
+  const graph = ensureGraph(src)
+  if (!graph?.ctx) return
+  // Kick resume during the press — don't await here (keeps pull feeling instant)
   void resumeCtx()
 }
 
@@ -360,16 +399,16 @@ export async function playWireRadio({
     fadeTween = null
   }
 
-  // Resume without blocking play() — unlockWireRadio usually already resumed on press.
-  void resumeCtx()
+  // pointerup is still a user gesture — await resume BEFORE play/fade (fixes silent iOS)
+  await resumeCtx()
 
   if (playing && !el.paused) {
     markFoundWireRadio()
     return true
   }
 
-  // Seek only when metadata is already ready; otherwise play first, seek after.
-  if (!hasStartedRadio && el.readyState >= 1) {
+  // First play: jump to startAt only when duration is known (avoid locking to 0)
+  if (!hasStartedRadio) {
     seekToStart(el, start)
   }
 
@@ -378,7 +417,6 @@ export async function playWireRadio({
   try {
     await el.play()
   } catch (error) {
-    // One retry after an explicit resume (covers slow unlock on some Android browsers)
     try {
       await resumeCtx()
       await el.play()
@@ -392,16 +430,26 @@ export async function playWireRadio({
     }
   }
 
+  // Context can still be suspended after play() on some WebKit builds
+  await resumeCtx()
+
+  // Hold near-silence until we can seek to startAt, so mobile doesn't
+  // briefly play (and lock) the wrong entry point.
   if (!hasStartedRadio) {
-    if (el.readyState >= 1) {
-      seekToStart(el, start)
-    } else {
-      el.addEventListener(
-        'loadedmetadata',
-        () => seekToStart(el, start),
-        { once: true },
-      )
-    }
+    await Promise.race([
+      new Promise((resolve) => {
+        const trySeek = () => {
+          if (seekToStart(el, start)) resolve()
+        }
+        el.addEventListener('loadedmetadata', trySeek, { once: true })
+        el.addEventListener('durationchange', trySeek, { once: true })
+        el.addEventListener('canplay', trySeek, { once: true })
+        trySeek()
+      }),
+      new Promise((resolve) => window.setTimeout(resolve, 600)),
+    ])
+    if (!hasStartedRadio) seekToStart(el, start)
+    if (!hasStartedRadio) queueSeekToStart(el, start)
   }
 
   fadeInGain(gainFromSlider(userVolume), WIRE_RADIO.fadeIn)
