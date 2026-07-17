@@ -5,7 +5,9 @@ import {
   hasFoundWireRadio,
   isWireRadioPlaying,
   markFoundWireRadio,
+  prefetchWireRadio,
   toggleWireRadio,
+  unlockWireRadio,
   wireRadioDefaults,
 } from '../lib/wireRadio'
 import { track } from '../lib/track'
@@ -109,10 +111,25 @@ export default function SpringWire({
 
   useEffect(() => {
     if (!hasRadio) return undefined
+    prefetchWireRadio(radioRef.current?.src)
     const onRadio = (e) => setRadioOn(Boolean(e.detail?.playing))
     window.addEventListener('wire-radio', onRadio)
     return () => window.removeEventListener('wire-radio', onRadio)
   }, [hasRadio])
+
+  // Keep invite flag live without rebuilding pointer/GSAP setup (that was
+  // killing springHome mid-tween on first find and leaving the wire pulled).
+  useEffect(() => {
+    invitingRef.current = showInvite
+    const wrap = wrapRef.current
+    if (!wrap) return
+    if (showInvite) {
+      wrap.classList.add('spring-wire--invite')
+    } else {
+      wrap.classList.remove('spring-wire--invite')
+      wrap.classList.remove('spring-wire--invite-inview')
+    }
+  }, [showInvite])
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -402,6 +419,8 @@ export default function SpringWire({
       pointerIdRef.current = e.pointerId
       pullStartRef.current = { x: e.clientX, y: e.clientY, t: performance.now() }
       wrap.classList.add('spring-wire--pulling')
+      // Unlock audio during the gesture so release play() isn't blocked on mobile
+      if (radioRef.current) unlockWireRadio(radioRef.current.src)
       // Kill any lingering spring/hum so the grab feels instant
       gsap.killTweensOf(pointsRef.current)
       placeHint(e.clientX)
@@ -494,7 +513,7 @@ export default function SpringWire({
     }
     placeTram()
 
-    if (showInvite) {
+    if (invitingRef.current) {
       wrap.classList.add('spring-wire--invite')
       const rect = wrap.getBoundingClientRect()
       placeHint(rect.left + rect.width / 2)
@@ -505,10 +524,10 @@ export default function SpringWire({
     }
 
     let io
-    if (showInvite && typeof IntersectionObserver !== 'undefined') {
+    if (typeof IntersectionObserver !== 'undefined') {
       io = new IntersectionObserver(
         ([entry]) => {
-          if (!entry) return
+          if (!entry || !invitingRef.current) return
           wrap.classList.toggle('spring-wire--invite-inview', entry.isIntersecting)
           if (entry.isIntersecting) setHint(true)
         },
@@ -542,7 +561,8 @@ export default function SpringWire({
       gsap.killTweensOf(pointsRef.current)
       gsap.killTweensOf(hint)
     }
-  }, [seed, hasRadio, showInvite])
+    // showInvite is synced via invitingRef — do not remount this effect on find
+  }, [seed, hasRadio])
 
   const hintCopy = !hasRadio
     ? 'drag me'

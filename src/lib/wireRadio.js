@@ -324,6 +324,27 @@ export function getWireRadioVolume() {
   return userVolume
 }
 
+function seekToStart(el, start) {
+  try {
+    const latestStart = Number.isFinite(el.duration)
+      ? Math.max(0, el.duration - 1)
+      : start
+    el.currentTime = Math.min(start, latestStart)
+    hasStartedRadio = true
+  } catch {
+    /* ignore seek failures */
+  }
+}
+
+/**
+ * Unlock AudioContext during a user gesture (pointerdown).
+ * Mobile Safari voids play() if we await metadata first — unlock early instead.
+ */
+export function unlockWireRadio(src = WIRE_RADIO.src) {
+  ensureGraph(src)
+  void resumeCtx()
+}
+
 export async function playWireRadio({
   src = WIRE_RADIO.src,
   startAt: start = WIRE_RADIO.startAt,
@@ -339,31 +360,17 @@ export async function playWireRadio({
     fadeTween = null
   }
 
-  await resumeCtx()
+  // Resume without blocking play() — unlockWireRadio usually already resumed on press.
+  void resumeCtx()
 
   if (playing && !el.paused) {
     markFoundWireRadio()
     return true
   }
 
-  // Jump to startAt only on the first play.
-  // Later plays resume from where the user paused.
-  if (!hasStartedRadio) {
-    try {
-      if (el.readyState < 1) {
-        await new Promise((resolve, reject) => {
-          el.addEventListener('loadedmetadata', resolve, { once: true })
-          el.addEventListener('error', reject, { once: true })
-        })
-      }
-      const latestStart = Number.isFinite(el.duration)
-        ? Math.max(0, el.duration - 1)
-        : start
-      el.currentTime = Math.min(start, latestStart)
-      hasStartedRadio = true
-    } catch {
-      /* ignore seek / metadata failures */
-    }
+  // Seek only when metadata is already ready; otherwise play first, seek after.
+  if (!hasStartedRadio && el.readyState >= 1) {
+    seekToStart(el, start)
   }
 
   if (masterGain) masterGain.gain.value = 0.001
@@ -371,12 +378,30 @@ export async function playWireRadio({
   try {
     await el.play()
   } catch (error) {
-    playing = false
-    emit()
-    if (typeof console !== 'undefined') {
-      console.error('[wire-radio] Unable to play radio:', error)
+    // One retry after an explicit resume (covers slow unlock on some Android browsers)
+    try {
+      await resumeCtx()
+      await el.play()
+    } catch (retryError) {
+      playing = false
+      emit()
+      if (typeof console !== 'undefined') {
+        console.error('[wire-radio] Unable to play radio:', retryError)
+      }
+      return false
     }
-    return false
+  }
+
+  if (!hasStartedRadio) {
+    if (el.readyState >= 1) {
+      seekToStart(el, start)
+    } else {
+      el.addEventListener(
+        'loadedmetadata',
+        () => seekToStart(el, start),
+        { once: true },
+      )
+    }
   }
 
   fadeInGain(gainFromSlider(userVolume), WIRE_RADIO.fadeIn)
