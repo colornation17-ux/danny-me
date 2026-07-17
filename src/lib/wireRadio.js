@@ -6,11 +6,13 @@
 
 export const WIRE_RADIO = {
   src: '/audio/wire-radio.mp3',
-  startAt: 63, // 1:03
-  volume: 0.15, // default slider ~15%
-  maxGain: 0.62,
+  startAt: 20,
+  volume: 0.12,
+  maxGain: 1,
+  fadeIn: 1.4,
+  fadeOut: 0.35,
   title: 'Radio',
-  track: 'I Had Some Help',
+  track: 'I Got Better',
 }
 
 export const WIRE_RADIO_FOUND_KEY = 'wire-radio-found'
@@ -30,6 +32,7 @@ let masterGain = null
 let connected = false
 let fadeTween = null
 let playing = false
+let hasStartedRadio = false
 let startAt = WIRE_RADIO.startAt
 let userVolume = WIRE_RADIO.volume
 
@@ -65,11 +68,25 @@ function gainFromSlider(v = userVolume) {
 }
 
 /**
+ * Soft tanh saturation — tiny onboard speaker, not grit/distortion.
+ */
+function createSoftSaturationCurve(amount = 0.18, samples = 2048) {
+  const curve = new Float32Array(samples)
+  for (let i = 0; i < samples; i++) {
+    const x = (i * 2) / (samples - 1) - 1
+    curve[i] = Math.tanh(x * (1 + amount * 4))
+  }
+  return curve
+}
+
+/**
  * Cable-car / transit pull-cord radio.
  *
  * Nearby small speaker:
  * - limited bass and treble
  * - gentle midrange character
+ * - narrow mono image
+ * - soft speaker saturation
  * - controlled dynamics
  * - subtle open-air reflection
  *
@@ -101,7 +118,18 @@ export function createCableCarRadioEffect(ctx, source, masterGain) {
   presence.type = 'peaking'
   presence.frequency.value = 1650
   presence.Q.value = 0.85
-  presence.gain.value = 1.2
+  presence.gain.value = 1.1
+
+  // Narrow stereo toward mono like a small onboard speaker
+  const mono = ctx.createGain()
+  mono.channelCount = 1
+  mono.channelCountMode = 'explicit'
+  mono.channelInterpretation = 'speakers'
+
+  // Very gentle speaker saturation
+  const saturation = ctx.createWaveShaper()
+  saturation.curve = createSoftSaturationCurve(0.18)
+  saturation.oversample = '2x'
 
   // Soft dynamics like a small onboard speaker
   const compressor = ctx.createDynamicsCompressor()
@@ -113,14 +141,14 @@ export function createCableCarRadioEffect(ctx, source, masterGain) {
 
   // Direct speaker signal
   const dryGain = ctx.createGain()
-  dryGain.gain.value = 0.88
+  dryGain.gain.value = 0.86
 
   // Short street/open-air reflection
   const delay = ctx.createDelay(1)
   delay.delayTime.value = 0.065
 
   const feedback = ctx.createGain()
-  feedback.gain.value = 0.045
+  feedback.gain.value = 0.04
 
   const wetFilter = ctx.createBiquadFilter()
   wetFilter.type = 'lowpass'
@@ -128,13 +156,15 @@ export function createCableCarRadioEffect(ctx, source, masterGain) {
   wetFilter.Q.value = 0.5
 
   const wetGain = ctx.createGain()
-  wetGain.gain.value = 0.1
+  wetGain.gain.value = 0.09
 
   source
     .connect(highpass)
     .connect(lowpass)
     .connect(boxCut)
     .connect(presence)
+    .connect(mono)
+    .connect(saturation)
     .connect(compressor)
 
   // Dry path
@@ -154,6 +184,8 @@ export function createCableCarRadioEffect(ctx, source, masterGain) {
     lowpass,
     boxCut,
     presence,
+    mono,
+    saturation,
     compressor,
     dryGain,
     delay,
@@ -166,6 +198,8 @@ export function createCableCarRadioEffect(ctx, source, masterGain) {
       lowpass.disconnect()
       boxCut.disconnect()
       presence.disconnect()
+      mono.disconnect()
+      saturation.disconnect()
       compressor.disconnect()
       dryGain.disconnect()
       delay.disconnect()
@@ -238,8 +272,28 @@ function fadeGain(to, duration = 0.9) {
   const g = masterGain.gain
   const now = ctx.currentTime
   g.cancelScheduledValues(now)
-  g.setValueAtTime(g.value, now)
+  g.setValueAtTime(Math.max(g.value, 0.001), now)
   g.linearRampToValueAtTime(to, now + Math.max(0.05, duration))
+}
+
+function fadeInGain(to, duration = WIRE_RADIO.fadeIn) {
+  if (!masterGain || !ctx) return
+  const g = masterGain.gain
+  const now = ctx.currentTime
+  const target = Math.max(0.001, to)
+  g.cancelScheduledValues(now)
+  g.setValueAtTime(0.001, now)
+  g.exponentialRampToValueAtTime(target, now + Math.max(0.05, duration))
+}
+
+function fadeOutGain(duration = WIRE_RADIO.fadeOut) {
+  if (!masterGain || !ctx) return
+  const g = masterGain.gain
+  const now = ctx.currentTime
+  const current = Math.max(g.value, 0.001)
+  g.cancelScheduledValues(now)
+  g.setValueAtTime(current, now)
+  g.exponentialRampToValueAtTime(0.001, now + Math.max(0.05, duration))
 }
 
 async function resumeCtx() {
@@ -279,6 +333,12 @@ export async function playWireRadio({
 
   startAt = start
   const { audio: el } = graph
+
+  if (fadeTween) {
+    window.clearTimeout(fadeTween)
+    fadeTween = null
+  }
+
   await resumeCtx()
 
   if (playing && !el.paused) {
@@ -286,30 +346,40 @@ export async function playWireRadio({
     return true
   }
 
-  const needsSeek = el.paused && (el.currentTime < start - 0.5 || el.ended || el.currentTime === 0)
-  if (needsSeek) {
-    const seek = () => {
-      try {
-        el.currentTime = start
-      } catch {
-        /* ignore */
+  // Jump to startAt only on the first play.
+  // Later plays resume from where the user paused.
+  if (!hasStartedRadio) {
+    try {
+      if (el.readyState < 1) {
+        await new Promise((resolve, reject) => {
+          el.addEventListener('loadedmetadata', resolve, { once: true })
+          el.addEventListener('error', reject, { once: true })
+        })
       }
+      const latestStart = Number.isFinite(el.duration)
+        ? Math.max(0, el.duration - 1)
+        : start
+      el.currentTime = Math.min(start, latestStart)
+      hasStartedRadio = true
+    } catch {
+      /* ignore seek / metadata failures */
     }
-    if (el.readyState >= 1) seek()
-    else el.addEventListener('loadedmetadata', seek, { once: true })
   }
 
-  if (masterGain) masterGain.gain.value = 0
+  if (masterGain) masterGain.gain.value = 0.001
 
   try {
     await el.play()
-  } catch {
+  } catch (error) {
     playing = false
     emit()
+    if (typeof console !== 'undefined') {
+      console.error('[wire-radio] Unable to play radio:', error)
+    }
     return false
   }
 
-  fadeGain(gainFromSlider(userVolume), 1.15)
+  fadeInGain(gainFromSlider(userVolume), WIRE_RADIO.fadeIn)
   playing = true
   markFoundWireRadio()
   emit()
@@ -324,19 +394,22 @@ export async function pauseWireRadio() {
     return false
   }
 
-  fadeGain(0, 0.35)
+  fadeOutGain(WIRE_RADIO.fadeOut)
   window.clearTimeout(fadeTween)
   fadeTween = window.setTimeout(() => {
     graph.audio.pause()
-  }, 360)
+    fadeTween = null
+  }, WIRE_RADIO.fadeOut * 1000)
   playing = false
   emit()
   return false
 }
 
 export async function toggleWireRadio(opts) {
-  if (playing) return pauseWireRadio()
-  return playWireRadio(opts)
+  const graph = ensureGraph(opts?.src)
+  if (!graph?.audio) return false
+  if (graph.audio.paused) return playWireRadio(opts)
+  return pauseWireRadio()
 }
 
 export function isWireRadioPlaying() {

@@ -54,7 +54,7 @@ export default function SiteRadio() {
           onClick={onToggle}
           disabled={busy}
           aria-pressed={playing}
-          title={playing ? 'Pause radio' : `Play radio from 1:03 — ${WIRE_RADIO.track}`}
+          title={playing ? 'Pause radio' : `Play radio from 0:20 — ${WIRE_RADIO.track}`}
         >
           <span className="site-radio__icon" aria-hidden="true">
             {playing ? (
