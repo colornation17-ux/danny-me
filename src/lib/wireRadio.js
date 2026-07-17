@@ -373,53 +373,36 @@ function queueSeekToStart(el, start) {
   el.addEventListener('canplay', trySeek, { once: true })
 }
 
-let unlockPriming = null
-
 /**
- * Unlock AudioContext + media element during pointerdown.
- * iOS requires play() to be called synchronously inside the gesture —
- * we start muted (gain 0) then pause so pointerup can play for real.
+ * Unlock AudioContext during pointerdown (resume only).
+ * Do not call play()/pause() here — that races the release toggle and can hang.
  */
 export function unlockWireRadio(src = WIRE_RADIO.src) {
   const graph = ensureGraph(src)
-  if (!graph?.audio) return
-
-  if (masterGain) masterGain.gain.value = 0
-
-  if (graph.ctx?.state === 'suspended') {
+  if (!graph?.ctx) return
+  if (graph.ctx.state === 'suspended') {
     try {
       void graph.ctx.resume()
     } catch {
       /* ignore */
     }
   }
+}
 
-  const el = graph.audio
-  if (!el.paused || playing) return
-
+function playWithTimeout(el, ms = 2500) {
+  let playP
   try {
-    const p = el.play()
-    unlockPriming = p
-    if (p && typeof p.then === 'function') {
-      void p
-        .then(() => {
-          // Only pause if real play() hasn't taken over yet
-          if (unlockPriming === p && !playing) {
-            try {
-              el.pause()
-            } catch {
-              /* ignore */
-            }
-          }
-        })
-        .catch(() => {})
-        .finally(() => {
-          if (unlockPriming === p) unlockPriming = null
-        })
-    }
-  } catch {
-    unlockPriming = null
+    playP = el.paused ? el.play() : Promise.resolve()
+  } catch (error) {
+    return Promise.reject(error)
   }
+  if (!playP || typeof playP.then !== 'function') return Promise.resolve()
+  return Promise.race([
+    playP,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error('play timeout')), ms)
+    }),
+  ])
 }
 
 export async function playWireRadio({
@@ -437,40 +420,27 @@ export async function playWireRadio({
     fadeTween = null
   }
 
-  // Cancel unlock's pending pause — this call owns playback now
-  unlockPriming = null
-
-  // Kick resume, but fire play() immediately so we stay inside the user gesture
-  const resumeP = resumeCtx()
-
   if (playing && !el.paused) {
-    await resumeP
+    void resumeCtx()
     markFoundWireRadio()
     return true
   }
 
-  // First play: jump to startAt only when duration is known (avoid locking to 0)
+  // Seek if we can; otherwise queue — never block play on metadata
   if (!hasStartedRadio) {
-    seekToStart(el, start)
+    if (!seekToStart(el, start)) queueSeekToStart(el, start)
   }
 
   if (masterGain) masterGain.gain.value = 0.001
 
-  let playP
+  // Fire resume + play in the same turn (keeps mobile gesture alive)
+  const resumeP = resumeCtx()
   try {
-    playP = el.paused ? el.play() : Promise.resolve()
+    await playWithTimeout(el)
   } catch (error) {
-    playP = Promise.reject(error)
-  }
-
-  await resumeP
-
-  try {
-    await playP
-  } catch {
     try {
-      await resumeCtx()
-      await el.play()
+      await resumeP
+      await playWithTimeout(el, 1500)
     } catch (retryError) {
       playing = false
       emit()
@@ -481,26 +451,10 @@ export async function playWireRadio({
     }
   }
 
+  void resumeP.then(() => resumeCtx())
   await resumeCtx()
 
-  // Hold near-silence until we can seek to startAt, so mobile doesn't
-  // briefly play (and lock) the wrong entry point.
-  if (!hasStartedRadio) {
-    await Promise.race([
-      new Promise((resolve) => {
-        const trySeek = () => {
-          if (seekToStart(el, start)) resolve()
-        }
-        el.addEventListener('loadedmetadata', trySeek, { once: true })
-        el.addEventListener('durationchange', trySeek, { once: true })
-        el.addEventListener('canplay', trySeek, { once: true })
-        trySeek()
-      }),
-      new Promise((resolve) => window.setTimeout(resolve, 600)),
-    ])
-    if (!hasStartedRadio) seekToStart(el, start)
-    if (!hasStartedRadio) queueSeekToStart(el, start)
-  }
+  if (!hasStartedRadio) queueSeekToStart(el, start)
 
   fadeInGain(gainFromSlider(userVolume), WIRE_RADIO.fadeIn)
   playing = true
@@ -531,8 +485,6 @@ export async function pauseWireRadio() {
 export async function toggleWireRadio(opts) {
   const graph = ensureGraph(opts?.src)
   if (!graph?.audio) return false
-  // Use the intentional playing flag — unlock may leave the element briefly
-  // unpaused at gain 0, which must not count as "on air".
   if (playing) return pauseWireRadio()
   return playWireRadio(opts)
 }
