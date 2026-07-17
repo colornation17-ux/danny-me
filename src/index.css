@@ -5591,10 +5591,9 @@ body.game-embed .site-radio {
 }
 
 .spring-wire--radio {
-  position: relative;
   cursor: grab;
-  /* Preserve vertical page scroll; tram handle takes the gesture */
-  touch-action: pan-y;
+  /* touch-action must be none from gesture start — browsers ignore mid-pull changes */
+  touch-action: none;
 }
 
 .spring-wire--radio:active {
@@ -5603,8 +5602,12 @@ body.game-embed .site-radio {
 
 @media (pointer: coarse) {
   .spring-wire--radio {
-    /* Taller grab band on phones — easier to find the tram handle */
-    padding-block: 1.15rem;
+    /* Taller grab band on phones — easier to pluck without hunting */
+    padding-block: 1.4rem;
+  }
+
+  .spring-wire--radio .spring-wire__svg {
+    height: 3.6rem;
   }
 }
 
@@ -5612,7 +5615,7 @@ body.game-embed .site-radio {
   stroke: color-mix(in srgb, var(--ink, var(--black)) 70%, var(--accent-cool));
 }
 
-/* Cable car — sits on top of the wire; mobile pull handle */
+/* Cable car — sits on top of the wire (decorative; whole wire is the pull) */
 .spring-wire__tram {
   position: absolute;
   z-index: 2;
@@ -5623,44 +5626,16 @@ body.game-embed .site-radio {
   color: color-mix(in srgb, var(--accent) 78%, var(--ink));
   opacity: 0;
   transform: translate3d(0, 0, 0) translate(-50%, -100%);
-  pointer-events: auto;
-  cursor: grab;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: none;
+  pointer-events: none;
   will-change: transform, opacity;
   transition: opacity 0.4s var(--ease-out, ease);
 }
 
-.spring-wire__tram:active {
-  cursor: grabbing;
-}
-
-.spring-wire__tram-hit-area {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 48px;
-  height: 48px;
-  transform: translate(-50%, -50%);
-  touch-action: none;
-}
-
-@media (pointer: coarse) {
-  .spring-wire__tram-hit-area {
-    width: 56px;
-    height: 56px;
-  }
-}
-
 .spring-wire__tram-svg {
-  position: relative;
-  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
   overflow: visible;
-  pointer-events: none;
   filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--white) 75%, transparent));
 }
 

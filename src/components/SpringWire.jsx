@@ -135,15 +135,15 @@ export default function SpringWire({
     const isCoarse =
       typeof window !== 'undefined' &&
       window.matchMedia('(pointer: coarse)').matches
-    // Phones: less elastic flyback; desktop keeps playful spring
+    // Phones: direct follow + soft return (no elastic bounce)
     const springEase = isCoarse ? 'power3.out' : 'elastic.out(1.12, 0.36)'
-    const springDuration = isCoarse ? 0.42 : 0.95
-    // Harder to trigger radio by accident on touch
-    const pullPlayMinMove = isCoarse ? 12 : 10
-    const pullPlayMinHold = isCoarse ? 100 : 120
+    const springDuration = isCoarse ? 0.48 : 0.95
+    const pullPlayMinMove = isCoarse ? 10 : 10
+    const pullPlayMinHold = isCoarse ? 90 : 120
     // Normalized progress per second (~3 min full fallback crossing)
     const tramFallbackSpeed = 1 / 180
-    const tramNudgeMax = isCoarse ? 70 : 90
+    const tramNudgeMax = isCoarse ? 64 : 90
+    const pullFalloff = isCoarse ? 6.2 : 5.5
 
     const placeTram = () => {
       const tram = tramRef.current
@@ -161,7 +161,7 @@ export default function SpringWire({
       const left =
         (x / vbW) * svgRect.width + (svgRect.left - wrapRect.left) + tramNudgeX
       // Sit on top of the wire (no hanging stem)
-      const top = (y / vbH) * svgRect.height + (svgRect.top - wrapRect.top) - 2
+      const top = (y / vbH) * svgRect.height + (svgRect.top - wrapRect.top) - 1
       const sx = svgRect.width / vbW
       const sy = svgRect.height / vbH
       const pathTilt = reduceMotion
@@ -178,17 +178,10 @@ export default function SpringWire({
                 Math.PI,
             ),
           )
-      const tilt = reduceMotion ? 0 : pathTilt * 0.8
+      const tilt = reduceMotion ? 0 : pathTilt
 
       tram.style.transform = `translate3d(${left}px, ${top}px, 0) translate(-50%, -100%) rotate(${tilt.toFixed(2)}deg)`
-      // On touch, keep tram visible as the pull handle even when paused
-      if (tramRiding) {
-        tram.style.opacity = reduceMotion ? '0.75' : '1'
-      } else if (isCoarse) {
-        tram.style.opacity = '0.55'
-      } else {
-        tram.style.opacity = '0'
-      }
+      tram.style.opacity = tramRiding ? (reduceMotion ? '0.75' : '1') : '0'
     }
 
     const setPath = () => {
@@ -228,7 +221,7 @@ export default function SpringWire({
         return
       }
 
-      if (tramRiding || (hasRadio && isCoarse)) placeTram()
+      if (tramRiding) placeTram()
     }
 
     const placeHint = (clientX) => {
@@ -309,35 +302,51 @@ export default function SpringWire({
         }
       })
 
-      pts.forEach((p, i) => {
-        const dist = Math.abs(i - nearest)
-        const falloff = Math.max(0, 1 - dist / 5.5) ** 1.2
-        if (falloff <= 0) return
-        const pull = Math.min(strength, 0.95) * falloff
-        const targetY = gsap.utils.clamp(
-          3,
-          VIEW_H - 3,
-          gsap.utils.interpolate(p.oy, y, pull),
-        )
-        gsap.to(p, {
-          y: targetY,
-          duration: pullingRef.current ? (isCoarse ? 0.05 : 0.08) : isCoarse ? 0.14 : 0.2,
-          ease: pullingRef.current ? 'power3.out' : 'power2.out',
-          overwrite: 'auto',
-          onUpdate: setPath,
+      // Touch: set points directly so the wire tracks the finger with no tween lag
+      if (pullingRef.current && isCoarse) {
+        gsap.killTweensOf(pts)
+        pts.forEach((p, i) => {
+          const dist = Math.abs(i - nearest)
+          const falloff = Math.max(0, 1 - dist / pullFalloff) ** 1.15
+          if (falloff <= 0) return
+          const pull = Math.min(strength, 0.95) * falloff
+          p.y = gsap.utils.clamp(
+            3,
+            VIEW_H - 3,
+            gsap.utils.interpolate(p.oy, y, pull),
+          )
         })
-      })
+        setPath()
+      } else {
+        pts.forEach((p, i) => {
+          const dist = Math.abs(i - nearest)
+          const falloff = Math.max(0, 1 - dist / pullFalloff) ** 1.2
+          if (falloff <= 0) return
+          const pull = Math.min(strength, 0.95) * falloff
+          const targetY = gsap.utils.clamp(
+            3,
+            VIEW_H - 3,
+            gsap.utils.interpolate(p.oy, y, pull),
+          )
+          gsap.to(p, {
+            y: targetY,
+            duration: pullingRef.current ? 0.08 : isCoarse ? 0.14 : 0.2,
+            ease: pullingRef.current ? 'power3.out' : 'power2.out',
+            overwrite: 'auto',
+            onUpdate: setPath,
+          })
+        })
+      }
 
-      // Horizontal nudge from pull distance (capped ~60–100px)
+      // Small horizontal nudge while plucking (capped ~60–100px)
       if (pullingRef.current && hasRadio && !reduceMotion) {
-        const start = pullStartRef.current
-        if (start) {
-          const dx = clientX - start.x
-          const pullDistance = Math.hypot(dx, clientY - start.y)
-          const pullProgress = Math.min(Math.max(pullDistance / 80, 0), 1)
-          tramNudgeX = Math.sign(dx || 1) * pullProgress * tramNudgeMax
-          placeTram()
-        }
+        const svg = wrap.querySelector('svg')
+        const vbW = svg?.viewBox?.baseVal?.width || Math.max(wrap.clientWidth, 320)
+        const baseX = sampleAlongWire(pts, reduceMotion ? 0.5 : tramT).x
+        const baseLeft = (baseX / vbW) * wrap.clientWidth
+        const pullLeft = clientX - wrap.getBoundingClientRect().left
+        tramNudgeX = gsap.utils.clamp(-tramNudgeMax, tramNudgeMax, pullLeft - baseLeft)
+        placeTram()
       }
 
       // Hint + emphasis wherever the pointer is on the wire
@@ -375,10 +384,10 @@ export default function SpringWire({
           },
         })
       }
-      pointsRef.current.forEach((p) => {
+      pointsRef.current.forEach((p, i) => {
         gsap.to(p, {
           y: p.oy,
-          duration: springDuration,
+          duration: springDuration + (i % 4) * (isCoarse ? 0.02 : 0.05),
           ease: springEase,
           overwrite: 'auto',
           onUpdate: setPath,
@@ -389,23 +398,15 @@ export default function SpringWire({
     const onPointerDown = (e) => {
       // Ignore multi-touch pinch — one finger plucks the wire
       if (e.isPrimary === false) return
-
-      // On touch + radio: only the tram is the pull handle so the page can scroll
-      if (
-        e.pointerType === 'touch' &&
-        hasRadio &&
-        !e.target.closest?.('.spring-wire__tram')
-      ) {
-        return
-      }
-
       pullingRef.current = true
       pointerIdRef.current = e.pointerId
       pullStartRef.current = { x: e.clientX, y: e.clientY, t: performance.now() }
       wrap.classList.add('spring-wire--pulling')
+      // Kill any lingering spring/hum so the grab feels instant
+      gsap.killTweensOf(pointsRef.current)
       placeHint(e.clientX)
       if (!invitingRef.current) {
-        gsap.to(hint, { opacity: 0.35, duration: 0.15, overwrite: 'auto' })
+        gsap.to(hint, { opacity: 0.35, duration: 0.12, overwrite: 'auto' })
       }
       wrap.setPointerCapture?.(e.pointerId)
       pullToward(e.clientX, e.clientY, 1)
@@ -415,18 +416,15 @@ export default function SpringWire({
     }
 
     const onPointerMove = (e) => {
-      if (!pullingRef.current || pointerIdRef.current !== e.pointerId) {
-        // Hover: wire follows cursor along the full length (mouse / stylus only)
-        if (!pullingRef.current && e.pointerType !== 'touch') {
-          pullToward(e.clientX, e.clientY, HOVER_PULL)
-        }
+      if (pullingRef.current && pointerIdRef.current === e.pointerId) {
+        placeHint(e.clientX)
+        pullToward(e.clientX, e.clientY, 1)
+        if (e.pointerType === 'touch') e.preventDefault()
         return
       }
-
-      placeHint(e.clientX)
-      pullToward(e.clientX, e.clientY, 1)
-      if (e.pointerType === 'touch') {
-        e.preventDefault()
+      // Hover: wire follows cursor along the full length (mouse / stylus only)
+      if (!pullingRef.current && e.pointerType !== 'touch') {
+        pullToward(e.clientX, e.clientY, HOVER_PULL)
       }
     }
 
@@ -625,7 +623,6 @@ export default function SpringWire({
       </svg>
       {hasRadio ? (
         <span ref={tramRef} className="spring-wire__tram" aria-hidden="true">
-          <span className="spring-wire__tram-hit-area" />
           <svg
             className="spring-wire__tram-svg"
             viewBox="0 0 64 24"
