@@ -460,14 +460,20 @@ export default function SpringWire({
       springHome()
 
       if (radioRef.current && (moved > pullPlayMinMove || held > pullPlayMinHold)) {
-        // Pull toggles: play when off, pause when on
+        // Pull toggles: play when off, pause when on.
+        // Start audio BEFORE markFoundWireRadio() — mounting SiteRadio first
+        // burns the mobile user-gesture and forces a manual play tap.
         invitingRef.current = false
-        setFound(true)
         wrap.classList.remove('spring-wire--invite')
         wrap.classList.remove('spring-wire--invite-inview')
-        markFoundWireRadio()
-        track('pull_wire', { action: radioOn ? 'pause' : 'play', input: 'pull' })
-        toggleWireRadio(radioRef.current).catch(() => {})
+        const opts = radioRef.current
+        const action = isWireRadioPlaying() ? 'pause' : 'play'
+        const togglePromise = toggleWireRadio(opts)
+        setFound(true)
+        track('pull_wire', { action, input: 'pull' })
+        void togglePromise.finally(() => {
+          markFoundWireRadio()
+        })
       }
     }
 
@@ -589,10 +595,13 @@ export default function SpringWire({
           ? (e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault()
+                const action = radioOn ? 'pause' : 'play'
+                const togglePromise = toggleWireRadio(radioRef.current)
                 setFound(true)
-                markFoundWireRadio()
-                track('pull_wire', { action: radioOn ? 'pause' : 'play', input: 'keyboard' })
-                toggleWireRadio(radioRef.current).catch(() => {})
+                track('pull_wire', { action, input: 'keyboard' })
+                void togglePromise.finally(() => {
+                  markFoundWireRadio()
+                })
               }
             }
           : undefined

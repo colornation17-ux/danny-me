@@ -373,15 +373,53 @@ function queueSeekToStart(el, start) {
   el.addEventListener('canplay', trySeek, { once: true })
 }
 
+let unlockPriming = null
+
 /**
- * Unlock AudioContext during a user gesture (pointerdown).
- * Must run inside the gesture so iOS allows resume + later play.
+ * Unlock AudioContext + media element during pointerdown.
+ * iOS requires play() to be called synchronously inside the gesture —
+ * we start muted (gain 0) then pause so pointerup can play for real.
  */
 export function unlockWireRadio(src = WIRE_RADIO.src) {
   const graph = ensureGraph(src)
-  if (!graph?.ctx) return
-  // Kick resume during the press — don't await here (keeps pull feeling instant)
-  void resumeCtx()
+  if (!graph?.audio) return
+
+  if (masterGain) masterGain.gain.value = 0
+
+  if (graph.ctx?.state === 'suspended') {
+    try {
+      void graph.ctx.resume()
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const el = graph.audio
+  if (!el.paused || playing) return
+
+  try {
+    const p = el.play()
+    unlockPriming = p
+    if (p && typeof p.then === 'function') {
+      void p
+        .then(() => {
+          // Only pause if real play() hasn't taken over yet
+          if (unlockPriming === p && !playing) {
+            try {
+              el.pause()
+            } catch {
+              /* ignore */
+            }
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          if (unlockPriming === p) unlockPriming = null
+        })
+    }
+  } catch {
+    unlockPriming = null
+  }
 }
 
 export async function playWireRadio({
@@ -399,10 +437,14 @@ export async function playWireRadio({
     fadeTween = null
   }
 
-  // pointerup is still a user gesture — await resume BEFORE play/fade (fixes silent iOS)
-  await resumeCtx()
+  // Cancel unlock's pending pause — this call owns playback now
+  unlockPriming = null
+
+  // Kick resume, but fire play() immediately so we stay inside the user gesture
+  const resumeP = resumeCtx()
 
   if (playing && !el.paused) {
+    await resumeP
     markFoundWireRadio()
     return true
   }
@@ -414,9 +456,18 @@ export async function playWireRadio({
 
   if (masterGain) masterGain.gain.value = 0.001
 
+  let playP
   try {
-    await el.play()
+    playP = el.paused ? el.play() : Promise.resolve()
   } catch (error) {
+    playP = Promise.reject(error)
+  }
+
+  await resumeP
+
+  try {
+    await playP
+  } catch {
     try {
       await resumeCtx()
       await el.play()
@@ -430,7 +481,6 @@ export async function playWireRadio({
     }
   }
 
-  // Context can still be suspended after play() on some WebKit builds
   await resumeCtx()
 
   // Hold near-silence until we can seek to startAt, so mobile doesn't
@@ -481,8 +531,10 @@ export async function pauseWireRadio() {
 export async function toggleWireRadio(opts) {
   const graph = ensureGraph(opts?.src)
   if (!graph?.audio) return false
-  if (graph.audio.paused) return playWireRadio(opts)
-  return pauseWireRadio()
+  // Use the intentional playing flag — unlock may leave the element briefly
+  // unpaused at gain 0, which must not count as "on air".
+  if (playing) return pauseWireRadio()
+  return playWireRadio(opts)
 }
 
 export function isWireRadioPlaying() {
