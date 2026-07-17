@@ -1,13 +1,13 @@
 /**
- * Shared “bus cabin radio” bed — SpringWire pulls + SiteRadio.
- * Cheap speaker EQ, cabin boom, soft saturation, short wet delay.
+ * Shared “shop radio” bed — SpringWire pulls + SiteRadio.
+ * Clean band-limit + compressor glue + short room. No distortion.
  */
 
 export const WIRE_RADIO = {
   src: '/audio/wire-radio.mp3',
   startAt: 63, // 1:03
   volume: 0.5, // default slider 0–1
-  maxGain: 0.72,
+  maxGain: 0.68,
   title: 'Radio',
   track: 'I Had Some Help',
 }
@@ -63,15 +63,85 @@ function gainFromSlider(v = userVolume) {
   return Math.max(0, Math.min(1, v)) * WIRE_RADIO.maxGain
 }
 
-/** Soft tanh-ish clip — cheap speaker, not fuzz pedal */
-function makeSoftClipCurve(amount = 0.2, samples = 2048) {
-  const curve = new Float32Array(samples)
-  const k = Math.max(0.01, amount) * 12
-  for (let i = 0; i < samples; i++) {
-    const x = (i * 2) / (samples - 1) - 1
-    curve[i] = ((1 + k) * x) / (1 + k * Math.abs(x))
+/**
+ * Wireless-speaker filter chain — clean band-limit + compressor glue,
+ * light room reflection. No distortion. Source → chain → masterGain.
+ */
+export function createShopRadioEffect(ctx, source, masterGain) {
+  // Remove deep bass
+  const highpass = ctx.createBiquadFilter()
+  highpass.type = 'highpass'
+  highpass.frequency.value = 140
+  highpass.Q.value = 0.5
+
+  // Soften high frequencies like a small speaker
+  const lowpass = ctx.createBiquadFilter()
+  lowpass.type = 'lowpass'
+  lowpass.frequency.value = 3200
+  lowpass.Q.value = 0.6
+
+  // Reduce boxy frequencies
+  const boxCut = ctx.createBiquadFilter()
+  boxCut.type = 'peaking'
+  boxCut.frequency.value = 700
+  boxCut.Q.value = 0.8
+  boxCut.gain.value = -2
+
+  // Keep vocals understandable
+  const presence = ctx.createBiquadFilter()
+  presence.type = 'peaking'
+  presence.frequency.value = 1800
+  presence.Q.value = 0.9
+  presence.gain.value = 1.5
+
+  // Contain the dynamics like a small speaker (glue, no clipping)
+  const compressor = ctx.createDynamicsCompressor()
+  compressor.threshold.value = -22
+  compressor.knee.value = 18
+  compressor.ratio.value = 3
+  compressor.attack.value = 0.015
+  compressor.release.value = 0.22
+
+  // Short room reflection
+  const delay = ctx.createDelay(1)
+  delay.delayTime.value = 0.075
+
+  const feedback = ctx.createGain()
+  feedback.gain.value = 0.06
+
+  const dryGain = ctx.createGain()
+  dryGain.gain.value = 0.9
+
+  const wetGain = ctx.createGain()
+  wetGain.gain.value = 0.1
+
+  source
+    .connect(highpass)
+    .connect(lowpass)
+    .connect(boxCut)
+    .connect(presence)
+    .connect(compressor)
+
+  compressor.connect(dryGain)
+  dryGain.connect(masterGain)
+
+  compressor.connect(delay)
+  delay.connect(feedback)
+  feedback.connect(delay)
+  delay.connect(wetGain)
+  wetGain.connect(masterGain)
+
+  return {
+    highpass,
+    lowpass,
+    boxCut,
+    presence,
+    compressor,
+    delay,
+    feedback,
+    dryGain,
+    wetGain,
   }
-  return curve
 }
 
 function ensureGraph(src = WIRE_RADIO.src) {
@@ -119,76 +189,10 @@ function ensureGraph(src = WIRE_RADIO.src) {
   if (!connected && ctx) {
     const source = ctx.createMediaElementSource(audio)
 
-    // Bus cabin radio — muffled dash speaker + boxy cabin air
-    const highpass = ctx.createBiquadFilter()
-    highpass.type = 'highpass'
-    highpass.frequency.value = 95
-    highpass.Q.value = 0.4
-
-    // Soft cabin boom under the track
-    const cabinBoom = ctx.createBiquadFilter()
-    cabinBoom.type = 'lowshelf'
-    cabinBoom.frequency.value = 140
-    cabinBoom.gain.value = 3.2
-
-    const midBox = ctx.createBiquadFilter()
-    midBox.type = 'peaking'
-    midBox.frequency.value = 720
-    midBox.Q.value = 0.7
-    midBox.gain.value = 2.4
-
-    const presenceScoop = ctx.createBiquadFilter()
-    presenceScoop.type = 'peaking'
-    presenceScoop.frequency.value = 1600
-    presenceScoop.Q.value = 0.8
-    presenceScoop.gain.value = -2.8
-
-    const lowpass = ctx.createBiquadFilter()
-    lowpass.type = 'lowpass'
-    lowpass.frequency.value = 1950
-    lowpass.Q.value = 0.7
-
-    // Gentle cheap-speaker soft clip (not harsh distortion)
-    const drive = ctx.createWaveShaper()
-    drive.curve = makeSoftClipCurve(0.22)
-    drive.oversample = '2x'
-
-    // Short cabin slap / wet delay (readable, not drowning the track)
-    const delay = ctx.createDelay(1.0)
-    delay.delayTime.value = 0.135
-
-    const feedback = ctx.createGain()
-    feedback.gain.value = 0.32
-
-    const wet = ctx.createGain()
-    wet.gain.value = 0.36
-
-    const dry = ctx.createGain()
-    dry.gain.value = 0.74
-
-    const reverbLow = ctx.createBiquadFilter()
-    reverbLow.type = 'lowpass'
-    reverbLow.frequency.value = 1650
-
     masterGain = ctx.createGain()
     masterGain.gain.value = 0
 
-    source.connect(highpass)
-    highpass.connect(cabinBoom)
-    cabinBoom.connect(midBox)
-    midBox.connect(presenceScoop)
-    presenceScoop.connect(lowpass)
-    lowpass.connect(drive)
-
-    drive.connect(dry)
-    dry.connect(masterGain)
-
-    drive.connect(delay)
-    delay.connect(reverbLow)
-    reverbLow.connect(feedback)
-    feedback.connect(delay)
-    reverbLow.connect(wet)
-    wet.connect(masterGain)
+    createShopRadioEffect(ctx, source, masterGain)
 
     masterGain.connect(ctx.destination)
     connected = true
