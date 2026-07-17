@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import gsap from 'gsap'
 import {
+  getWireRadioProgress,
   hasFoundWireRadio,
   isWireRadioPlaying,
   markFoundWireRadio,
@@ -41,6 +42,39 @@ function buildPath(pts) {
   return d
 }
 
+/** Sample position + tangent angle along the live wire points (0–1). */
+function sampleAlongWire(pts, t) {
+  if (!pts.length) return { x: 0, y: BASE_Y, angle: 0 }
+  if (pts.length === 1) return { x: pts[0].x, y: pts[0].y, angle: 0 }
+
+  const segs = []
+  let total = 0
+  for (let i = 0; i < pts.length - 1; i++) {
+    const len = Math.hypot(pts[i + 1].x - pts[i].x, pts[i + 1].y - pts[i].y)
+    segs.push(len)
+    total += len
+  }
+  if (total <= 0) return { x: pts[0].x, y: pts[0].y, angle: 0 }
+
+  let target = Math.max(0, Math.min(1, t)) * total
+  for (let i = 0; i < segs.length; i++) {
+    const len = segs[i]
+    if (target <= len || i === segs.length - 1) {
+      const u = len <= 0 ? 0 : Math.min(1, target / len)
+      const p0 = pts[i]
+      const p1 = pts[i + 1]
+      return {
+        x: p0.x + (p1.x - p0.x) * u,
+        y: p0.y + (p1.y - p0.y) * u,
+        angle: (Math.atan2(p1.y - p0.y, p1.x - p0.x) * 180) / Math.PI,
+      }
+    }
+    target -= len
+  }
+  const last = pts[pts.length - 1]
+  return { x: last.x, y: last.y, angle: 0 }
+}
+
 /**
  * Full-bleed pencil rule. Optional radio: pull toggles the shared bed.
  * `invite` — first-visit “try pulling me” cue (readable on fast scroll).
@@ -56,6 +90,7 @@ export default function SpringWire({
   const mainRef = useRef(null)
   const ghostRef = useRef(null)
   const hintRef = useRef(null)
+  const tramRef = useRef(null)
   const pointsRef = useRef([])
   const pullingRef = useRef(false)
   const pointerIdRef = useRef(null)
@@ -88,6 +123,9 @@ export default function SpringWire({
 
     invitingRef.current = showInvite
     let humming = false
+    let tramRiding = false
+    let tramT = 0.4
+    let tramNudgeX = 0
     let humPhase = 0
     let humStartTimer = 0
     let pointerOver = false
@@ -102,6 +140,48 @@ export default function SpringWire({
     const springDur = isCoarse ? 0.42 : 0.95
     const pullPlayMinMove = isCoarse ? 8 : 10
     const pullPlayMinHold = isCoarse ? 70 : 120
+    // Fallback if metadata isn't ready yet (~3 min crossing)
+    const tramFallbackSpeed = 1 / (180 * 60)
+    const tramNudgeMax = isCoarse ? 70 : 90
+
+    const placeTram = () => {
+      const tram = tramRef.current
+      const svg = wrap.querySelector('svg')
+      if (!tram || !svg || !hasRadio) return
+      const pts = pointsRef.current
+      if (!pts.length) return
+
+      const t = reduceMotion ? 0.5 : tramT
+      const { x, y, angle } = sampleAlongWire(pts, t)
+      const vbW = svg.viewBox.baseVal.width || Math.max(wrap.clientWidth, 320)
+      const vbH = svg.viewBox.baseVal.height || VIEW_H
+      const svgRect = svg.getBoundingClientRect()
+      const wrapRect = wrap.getBoundingClientRect()
+      const left =
+        (x / vbW) * svgRect.width + (svgRect.left - wrapRect.left) + tramNudgeX
+      // Sit on top of the wire (no hanging stem)
+      const top = (y / vbH) * svgRect.height + (svgRect.top - wrapRect.top) - 1
+      const sx = svgRect.width / vbW
+      const sy = svgRect.height / vbH
+      const pathTilt = reduceMotion
+        ? 0
+        : Math.max(
+            -10,
+            Math.min(
+              10,
+              (Math.atan2(
+                Math.sin((angle * Math.PI) / 180) * sy,
+                Math.cos((angle * Math.PI) / 180) * sx,
+              ) *
+                180) /
+                Math.PI,
+            ),
+          )
+      const tilt = reduceMotion ? 0 : pathTilt
+
+      tram.style.transform = `translate3d(${left}px, ${top}px, 0) translate(-50%, -100%) rotate(${tilt.toFixed(2)}deg)`
+      tram.style.opacity = tramRiding ? (reduceMotion ? '0.75' : '1') : '0'
+    }
 
     const setPath = () => {
       const pts = pointsRef.current
@@ -109,22 +189,38 @@ export default function SpringWire({
       main.setAttribute('d', d)
       const ghostPts = pts.map((p) => ({ ...p, y: p.y + 0.85 }))
       ghost.setAttribute('d', buildPath(ghostPts))
+      placeTram()
     }
 
     /** Soft uneven hum while radio plays — settle to rest when pause */
     const tickHum = () => {
-      if (!humming || pullingRef.current || pointerOver || reduceMotion) return
-      humPhase += 0.055
-      const pts = pointsRef.current
-      pts.forEach((p, i) => {
-        const amp = 0.42 + (i % 5) * 0.08
-        const wobble =
-          Math.sin(humPhase * 2.35 + i * 0.91) * amp +
-          Math.sin(humPhase * 5.7 + i * 1.63) * amp * 0.38 +
-          Math.sin(humPhase * 0.9 + seed + i * 0.3) * 0.18
-        p.y = p.oy + wobble
-      })
-      setPath()
+      if (tramRiding && !reduceMotion) {
+        const songProgress = getWireRadioProgress()
+        if (songProgress != null) {
+          // Start ~40% across the wire; finish the page as the song ends
+          tramT = 0.4 + songProgress * 0.58
+        } else {
+          tramT += tramFallbackSpeed
+          if (tramT > 0.98) tramT = 0.4
+        }
+      }
+
+      if (humming && !pullingRef.current && !pointerOver && !reduceMotion) {
+        humPhase += 0.055
+        const pts = pointsRef.current
+        pts.forEach((p, i) => {
+          const amp = 0.42 + (i % 5) * 0.08
+          const wobble =
+            Math.sin(humPhase * 2.35 + i * 0.91) * amp +
+            Math.sin(humPhase * 5.7 + i * 1.63) * amp * 0.38 +
+            Math.sin(humPhase * 0.9 + seed + i * 0.3) * 0.18
+          p.y = p.oy + wobble
+        })
+        setPath()
+        return
+      }
+
+      if (tramRiding) placeTram()
     }
 
     const placeHint = (clientX) => {
@@ -224,6 +320,17 @@ export default function SpringWire({
         })
       })
 
+      // Small horizontal nudge while plucking (capped ~60–100px)
+      if (pullingRef.current && hasRadio && !reduceMotion) {
+        const svg = wrap.querySelector('svg')
+        const vbW = svg?.viewBox?.baseVal?.width || Math.max(wrap.clientWidth, 320)
+        const baseX = sampleAlongWire(pts, reduceMotion ? 0.5 : tramT).x
+        const baseLeft = (baseX / vbW) * wrap.clientWidth
+        const pullLeft = ((clientX - wrap.getBoundingClientRect().left) / wrap.clientWidth) * wrap.clientWidth
+        tramNudgeX = gsap.utils.clamp(-tramNudgeMax, tramNudgeMax, pullLeft - baseLeft)
+        placeTram()
+      }
+
       // Hint + emphasis wherever the pointer is on the wire
       if (!pullingRef.current) {
         setHint(true, clientX)
@@ -242,6 +349,23 @@ export default function SpringWire({
         setHint(true)
       }
       wrap.classList.remove('spring-wire--pulling')
+      if (hasRadio && !reduceMotion) {
+        const nudgeProxy = { n: tramNudgeX }
+        gsap.to(nudgeProxy, {
+          n: 0,
+          duration: 0.55,
+          ease: 'power2.out',
+          overwrite: true,
+          onUpdate: () => {
+            tramNudgeX = nudgeProxy.n
+            placeTram()
+          },
+          onComplete: () => {
+            tramNudgeX = 0
+            placeTram()
+          },
+        })
+      }
       pointsRef.current.forEach((p, i) => {
         gsap.to(p, {
           y: p.oy,
@@ -325,15 +449,18 @@ export default function SpringWire({
       if (!hasRadio) return
       const on = Boolean(e.detail?.playing)
       window.clearTimeout(humStartTimer)
+      tramRiding = on
       if (on) {
         // Let pull-release elastic finish before the bed vibrates
         humStartTimer = window.setTimeout(() => {
           humming = true
         }, 320)
+        placeTram()
       } else {
         humming = false
         humPhase = 0
         springHome()
+        placeTram()
       }
     }
 
@@ -342,7 +469,11 @@ export default function SpringWire({
     window.addEventListener('wire-radio', onRadioHum)
     if (hasRadio && isWireRadioPlaying() && !reduceMotion) {
       humming = true
+      tramRiding = true
+    } else if (hasRadio && isWireRadioPlaying()) {
+      tramRiding = true
     }
+    placeTram()
 
     if (showInvite) {
       wrap.classList.add('spring-wire--invite')
@@ -471,6 +602,55 @@ export default function SpringWire({
           filter={`url(#pencil-${filterId})`}
         />
       </svg>
+      {hasRadio ? (
+        <span ref={tramRef} className="spring-wire__tram" aria-hidden="true">
+          <svg
+            className="spring-wire__tram-svg"
+            viewBox="0 0 64 24"
+            width="42"
+            height="16"
+            fill="none"
+          >
+            {/* Streetcar roof — sits on the wire */}
+            <path
+              className="spring-wire__tram-body"
+              d="M8 2h48v2.2H8z"
+              fill="currentColor"
+            />
+            {/* Cabin body */}
+            <rect
+              className="spring-wire__tram-body"
+              x="6"
+              y="4"
+              width="52"
+              height="14.5"
+              rx="2.2"
+              fill="currentColor"
+            />
+            {/* Windows row */}
+            <rect x="10" y="6.2" width="8.5" height="6" rx="0.7" fill="var(--bg)" />
+            <rect x="21.5" y="6.2" width="8.5" height="6" rx="0.7" fill="var(--bg)" />
+            <rect x="33" y="6.2" width="8.5" height="6" rx="0.7" fill="var(--bg)" />
+            <rect x="44.5" y="6.2" width="8.5" height="6" rx="0.7" fill="var(--bg)" />
+            {/* Belt line */}
+            <path
+              d="M10 14h44"
+              stroke="var(--bg)"
+              strokeWidth="1"
+              strokeLinecap="round"
+              opacity="0.4"
+            />
+            {/* Soft runner along the cable */}
+            <path
+              d="M12 20h40"
+              stroke="currentColor"
+              strokeWidth="1.3"
+              strokeLinecap="round"
+              opacity="0.7"
+            />
+          </svg>
+        </span>
+      ) : null}
       <span ref={hintRef} className="spring-wire__hint" aria-hidden="true">
         {hintCopy}
       </span>

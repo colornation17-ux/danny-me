@@ -416,6 +416,17 @@ export function isWireRadioPlaying() {
   return playing
 }
 
+/**
+ * 0–1 progress through the clip from startAt → end.
+ * Used to pace the cable-car tram so one crossing ≈ one song.
+ */
+export function getWireRadioProgress() {
+  if (!audio || !Number.isFinite(audio.duration) || audio.duration <= 1) return null
+  const span = Math.max(1, audio.duration - startAt)
+  const t = (audio.currentTime - startAt) / span
+  return Math.max(0, Math.min(1, t))
+}
+
 export function wireRadioDefaults() {
   return {
     src: WIRE_RADIO.src,
