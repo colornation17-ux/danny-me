@@ -1,12 +1,12 @@
 ﻿import { useState, useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { SITE } from '../data/site'
 import { track } from '../lib/track'
 
 const links = [
   { to: '/', label: 'Home', end: true, icon: 'home' },
   { to: '/about', label: 'About', icon: 'about' },
-  { to: '/', label: 'Work', end: true, hash: '/#projects', icon: 'work' },
+  { to: '/#projects', label: 'Work', hash: true, icon: 'work' },
   { to: '/play', label: 'Lab', icon: 'play' },
 ]
 
@@ -52,17 +52,33 @@ function NavIcon({ type }) {
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
+  const menuButtonRef = useRef(null)
 
-  // Close on outside click
+  // Close on outside pointer + Escape; restore focus to hamburger
   useEffect(() => {
-    if (!menuOpen) return
-    const handler = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+    if (!menuOpen) return undefined
+
+    const onPointerDown = (e) => {
+      if (!menuRef.current?.contains(e.target)) {
         setMenuOpen(false)
+        menuButtonRef.current?.focus()
       }
     }
-    document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setMenuOpen(false)
+        menuButtonRef.current?.focus()
+      }
+    }
+
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKeyDown)
+    }
   }, [menuOpen])
 
   // Close on route change (link click)
@@ -82,10 +98,10 @@ export default function Nav() {
             {links.map(({ to, label, end, hash, icon }) => (
               <li key={`${label}-${to}`}>
                 {hash ? (
-                  <a className="nav-tab" href={hash} onClick={close}>
+                  <Link to={to} className="nav-tab" onClick={close}>
                     <NavIcon type={icon} />
                     {label}
-                  </a>
+                  </Link>
                 ) : (
                   <NavLink
                     to={to}
@@ -133,9 +149,12 @@ export default function Nav() {
           </a>
           {/* Hamburger — mobile only */}
           <button
+            ref={menuButtonRef}
+            type="button"
             className="nav-hamburger"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
             onClick={() => setMenuOpen((o) => !o)}
           >
             <span className={`nav-hamburger__icon${menuOpen ? ' nav-hamburger__icon--open' : ''}`}>
@@ -145,58 +164,60 @@ export default function Nav() {
         </div>
       </div>
 
-      {/* Mobile dropdown */}
-      <div className={`nav-mobile-menu${menuOpen ? ' nav-mobile-menu--open' : ''}`} aria-hidden={!menuOpen}>
-        <ul className="nav-mobile-links">
-          {links.map(({ to, label, end, hash, icon }) => (
-            <li key={`mob-${label}`}>
-              {hash ? (
-                <a className="nav-mobile-link" href={hash} onClick={close}>
-                  <NavIcon type={icon} />
-                  {label}
-                </a>
-              ) : (
-                <NavLink
-                  to={to}
-                  end={end}
-                  className={({ isActive }) =>
-                    `nav-mobile-link${isActive ? ' active' : ''}`
-                  }
-                  onClick={close}
-                >
-                  <NavIcon type={icon} />
-                  {label}
-                </NavLink>
-              )}
+      {/* Mobile dropdown — only mount when open so links are not focusable while closed */}
+      {menuOpen ? (
+        <div id="mobile-navigation" className="nav-mobile-menu nav-mobile-menu--open">
+          <ul className="nav-mobile-links">
+            {links.map(({ to, label, end, hash, icon }) => (
+              <li key={`mob-${label}`}>
+                {hash ? (
+                  <Link to={to} className="nav-mobile-link" onClick={close}>
+                    <NavIcon type={icon} />
+                    {label}
+                  </Link>
+                ) : (
+                  <NavLink
+                    to={to}
+                    end={end}
+                    className={({ isActive }) =>
+                      `nav-mobile-link${isActive ? ' active' : ''}`
+                    }
+                    onClick={close}
+                  >
+                    <NavIcon type={icon} />
+                    {label}
+                  </NavLink>
+                )}
+              </li>
+            ))}
+            <li>
+              <a
+                className="nav-mobile-link"
+                href={SITE.resume}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={close}
+              >
+                Resume
+              </a>
             </li>
-          ))}
-          <li>
-            <a
-              className="nav-mobile-link"
-              href={SITE.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={close}
-            >
-              Resume
-            </a>
-          </li>
-          <li>
-            <a
-              className="nav-mobile-link"
-              href={SITE.linkedIn}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={close}
-            >
-              <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true">
-                <path fill="currentColor" d="M4.5 6.5h-3v9h3v-9Zm-1.5-4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 3 2.5ZM7 15.5h3v-5c0-1.1.9-2 2-2s2 .9 2 2v5h3v-5.5a4.5 4.5 0 0 0-4.5-4.5c-1.3 0-2.4.6-3.1 1.5H9.1L9 6.5H7v9Z"/>
-              </svg>
-              LinkedIn
-            </a>
-          </li>
-        </ul>
-      </div>
+            <li>
+              <a
+                className="nav-mobile-link"
+                href={SITE.linkedIn}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={close}
+              >
+                <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true">
+                  <path fill="currentColor" d="M4.5 6.5h-3v9h3v-9Zm-1.5-4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 3 2.5ZM7 15.5h3v-5c0-1.1.9-2 2-2s2 .9 2 2v5h3v-5.5a4.5 4.5 0 0 0-4.5-4.5c-1.3 0-2.4.6-3.1 1.5H9.1L9 6.5H7v9Z"/>
+                </svg>
+                LinkedIn
+              </a>
+            </li>
+          </ul>
+        </div>
+      ) : null}
     </header>
   )
 }

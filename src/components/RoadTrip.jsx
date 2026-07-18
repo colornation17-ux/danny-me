@@ -51,6 +51,15 @@ const TRIP_STOPS = [
 const ROUTE_STATES = [...new Set(TRIP_STOPS.map((s) => s.state))]
 const ALL_STATE_CODES = Object.keys(STATE_PATHS)
 
+function getFocusable(root) {
+  if (!root) return []
+  return [
+    ...root.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ]
+}
+
 function TravelLightbox({ open, stop, onClose, labelId }) {
   const dialogRef = useRef(null)
   const closeBtnRef = useRef(null)
@@ -62,7 +71,24 @@ function TravelLightbox({ open, stop, onClose, labelId }) {
     const t = window.setTimeout(() => closeBtnRef.current?.focus(), 30)
 
     const onKey = (e) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+        return
+      }
+      if (e.key !== 'Tab') return
+      const root = dialogRef.current
+      const items = getFocusable(root)
+      if (!items.length) return
+      const first = items[0]
+      const last = items[items.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => {
@@ -112,6 +138,34 @@ function TravelLightbox({ open, stop, onClose, labelId }) {
   )
 }
 
+function RoadTripStatic({ stops, onOpenPhoto }) {
+  return (
+    <div className="road-trip road-trip--static" role="region" aria-label="Cross-country road trip stops">
+      <ol className="road-trip__static-list">
+        {stops.map((s) => (
+          <li key={s.id} className="road-trip__static-item">
+            {s.photo ? (
+              <button
+                type="button"
+                className="road-trip__static-photo"
+                aria-label={`View ${s.title} photo full size`}
+                onClick={(e) => onOpenPhoto(s, e)}
+              >
+                <img src={s.photo} alt="" loading="lazy" decoding="async" />
+              </button>
+            ) : null}
+            <div className="road-trip__static-text">
+              <p className="road-trip__panel-eyebrow">{s.desc}</p>
+              <h3 className="road-trip__panel-title">{s.title}</h3>
+              {s.note ? <p className="road-trip__panel-note">{s.note}</p> : null}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
 export default function RoadTrip() {
   const svgRef = useRef(null)
   const scrollerRef = useRef(null)
@@ -119,23 +173,44 @@ export default function RoadTrip() {
   const markerRef = useRef(null)
   const panelRefs = useRef({})
   const [lightbox, setLightbox] = useState(null)
+  const [reduceMotion, setReduceMotion] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false,
+  )
   const lightboxLabelId = useId()
+  const openerRef = useRef(null)
 
-  const closeLightbox = useCallback(() => setLightbox(null), [])
-  const openLightbox = useCallback((stop) => {
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = () => setReduceMotion(mq.matches)
+    onChange()
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  const closeLightbox = useCallback(() => {
+    setLightbox(null)
+    const opener = openerRef.current
+    openerRef.current = null
+    window.requestAnimationFrame(() => {
+      opener?.focus?.()
+    })
+  }, [])
+
+  const openLightbox = useCallback((stop, event) => {
     if (!stop?.photo) return
+    openerRef.current = event?.currentTarget ?? null
     setLightbox(stop)
     track('photo_map', { action: 'lightbox', stop: stop.id || stop.title || 'unknown' })
   }, [])
 
   useEffect(() => {
+    if (reduceMotion) return undefined
+
     const svg = svgRef.current
     const marker = markerRef.current
-    if (!svg || !marker) return
-
-    const reduceMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!svg || !marker) return undefined
 
     const ctx = gsap.context(() => {
       // Real geographic position for each stop, resolved from its state's
@@ -149,15 +224,14 @@ export default function RoadTrip() {
       gsap.set(marker, { attr: { cx: stops[0].cx, cy: stops[0].cy }, autoAlpha: 0 })
       gsap.set(Object.values(panelRefs.current).filter(Boolean), { autoAlpha: 0 })
 
-      // Longer scroll + softer scrub = smoother photo card handoffs
-      const stopGap = reduceMotion ? 0.7 : 1
+      const stopGap = 1
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: scrollerRef.current,
           start: 'top top',
           end: () =>
             `+=${Math.max(5200, window.innerHeight * (3.2 + TRIP_STOPS.length * 0.22))}`,
-          scrub: reduceMotion ? 0.35 : 1.85,
+          scrub: 1.85,
           pin: pinRef.current,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -218,7 +292,21 @@ export default function RoadTrip() {
     ScrollTrigger.refresh()
 
     return () => ctx.revert()
-  }, [])
+  }, [reduceMotion])
+
+  if (reduceMotion) {
+    return (
+      <>
+        <RoadTripStatic stops={TRIP_STOPS} onOpenPhoto={openLightbox} />
+        <TravelLightbox
+          open={Boolean(lightbox)}
+          stop={lightbox}
+          onClose={closeLightbox}
+          labelId={lightboxLabelId}
+        />
+      </>
+    )
+  }
 
   return (
     <div
@@ -267,7 +355,7 @@ export default function RoadTrip() {
                     type="button"
                     className="road-trip__polaroid"
                     aria-label={`View ${s.title} photo full size`}
-                    onClick={() => openLightbox(s)}
+                    onClick={(e) => openLightbox(s, e)}
                   >
                     <img
                       src={s.photo}

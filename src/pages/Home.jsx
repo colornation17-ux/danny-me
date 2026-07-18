@@ -62,227 +62,263 @@ export default function Home() {
   // Run GSAP animations once the page is visible
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // ── Hero sequence ────────────────────────────────────────────────
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+      const mm = gsap.matchMedia()
 
-      // Split display name into characters and stagger them in
-      const nameEl = document.querySelector('.folio-hero__name--display')
-      if (nameEl) {
-        const raw = nameEl.textContent.trim()
-        nameEl.innerHTML = raw
-          .split('')
-          .map((c) => `<span class="gs-char" style="display:inline-block">${c}</span>`)
-          .join('')
-        tl.from('.folio-hero__name--display .gs-char', {
-          opacity: 0,
-          y: 48,
-          rotateX: -80,
-          transformOrigin: '50% 100%',
-          stagger: 0.04,
-          duration: 0.55,
-        })
-      }
-
-      tl.from(
-        '.folio-hero__kicker',
-        { opacity: 0, x: -20, duration: 0.4 },
-        '<+0.1',
-      )
-        .from(
-          '.folio-hero__avail',
-          { opacity: 0, y: 12, duration: 0.35 },
-          '-=0.2',
-        )
-        .from(
-          '.folio-sticker',
+      mm.add('(prefers-reduced-motion: reduce)', () => {
+        gsap.set(
+          [
+            '.folio-hero__name--display',
+            '.folio-hero__kicker',
+            '.folio-hero__avail',
+            '.folio-sticker',
+            '.folio-hero__lead',
+            '.folio-btn--contact',
+            '.folio-about__body',
+            '.folio-polaroid',
+            '.folio-skills li',
+            '.folio-work__title',
+            '.folio-sticky',
+            '.folio-contact__title',
+            '.folio-contact__body',
+            '.folio-contact__cta',
+          ],
           {
-            opacity: 0,
-            scale: 0.6,
-            rotation: -20,
-            stagger: 0.08,
-            duration: 0.45,
-            ease: 'back.out(2)',
-          },
-          '-=0.25',
-        )
-        .from(
-          '.folio-hero__lead',
-          { opacity: 0, y: 18, duration: 0.4 },
-          '-=0.15',
-        )
-        .from(
-          '.folio-btn--contact',
-          { opacity: 0, scale: 0.88, duration: 0.35, ease: 'back.out(1.7)' },
-          '-=0.1',
-        )
-
-      // ── About section — slide-up on scroll ──────────────────────────
-      gsap.from('.folio-about__body', {
-        scrollTrigger: { trigger: '.folio-about', start: 'top 78%' },
-        opacity: 0,
-        y: 36,
-        duration: 0.6,
-      })
-      gsap.from('.folio-polaroid', {
-        scrollTrigger: { trigger: '.folio-about__grid', start: 'top 80%' },
-        opacity: 0,
-        y: 24,
-        rotation: 4,
-        stagger: 0.12,
-        duration: 0.55,
-        ease: 'back.out(1.4)',
-      })
-      // ── Skills — drop-and-tumble entrance (GSAP SplitText demo physics) ──
-      gsap.from('.folio-skills li', {
-        scrollTrigger: { trigger: '.folio-skills', start: 'top 85%' },
-        y: -100,
-        opacity: 0,
-        rotation: 'random(-80, 80)',
-        stagger: 0.1,
-        duration: 1,
-        ease: 'back',
-      })
-
-      // ── Work heading ────────────────────────────────────────────────
-      gsap.from('.folio-work__title', {
-        scrollTrigger: { trigger: '.folio-work__head', start: 'top 82%' },
-        opacity: 0,
-        y: 32,
-        duration: 0.55,
-        ease: 'power2.out',
-      })
-      gsap.from('.folio-sticky', {
-        scrollTrigger: { trigger: '.folio-work__head', start: 'top 75%' },
-        opacity: 0,
-        y: 16,
-        duration: 0.4,
-        delay: 0.15,
-      })
-
-      // ── Contact section ─────────────────────────────────────────────
-      // Do not use gsap.from({ opacity: 0 }) here. FolderStack pin/refresh
-      // can prevent the tween from playing and leave the copy invisible
-      // (eyebrow + CTA visible, headline/body gone). Animate only on enter
-      // and force-visible if the section is already past the start line.
-      const contactEls = gsap.utils.toArray(
-        '.folio-contact__title, .folio-contact__body, .folio-contact__cta',
-      )
-      if (contactEls.length) {
-        const revealContact = () => {
-          gsap.to(contactEls, {
+            clearProps: 'all',
             autoAlpha: 1,
+            opacity: 1,
+            visibility: 'visible',
+            x: 0,
             y: 0,
-            duration: 0.45,
-            stagger: 0.08,
-            ease: 'power2.out',
-            overwrite: 'auto',
+            rotation: 0,
+            scale: 1,
+          },
+        )
+      })
+
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // ── Hero sequence ────────────────────────────────────────────────
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+        // Split display name into characters and stagger them in
+        const nameEl = document.querySelector('.folio-hero__name--display')
+        if (nameEl) {
+          const raw = nameEl.textContent.trim()
+          nameEl.innerHTML = raw
+            .split('')
+            .map((c) => `<span class="gs-char" style="display:inline-block">${c}</span>`)
+            .join('')
+          tl.from('.folio-hero__name--display .gs-char', {
+            opacity: 0,
+            y: 48,
+            rotateX: -80,
+            transformOrigin: '50% 100%',
+            stagger: 0.04,
+            duration: 0.55,
           })
         }
-        gsap.set(contactEls, { autoAlpha: 0, y: 20 })
-        ScrollTrigger.create({
-          trigger: '.folio-contact',
-          start: 'top 90%',
-          once: true,
-          invalidateOnRefresh: true,
-          onEnter: revealContact,
-          onRefresh(self) {
-            if (self.progress > 0 || self.isActive) revealContact()
-          },
+
+        tl.from(
+          '.folio-hero__kicker',
+          { opacity: 0, x: -20, duration: 0.4 },
+          '<+0.1',
+        )
+          .from(
+            '.folio-hero__avail',
+            { opacity: 0, y: 12, duration: 0.35 },
+            '-=0.2',
+          )
+          .from(
+            '.folio-sticker',
+            {
+              opacity: 0,
+              scale: 0.6,
+              rotation: -20,
+              stagger: 0.08,
+              duration: 0.45,
+              ease: 'back.out(2)',
+            },
+            '-=0.25',
+          )
+          .from(
+            '.folio-hero__lead',
+            { opacity: 0, y: 18, duration: 0.4 },
+            '-=0.15',
+          )
+          .from(
+            '.folio-btn--contact',
+            { opacity: 0, scale: 0.88, duration: 0.35, ease: 'back.out(1.7)' },
+            '-=0.1',
+          )
+
+        // ── About section — slide-up on scroll ──────────────────────────
+        gsap.from('.folio-about__body', {
+          scrollTrigger: { trigger: '.folio-about', start: 'top 78%' },
+          opacity: 0,
+          y: 36,
+          duration: 0.6,
         })
-      }
+        gsap.from('.folio-polaroid', {
+          scrollTrigger: { trigger: '.folio-about__grid', start: 'top 80%' },
+          opacity: 0,
+          y: 24,
+          rotation: 4,
+          stagger: 0.12,
+          duration: 0.55,
+          ease: 'back.out(1.4)',
+        })
+        // ── Skills — drop-and-tumble entrance (GSAP SplitText demo physics) ──
+        gsap.from('.folio-skills li', {
+          scrollTrigger: { trigger: '.folio-skills', start: 'top 85%' },
+          y: -100,
+          opacity: 0,
+          rotation: 'random(-80, 80)',
+          stagger: 0.1,
+          duration: 1,
+          ease: 'back',
+        })
 
-      // ── Hero stickers + DANNY box ────────────────────────────────────
-      // Was nearly static: only amber/pink drifted ±6px on x; green/yellow
-      // waited on scroll parallax (0 motion at rest). Float all four instead.
-      const mm = gsap.matchMedia()
-      mm.add(
-        {
-          reduce: '(prefers-reduced-motion: reduce)',
-          motion: '(prefers-reduced-motion: no-preference)',
-          mouse: '(hover: hover) and (pointer: fine)',
-        },
-        (context) => {
-          const { reduce, motion, mouse } = context.conditions
-          if (reduce || !motion) return
+        // ── Work heading ────────────────────────────────────────────────
+        gsap.from('.folio-work__title', {
+          scrollTrigger: { trigger: '.folio-work__head', start: 'top 82%' },
+          opacity: 0,
+          y: 32,
+          duration: 0.55,
+          ease: 'power2.out',
+        })
+        gsap.from('.folio-sticky', {
+          scrollTrigger: { trigger: '.folio-work__head', start: 'top 75%' },
+          opacity: 0,
+          y: 16,
+          duration: 0.4,
+          delay: 0.15,
+        })
 
-          const stickers = gsap.utils.toArray('.folio-sticker')
-          stickers.forEach((el, i) => {
-            const baseRot =
-              parseFloat(getComputedStyle(el).getPropertyValue('--rot')) || 0
-            gsap.set(el, {
-              rotation: baseRot,
-              x: 0,
+        // ── Contact section ─────────────────────────────────────────────
+        // Do not use gsap.from({ opacity: 0 }) here. FolderStack pin/refresh
+        // can prevent the tween from playing and leave the copy invisible
+        // (eyebrow + CTA visible, headline/body gone). Animate only on enter
+        // and force-visible if the section is already past the start line.
+        const contactEls = gsap.utils.toArray(
+          '.folio-contact__title, .folio-contact__body, .folio-contact__cta',
+        )
+        if (contactEls.length) {
+          const revealContact = () => {
+            gsap.to(contactEls, {
+              autoAlpha: 1,
               y: 0,
-              transformOrigin: '50% 50%',
+              duration: 0.45,
+              stagger: 0.08,
+              ease: 'power2.out',
+              overwrite: 'auto',
             })
-            const dir = i % 2 === 0 ? 1 : -1
-            gsap.to(el, {
-              y: `+=${10 + (i % 3) * 5}`,
-              x: `+=${dir * (8 + i * 3)}`,
-              rotation: baseRot + dir * 2.2,
-              duration: 2.6 + i * 0.4,
-              ease: 'sine.inOut',
-              repeat: -1,
-              yoyo: true,
-              // Wait for hero entrance stagger to finish before floating
-              delay: 1.15 + i * 0.28,
-            })
+          }
+          gsap.set(contactEls, { autoAlpha: 0, y: 20 })
+          ScrollTrigger.create({
+            trigger: '.folio-contact',
+            start: 'top 90%',
+            once: true,
+            invalidateOnRefresh: true,
+            onEnter: revealContact,
+            onRefresh(self) {
+              if (self.progress > 0 || self.isActive) revealContact()
+            },
           })
+        }
 
-          if (mouse) {
-            const select = document.querySelector('.folio-hero__select')
-            if (select) {
-              const onMove = (e) => {
-                const r = select.getBoundingClientRect()
-                const nx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2)
-                const ny = (e.clientY - (r.top + r.height / 2)) / (r.height / 2)
-                gsap.to(select, {
-                  x: nx * 8,
-                  y: ny * 5,
-                  rotation: nx * 1.6,
-                  duration: 0.4,
-                  ease: 'power2.out',
-                  overwrite: 'auto',
-                })
-              }
-              const onLeave = () => {
-                gsap.to(select, {
-                  x: 0,
-                  y: 0,
-                  rotation: 0,
-                  duration: 0.65,
-                  ease: 'elastic.out(1, 0.45)',
-                  overwrite: 'auto',
-                })
-              }
-              select.addEventListener('mousemove', onMove)
-              select.addEventListener('mouseleave', onLeave)
-              context.add(() => {
-                select.removeEventListener('mousemove', onMove)
-                select.removeEventListener('mouseleave', onLeave)
+        // ── Hero stickers + DANNY box ────────────────────────────────────
+        const stickers = gsap.utils.toArray('.folio-sticker')
+        stickers.forEach((el, i) => {
+          const baseRot =
+            parseFloat(getComputedStyle(el).getPropertyValue('--rot')) || 0
+          gsap.set(el, {
+            rotation: baseRot,
+            x: 0,
+            y: 0,
+            transformOrigin: '50% 50%',
+          })
+          const dir = i % 2 === 0 ? 1 : -1
+          gsap.to(el, {
+            y: `+=${10 + (i % 3) * 5}`,
+            x: `+=${dir * (8 + i * 3)}`,
+            rotation: baseRot + dir * 2.2,
+            duration: 2.6 + i * 0.4,
+            ease: 'sine.inOut',
+            repeat: -1,
+            yoyo: true,
+            delay: 1.15 + i * 0.28,
+          })
+        })
+
+        const mouseMm = gsap.matchMedia()
+        mouseMm.add('(hover: hover) and (pointer: fine)', () => {
+          const select = document.querySelector('.folio-hero__select')
+          if (select) {
+            const xTo = gsap.quickTo(select, 'x', { duration: 0.4, ease: 'power2.out' })
+            const yTo = gsap.quickTo(select, 'y', { duration: 0.4, ease: 'power2.out' })
+            const rotTo = gsap.quickTo(select, 'rotation', {
+              duration: 0.4,
+              ease: 'power2.out',
+            })
+            const onMove = (e) => {
+              const r = select.getBoundingClientRect()
+              const nx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2)
+              const ny = (e.clientY - (r.top + r.height / 2)) / (r.height / 2)
+              xTo(nx * 8)
+              yTo(ny * 5)
+              rotTo(nx * 1.6)
+            }
+            const onLeave = () => {
+              gsap.to(select, {
+                x: 0,
+                y: 0,
+                rotation: 0,
+                duration: 0.65,
+                ease: 'elastic.out(1, 0.45)',
+                overwrite: 'auto',
               })
             }
+            select.addEventListener('mousemove', onMove)
+            select.addEventListener('mouseleave', onLeave)
+            return () => {
+              select.removeEventListener('mousemove', onMove)
+              select.removeEventListener('mouseleave', onLeave)
+            }
           }
-        },
-      )
+          return undefined
+        })
 
-      // ── Magnetic hover on the hero CTA ──────────────────────────────
-      const cta = document.querySelector('.folio-btn--contact')
-      if (cta) {
-        const onMove = (e) => {
-          const r = cta.getBoundingClientRect()
-          const cx = r.left + r.width / 2
-          const cy = r.top + r.height / 2
-          const dx = (e.clientX - cx) * 0.25
-          const dy = (e.clientY - cy) * 0.25
-          gsap.to(cta, { x: dx, y: dy, duration: 0.35, ease: 'power2.out' })
+        // ── Magnetic hover on the hero CTA ──────────────────────────────
+        const cta = document.querySelector('.folio-btn--contact')
+        if (cta) {
+          const xTo = gsap.quickTo(cta, 'x', { duration: 0.22, ease: 'power3.out' })
+          const yTo = gsap.quickTo(cta, 'y', { duration: 0.22, ease: 'power3.out' })
+          const onMove = (e) => {
+            const r = cta.getBoundingClientRect()
+            const cx = r.left + r.width / 2
+            const cy = r.top + r.height / 2
+            xTo((e.clientX - cx) * 0.25)
+            yTo((e.clientY - cy) * 0.25)
+          }
+          const onLeave = () => {
+            gsap.to(cta, {
+              x: 0,
+              y: 0,
+              duration: 0.5,
+              ease: 'elastic.out(1, 0.4)',
+              overwrite: 'auto',
+            })
+          }
+          cta.addEventListener('mousemove', onMove)
+          cta.addEventListener('mouseleave', onLeave)
+          return () => {
+            mouseMm.revert()
+            cta.removeEventListener('mousemove', onMove)
+            cta.removeEventListener('mouseleave', onLeave)
+          }
         }
-        const onLeave = () => {
-          gsap.to(cta, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' })
-        }
-        cta.addEventListener('mousemove', onMove)
-        cta.addEventListener('mouseleave', onLeave)
-      }
+
+        return () => mouseMm.revert()
+      })
     }, pageRef)
 
     return () => ctx.revert()
@@ -361,6 +397,7 @@ export default function Home() {
       <section
         className="folio-work folio-work--folders"
         id="projects"
+        tabIndex={-1}
         aria-labelledby="work-heading"
       >
         <div className="folio-work__head">

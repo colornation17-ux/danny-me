@@ -66,15 +66,27 @@ function buzz() {
   }
 }
 
+function getFocusable(root) {
+  if (!root) return []
+  return [
+    ...root.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ].filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true')
+}
+
 /**
  * Collapsible, draggable site radio.
  * Mobile: big play target, grip-only drag, auto-collapse, bottom sheet when open.
  */
 export default function SiteRadio() {
   const rootRef = useRef(null)
+  const panelRef = useRef(null)
+  const expandBtnRef = useRef(null)
   const dragRef = useRef(null)
-  const suppressClickRef = useRef(false)
+  const didDragRef = useRef(false)
   const idleTimerRef = useRef(0)
+  const restoreFocusRef = useRef(null)
 
   const isNarrow = useMedia('(max-width: 600px)')
 
@@ -134,8 +146,56 @@ export default function SiteRadio() {
     return () => window.clearTimeout(idleTimerRef.current)
   }, [expanded, sheetMode])
 
+  // Sheet mode: dialog semantics, focus trap, Escape, body scroll lock
+  useEffect(() => {
+    if (!sheetMode) return undefined
+
+    restoreFocusRef.current = document.activeElement
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const panel = panelRef.current
+    const focusables = getFocusable(panel)
+    const first = focusables[0]
+    window.requestAnimationFrame(() => first?.focus())
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setExpanded(false)
+        return
+      }
+      if (e.key !== 'Tab' || !panel) return
+      const items = getFocusable(panel)
+      if (!items.length) return
+      const firstEl = items[0]
+      const lastEl = items[items.length - 1]
+      if (e.shiftKey && document.activeElement === firstEl) {
+        e.preventDefault()
+        lastEl.focus()
+      } else if (!e.shiftKey && document.activeElement === lastEl) {
+        e.preventDefault()
+        firstEl.focus()
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      document.removeEventListener('keydown', onKeyDown)
+      const restore = restoreFocusRef.current
+      restoreFocusRef.current = null
+      window.requestAnimationFrame(() => {
+        if (restore && typeof restore.focus === 'function') restore.focus()
+        else expandBtnRef.current?.focus()
+      })
+    }
+  }, [sheetMode])
+
+  const collapse = () => setExpanded(false)
+
   const onToggle = async () => {
-    if (busy || suppressClickRef.current) return
+    if (busy || didDragRef.current) return
     setBusy(true)
     try {
       await toggleWireRadio()
@@ -155,6 +215,8 @@ export default function SiteRadio() {
 
   const onPointerDown = (e) => {
     if (e.button != null && e.button !== 0) return
+    // Clear drag-suppression at the start of a new pointer sequence
+    didDragRef.current = false
     // Grip-only drag — play/expand stay clean taps
     if (!e.target.closest('.site-radio__grip')) return
     if (sheetMode) return
@@ -185,7 +247,7 @@ export default function SiteRadio() {
     if (!drag.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD) return
 
     drag.moved = true
-    suppressClickRef.current = true
+    didDragRef.current = true
     if (!dragging) setDragging(true)
 
     const maxX = Math.max(EDGE, window.innerWidth - drag.width - EDGE)
@@ -213,9 +275,7 @@ export default function SiteRadio() {
     dragRef.current = null
     setDragging(false)
     setDragPos(null)
-    window.setTimeout(() => {
-      suppressClickRef.current = false
-    }, 40)
+    // didDragRef clears on the next pointerdown — not a timer
   }
 
   const style =
@@ -241,19 +301,26 @@ export default function SiteRadio() {
         .filter(Boolean)
         .join(' ')}
       style={style}
-      role="region"
+      role={sheetMode ? 'dialog' : 'region'}
+      aria-modal={sheetMode ? true : undefined}
       aria-label="Site radio"
+      aria-labelledby={sheetMode ? 'site-radio-heading' : undefined}
     >
       {sheetMode ? (
         <button
           type="button"
           className="site-radio__scrim"
           aria-label="Collapse radio controls"
-          onClick={() => setExpanded(false)}
+          onClick={collapse}
         />
       ) : null}
 
-      <div className="site-radio__panel">
+      <div
+        className="site-radio__panel"
+        ref={panelRef}
+        onPointerDown={bumpIdle}
+        onFocus={bumpIdle}
+      >
         <div className="site-radio__row">
           {!sheetMode ? (
             <button
@@ -292,7 +359,9 @@ export default function SiteRadio() {
             </span>
             {expanded ? (
               <span className="site-radio__copy">
-                <span className="site-radio__eyebrow">{playing ? 'On air' : 'Radio'}</span>
+                <span id="site-radio-heading" className="site-radio__eyebrow">
+                  {playing ? 'On air' : 'Radio'}
+                </span>
                 <span className="site-radio__label">{playing ? 'Pause' : 'Play'}</span>
               </span>
             ) : null}
@@ -302,10 +371,11 @@ export default function SiteRadio() {
           </button>
 
           <button
+            ref={expandBtnRef}
             type="button"
             className="site-radio__expand"
             onClick={() => {
-              if (suppressClickRef.current) return
+              if (didDragRef.current) return
               setExpanded((v) => !v)
             }}
             aria-expanded={expanded}
@@ -357,7 +427,7 @@ export default function SiteRadio() {
             {!sheetMode ? (
               <p className="site-radio__hint">Use the grip to drag · snaps to a corner</p>
             ) : (
-              <p className="site-radio__hint">Tap outside or the chevron to close</p>
+              <p className="site-radio__hint">Tap outside, Escape, or the chevron to close</p>
             )}
           </div>
         ) : null}

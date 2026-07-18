@@ -146,6 +146,9 @@ export default function SpringWire({
     let humPhase = 0
     let humStartTimer = 0
     let pointerOver = false
+    let ticking = false
+    let settledFrames = 0
+    let gestureLocked = false
     const reduceMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -157,6 +160,7 @@ export default function SpringWire({
     const springDuration = isCoarse ? 0.48 : 0.95
     const pullPlayMinMove = isCoarse ? 10 : 10
     const pullPlayMinHold = isCoarse ? 90 : 120
+    const pullLockMove = isCoarse ? 8 : 4
     // Normalized progress per second (~3 min full fallback crossing)
     const tramFallbackSpeed = 1 / 180
     const tramNudgeMax = isCoarse ? 64 : 90
@@ -210,8 +214,21 @@ export default function SpringWire({
       placeTram()
     }
 
+    const stopTicker = () => {
+      if (!ticking) return
+      ticking = false
+      gsap.ticker.remove(tickWire)
+    }
+
+    const startTicker = () => {
+      settledFrames = 0
+      if (ticking) return
+      ticking = true
+      gsap.ticker.add(tickWire)
+    }
+
     /** Soft uneven hum while radio plays — settle to rest when pause */
-    const tickHum = (_time, deltaTime) => {
+    const tickWire = (_time, deltaTime) => {
       if (tramRiding && !reduceMotion) {
         const songProgress = getWireRadioProgress()
         if (songProgress != null) {
@@ -235,10 +252,24 @@ export default function SpringWire({
           p.y = p.oy + wobble
         })
         setPath()
+      } else if (tramRiding) {
+        placeTram()
+      }
+
+      const busy =
+        pullingRef.current ||
+        humming ||
+        tramRiding ||
+        pointerOver ||
+        pointsRef.current.some((p) => gsap.isTweening(p))
+
+      if (busy) {
+        settledFrames = 0
         return
       }
 
-      if (tramRiding) placeTram()
+      settledFrames += 1
+      if (settledFrames > 8) stopTicker()
     }
 
     const placeHint = (clientX) => {
@@ -292,6 +323,7 @@ export default function SpringWire({
         }
       })
       setPath()
+      startTicker()
     }
 
     const localPoint = (clientX, clientY) => {
@@ -307,6 +339,7 @@ export default function SpringWire({
     }
 
     const pullToward = (clientX, clientY, strength = 1) => {
+      startTicker()
       const { x, y } = localPoint(clientX, clientY)
       const pts = pointsRef.current
       let nearest = 0
@@ -375,6 +408,7 @@ export default function SpringWire({
     }
 
     const springHome = () => {
+      startTicker()
       if (!invitingRef.current) {
         setHint(false)
       } else {
@@ -412,10 +446,48 @@ export default function SpringWire({
       })
     }
 
+    const finishPointer = (e, { cancelled = false } = {}) => {
+      if (pointerIdRef.current != null && e.pointerId !== pointerIdRef.current) return
+      const start = pullStartRef.current
+      const moved = start
+        ? Math.hypot(e.clientX - start.x, e.clientY - start.y)
+        : 0
+      const held = start ? performance.now() - start.t : 0
+      const locked = gestureLocked
+      pullingRef.current = false
+      pointerIdRef.current = null
+      pullStartRef.current = null
+      gestureLocked = false
+      if (wrap.hasPointerCapture?.(e.pointerId)) {
+        try {
+          wrap.releasePointerCapture(e.pointerId)
+        } catch {
+          /* ignore */
+        }
+      }
+      springHome()
+
+      // Browser canceled the gesture (often for scroll) — never toggle audio
+      if (cancelled || !locked) return
+
+      if (radioRef.current && (moved > pullPlayMinMove || held > pullPlayMinHold)) {
+        invitingRef.current = false
+        wrap.classList.remove('spring-wire--invite')
+        wrap.classList.remove('spring-wire--invite-inview')
+        const opts = radioRef.current
+        const action = isWireRadioPlaying() ? 'pause' : 'play'
+        void toggleWireRadio(opts)
+        markFoundWireRadio()
+        setFound(true)
+        track('pull_wire', { action, input: 'pull' })
+      }
+    }
+
     const onPointerDown = (e) => {
       // Ignore multi-touch pinch — one finger plucks the wire
       if (e.isPrimary === false) return
       pullingRef.current = true
+      gestureLocked = false
       pointerIdRef.current = e.pointerId
       pullStartRef.current = { x: e.clientX, y: e.clientY, t: performance.now() }
       wrap.classList.add('spring-wire--pulling')
@@ -427,18 +499,33 @@ export default function SpringWire({
       if (!invitingRef.current) {
         gsap.to(hint, { opacity: 0.35, duration: 0.12, overwrite: 'auto' })
       }
-      wrap.setPointerCapture?.(e.pointerId)
-      pullToward(e.clientX, e.clientY, 1)
-      if (e.pointerType === 'touch') {
-        e.preventDefault()
+      startTicker()
+      // Mouse/stylus: lock immediately. Touch: wait for intentional move so
+      // light taps still scroll the page instead of owning the gesture.
+      if (e.pointerType !== 'touch') {
+        gestureLocked = true
+        wrap.setPointerCapture?.(e.pointerId)
+        pullToward(e.clientX, e.clientY, 1)
+      } else {
+        pullToward(e.clientX, e.clientY, 0.35)
       }
     }
 
     const onPointerMove = (e) => {
       if (pullingRef.current && pointerIdRef.current === e.pointerId) {
+        const start = pullStartRef.current
+        const moved = start
+          ? Math.hypot(e.clientX - start.x, e.clientY - start.y)
+          : 0
+        if (!gestureLocked && moved >= pullLockMove) {
+          gestureLocked = true
+          wrap.setPointerCapture?.(e.pointerId)
+        }
+        if (gestureLocked && e.pointerType === 'touch') {
+          e.preventDefault()
+        }
         placeHint(e.clientX)
-        pullToward(e.clientX, e.clientY, 1)
-        if (e.pointerType === 'touch') e.preventDefault()
+        pullToward(e.clientX, e.clientY, gestureLocked ? 1 : 0.45)
         return
       }
       // Hover: wire follows cursor along the full length (mouse / stylus only)
@@ -447,33 +534,8 @@ export default function SpringWire({
       }
     }
 
-    const onPointerUp = (e) => {
-      if (pointerIdRef.current != null && e.pointerId !== pointerIdRef.current) return
-      const start = pullStartRef.current
-      const moved = start
-        ? Math.hypot(e.clientX - start.x, e.clientY - start.y)
-        : 0
-      const held = start ? performance.now() - start.t : 0
-      pullingRef.current = false
-      pointerIdRef.current = null
-      pullStartRef.current = null
-      springHome()
-
-      if (radioRef.current && (moved > pullPlayMinMove || held > pullPlayMinHold)) {
-        // Pull toggles: play when off, pause when on.
-        invitingRef.current = false
-        wrap.classList.remove('spring-wire--invite')
-        wrap.classList.remove('spring-wire--invite-inview')
-        const opts = radioRef.current
-        const action = isWireRadioPlaying() ? 'pause' : 'play'
-        // Kick play first (sync el.play inside), then always reveal the player.
-        // Never gate the play button on play() settling — it can hang on mobile.
-        void toggleWireRadio(opts)
-        markFoundWireRadio()
-        setFound(true)
-        track('pull_wire', { action, input: 'pull' })
-      }
-    }
+    const onPointerUp = (e) => finishPointer(e, { cancelled: false })
+    const onPointerCancel = (e) => finishPointer(e, { cancelled: true })
 
     const onPointerLeave = () => {
       pointerOver = false
@@ -493,9 +555,11 @@ export default function SpringWire({
       window.clearTimeout(humStartTimer)
       tramRiding = on
       if (on) {
+        startTicker()
         // Let pull-release elastic finish before the bed vibrates
         humStartTimer = window.setTimeout(() => {
           humming = true
+          startTicker()
         }, 320)
         placeTram()
       } else {
@@ -507,13 +571,14 @@ export default function SpringWire({
     }
 
     layout()
-    gsap.ticker.add(tickHum)
     window.addEventListener('wire-radio', onRadioHum)
     if (hasRadio && isWireRadioPlaying() && !reduceMotion) {
       humming = true
       tramRiding = true
+      startTicker()
     } else if (hasRadio && isWireRadioPlaying()) {
       tramRiding = true
+      startTicker()
     }
     placeTram()
 
@@ -531,9 +596,16 @@ export default function SpringWire({
     if (typeof IntersectionObserver !== 'undefined') {
       io = new IntersectionObserver(
         ([entry]) => {
-          if (!entry || !invitingRef.current) return
-          wrap.classList.toggle('spring-wire--invite-inview', entry.isIntersecting)
-          if (entry.isIntersecting) setHint(true)
+          if (!entry) return
+          if (!entry.isIntersecting) {
+            if (!humming && !tramRiding && !pullingRef.current) stopTicker()
+            return
+          }
+          if (invitingRef.current) {
+            wrap.classList.toggle('spring-wire--invite-inview', true)
+            setHint(true)
+          }
+          if (humming || tramRiding) startTicker()
         },
         { threshold: [0, 0.15, 0.4], rootMargin: '0px 0px -8% 0px' },
       )
@@ -546,7 +618,7 @@ export default function SpringWire({
     wrap.addEventListener('pointerdown', onPointerDown, { passive: false })
     wrap.addEventListener('pointermove', onPointerMove, { passive: false })
     wrap.addEventListener('pointerup', onPointerUp)
-    wrap.addEventListener('pointercancel', onPointerUp)
+    wrap.addEventListener('pointercancel', onPointerCancel)
     wrap.addEventListener('pointerleave', onPointerLeave)
     wrap.addEventListener('pointerenter', onPointerEnter)
 
@@ -554,12 +626,12 @@ export default function SpringWire({
       io?.disconnect()
       ro.disconnect()
       window.clearTimeout(humStartTimer)
-      gsap.ticker.remove(tickHum)
+      stopTicker()
       window.removeEventListener('wire-radio', onRadioHum)
       wrap.removeEventListener('pointerdown', onPointerDown)
       wrap.removeEventListener('pointermove', onPointerMove)
       wrap.removeEventListener('pointerup', onPointerUp)
-      wrap.removeEventListener('pointercancel', onPointerUp)
+      wrap.removeEventListener('pointercancel', onPointerCancel)
       wrap.removeEventListener('pointerleave', onPointerLeave)
       wrap.removeEventListener('pointerenter', onPointerEnter)
       gsap.killTweensOf(pointsRef.current)
@@ -651,8 +723,8 @@ export default function SpringWire({
           <svg
             className="spring-wire__tram-svg"
             viewBox="0 0 64 24"
-            width="42"
-            height="16"
+            width="52"
+            height="20"
             fill="none"
           >
             {/* Streetcar roof — sits on the wire */}

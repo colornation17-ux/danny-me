@@ -1,5 +1,5 @@
 ﻿import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import Nav from './components/Nav'
@@ -11,18 +11,44 @@ import About from './pages/About'
 import Play from './pages/Play'
 import Project from './pages/Project'
 
-function ScrollToTop() {
-  const { pathname } = useLocation()
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [pathname])
+/** Scroll to hash targets, or top of page — hash-aware so Work → #projects works. */
+function ScrollManager() {
+  const { pathname, hash } = useLocation()
+
+  useLayoutEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      if (hash) {
+        const id = decodeURIComponent(hash.slice(1))
+        const target = document.getElementById(id)
+        if (target) {
+          target.scrollIntoView({ block: 'start' })
+          try {
+            target.focus({ preventScroll: true })
+          } catch {
+            /* ignore */
+          }
+          return
+        }
+      }
+
+      window.scrollTo(0, 0)
+      try {
+        document.getElementById('main-content')?.focus({ preventScroll: true })
+      } catch {
+        /* ignore */
+      }
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [pathname, hash])
+
   return null
 }
 
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
+      <ScrollManager />
       <Seo />
       <div className="app">
         <a className="skip-link" href="#main-content">
