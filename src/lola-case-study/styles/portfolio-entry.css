@@ -6,6 +6,20 @@
 @import './tailwind.css';
 @import './theme.css';
 
+/* Undo adp-tokens global html/body paint (was making a white “card” on the folio page) */
+html {
+  background: var(--bg, #fdfdfd);
+  color: var(--ink, #0d0d0d);
+  font-family: inherit;
+}
+
+body {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
 /*
  * Portfolio case-study-system.css sets `--cs-brand: var(--font-brand)` and
  * `--cs-muted: var(--muted)` on `.cs`. Re-assert Lola tokens here.
@@ -20,8 +34,9 @@
   --cs-muted: #747272;
   --cs-ink: #0d0d0d;
   --cs-ink-muted: #2a3340;
-  --cs-bg: #ffffff;
-  --cs-surface: #ffffff;
+  /* Match folio page surface — pure #fff here reads as an embedded “card/frame” */
+  --cs-bg: var(--bg, #fdfdfd);
+  --cs-surface: var(--bg-elevated, #ffffff);
   --cs-border: var(--line, #e4e9ee);
   --cs-border-subtle: var(--line-cool, #d5dde5);
   /* Single gutter owned by .main — match folio --max */
@@ -32,9 +47,14 @@
   --cs-nav-h: 5.5rem;
 }
 
+/* Kill the white “iframe card” — blend into folio page bg */
+.cs--lola.cs {
+  background: transparent;
+}
+
 .lola-cs {
   position: relative;
-  isolation: isolate;
+  isolation: auto;
   background: transparent;
   min-height: 0;
   color: var(--cs-ink);
@@ -98,12 +118,12 @@
   color: var(--cs-ink);
 }
 
-/* ── Backgrounds: flat folio (white + hairline), not grey phase bands ── */
+/* ── Backgrounds: same flat folio wash as CW — no boxed column ── */
 
 .lola-cs .cs-fold--muted,
 .lola-cs .cs-fold--surface,
 .lola-cs .cs-fold--default {
-  background: var(--bg, #fdfdfd);
+  background: transparent;
 }
 
 .lola-cs .cs-fold {
@@ -114,14 +134,18 @@
   border-bottom: 0;
 }
 
+.lola-cs .cs-hero-banner {
+  background: transparent;
+}
+
 /* Soften giant phase numerals so they don’t fight folio calm */
 .lola-cs .cs-fold-marker {
   opacity: 0.06;
 }
 
-/* Prologue meta strip — match folio surface */
+/* Prologue meta strip — no card panel */
 .lola-cs #prologue > .border-b {
-  background: var(--bg-elevated, #fff) !important;
+  background: transparent !important;
   border-color: var(--line, #e4e9ee) !important;
 }
 
