@@ -55,7 +55,12 @@ export default function Project() {
   }, [project, isLab, featuredIndex, featuredBySlug, featuredOrder])
 
   const isCwCase = project?.caseStudyBody === 'competitor-watch'
-  const isGameCase = project?.slug === 'bodega-ops'
+  const embedUrl =
+    project?.embedUrl ||
+    (project?.slug === 'bodega-ops'
+      ? 'https://mattjr21.github.io/La-Bodega-game/?embed=1'
+      : null)
+  const isGameCase = Boolean(embedUrl)
   const railSteps = useMemo(() => {
     if (!project) return []
     if (isCwCase) return CW_RAIL_STEPS
@@ -137,15 +142,15 @@ export default function Project() {
         {gameActive && (
           <div className="cs-game-frame">
             <iframe
-              src="https://mattjr21.github.io/La-Bodega-game/?embed=1"
-              title="La Bodega Interactive Case Study"
+              src={embedUrl}
+              title={project.embedTitle || `${project.title} Interactive Case Study`}
               className="cs-game-iframe"
               allowFullScreen
             />
             <Link to="/" className="cs-game-badge">
               <span>Danny Varghese</span>
               <span className="cs-game-badge__sep">·</span>
-              <span>La Bodega Case Study</span>
+              <span>{project.embedBadge || 'La Bodega Case Study'}</span>
             </Link>
             <button
               className="cs-game-skip"
