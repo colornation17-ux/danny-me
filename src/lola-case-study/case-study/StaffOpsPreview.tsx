@@ -375,9 +375,8 @@ function StaffAppTour() {
       <header className="cs-staff-app-tour__intro">
         <p className="cs-meta-label mb-2">Inside the staff dashboard</p>
         <p className="cs-staff-app-tour__lead">
-          This is the real Lola Connect interface, not a mock — Inbox, Orders, Tickets, Home. It runs behind staff
-          login because it holds real customer names and order data; what&apos;s shown across these four tabs is the
-          complete picture.
+          Real Lola Connect screens — Home, Inbox, Orders, Tickets. Behind staff login because it holds real customer
+          names and orders; the tour below is the full picture staff use during pickup.
         </p>
       </header>
 
@@ -422,11 +421,11 @@ export function StaffOpsPreview() {
       <div className="cs-phase-artifact cs-phase-artifact--pad cs-staff-ops-section">
         <FadeIn>
           <header className="cs-section-intro max-w-[52ch]">
-            <p className="cs-meta-label">Staff product · Lola Connect</p>
+            <p className="cs-meta-label">Staff CRM · Lola Connect</p>
             <h3 className="cs-h3 max-w-[28ch]">The other half of the loop — ops that close pickup</h3>
             <p className="cs-body">
-              I built Lola Connect so confirmed lists land before walk-in — Inbox, Orders, Tickets, shift alerts. The
-              full walkthrough is below; the live app stays behind staff login.
+              Confirmed lists land in Lola Connect before walk-in — Home, Inbox, Orders, Tickets, and shift alerts.
+              Tour it below; the live app stays behind staff login.
             </p>
           </header>
           <StaffProcessFlow />

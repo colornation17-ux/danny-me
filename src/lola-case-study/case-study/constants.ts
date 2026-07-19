@@ -232,28 +232,28 @@ export const PRODUCT_SYSTEM = {
 /** Hiring-manager metrics — scope facts + honest gaps (outcomes live on Pilot Outcomes cards) */
 export const SCOPE_METRICS = {
   outcomesWindow: "Live data · Jun 2 – Jul 12 2026 · ~6 weeks",
-  shippedLabel: "Product scope",
+  shippedLabel: "What shipped",
   measuringLabel: "Still measuring",
   shipped: [
     {
       label: "Loyalty reach",
       value: LOYALTY_MEMBER_COUNT,
-      detail: "Weekly flyer list",
+      detail: "Weekly flyer families on the thread",
     },
     {
       label: "Guest flows",
       value: "6",
-      detail: "Broadcast → staff help",
+      detail: "Broadcast → pickup → staff help",
     },
     {
-      label: "Staff surfaces",
-      value: "5",
+      label: "Staff CRM",
+      value: "Lola Connect",
       detail: "Home · Inbox · Orders · Tickets · Reminders",
     },
     {
-      label: "Regression",
-      value: "988",
-      detail: "Passing Vitest · 103 files",
+      label: "Answer safety",
+      value: "Grounded",
+      detail: "Flyer + FAQ only — never invents prices",
     },
   ],
   measuring: [
@@ -309,16 +309,16 @@ export const DESIGN_GOAL_PILLARS = [
 
 /** Develop craft — how open-ended turns relate to routing + tools (main path, one beat) */
 export const DEVELOP_AI_LAYER =
-  "Customer acts first — Lola never initiates outside the flyer broadcast. Open asks use store tools first; staff handoff when knowledge runs out." as const;
+  "Customer acts first. Open asks use approved store knowledge — if Lola doesn’t know, Staff CRM takes over." as const;
 
 /** Fold I — project metadata (Rachel Chen–style intro row) */
 export const FOLD1_META = {
   role: "Design Technologist",
   team: PROJECT.team,
   skills: [
-    "Conversational UX & Architecture",
+    "Conversational UX",
     "Service & Operations Design",
-    "Full-Stack Development",
+    "Staff CRM (Lola Connect)",
     "Bilingual Localization (EN/ES)",
   ] as const,
 } as const;
@@ -339,15 +339,15 @@ export const FOLD1_OVERVIEW = {
   lead:
     "La Bodega’s weekly deals blast worked. The responses didn’t. Inquiries regarding hours, SNAP benefits, voice notes, and complex pickup lists flooded a single inbox during rush hours.",
   role:
-    "To solve this, I analyzed 180 live flyer threads (310 customer messages) to map the friction points before designing a single flow. I then designed the conversational guest flows and single-handedly built Lola Connect.",
+    "To solve this, I analyzed 180 live flyer threads (310 customer messages) to map the friction points before designing a single flow. I then designed the conversational guest flows and built Lola Connect — the staff CRM that closes pickup.",
   facts: [
     { label: "Client", detail: "La Bodega Supermarket · Calhoun, GA" },
     { label: "Timeline", detail: "May – July 2026 (6-Week Live Pilot)" },
     {
       label: "Deliverables",
       detail: [
-        "6 Conversational Flows: Fully localized (EN/ES) interactions supporting both voice and text inputs.",
-        "Lola Connect Backend: Custom live middleware handling automation routing, data logging, and live staff handoffs.",
+        "6 conversational flows: bilingual (EN/ES), text and voice, from flyer reply through pickup.",
+        "Lola Connect staff CRM: Inbox, Orders, Tickets, Home, and alerts so lists land before walk-in.",
       ],
     },
   ],
@@ -355,8 +355,8 @@ export const FOLD1_OVERVIEW = {
 
 /** Develop sub-sections — in-phase progress cue */
 export const DEVELOP_STEPS = [
-  { id: "develop-flows", label: "Flows" },
-  { id: "develop-staff-ops", label: "Staff" },
+  { id: "develop-flows", label: "Guest flow" },
+  { id: "develop-staff-ops", label: "Staff CRM" },
   { id: "develop-craft", label: "Craft" },
 ] as const;
 
@@ -633,7 +633,7 @@ export const PROJECT_META = {
   timeline: PROJECT.timeline,
   context: PROJECT.context,
   skills:
-    "Conversational UX & Architecture · Service & Operations Design · Full-Stack Development · Bilingual Localization (EN/ES)",
+    "Conversational UX · Service & Operations Design · Staff CRM (Lola Connect) · Bilingual Localization (EN/ES)",
 } as const;
 
 export const PROBLEM_POINTS = [
@@ -1264,20 +1264,20 @@ export const TESTIMONIALS = [
 
 export const PILOT_IMPACT = [
   {
-    signal: "97.7% first reply < 2 min",
-    detail: "Lola bot · median ~4 sec · n=353 on the live flyer thread.",
-  },
-  {
     signal: "96.3% closed without staff",
-    detail: "14 of 380 conversations escalated — the rest didn’t loop in chat.",
+    detail: "Guests got answers or a clean handoff — 14 of 380 threads needed a human.",
   },
   {
-    signal: "988 Vitest tests",
-    detail: "Routing, language, tone, and safety — ship changes without babysitting deploys.",
+    signal: "97.7% first reply under 2 min",
+    detail: "Median ~4 seconds on the live flyer thread (n=353) — rush doesn't wait.",
+  },
+  {
+    signal: "Staff CRM before walk-in",
+    detail: "Confirmed pickup lists land in Lola Connect with two-tier alerts to the counter.",
   },
   {
     signal: "Voice on the same path",
-    detail: "Spoken asks transcribe, then hit the same grounded logic as text.",
+    detail: "Spoken asks transcribe, then follow the same grounded flow as text.",
   },
 ] as const;
 
@@ -1563,24 +1563,19 @@ export const BUTTON_MOMENTS = [
 /** Main-path product decisions — technical mechanisms (philosophy lives on Craft rules) */
 export const FEATURED_PRODUCT_DECISIONS = [
   {
-    tag: "Architecture",
-    decision: "Store tools on open asks",
-    body: "Hours, FAQ, and deals resolve through store tools first — the agent never invents prices or stock.",
+    tag: "Trust",
+    decision: "Store knowledge before imagination",
+    body: "Hours, FAQ, and deals come from approved facts — Lola never invents prices or stock.",
   },
   {
-    tag: "Operations",
-    decision: "Staff quote the list",
-    body: "Shopping lists get a human quote and confirm — Lola does not price an order on her own.",
+    tag: "Staff CRM",
+    decision: "Humans quote the list",
+    body: "Shopping lists get a staff quote and confirm in Connect — Lola does not price alone.",
   },
   {
-    tag: "Alerts",
+    tag: "Ops",
     decision: "Two-tier staff alerts",
-    body: "WhatsApp alerts catch attention; dashboard alerts support fulfillment.",
-  },
-  {
-    tag: "Consent",
-    decision: "Customer acts first",
-    body: "Lola responds after a customer taps, texts, or sends a voice note.",
+    body: "WhatsApp buzz catches the floor; Connect alerts support bagging until dismissed.",
   },
 ] as const;
 
@@ -1856,8 +1851,8 @@ export const CONVERSATION_RULES = [
     body: "Customers should not need to remember commands like #order. Key actions use tap buttons.",
   },
   {
-    title: "Staff knowledge before imagination",
-    body: "Hours, prices, menu items, and deals come from staff-approved knowledge. If Lola does not know, she routes to staff instead of inventing.",
+    title: "Store facts before imagination",
+    body: "Hours, prices, and deals come from staff-approved knowledge. If Lola does not know, she routes to Staff CRM instead of inventing.",
   },
 ] as const;
 
@@ -1880,5 +1875,5 @@ export const LOLA_PERSONA = {
   visual: "Teen mascot (~16–17) — folkloric La Bodega kid shoppers recognize from the store.",
   voice: "Warm and casual, but TTS tuned slightly more mature (early-20s tone) so price and hours answers feel trustworthy — not babyish.",
   rules:
-    "Facts from tools/knowledge only · one language per message · intro once · safety layer before every outbound send.",
+    "Facts from approved store knowledge only · one language per message · intro once · safety check before every outbound send.",
 };

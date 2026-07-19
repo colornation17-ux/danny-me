@@ -106,7 +106,7 @@ export function ValidationLedger() {
 
       <FadeIn delay={0.05}>
         <Panel className="cs-panel--pad">
-          <p className="cs-meta-label mb-3">988 tests → guest-visible behaviors</p>
+          <p className="cs-meta-label mb-3">Answer safety → guest-visible behaviors</p>
           <SkimTable
             caption="Regression test mapping"
             columns={[
