@@ -25,7 +25,10 @@ import {
 export default function Project() {
   const { slug } = useParams()
   const project = getProjectBySlug(slug)
-  const [gameActive, setGameActive] = useState(true)
+  /** Frame visible in the page flow */
+  const [gameVisible, setGameVisible] = useState(true)
+  /** Iframe only mounts after Play — keeps first paint light on phones */
+  const [gameStarted, setGameStarted] = useState(false)
 
   const isLab = project?.collection === 'lab'
   const featuredBySlug = useMemo(
@@ -82,13 +85,13 @@ export default function Project() {
   }, [externalHref])
 
   useEffect(() => {
-    if (isGameCase && gameActive) {
+    if (isGameCase && gameVisible && gameStarted) {
       document.body.classList.add('game-embed')
     } else {
       document.body.classList.remove('game-embed')
     }
     return () => document.body.classList.remove('game-embed')
-  }, [isGameCase, gameActive])
+  }, [isGameCase, gameVisible, gameStarted])
 
   if (!project) {
     return (
@@ -157,32 +160,94 @@ export default function Project() {
   }
 
   if (isGameCase) {
+    const dismissGame = () => {
+      setGameStarted(false)
+      setGameVisible(false)
+      window.requestAnimationFrame(() => {
+        document.getElementById('case-study')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    }
+
     return (
       <article className="cs cs--game" style={{ '--cs-accent': project.accent }}>
-        {gameActive && (
-          <div className="cs-game-frame">
-            <iframe
-              src={embedUrl}
-              title={project.embedTitle || `${project.title} Interactive Case Study`}
-              className="cs-game-iframe"
-              allowFullScreen
-            />
+        {gameVisible && (
+          <div className={`cs-game-frame${gameStarted ? ' is-playing' : ' is-idle'}`}>
+            {!gameStarted ? (
+              <div className="cs-game-poster">
+                <img
+                  className="cs-game-poster__img"
+                  src={project.cover || project.hero}
+                  alt=""
+                  decoding="async"
+                  fetchPriority="high"
+                />
+                <div className="cs-game-poster__veil" aria-hidden="true" />
+                <div className="cs-game-poster__copy">
+                  <p className="cs-game-poster__eyebrow">Interactive case study · ~2 min</p>
+                  <h2 className="cs-game-poster__title">Walk the store floor</h2>
+                  <p className="cs-game-poster__blurb">
+                    Tap zones to fix the POS, roles, and pricing — the same recovery path from the live launch.
+                  </p>
+                  <div className="cs-game-poster__actions">
+                    <button
+                      type="button"
+                      className="cs-game-play"
+                      onClick={() => setGameStarted(true)}
+                    >
+                      Play interactive →
+                    </button>
+                    <button type="button" className="cs-game-poster__skip" onClick={dismissGame}>
+                      Skip to write-up
+                    </button>
+                  </div>
+                  <a
+                    className="cs-game-poster__external"
+                    href={embedUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open full screen ↗
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <iframe
+                src={embedUrl}
+                title={project.embedTitle || `${project.title} Interactive Case Study`}
+                className="cs-game-iframe"
+                allow="fullscreen"
+                allowFullScreen
+                loading="eager"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            )}
+
             <Link to="/" className="cs-game-badge">
               <span>Danny Varghese</span>
               <span className="cs-game-badge__sep">·</span>
               <span>{project.embedBadge || 'La Bodega Case Study'}</span>
             </Link>
-            <button
-              className="cs-game-skip"
-              onClick={() => {
-                setGameActive(false)
-                setTimeout(() => {
-                  document.getElementById('case-study')?.scrollIntoView({ behavior: 'smooth' })
-                }, 50)
-              }}
-            >
-              Skip · read the case study ↓
+
+            {gameStarted && (
+              <button type="button" className="cs-game-skip" onClick={dismissGame}>
+                Skip · read the case study ↓
+              </button>
+            )}
+          </div>
+        )}
+
+        {!gameVisible && (
+          <div className="cs-game-replay">
+            <button type="button" className="folio-btn folio-btn--solid" onClick={() => {
+              setGameVisible(true)
+              setGameStarted(false)
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}>
+              Play interactive demo
             </button>
+            <a className="folio-btn" href={embedUrl} target="_blank" rel="noreferrer">
+              Open full screen ↗
+            </a>
           </div>
         )}
 
@@ -245,7 +310,7 @@ export default function Project() {
                 <div className="cs-mobile-gallery">
                   {section.mobileGallery.map((item) => (
                     <figure key={item.src} className="cs-mobile-mockup">
-                      <img src={item.src} alt={item.caption || ''} />
+                      <img src={item.src} alt={item.caption || ''} loading="lazy" decoding="async" />
                       {item.caption && <figcaption>{item.caption}</figcaption>}
                     </figure>
                   ))}
@@ -253,7 +318,7 @@ export default function Project() {
               )}
               {section.image && (
                 <figure className="cs-inline-shot">
-                  <img src={section.image} alt="" />
+                  <img src={section.image} alt="" loading="lazy" decoding="async" />
                   {section.caption && <figcaption>{section.caption}</figcaption>}
                 </figure>
               )}

@@ -36,6 +36,8 @@ export const featured = [
     tags: ['Service design', 'Ops'],
     cover: '/work/bodega-ops/store-floor.jpg',
     coverAlt: 'La Bodega store floor during checkout ops recovery',
+    folderFill: '#E8A030',
+    folderInk: '#111212',
   },
   {
     ...bySlug['competitor-watch'],
@@ -76,8 +78,8 @@ export const featured = [
     reel: '/work/wing-hmi/demo-1.mp4',
     cover: '/work/wing-hmi/hero.png',
     coverAlt: 'Wing automotive HMI cluster and HUD concept',
-    folderFill: '#EA580C',
-    folderInk: '#111212',
+    folderFill: '#7C5CFF',
+    folderInk: '#ffffff',
   },
   {
     ...bySlug['edge-ai'],
