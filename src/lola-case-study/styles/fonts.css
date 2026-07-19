@@ -1,0 +1,60 @@
+/* Body + Lola accent — match danny-me (no second sans) */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Pixelify+Sans:wght@400..700&display=swap");
+
+/* Portfolio nav brand / tabs — match danny-me */
+@font-face {
+  font-family: "Chubby And Groovy";
+  src: url("/fonts/chubby-and-groovy/Chubby%20And%20Groovy.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Season Mix TRIAL";
+  src: url("/fonts/season/SeasonMix-TRIAL-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Season Mix TRIAL";
+  src: url("/fonts/season/SeasonMix-TRIAL-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono/DMMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Mono";
+  src: url("/fonts/dm-mono/DMMono-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Klim Tiempos Text — desktop test OTF (case study serif) */
+@font-face {
+  font-family: "Tiempos Text";
+  src: url("/fonts/tiempos/TestTiemposText-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Tiempos Text";
+  src: url("/fonts/tiempos/TestTiemposText-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

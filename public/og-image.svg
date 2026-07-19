@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="La Bodega Lola case study">
+  <rect width="1200" height="630" fill="#FAFBFC"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#1B4D3E"/>
+  <text x="80" y="120" fill="#64748B" font-family="system-ui,Segoe UI,sans-serif" font-size="22" font-weight="600" letter-spacing="0.08em">CASE STUDY � LIVE PILOT</text>
+  <text x="80" y="210" fill="#0F172A" font-family="Georgia,Times New Roman,serif" font-size="52" font-weight="700">La Bodega  Lola</text>
+  <text x="80" y="280" fill="#334155" font-family="system-ui,Segoe UI,sans-serif" font-size="30">Bilingual WhatsApp shopping companion</text>
+  <text x="80" y="340" fill="#64748B" font-family="system-ui,Segoe UI,sans-serif" font-size="22" max-width="900">From one-way flyers to grounded Q&amp;A, reminders, and #order pickup.</text>
+  <rect x="80" y="400" width="220" height="44" rx="8" fill="#E6F6F4"/>
+  <text x="104" y="428" fill="#1B4D3E" font-family="system-ui,Segoe UI,sans-serif" font-size="18" font-weight="600">WhatsApp � EN/ES</text>
+  <rect x="320" y="400" width="160" height="44" rx="8" fill="#EEF2FF"/>
+  <text x="344" y="428" fill="#2563EB" font-family="system-ui,Segoe UI,sans-serif" font-size="18" font-weight="600">Calhoun, GA</text>
+  <rect x="860" y="80" width="260" height="470" rx="28" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <rect x="890" y="120" width="200" height="120" rx="12" fill="#1B4D3E" opacity="0.12"/>
+  <text x="920" y="170" fill="#1B4D3E" font-family="system-ui,Segoe UI,sans-serif" font-size="20" font-weight="700">Lola</text>
+  <text x="920" y="200" fill="#64748B" font-family="system-ui,Segoe UI,sans-serif" font-size="14">Weekly deals � Hours � #order</text>
+  <rect x="890" y="270" width="140" height="36" rx="8" fill="#25D366" opacity="0.15"/>
+  <text x="908" y="294" fill="#128C7E" font-family="system-ui,Segoe UI,sans-serif" font-size="14" font-weight="600">Place order</text>
+  <rect x="890" y="320" width="140" height="36" rx="8" fill="#25D366" opacity="0.15"/>
+  <text x="908" y="344" fill="#128C7E" font-family="system-ui,Segoe UI,sans-serif" font-size="14" font-weight="600">Store hours</text>
+  <text x="80" y="560" fill="#94A3B8" font-family="system-ui,Segoe UI,sans-serif" font-size="18">Product &amp; conversational design � Danny</text>
+</svg>

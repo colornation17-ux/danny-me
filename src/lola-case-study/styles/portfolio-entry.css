@@ -1,0 +1,212 @@
+/* Lola case study inside danny-me — skip portfolio-chrome.css (site Nav/Footer already wrap the page). */
+@import './fonts.css';
+@import './lola-scroll-narrative.css';
+@import './adp-tokens.css';
+@import './transitions-dev.css';
+@import './tailwind.css';
+@import './theme.css';
+
+/*
+ * Portfolio case-study-system.css sets `--cs-brand: var(--font-brand)` and
+ * `--cs-muted: var(--muted)` on `.cs`. Re-assert Lola tokens here.
+ */
+.cs--lola,
+.lola-cs {
+  --cs-brand: #290545;
+  --cs-accent: #290545;
+  --cs-accent-hover: #140047;
+  --cs-accent-soft: #ede8f2;
+  --cs-focus-ring: #290545;
+  --cs-muted: #747272;
+  --cs-ink: #0d0d0d;
+  --cs-ink-muted: #2a3340;
+  --cs-bg: #ffffff;
+  --cs-surface: #ffffff;
+  --cs-border: var(--line, #e4e9ee);
+  --cs-border-subtle: var(--line-cool, #d5dde5);
+  /* Single gutter owned by .main — match folio --max */
+  --cs-page-wide: var(--max);
+  --cs-page-gutter: 0px;
+  --cs-page-narrow: 42rem;
+  --cs-section-y: var(--section-y, 2.75rem);
+  --cs-nav-h: 5.5rem;
+}
+
+.lola-cs {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  min-height: 0;
+  color: var(--cs-ink);
+  font-family: var(--cs-font);
+}
+
+.lola-cs .cs-skip-links {
+  z-index: 80;
+}
+
+/* ── Folio shell: kill double inset + global side-effects from adp-tokens ── */
+
+/* adp-tokens pads #main-content whenever Lola CSS loads — restore folio gutter */
+@media (min-width: 1024px) {
+  #main-content {
+    padding-left: var(--gutter);
+  }
+}
+
+/* .main already applies --gutter + --max; flatten Lola page wrappers */
+.lola-cs .cs-page {
+  max-width: 100%;
+  padding-inline: 0;
+}
+
+.lola-cs .cs-page-narrow {
+  max-width: var(--cs-page-narrow);
+  padding-inline: 0;
+}
+
+/* Hide Lola’s own rail — folio CaseStudyNav owns timeline + Work back */
+.lola-cs .cs-phase-rail,
+.lola-cs .cs-phase-mobile-bar {
+  display: none !important;
+}
+
+/* Folio rail brand → Pixelify + violet (matches Lola wordmark) */
+.cs--lola .cs-rail__brand {
+  font-family: var(--font-lola, "Pixelify Sans", var(--font-display));
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--cs-brand);
+  border-bottom-color: color-mix(in srgb, var(--cs-brand) 22%, var(--line-cool));
+}
+
+.cs--lola .cs-rail__fill {
+  background: var(--cs-accent) !important;
+}
+
+.cs--lola .cs-rail__step.is-active .cs-rail__dot {
+  background: var(--cs-accent) !important;
+  border-color: var(--cs-accent) !important;
+}
+
+.cs--lola .cs-rail__step.is-past .cs-rail__dot {
+  background: color-mix(in srgb, var(--cs-accent) 55%, var(--line));
+  border-color: color-mix(in srgb, var(--cs-accent) 55%, var(--line));
+}
+
+.cs--lola .cs-rail__step.is-active .cs-rail__label {
+  color: var(--cs-ink);
+}
+
+/* ── Backgrounds: flat folio (white + hairline), not grey phase bands ── */
+
+.lola-cs .cs-fold--muted,
+.lola-cs .cs-fold--surface,
+.lola-cs .cs-fold--default {
+  background: var(--bg, #fdfdfd);
+}
+
+.lola-cs .cs-fold {
+  border-bottom: 1px solid var(--line, #e4e9ee);
+}
+
+.lola-cs .cs-fold--end {
+  border-bottom: 0;
+}
+
+/* Soften giant phase numerals so they don’t fight folio calm */
+.lola-cs .cs-fold-marker {
+  opacity: 0.06;
+}
+
+/* Prologue meta strip — match folio surface */
+.lola-cs #prologue > .border-b {
+  background: var(--bg-elevated, #fff) !important;
+  border-color: var(--line, #e4e9ee) !important;
+}
+
+/* Section rhythm closer to .cs-section */
+.lola-cs .cs-fold-body {
+  padding-bottom: var(--cs-section-y);
+}
+
+.lola-cs .cs-fold-header {
+  padding-top: var(--cs-section-y);
+}
+
+/* ── Contact + pager: portfolio tokens, not adp-tokens folio clone ── */
+
+.cs--lola .folio-contact,
+.lola-cs .folio-contact {
+  margin-top: 2.5rem;
+  padding: var(--section-y, 2.75rem) 0;
+  background: transparent;
+  border-top: 1px solid var(--folio-line, var(--line-cool));
+  color: var(--ink);
+}
+
+.cs--lola .folio-contact__inner,
+.lola-cs .folio-contact__inner {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.cs--lola .folio-contact__eyebrow,
+.lola-cs .folio-contact__eyebrow {
+  color: var(--accent-cool-ink, #2952cc);
+}
+
+.cs--lola .folio-contact__title,
+.lola-cs .folio-contact__title {
+  font-family: var(--font-brand);
+  color: var(--ink, #0d0d0d);
+}
+
+.cs--lola .folio-contact__body,
+.lola-cs .folio-contact__body {
+  /* .lola-cs remaps --muted for shadcn surfaces — use text muted explicitly */
+  color: var(--cs-muted, #747272);
+}
+
+.cs--lola .folio-contact__links a,
+.lola-cs .folio-contact__links a {
+  color: var(--muted-cool, #5c6670);
+}
+
+.cs--lola .folio-contact__links a:hover,
+.lola-cs .folio-contact__links a:hover {
+  color: var(--ink);
+}
+
+/* Sticker CTA — portfolio cool blue */
+.lola-cs .folio-contact__cta,
+.cs--lola .folio-contact__cta {
+  background: var(--accent-cool);
+  border: 2px solid var(--black);
+  border-radius: var(--radius-sticker, 0.9rem 0.9rem 0.9rem 0.35rem);
+  color: var(--white);
+  box-shadow: 5px 5px 0 var(--black);
+}
+
+.lola-cs .folio-contact__cta:hover,
+.lola-cs .folio-contact__cta:focus-visible,
+.cs--lola .folio-contact__cta:hover,
+.cs--lola .folio-contact__cta:focus-visible {
+  background: #3d6be8;
+  border-color: var(--black);
+  box-shadow: 7px 7px 0 var(--black);
+}
+
+/* Pixelify wordmark — force violet */
+.lola-cs .cs-lola:not(.cs-lola--white):not(.cs-lola--phone):not(.cs-lola--avatar) {
+  color: var(--cs-brand);
+}
+
+/* Next/prev pager sits on article — keep aligned with folio max */
+.cs--lola .cs-pager {
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}

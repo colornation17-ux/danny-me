@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" role="img" aria-label="Lola mascot">
+  <circle cx="60" cy="60" r="58" fill="#E8F5F0" stroke="#1B4D3E" stroke-width="2"/>
+  <ellipse cx="60" cy="72" rx="28" ry="32" fill="#F5D0A9"/>
+  <path d="M32 52c4-18 20-28 28-28s24 10 28 28" fill="#2C1810"/>
+  <circle cx="48" cy="58" r="4" fill="#1B1B22"/>
+  <circle cx="72" cy="58" r="4" fill="#1B1B22"/>
+  <path d="M52 68c4 6 12 6 16 0" stroke="#B45309" stroke-width="2" stroke-linecap="round"/>
+  <path d="M38 78c-6 8-4 18 4 22" stroke="#C2410C" stroke-width="3" stroke-linecap="round"/>
+  <path d="M82 78c6 8 4 18-4 22" stroke="#C2410C" stroke-width="3" stroke-linecap="round"/>
+  <rect x="44" y="88" width="32" height="18" rx="4" fill="#1B4D3E"/>
+  <text x="60" y="100" text-anchor="middle" fill="#fff" font-family="system-ui,sans-serif" font-size="8" font-weight="700">LOLA</text>
+</svg>

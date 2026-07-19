@@ -8,6 +8,7 @@ import CompetitorWatchCaseStudy, {
   CW_RAIL_STEPS,
 } from '../components/motion/CompetitorWatchCaseStudy'
 import CwHeroChapters from '../components/motion/CwHeroChapters'
+import LolaCaseStudy, { LOLA_RAIL_STEPS } from '../components/lola/LolaCaseStudy'
 import {
   CaseStudyNav,
   sectionAnchorId,
@@ -55,12 +56,13 @@ export default function Project() {
   }, [project, isLab, featuredIndex, featuredBySlug, featuredOrder])
 
   const isCwCase = project?.caseStudyBody === 'competitor-watch'
+  const isLolaCase = project?.caseStudyBody === 'lola'
   const embedUrl =
     project?.embedUrl ||
     (project?.slug === 'bodega-ops'
       ? 'https://mattjr21.github.io/La-Bodega-game/?embed=1'
       : null)
-  const isGameCase = Boolean(embedUrl)
+  const isGameCase = Boolean(embedUrl) && !isLolaCase
   const railSteps = useMemo(() => {
     if (!project) return []
     if (isCwCase) return CW_RAIL_STEPS
@@ -135,6 +137,24 @@ export default function Project() {
   const showRail = railSteps.length >= 2
   const contactId = isCwCase ? 'cw-close' : 'contact'
   const contactHeadingId = isCwCase ? 'cw-contact-heading' : 'contact-heading'
+
+  if (isLolaCase) {
+    return (
+      <article
+        className="cs cs--lola cs--with-rail"
+        style={{ '--cs-accent': '#290545' }}
+      >
+        <CaseStudyNav
+          brand="Lola"
+          steps={LOLA_RAIL_STEPS}
+          backTo={backTo}
+          backLabel={backLabel}
+        />
+        <LolaCaseStudy />
+        <CaseStudyNext prev={prev} next={next} />
+      </article>
+    )
+  }
 
   if (isGameCase) {
     return (
