@@ -46,19 +46,20 @@
   --folio-paper: var(--bg-paper);
   --folio-grid-light: var(--grid-light);
 
-  /* Type stack: DM Sans · Season · Chubby · Just Me
+  /* Type stack — original design system (never Tiempos / Georgia / Times):
+     DM Sans body · Season Mix display · Chubby brand · Just Me script
      Exceptions: Highfat (Featured work), Pixelify (Lola), Press Start (pills),
      Cubao (skills), DM Mono (rect stickers) */
-  --font-display: "Season Mix TRIAL", sans-serif;
-  --font-brand: "Chubby And Groovy", "Season Mix TRIAL", sans-serif;
-  --font-script: "Just Me Again Down Here", cursive;
+  --font-display: "Season Mix TRIAL", "DM Sans", system-ui, sans-serif;
+  --font-brand: "Chubby And Groovy", "Season Mix TRIAL", "DM Sans", system-ui, sans-serif;
+  --font-script: "Just Me Again Down Here", "DM Sans", system-ui, sans-serif;
   --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-label: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-label);
   --font-pixel: "Press Start 2P", var(--font-label);
   --font-chip: "Cubao", var(--font-sans);
-  --font-lola: "Pixelify Sans", var(--font-display);
-  --font-featured: "Highfat", Impact, "Arial Black", sans-serif; /* Featured work — never Season Mix */
+  --font-lola: "Pixelify Sans", "Season Mix TRIAL", "DM Sans", system-ui, sans-serif;
+  --font-featured: "Highfat", Impact, "Arial Black", "DM Sans", sans-serif;
   --font-sticker: "DM Mono", ui-monospace, monospace; /* rect stickers only */
   /* Type ladder — prefer these over one-off rem sizes
      Floor ≥12px at default 16px root for AA-friendly small text */
@@ -6383,7 +6384,7 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__progress {
   margin: 0 0 var(--space-1);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: max(var(--text-meta-xs), 0.75rem);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -6564,7 +6565,7 @@ body:has(.folio--fullgrid) .site-footer {
     min-width: 0;
     justify-content: center;
     padding-inline: 0.4rem;
-    font-size: max(0.6rem, var(--text-meta-xs));
+    font-size: max(var(--text-meta-xs), 0.75rem);
     text-align: center;
   }
 }
@@ -6589,7 +6590,7 @@ body:has(.folio--fullgrid) .site-footer {
   align-items: center;
   gap: var(--space-2);
   margin: 0;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: max(var(--text-meta), 0.8125rem);
   letter-spacing: 0.02em;
   text-transform: none;
@@ -6618,7 +6619,9 @@ body:has(.folio--fullgrid) .site-footer {
   font-weight: 400;
 }
 
-.folder-card__title[data-font="tiempos"] {
+/* Legacy data-font value — maps to Season Mix, never Tiempos */
+.folder-card__title[data-font="tiempos"],
+.folder-card__title[data-font="season"] {
   font-family: var(--font-display);
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -6634,7 +6637,7 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__meta {
   margin: var(--space-2) 0 0;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: max(var(--text-meta), 0.8125rem);
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -6651,8 +6654,10 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__blurb {
   margin: var(--space-2) 0 0;
-  max-width: 34ch;
+  max-width: 36ch;
+  font-family: var(--font-sans);
   font-size: max(var(--text-body), 1rem);
+  font-weight: 400;
   line-height: 1.45;
   opacity: 0.92;
 }
@@ -6668,11 +6673,12 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__spine li {
-  font-family: var(--font-mono);
-  font-size: max(0.62rem, 0.68rem);
-  letter-spacing: 0.05em;
+  font-family: var(--font-sans);
+  font-size: max(var(--text-meta-xs), 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.2rem 0.4rem;
+  padding: 0.25rem 0.45rem;
   border: 1px solid color-mix(in srgb, var(--folder-ink) 30%, transparent);
   opacity: 0.88;
 }
@@ -6683,21 +6689,22 @@ body:has(.folio--fullgrid) .site-footer {
   gap: var(--space-1);
   width: fit-content;
   min-height: 44px;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid var(--folder-ink);
+  padding: 0.55rem 0.9rem;
+  border: 1.5px solid var(--folder-ink);
   border-radius: var(--radius-sm);
   background: var(--folder-ink);
   color: var(--folder-fill);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: max(var(--text-meta), 0.8125rem);
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   transition:
-    opacity var(--dur-ui) var(--ease-out),
-    transform var(--dur-fast) var(--ease-press);
+    filter var(--dur-ui) var(--ease-out),
+    transform var(--dur-fast) var(--ease-press),
+    box-shadow var(--dur-ui) var(--ease-out);
 }
 
 .folder-card__cta-arrow {
@@ -6716,31 +6723,36 @@ body:has(.folio--fullgrid) .site-footer {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  padding: 0.25rem 0.6rem;
+  min-height: 44px;
+  padding: 0.45rem 0.75rem;
   border-radius: var(--radius-sm);
-  border: 1px solid currentColor;
-  font-family: var(--font-mono);
-  font-size: var(--text-meta-xs);
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  border: 1.5px solid color-mix(in srgb, var(--folder-ink) 75%, transparent);
+  background: color-mix(in srgb, var(--folder-ink) 10%, transparent);
+  font-family: var(--font-sans);
+  font-size: max(var(--text-meta-xs), 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: inherit;
+  color: var(--folder-ink);
   text-decoration: none;
-  opacity: 0.72;
+  opacity: 1;
   cursor: pointer;
   transition:
-    opacity var(--dur-ui) var(--ease-out),
+    background var(--dur-ui) var(--ease-out),
+    border-color var(--dur-ui) var(--ease-out),
     transform var(--dur-fast) var(--ease-press);
 }
 
 .folder-card__live--secondary {
-  border-color: color-mix(in srgb, currentColor 48%, transparent);
-  opacity: 0.62;
+  border-color: color-mix(in srgb, var(--folder-ink) 55%, transparent);
+  background: transparent;
+  opacity: 1;
 }
 
 .folder-card__live:hover,
 .folder-card__live:focus-visible {
-  opacity: 1;
+  background: color-mix(in srgb, var(--folder-ink) 16%, transparent);
+  border-color: var(--folder-ink);
   outline: none;
 }
 
@@ -6754,9 +6766,10 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__cta:hover,
 .folder-card__cta:focus-visible {
-  background: transparent;
-  color: var(--folder-ink);
-  opacity: 1;
+  /* Keep solid fill — transparent hover looked broken on colored folders */
+  background: var(--folder-ink);
+  color: var(--folder-fill);
+  filter: brightness(1.08);
   outline: none;
 }
 
@@ -6787,10 +6800,10 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__tag-label {
   padding: 0.4rem 0.75rem;
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--text-meta-xs);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--folder-fill);
 }
@@ -7317,7 +7330,7 @@ body:has(.folio--fullgrid) .site-footer {
     min-width: 0;
     justify-content: center;
     padding-inline: 0.35rem;
-    font-size: 0.625rem;
+    font-size: max(var(--text-meta-xs), 0.75rem);
     line-height: 1.15;
     text-align: center;
   }
@@ -7420,7 +7433,7 @@ body:has(.folio--fullgrid) .site-footer {
     min-width: 0;
     justify-content: center;
     padding-inline: 0.3rem;
-    font-size: 0.6rem;
+    font-size: max(var(--text-meta-xs), 0.75rem);
     line-height: 1.15;
     text-align: center;
   }

@@ -9,7 +9,7 @@
   --accent: #e65f2e;
   --accent-text: #cd4919;
   --accent-soft: #fde8df;
-  --font-brand: "Chubby And Groovy", "Season Mix TRIAL", sans-serif;
+  --font-brand: "Chubby And Groovy", "Season Mix TRIAL", "DM Sans", system-ui, sans-serif;
   --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --text-meta: 0.8125rem;

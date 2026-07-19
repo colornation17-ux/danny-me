@@ -40,15 +40,15 @@
   src: url("/fonts/just-me-again/JustMeAgainDownHere-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Chubby And Groovy";
-  src: url("/fonts/chubby-and-groovy/Chubby And Groovy.ttf") format("truetype");
+  src: url("/fonts/chubby-and-groovy/Chubby%20And%20Groovy.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
 }
 
 @font-face {
