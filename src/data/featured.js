@@ -79,4 +79,19 @@ export const featured = [
     folderFill: '#EA580C',
     folderInk: '#111212',
   },
+  {
+    ...bySlug['edge-ai'],
+    index: '06',
+    displayTitle: 'WING Edge AI',
+    company: 'Wing',
+    folderDate: 'Nov 4, 2025',
+    outcome:
+      'Concept: on-device vehicle AI UX: local inference, driver data controls (target <20ms edge latency)',
+    tags: ['Edge AI', 'Concept'],
+    reel: '/work/edge-ai/demo-1.mp4',
+    cover: '/work/edge-ai/hero.jpg',
+    coverAlt: 'Wing Edge AI vehicle concept',
+    folderFill: '#0891B2',
+    folderInk: '#111212',
+  },
 ]
