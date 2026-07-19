@@ -19,11 +19,11 @@
   --cs-touch-min: 2.75rem;
   --cs-nav-h: 4.625rem;
   --cs-radius: 0.45rem;
-  /* Tight stack: DM Sans everywhere (no Tiempos / Georgia / Times serif fallbacks) */
+  /* Tight stack: DM Sans body Â· Tiempos chapters Â· Chubby/Season nav Â· Pixelify Lola Â· DM Mono UI */
   --cs-font: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --cs-font-lola: "Pixelify Sans", "DM Sans", system-ui, sans-serif;
-  --cs-font-serif: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --cs-font-display: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cs-font-serif: "Season Mix TRIAL", "Tiempos Text", Georgia, serif;
+  --cs-font-display: "Chubby And Groovy", "Season Mix TRIAL", sans-serif;
   --cs-mono: "DM Mono", ui-monospace, monospace;
   --cs-page-gutter: clamp(1.25rem, 4vw, 2.5rem);
   --cs-page-narrow: 720px;
@@ -2596,7 +2596,7 @@ h2:focus-visible,
 }
 
 .folio-contact__cta-label {
-  font-family: var(--font-brand, "Chubby And Groovy", "DM Sans", system-ui, sans-serif);
+  font-family: var(--font-brand, "Chubby And Groovy", "Season Mix TRIAL", sans-serif);
   font-size: clamp(1.35rem, 3vw, 1.85rem);
   text-transform: uppercase;
   letter-spacing: 0.02em;

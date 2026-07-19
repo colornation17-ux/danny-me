@@ -14,14 +14,15 @@ export const featured = [
     company: 'La Bodega',
     folderDate: 'Jun 28, 2026',
     outcome:
-      'Guest WhatsApp pickup flows + Lola Connect staff CRM — ~1,200 loyalty families, 96.3% closed without staff.',
+      'Designed flows + built Lola Connect solo (Home · Inbox · Orders · Tickets · Reminders): bilingual deals, buttons-first pickup, reminders, staff handoff (~1,200 loyalty · 96.3% closed without staff)',
     blurb:
-      'Six bilingual guest flows; staff close pickup in Connect. Flyer-grounded answers — no invented prices.',
-    tags: ['WhatsApp', 'PWA', 'Staff CRM'],
+      'Six guest WhatsApp flows; staff run the Connect PWA spine. Flyer-grounded answers — no invented prices. Research-backed from real threads before ship.',
+    tags: ['WhatsApp', 'PWA', 'Full-stack'],
     reel: '/work/lola/motion/Lola-Reel-Horizontal.mp4',
     reelAudioControl: true,
     folderFill: '#290545',
     folderInk: '#ffffff',
+    folderTitleFont: 'pixelify',
     connectSpine: ['Home', 'Inbox', 'Orders', 'Tickets', 'Reminders'],
   },
   {

@@ -192,7 +192,10 @@ function FolderCard({
               <span className="folder-card__date-dot" aria-hidden="true" />
               <span>{project.folderDate || project.year || '2026'}</span>
             </div>
-            <h3 className="folder-card__title">{title}</h3>
+            <h3
+            className="folder-card__title"
+            data-font={project.folderTitleFont || ''}
+          >{title}</h3>
             {(role || company || status) && (
               <p className="folder-card__meta">
                 {[role, company, status].filter(Boolean).join(' · ')}
