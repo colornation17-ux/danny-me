@@ -8,21 +8,8 @@ const bySlug = Object.fromEntries(work.map((p) => [p.slug, p]))
  */
 export const featured = [
   {
-    ...bySlug['competitor-watch'],
-    index: '01',
-    displayTitle: 'Competitor Watch',
-    company: 'La Bodega',
-    folderDate: 'Jun 10, 2026',
-    outcome:
-      'Solo React+Python: Flipp deals + combos, shelf-vs-floor pricing, market trends, weekend playbook, forecast, RFM visit-rhythm nudges, WhatsApp→POS (2,088 visits)',
-    tags: ['Web app', 'Full-stack', 'Retail'],
-    reel: '/work/competitor-watch/motion/CompetitorWatch-Reel.mp4',
-    folderFill: '#166534',
-    folderInk: '#ffffff',
-  },
-  {
     ...bySlug['lola'],
-    index: '02',
+    index: '01',
     displayTitle: 'Lola',
     company: 'La Bodega',
     folderDate: 'Jun 28, 2026',
@@ -40,7 +27,7 @@ export const featured = [
   },
   {
     ...bySlug['bodega-ops'],
-    index: '03',
+    index: '02',
     displayTitle: 'Checkout ops',
     company: 'La Bodega',
     folderDate: 'Feb 24, 2026',
@@ -49,6 +36,19 @@ export const featured = [
     tags: ['Service design', 'Ops'],
     cover: '/work/bodega-ops/store-floor.jpg',
     coverAlt: 'La Bodega store floor during checkout ops recovery',
+  },
+  {
+    ...bySlug['competitor-watch'],
+    index: '03',
+    displayTitle: 'Competitor Watch',
+    company: 'La Bodega',
+    folderDate: 'Jun 10, 2026',
+    outcome:
+      'Solo React+Python: Flipp deals + combos, shelf-vs-floor pricing, market trends, weekend playbook, forecast, RFM visit-rhythm nudges, WhatsApp→POS (2,088 visits)',
+    tags: ['Web app', 'Full-stack', 'Retail'],
+    reel: '/work/competitor-watch/motion/CompetitorWatch-Reel.mp4',
+    folderFill: '#166534',
+    folderInk: '#ffffff',
   },
   {
     ...bySlug['code19'],
@@ -77,21 +77,6 @@ export const featured = [
     cover: '/work/wing-hmi/hero.png',
     coverAlt: 'Wing automotive HMI cluster and HUD concept',
     folderFill: '#EA580C',
-    folderInk: '#111212',
-  },
-  {
-    ...bySlug['edge-ai'],
-    index: '06',
-    displayTitle: 'WING Edge AI',
-    company: 'Wing',
-    folderDate: 'Nov 4, 2025',
-    outcome:
-      'Concept: on-device vehicle AI UX: local inference, driver data controls (target <20ms edge latency)',
-    tags: ['Edge AI', 'Concept'],
-    reel: '/work/edge-ai/demo-1.mp4',
-    cover: '/work/edge-ai/hero.jpg',
-    coverAlt: 'Wing Edge AI vehicle concept',
-    folderFill: '#0891B2',
     folderInk: '#111212',
   },
 ]
