@@ -46,19 +46,19 @@
   --folio-paper: var(--bg-paper);
   --folio-grid-light: var(--grid-light);
 
-  /* Type stack: DM Sans · Season · Chubby · Just Me
-     Exceptions: Highfat (Featured work), Pixelify (Lola), Press Start (pills),
-     Cubao (skills), DM Mono (rect stickers) */
-  --font-display: "Season Mix TRIAL", sans-serif;
-  --font-brand: "Chubby And Groovy", "Season Mix TRIAL", sans-serif;
-  --font-script: "Just Me Again Down Here", cursive;
+  /* Type stack: DM Sans across the portfolio (no Times / Tiempos / Season serif fallbacks)
+     Exceptions: Chubby (nav wordmark), Pixelify (Lola), Press Start (pills),
+     Cubao (skills), DM Mono (rect stickers), Highfat (section shouts) */
+  --font-display: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-brand: "Chubby And Groovy", "DM Sans", system-ui, sans-serif;
+  --font-script: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-label: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: var(--font-label);
   --font-pixel: "Press Start 2P", var(--font-label);
   --font-chip: "Cubao", var(--font-sans);
-  --font-lola: "Pixelify Sans", var(--font-display);
-  --font-featured: "Highfat", Impact, "Arial Black", sans-serif; /* Featured work — never Season Mix */
+  --font-lola: "Pixelify Sans", var(--font-sans);
+  --font-featured: "Highfat", Impact, "Arial Black", "DM Sans", sans-serif;
   --font-sticker: "DM Mono", ui-monospace, monospace; /* rect stickers only */
   /* Type ladder — prefer these over one-off rem sizes
      Floor ≥12px at default 16px root for AA-friendly small text */
@@ -5002,7 +5002,10 @@ body:has(.folio--fullgrid) .app {
   background: #fff3a3;
   border: 1px solid #e6d56a;
   box-shadow: 3px 3px 0 color-mix(in srgb, var(--black) 12%, transparent);
+  font-family: var(--font-sans);
   font-size: max(var(--text-body-lg), 1.125rem);
+  font-weight: 500;
+  line-height: 1.4;
   color: #4a4318;
   transform: rotate(-1.5deg);
 }
@@ -6315,9 +6318,9 @@ body:has(.folio--fullgrid) .site-footer {
   background: var(--folder-fill);
   color: var(--folder-ink);
   clip-path: none;
-  font-family: var(--font-brand);
+  font-family: var(--font-sans);
   font-size: clamp(0.78rem, 1.35vw, 0.95rem);
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 0.01em;
   text-transform: none;
   line-height: 1;
@@ -6561,7 +6564,7 @@ body:has(.folio--fullgrid) .site-footer {
     min-width: 0;
     justify-content: center;
     padding-inline: 0.4rem;
-    font-size: max(0.6rem, var(--text-meta-xs));
+    font-size: max(var(--text-meta-xs), 0.75rem);
     text-align: center;
   }
 }
@@ -6600,6 +6603,17 @@ body:has(.folio--fullgrid) .site-footer {
   flex-shrink: 0;
 }
 
+/* Folder project cards — DM Sans only (no Season / Chubby / Pixelify / Tiempos) */
+.folder-card,
+.folder-card button,
+.folder-card a,
+.folder-card h3,
+.folder-card p,
+.folder-card span,
+.folder-card li {
+  font-family: var(--font-sans);
+}
+
 .folder-card__title {
   margin: 0;
   font-family: var(--font-sans);
@@ -6608,23 +6622,6 @@ body:has(.folio--fullgrid) .site-footer {
   letter-spacing: -0.035em;
   line-height: 1.02;
   text-wrap: balance;
-}
-
-.folder-card__title[data-font="chubby"] {
-  font-family: var(--font-brand);
-  font-weight: 400;
-}
-
-.folder-card__title[data-font="tiempos"] {
-  font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-}
-
-.folder-card__title[data-font="pixelify"] {
-  font-family: var(--font-lola);
-  font-weight: 500;
-  letter-spacing: 0.02em;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
 }
@@ -6665,11 +6662,12 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__spine li {
-  font-family: var(--font-mono);
-  font-size: max(0.62rem, 0.68rem);
-  letter-spacing: 0.05em;
+  font-family: var(--font-sans);
+  font-size: max(var(--text-meta-xs), 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.2rem 0.4rem;
+  padding: 0.25rem 0.45rem;
   border: 1px solid color-mix(in srgb, var(--folder-ink) 30%, transparent);
   opacity: 0.88;
 }
@@ -7314,7 +7312,7 @@ body:has(.folio--fullgrid) .site-footer {
     min-width: 0;
     justify-content: center;
     padding-inline: 0.35rem;
-    font-size: 0.625rem;
+    font-size: max(var(--text-meta-xs), 0.75rem);
     line-height: 1.15;
     text-align: center;
   }
@@ -7417,7 +7415,7 @@ body:has(.folio--fullgrid) .site-footer {
     min-width: 0;
     justify-content: center;
     padding-inline: 0.3rem;
-    font-size: 0.6rem;
+    font-size: max(var(--text-meta-xs), 0.75rem);
     line-height: 1.15;
     text-align: center;
   }
