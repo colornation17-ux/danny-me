@@ -17,7 +17,7 @@ export const work = [
     team: 'Solo design & build',
     skills: ['Conversation design', 'Full-stack', 'WhatsApp', 'PWA', 'Service design'],
     accent: '#1FA97A',
-    liveUrl: 'https://la-bodega-lola-nu.vercel.app/',
+    liveUrl: 'https://la-bodega-lola.vercel.app/',
     whatsappUrl: 'https://wa.me/14043238325?text=Hi%20Lola',
     connectUrl: 'https://wacrm-i9f2.vercel.app/',
     connectCta: 'Lola Connect',
