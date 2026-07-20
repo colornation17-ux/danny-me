@@ -105,8 +105,8 @@ export function resolveLayoutMode(
   width: number,
   height: number,
 ): LayoutMode {
-  // Match pre-break FolderStack: short height → mobile; desktop is width-only ≥1200
-  if (height < 680 || width < 768) return 'mobile'
+  // Align with CSS 2-col (≥900) and FolderStack desktop chrome (≥1200)
+  if (height < 680 || width < 900) return 'mobile'
   if (width < 1200) return 'tablet'
   return 'desktop'
 }

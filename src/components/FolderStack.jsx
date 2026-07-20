@@ -22,7 +22,8 @@ const NAV_H = 74
 function resolveLayoutMode() {
   if (typeof window === 'undefined') return 'desktop'
   const w = window.innerWidth
-  if (w < 768) return 'mobile'
+  // Align with CSS 2-col cut (≥900) and desktop chrome (≥1200)
+  if (w < 900) return 'mobile'
   if (w < 1200) return 'tablet'
   return 'desktop'
 }
