@@ -9,6 +9,7 @@
     "lint": "oxlint && node scripts/check-css-tokens.mjs && npm run lint:cards",
     "lint:tokens": "node scripts/check-css-tokens.mjs",
     "lint:cards": "tsx scripts/check-project-cards.mjs",
+    "axe:cards": "node scripts/axe-folder-cards.mjs",
     "preview": "vite preview",
     "record:cw": "node scripts/record-cw-beats.mjs",
     "deploy:prod": "node scripts/deploy-prod.mjs",

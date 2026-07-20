@@ -6669,22 +6669,19 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 /* Hide incoming chrome while off-screen / sliding in — square tab tops
-   were flashing through the rounded bottom corners of the card above */
-.folder-card--future .folder-card__chrome {
+   were flashing through the rounded bottom corners of the card above.
+   Must also drop pointer-events: opacity:0 chrome still hit-tests otherwise. */
+.folder-card--future .folder-card__chrome,
+.folder-card--future .folder-card__tab {
   opacity: 0;
-}
-
-.folder-card--past .folder-card__chrome,
-.folder-card--active .folder-card__chrome {
-  opacity: 1;
-}
-
-.folder-card--future .folder-card__content {
   pointer-events: none;
 }
 
-.folder-card--future .folder-card__chrome,
-.folder-card--future .folder-card__tab {
+.folder-card--past .folder-card__chrome,
+.folder-card--past .folder-card__tab,
+.folder-card--active .folder-card__chrome,
+.folder-card--active .folder-card__tab {
+  opacity: 1;
   pointer-events: auto;
 }
 
@@ -6785,7 +6782,7 @@ body:has(.folio--fullgrid) .site-footer {
   flex-shrink: 0;
   font: inherit;
   letter-spacing: inherit;
-  opacity: 0.55;
+  opacity: 0.92;
 }
 
 .folder-card__tab-label {
@@ -6826,10 +6823,10 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__progress {
   margin: 0 0 var(--folder-space-3, var(--space-3));
   font-family: var(--font-sans);
-  font-size: max(var(--text-meta-xs), 0.6875rem);
+  font-size: max(var(--text-meta-xs), 0.75rem);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--folder-ink) 68%, transparent);
+  color: color-mix(in srgb, var(--folder-ink) 88%, transparent);
 }
 
 /* Dense footer: protect bottom inset — drop secondary meta */
@@ -7237,7 +7234,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__meta--sub {
   margin-top: var(--folder-space-2, var(--space-2));
   font-weight: 500;
-  color: color-mix(in srgb, var(--folder-ink) 78%, transparent);
+  color: color-mix(in srgb, var(--folder-ink) 90%, transparent);
 }
 
 .folder-card__blurb {
@@ -7274,7 +7271,7 @@ body:has(.folio--fullgrid) .site-footer {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--folder-ink) 78%, transparent);
+  color: color-mix(in srgb, var(--folder-ink) 90%, transparent);
 }
 
 .folder-card__metric-value {

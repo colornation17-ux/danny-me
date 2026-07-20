@@ -191,7 +191,12 @@ function FolderCard({
           aria-label={`Project ${label}: ${title}`}
           aria-expanded={isActive}
           aria-controls={contentId}
+          aria-current={isActive ? 'true' : undefined}
           onClick={() => onJump(index)}
+          onFocus={() => {
+            // Future tabs are visually off-stage — focusing them should reveal the card.
+            if (cardState === 'future') onJump(index)
+          }}
         >
           <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
           {tabTitle ? (
@@ -473,6 +478,22 @@ export default function FolderStack({ projects }) {
     }
   }, [total, navH, reduceMotion])
 
+  // If scroll changes the active card while focus sits inside an inert panel,
+  // move focus to the newly active project tab so keyboard users aren't trapped.
+  useEffect(() => {
+    const activeEl = document.activeElement
+    if (!(activeEl instanceof HTMLElement)) return
+    const panel = activeEl.closest('.folder-card__content')
+    if (!panel) return
+    if (!panel.hasAttribute('inert') && panel.getAttribute('aria-hidden') !== 'true') {
+      return
+    }
+    const slug = projects[activeIndex]?.slug
+    if (!slug) return
+    const nextTab = document.getElementById(`project-button-${slug}`)
+    nextTab?.focus({ preventScroll: true })
+  }, [activeIndex, projects])
+
   const jumpTo = useCallback(
     (index) => {
       const stack = stackRef.current
@@ -505,6 +526,8 @@ export default function FolderStack({ projects }) {
     <div
       className={`folder-stack folder-stack--${layoutMode}`}
       ref={stackRef}
+      role="region"
+      aria-label="Featured projects"
       style={{
         '--folder-count': total,
         '--folder-tab-w': `${tabW}px`,

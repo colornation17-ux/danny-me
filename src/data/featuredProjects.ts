@@ -57,7 +57,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       'Bilingual WhatsApp shopping and pickup connected to a staff workspace for orders, tickets and human handoff.',
     metric: {
       kind: 'Pilot signal',
-      value: '96.3% of valid conversations did not require staff escalation.',
+      value: 'About 96% of valid pilot chats closed without staff escalation.',
     },
     primaryAction: primary('View case study', '/projects/lola'),
     secondaryActions: [
@@ -122,7 +122,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       'Turns competitor promotions, store sales, weather and customer behavior into weekly merchandising decisions.',
     metric: {
       kind: 'Usage signal',
-      value: '2,088 attributed POS visits from WhatsApp outreach.',
+      value: '2,000+ attributed store visits from WhatsApp outreach.',
     },
     primaryAction: primary('View case study', '/projects/competitor-watch'),
     secondaryActions: [
@@ -154,7 +154,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       'Reframed a technical racing site around four audiences through new information architecture, content and SEO.',
     metric: {
       kind: 'Outcome',
-      value: '1,500+ new monthly sessions · 36% lower organic bounce.',
+      value: '1,500+ new monthly sessions after relaunch.',
     },
     primaryAction: primary('View case study', '/projects/code19'),
     secondaryActions: [secondary('Visit live site', bySlug['code19'].liveUrl)],
@@ -183,7 +183,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       'Explored how cluster, HUD and voice interfaces could reduce attention shifts during common driving tasks.',
     metric: {
       kind: 'Testing result',
-      value: '92% task success in simulator testing.',
+      value: 'High task success in simulator testing.',
     },
     primaryAction: primary('View case study', '/projects/wing-hmi'),
     secondaryActions: [],
@@ -193,7 +193,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       '/work/wing-hmi/hero.png',
       'WING automotive HMI cluster and HUD concept',
     ),
-    theme: { fill: '#7C5CFF', ink: '#ffffff' },
+    theme: { fill: '#5538D4', ink: '#ffffff' },
     variant: 'concept',
     caseStudyPath: '/projects/wing-hmi',
   },
@@ -223,7 +223,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       '/work/edge-ai/hero.jpg',
       'WING Edge AI vehicle concept',
     ),
-    theme: { fill: '#0891B2', ink: '#111212' },
+    theme: { fill: '#0A5F73', ink: '#ffffff' },
     variant: 'concept',
     caseStudyPath: '/projects/edge-ai',
   },
