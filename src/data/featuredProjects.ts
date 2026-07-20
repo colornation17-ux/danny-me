@@ -124,7 +124,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     metric: {
       kind: 'Pilot signal',
       value:
-        '102+ customers recaptured in the first two months via basket segmentation.',
+        '102+ customers recaptured in the first month via segmentation and basket analysis.',
     },
     primaryAction: primary('View case study', '/projects/competitor-watch'),
     secondaryActions: [
