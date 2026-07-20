@@ -38,10 +38,10 @@ export const featured = [
     folderDate: 'Feb 24, 2026',
     role: 'Service designer',
     status: 'Shipped',
-    timeline: '72-hour launch recovery',
-    team: 'Store operations',
+    timeline: '72-hour recovery · store operations',
+    team: 'Reported to CEO',
     outcome:
-      'Designed a barcode onboarding and receiving pipeline that reduced checkout time to under 30 seconds and restored SKU recognition to approximately 100%.',
+      'Led launch-week checkout recovery: diagnosed a shared POS data failure, moved product validation upstream into receiving, and shipped a barcode-normalization tool — so recognition happened before the shelf, not at the register.',
     tags: ['Service design', 'Ops'],
     cover: '/work/bodega-ops/store-floor.jpg',
     coverAlt: 'La Bodega store floor during checkout ops recovery',

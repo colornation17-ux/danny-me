@@ -283,6 +283,11 @@ export default function Project() {
               </dl>
               <div className="cs-actions">
                 <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>Ask about this work</a>
+                {project.evidenceDoc && (
+                  <a className="folio-btn" href={project.evidenceDoc} target="_blank" rel="noopener noreferrer">
+                    Research appendix ↗
+                  </a>
+                )}
               </div>
             </div>
           </header>
@@ -383,6 +388,11 @@ export default function Project() {
             <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>
               Ask about this work
             </a>
+            {project.evidenceDoc && (
+              <a className="folio-btn" href={project.evidenceDoc} target="_blank" rel="noopener noreferrer">
+                Research appendix ↗
+              </a>
+            )}
             {project.liveUrl && (
               <a
                 className="folio-btn"
