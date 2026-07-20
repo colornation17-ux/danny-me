@@ -76,7 +76,6 @@ function FolderCard({
   const contentId = `project-content-${project.slug}`
   const buttonId = `project-button-${project.slug}`
   const poster = project.reelPoster || project.cover || project.hero || undefined
-  const isStacked = layoutMode !== 'desktop'
   // Past cards stay under the active one — higher index = higher paint order
   const zIndex = isActive ? total + 10 : index + 1
 
@@ -173,9 +172,8 @@ function FolderCard({
         id={contentId}
         className="folder-card__content"
         aria-labelledby={buttonId}
-        aria-hidden={!isActive}
-        hidden={isStacked && !isActive ? true : undefined}
-        {...(!isActive ? { inert: true } : {})}
+        aria-hidden={reduceMotion ? undefined : !isActive}
+        {...(!isActive && !reduceMotion ? { inert: true } : {})}
       >
         <div className="folder-card__text">
           <p className="folder-card__progress" aria-hidden="true">
@@ -348,9 +346,9 @@ function FolderCard({
 }
 
 /**
- * Desktop sticky folder scrub — CSS transforms only (no GSAP).
+ * Sticky folder scrub on all viewports — CSS transforms only (no GSAP).
  * Past cards stay painted underneath so the stack never flashes empty grid.
- * Mobile/tablet: accordion / tab rail.
+ * Reduced-motion falls back to a static stacked list via CSS.
  */
 export default function FolderStack({ projects }) {
   const stackRef = useRef(null)
@@ -362,7 +360,6 @@ export default function FolderStack({ projects }) {
     typeof window !== 'undefined' ? resolveLayoutMode() : 'desktop',
   )
   const total = projects.length
-  const isDesktop = layoutMode === 'desktop'
   const activeIndexRef = useRef(0)
 
   useEffect(() => {
@@ -390,20 +387,18 @@ export default function FolderStack({ projects }) {
     const measure = () => {
       const sticky = el.querySelector('.folder-sticky')
       const width = sticky?.clientWidth || el.clientWidth
-      if (!isDesktop) {
-        setTabW(Math.max(72, Math.floor(width / Math.min(total, 4))))
-        return
-      }
       // Fit all tabs in the chrome row with room for slope
-      const slope = 40
-      const usable = Math.max(280, width - slope - 8)
-      setTabW(Math.floor(Math.min(140, Math.max(96, usable / total))))
+      const slope = layoutMode === 'mobile' ? 28 : 40
+      const minTab = layoutMode === 'mobile' ? 56 : layoutMode === 'tablet' ? 72 : 96
+      const maxTab = layoutMode === 'mobile' ? 88 : 140
+      const usable = Math.max(200, width - slope - 8)
+      setTabW(Math.floor(Math.min(maxTab, Math.max(minTab, usable / total))))
     }
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [total, isDesktop])
+  }, [total, layoutMode])
 
   useEffect(() => {
     const nav = document.querySelector('.site-nav--folio, .site-nav')
@@ -424,7 +419,7 @@ export default function FolderStack({ projects }) {
   }, [])
 
   useEffect(() => {
-    if (!isDesktop) return undefined
+    if (reduceMotion) return undefined
     const stack = stackRef.current
     if (!stack) return undefined
 
@@ -463,19 +458,19 @@ export default function FolderStack({ projects }) {
       window.visualViewport?.removeEventListener('resize', onScroll)
       if (raf) window.cancelAnimationFrame(raf)
     }
-  }, [total, navH, isDesktop])
+  }, [total, navH, reduceMotion])
 
   const jumpTo = useCallback(
     (index) => {
       const stack = stackRef.current
       if (!stack || total <= 0) return
 
-      if (!isDesktop) {
+      if (reduceMotion) {
         activeIndexRef.current = index
         setActiveIndex(index)
         stack.querySelector(`[data-index="${index}"]`)?.scrollIntoView({
           block: 'nearest',
-          behavior: reduceMotion ? 'auto' : 'smooth',
+          behavior: 'auto',
         })
         return
       }
@@ -486,10 +481,10 @@ export default function FolderStack({ projects }) {
       const progress = total <= 1 ? 0 : index / (total - 1)
       window.scrollTo({
         top: stackAbsTop - navH + progress * scrollRange,
-        behavior: reduceMotion ? 'auto' : 'smooth',
+        behavior: 'smooth',
       })
     },
-    [total, navH, reduceMotion, isDesktop],
+    [total, navH, reduceMotion],
   )
 
   return (
