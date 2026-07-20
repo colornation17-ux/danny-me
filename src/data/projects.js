@@ -70,7 +70,7 @@ export const work = [
       {
         eyebrow: 'Baseline',
         title: 'Four shared terminals. One broken product path.',
-        body: 'La Bodega is a hybrid grocery and restaurant serving a working-class Latino neighborhood. During launch week, a large share of the active assortment returned “Item Not Found” at checkout. All four registers shared one product database — grocery and restaurant billing failed together. Staff improvised with manager calls, Miscellaneous charges, and English-name search. Checkout stalls of two to five minutes were common on affected lines. Exact store size, catalog denominator, and failure sample are locked in the research appendix.',
+        body: 'La Bodega is a ~25,000 sq ft hybrid grocery and restaurant serving a working-class Latino neighborhood. During launch week, a large share of the active assortment returned “Item Not Found” at checkout. All four registers shared one product database — grocery and restaurant billing failed together. Staff improvised with manager calls, Miscellaneous charges, and English-name search. Checkout stalls of two to five minutes were common on affected lines. Catalog denominators and failure samples are locked in the research appendix.',
         image: '/work/bodega-ops/store-floor.jpg',
         caption: 'La Bodega store floor during launch-week recovery',
       },

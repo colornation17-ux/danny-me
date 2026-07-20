@@ -19,7 +19,7 @@
 | Field | Value |
 | --- | --- |
 | Store | La Bodega Supermercado |
-| Store size (sq ft) | TODO — reconcile prior 25,000 vs ~1,900 claims against lease / floor plan |
+| Store size (sq ft) | **25,000** — locked |
 | Terminals | 4 shared POS |
 | Launch window | TODO — pre-open dry run vs Day-1 live (pick one timeline) |
 | Decision deadline | ~72 hours contain → diagnose → ship |
@@ -169,7 +169,7 @@ Browser client called a **public UPC lookup service**. No custom store backend, 
 
 ## 10. Next fill session (checklist)
 
-1. [ ] Store sq ft from lease / listing  
+1. [x] Store sq ft from lease / listing — **25,000**  
 2. [ ] Lock SKU denominators (catalog vs active vs affected)  
 3. [ ] Recognition sample N and exact post rate  
 4. [ ] Checkout timing sample N  
