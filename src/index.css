@@ -7132,8 +7132,15 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__media .folder-card__image,
   .folder-card__media .folder-card__image--fill,
   .folder-card__media .folder-card__image--portrait {
-    aspect-ratio: 16 / 9;
-    max-height: min(34vh, 17.5rem);
+    width: 100%;
+    height: auto;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+
+  .folder-card__media .folder-card__image > img,
+  .folder-card__media .folder-card__image > video {
+    max-height: min(42vh, 22rem);
   }
 }
 
@@ -7176,9 +7183,14 @@ body:has(.folio--fullgrid) .site-footer {
     flex: none;
     width: 100%;
     height: auto;
-    max-height: min(34vh, 17.5rem);
-    aspect-ratio: 16 / 9;
+    max-height: none;
+    aspect-ratio: auto;
     min-height: 0;
+  }
+
+  .folder-card__media .folder-card__image > img,
+  .folder-card__media .folder-card__image > video {
+    max-height: min(42vh, 22rem);
   }
 }
 
@@ -7279,6 +7291,11 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image,
   .folder-card__image--fill,
   .folder-card__image--portrait {
+    max-height: none;
+  }
+
+  .folder-card__image > img,
+  .folder-card__image > video {
     max-height: min(42vh, 18rem);
   }
 }
@@ -7294,6 +7311,11 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image,
   .folder-card__image--fill,
   .folder-card__image--portrait {
+    max-height: none;
+  }
+
+  .folder-card__image > img,
+  .folder-card__image > video {
     max-height: min(42vh, 20rem);
   }
 }
@@ -7760,13 +7782,14 @@ body:has(.folio--fullgrid) .site-footer {
   align-self: start;
 }
 
-/* Shared media well — no stroke on the container; L-bracket corners are the edge frame */
+/* Shared media well — L-bracket corners are the edge frame */
 .folder-card__image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: auto;
   min-height: 0;
-  overflow: hidden;
+  aspect-ratio: auto;
+  overflow: visible;
   background: transparent;
   border: 0;
   outline: none;
@@ -7774,16 +7797,19 @@ body:has(.folio--fullgrid) .site-footer {
   border-radius: var(--radius-xs);
 }
 
-.folder-card__image img,
-.folder-card__image video,
-.folder-card__image canvas,
-.folder-card__image .motion-preview,
-.folder-card__image .folder-card__placeholder {
-  position: absolute;
-  inset: 0;
+/*
+ * Photos + reels: fill column width at native aspect — no forced crop.
+ * Absolute + object-fit:cover was clipping video frames.
+ */
+.folder-card__image > img,
+.folder-card__image > video {
+  position: relative;
+  display: block;
+  inset: auto;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  max-height: min(42vh, 22rem);
+  object-fit: contain;
   object-position: center;
   image-rendering: auto;
   -webkit-backface-visibility: hidden;
@@ -7792,16 +7818,37 @@ body:has(.folio--fullgrid) .site-footer {
   outline: none;
   background: transparent;
   transform: none;
+  border-radius: inherit;
 }
 
-/* Reels: show the full frame — cover was clipping Lola / CW / HMI */
-.folder-card__image video {
-  object-fit: contain;
-  background: color-mix(in srgb, var(--folder-ink) 8%, transparent);
+.folder-card__image > video {
+  background: color-mix(in srgb, var(--folder-ink) 6%, transparent);
+}
+
+/* Motion / canvas still need a framed well */
+.folder-card__image > canvas,
+.folder-card__image > .motion-preview,
+.folder-card__image > .folder-card__placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border: 0;
+  outline: none;
+  background: transparent;
+}
+
+.folder-card__image:has(> canvas),
+.folder-card__image:has(> .motion-preview),
+.folder-card__image:has(> .folder-card__placeholder) {
+  aspect-ratio: 16 / 9;
+  max-height: min(42vh, 22rem);
+  overflow: hidden;
 }
 
 .folder-card__image--fill {
-  aspect-ratio: 16 / 9;
   flex: none;
   align-self: flex-start;
   width: 100%;
@@ -7811,8 +7858,31 @@ body:has(.folio--fullgrid) .site-footer {
   background: transparent;
 }
 
-.folder-card__image--pos-top video,
-.folder-card__image--pos-top img {
+/*
+ * Still photos (Checkout Ops, CODE19): 16:9 cover on the img itself.
+ * Avoid absolute + empty-height wells — those collapsed and hid the photos.
+ */
+.folder-card__image--photo {
+  aspect-ratio: auto;
+  max-height: none;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--folder-ink) 8%, transparent);
+}
+
+.folder-card__image--photo > img {
+  position: relative !important;
+  inset: auto !important;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(42vh, 22rem);
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: center;
+}
+
+.folder-card__image--pos-top > video,
+.folder-card__image--pos-top > img {
   object-position: top center;
 }
 
@@ -7920,15 +7990,15 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    max-height: min(44vh, 22rem);
+    max-height: none;
     height: auto;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: auto;
   }
 }
 
-/* Portrait still uses the shared 16:9 well; phone frames sit inside */
+/* Portrait: phone frames + strip sit in a native-aspect well (no forced crop) */
 .folder-card__image--portrait {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: auto;
   flex: none;
   height: auto;
   min-height: 0;
@@ -8131,25 +8201,34 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image,
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: auto;
     width: 100%;
     height: auto;
-    max-height: 100%;
+    max-height: none;
     min-height: 0;
     flex: none;
     align-self: stretch;
   }
 
-  .folder-card__image img,
-  .folder-card__image video,
-  .folder-card__image--fill img,
-  .folder-card__image--fill video {
-    position: absolute;
-    inset: 0;
+  .folder-card__image > img,
+  .folder-card__image > video,
+  .folder-card__image--fill > img,
+  .folder-card__image--fill > video {
+    position: relative;
+    inset: auto;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    max-height: min(36vh, 18rem);
+    object-fit: contain;
     object-position: center;
+  }
+
+  .folder-card__image--photo > img {
+    position: relative !important;
+    inset: auto !important;
+    max-height: min(36vh, 18rem);
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
   }
 }
 
@@ -8287,9 +8366,22 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__tags {
-    margin-top: var(--folder-space-3, var(--space-3));
+    margin-top: 0.45rem;
     padding-top: 0;
-    gap: var(--folder-space-2, var(--space-2));
+    gap: 0.3rem;
+  }
+
+  .folder-card__tag {
+    min-height: 1.4rem;
+  }
+
+  .folder-card__tag-label {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.625rem;
+  }
+
+  .folder-card__tag:nth-child(n + 3) {
+    display: none;
   }
 
   /* Media: --mobile sets flex:0 + 16:9; keep FOUC start-aligned */
@@ -8308,28 +8400,44 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image,
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: auto;
     width: 100%;
     height: auto;
-    max-height: 100%;
+    max-height: none;
     min-height: 0;
     flex: none;
     align-self: stretch;
   }
 
-  .folder-card__image--fill img,
-  .folder-card__image--fill video,
-  .folder-card__image--fill canvas,
-  .folder-card__image--fill .motion-preview,
-  .folder-card__image--fill .folder-card__placeholder,
-  .folder-card__image img,
-  .folder-card__image video {
+  .folder-card__image--fill > img,
+  .folder-card__image--fill > video,
+  .folder-card__image > img,
+  .folder-card__image > video {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    max-height: min(26vh, 11.5rem);
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .folder-card__image--photo > img {
+    position: relative !important;
+    inset: auto !important;
+    max-height: min(28vh, 12.5rem);
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .folder-card__image--fill > canvas,
+  .folder-card__image--fill > .motion-preview,
+  .folder-card__image--fill > .folder-card__placeholder {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
   }
 
   .folder-card__audio {
@@ -8393,11 +8501,11 @@ body:has(.folio--fullgrid) .site-footer {
  *  ≥1200px   → full desktop chrome
  */
 .folder-stack--mobile {
-  /* Stacked media + dual CTAs need extra runway (Lola clipped ~62px at 42rem) */
-  --folder-card-h: clamp(38rem, calc(var(--folder-vh) - var(--folder-nav-h) - 1rem), 48rem);
-  --folder-pad-start: var(--space-4);
-  --folder-pad-end: var(--space-5);
-  --folder-pad-inline: var(--space-4);
+  /* Media + copy + full-width CTA need runway; keep CTAs inside the sticky frame */
+  --folder-card-h: clamp(40rem, calc(var(--folder-vh) - var(--folder-nav-h) - 0.5rem), 52rem);
+  --folder-pad-start: var(--space-3);
+  --folder-pad-end: var(--space-4);
+  --folder-pad-inline: var(--space-3);
   --folder-tab-h: 2.35rem;
   height: calc(var(--folder-count) * 48dvh + var(--folder-card-h));
   padding-inline: clamp(0.5rem, 2vw, 0.85rem);
@@ -8438,7 +8546,7 @@ body:has(.folio--fullgrid) .site-footer {
   max-width: 100%;
 }
 
-/* Mobile body: top-aligned stack — media then copy */
+/* Mobile body: top-aligned stack — media then copy; CTAs stay pinned in-frame */
 .folder-stack--mobile .folder-card__content {
   display: flex;
   flex-direction: column;
@@ -8447,6 +8555,11 @@ body:has(.folio--fullgrid) .site-footer {
   gap: 0;
   height: 100%;
   min-height: 0;
+  padding:
+    var(--folder-pad-start)
+    var(--folder-pad-inline)
+    var(--folder-pad-end)
+    var(--folder-pad-inline);
 }
 
 .folder-stack--mobile .folder-card__main {
@@ -8454,6 +8567,7 @@ body:has(.folio--fullgrid) .site-footer {
   flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
+  gap: 0.65rem;
 }
 
 .folder-stack--mobile .folder-card__media {
@@ -8464,12 +8578,28 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-stack--mobile .folder-card__copy {
   flex: 1 1 auto;
+  min-height: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+}
+
+.folder-stack--mobile .folder-card__eyebrow {
+  margin-bottom: 0.55rem;
+  font-size: 0.7rem;
 }
 
 .folder-stack--mobile .folder-card__title {
-  font-size: clamp(1.55rem, 7vw, 2.1rem);
+  font-size: clamp(1.35rem, 6.2vw, 1.85rem);
   max-width: none;
+  line-height: 1.12;
+}
+
+.folder-stack--mobile .folder-card__role {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
 }
 
 .folder-stack--mobile .folder-card__role--sub {
@@ -8481,56 +8611,83 @@ body:has(.folio--fullgrid) .site-footer {
   display: none;
 }
 
-.folder-stack--mobile .folder-card__summary {
-  margin-top: var(--folder-space-4);
-  max-width: none;
+/* Domain pills: compact so CTAs stay visible */
+.folder-stack--mobile .folder-card__tags,
+.folder-stack--mobile .folder-card__tags--identity {
+  margin-top: 0.45rem;
+  gap: 0.3rem;
 }
 
-.folder-stack--mobile .folder-card__actions {
-  margin-top: 1.35rem;
-  padding-top: 0;
-  width: 100%;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.55rem;
+.folder-stack--mobile .folder-card__tag {
+  min-height: 1.4rem;
 }
 
-.folder-stack--mobile .folder-card__primary-action,
-.folder-stack--mobile .folder-card__cta {
-  width: 100%;
-  justify-content: center;
+.folder-stack--mobile .folder-card__tag-label {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
 }
 
-.folder-stack--mobile .folder-card__secondary-actions {
-  flex-direction: column;
-  align-items: stretch;
-  width: 100%;
-}
-
-/* Metrics blow the sticky frame on phone — keep them on tablet+ */
-.folder-stack--mobile .folder-card__metric {
+.folder-stack--mobile .folder-card__tag:nth-child(n + 3) {
   display: none;
 }
 
+.folder-stack--mobile .folder-card__summary,
 .folder-stack--mobile .folder-card__blurb {
-  margin-top: var(--folder-space-4);
+  margin-top: 0.65rem;
   max-width: none;
-  font-size: max(var(--text-body), 1rem);
-  line-height: 1.45;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
 
-.folder-stack--mobile .folder-card__metric {
-  margin-top: var(--folder-space-4);
-}
-
-.folder-stack--mobile .folder-card__cta-row,
-.folder-stack--mobile .folder-card__actions {
-  margin-top: var(--folder-space-5);
-  padding-top: 0;
-  gap: var(--folder-space-2);
+.folder-stack--mobile .folder-card__actions,
+.folder-stack--mobile .folder-card__cta-row {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  width: 100%;
+  flex: 0 0 auto;
   flex-direction: column;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: stretch;
+  gap: 0.4rem;
+}
+
+.folder-stack--mobile .folder-card__primary-action,
+.folder-stack--mobile .folder-card__primary-action.folder-card__cta,
+.folder-stack--mobile .folder-card__cta,
+.folder-stack--mobile .folder-card__live {
+  width: 100%;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.7rem 1rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.folder-stack--mobile .folder-card__secondary-actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 0.15rem 1rem;
+}
+
+.folder-stack--mobile .folder-card__secondary-action,
+.folder-stack--mobile .folder-card__secondary-link {
+  min-height: 44px;
+  padding: 0.35rem 0.15rem;
+  font-size: 0.8125rem;
+  justify-content: center;
 }
 
 .folder-stack--mobile .folder-card__cta-row--split {
@@ -8540,15 +8697,9 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-stack--mobile .folder-card__cta-row--split .folder-card__cta,
-.folder-stack--mobile .folder-card__cta-row--split .folder-card__live,
-.folder-stack--mobile .folder-card__cta,
-.folder-stack--mobile .folder-card__live {
+.folder-stack--mobile .folder-card__cta-row--split .folder-card__live {
   width: 100%;
   justify-content: center;
-}
-
-.folder-stack--mobile .folder-card__tags {
-  margin-top: var(--folder-space-3);
 }
 
 .folder-stack--mobile .folder-card__image,
@@ -8557,11 +8708,24 @@ body:has(.folio--fullgrid) .site-footer {
   flex: none;
   width: 100%;
   height: auto;
-  max-height: min(30vh, 12.5rem);
+  max-height: none;
   min-height: 0;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: auto;
   border-radius: var(--radius-xs);
-  background: color-mix(in srgb, var(--folder-ink) 6%, var(--folder-fill));
+  background: transparent;
+}
+
+.folder-stack--mobile .folder-card__image > img,
+.folder-stack--mobile .folder-card__image > video {
+  max-height: min(26vh, 11.5rem);
+}
+
+.folder-stack--mobile .folder-card__image--photo > img {
+  position: relative !important;
+  inset: auto !important;
+  max-height: min(28vh, 12.5rem);
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 /* Dense footers already hide metric via the rule above */

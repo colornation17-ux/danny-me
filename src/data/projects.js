@@ -342,7 +342,7 @@ export const lab = [
     timeline: '2025',
     team: 'Design exploration',
     skills: ['HAI', 'UX/UI', 'Edge AI', 'Systems design'],
-    accent: '#0891B2',
+    accent: '#9A3412',
     conceptOnly: true,
     sections: [
       {

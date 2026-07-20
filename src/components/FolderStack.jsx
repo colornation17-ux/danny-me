@@ -77,7 +77,10 @@ function FolderCard({
         ? project.tabLabel || title
         : project.tabLabelCompact || project.tabLabel || title
   const label = project.index || String(index + 1).padStart(2, '0')
-  const tags = project.tags || project.skills?.slice(0, 2) || []
+  const tags = (project.tags || project.skills?.slice(0, 2) || []).slice(
+    0,
+    layoutMode === 'mobile' ? 2 : 3,
+  )
   const mediaAlt = project.coverAlt || `${title} preview`
   const company =
     project.company ||
@@ -343,6 +346,8 @@ function FolderCard({
                 project.reelPortrait
                   ? ' folder-card__image--portrait'
                   : ' folder-card__image--fill'
+              }${
+                !project.reel && project.cover ? ' folder-card__image--photo' : ''
               }${project.reelObjectPosition === 'top' ? ' folder-card__image--pos-top' : ''}`}
               {...(project.reel
                 ? { role: 'img', 'aria-label': `${title} product reel, silent` }

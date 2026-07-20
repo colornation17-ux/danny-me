@@ -225,7 +225,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       '/work/edge-ai/hero.jpg',
       'WING Edge AI vehicle concept',
     ),
-    theme: { fill: '#0A5F73', ink: '#ffffff' },
+    theme: { fill: '#9A3412', ink: '#ffffff' },
     variant: 'concept',
     caseStudyPath: '/projects/edge-ai',
   },
