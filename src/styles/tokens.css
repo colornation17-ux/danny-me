@@ -65,10 +65,10 @@
   width: min(100%, var(--pc-card-max));
 }
 
-/* Desktop: narrow enough that tab 06 stays inside overflow:hidden sticky */
+/* Desktop: fit six tabs; keep labels readable */
 .folder-stack--desktop {
-  --folder-tab-w: clamp(3.5rem, 7.2vw, 6.25rem);
-  --pc-tab-slope-w: 28px;
+  --folder-tab-w: clamp(4.25rem, 8vw, 7rem);
+  --pc-tab-slope-w: 32px;
 }
 
 .folder-stack--desktop .folder-card__tab-slope {

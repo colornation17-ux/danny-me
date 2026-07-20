@@ -110,7 +110,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     slug: 'competitor-watch',
     indexLabel: '03',
     tabLabel: 'Competitor Watch',
-    tabLabelCompact: 'Competitors',
+    tabLabelCompact: 'CW',
     title: 'Competitor Watch',
     role: 'Design technologist',
     organization: 'La Bodega',
