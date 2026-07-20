@@ -80,6 +80,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     slug: 'bodega-ops',
     indexLabel: '02',
     tabLabel: 'Checkout Ops',
+    tabLabelCompact: 'Checkout',
     title: 'Checkout Operations',
     role: 'Service designer',
     organization: 'La Bodega',

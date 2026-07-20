@@ -115,13 +115,6 @@ export default function ProjectMedia({
             {isAudioOn ? 'Audio on' : 'Play audio'}
           </button>
         )}
-
-        <div className="folder-card__corners" aria-hidden="true">
-          <span />
-          <span />
-          <span />
-          <span />
-        </div>
       </div>
     </div>
   )

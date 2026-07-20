@@ -147,7 +147,15 @@ export default function ProjectStack({ projects }: Props) {
     gsap.fromTo(
       card,
       { y: '105%' },
-      { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
+      {
+        y: 0,
+        duration: 0.55,
+        ease: 'power3.out',
+        clearProps: 'transform',
+        onComplete: () => {
+          gsap.set(card, { clearProps: 'willChange' })
+        },
+      },
     )
   }, [activeIndex, reduceMotion, layoutMode])
 

@@ -7,20 +7,25 @@
   order: -1;
 }
 
-/* Switch affordance — sits on the sticky viewport above folder tabs */
+/* Compact switch chrome — progress + dots only (tabs carry the labels) */
 .project-stack__chrome {
   position: absolute;
-  top: 0.55rem;
-  right: clamp(0.75rem, 2vw, 1.5rem);
+  top: calc(var(--folder-tab-h, 2.55rem) + 0.7rem);
+  right: clamp(0.85rem, 2vw, 1.65rem);
   z-index: 40;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.35rem;
-  max-width: min(16rem, 42vw);
+  flex-direction: row;
+  align-items: center;
+  gap: 0.55rem;
+  max-width: none;
+  padding: 0.35rem 0.55rem;
   pointer-events: none;
   color: var(--black);
   text-align: right;
+  background: color-mix(in srgb, var(--white) 94%, transparent);
+  border: 1.5px solid var(--black);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--black) 16%, transparent);
 }
 
 .project-stack__chrome > * {
@@ -30,19 +35,19 @@
 .project-stack__progress {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.35rem;
+  gap: 0.3rem;
   margin: 0;
-  padding: 0.2rem 0.55rem;
-  border: 1.5px solid var(--black);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--white) 92%, transparent);
-  box-shadow: 2px 2px 0 color-mix(in srgb, var(--black) 18%, transparent);
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
   font-family: var(--font-sans);
   font-size: max(var(--text-meta-xs), 0.75rem);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .project-stack__progress-label {
@@ -50,31 +55,34 @@
   opacity: 0.72;
 }
 
+/* Hint is SR / mobile only — desktop tabs already teach the model */
 .project-stack__hint {
-  margin: 0;
-  max-width: 14rem;
-  font-family: var(--font-sans);
-  font-size: max(var(--text-meta-xs), 0.75rem);
-  font-weight: 500;
-  line-height: 1.3;
-  color: color-mix(in srgb, var(--black) 72%, transparent);
-  text-wrap: balance;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .project-stack__dots {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 0.35rem;
-  margin: 0.15rem 0 0;
+  flex-shrink: 0;
+  gap: 0.3rem;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .project-stack__dot {
   appearance: none;
-  width: 0.55rem;
-  height: 0.55rem;
+  width: 0.5rem;
+  height: 0.5rem;
   padding: 0;
   border: 1.5px solid var(--black);
   border-radius: 50%;
@@ -84,12 +92,12 @@
 
 .project-stack__dot--active {
   background: var(--black);
-  transform: scale(1.15);
+  transform: scale(1.12);
 }
 
 .project-stack__dot--concept:not(.project-stack__dot--active) {
   border-style: dashed;
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 .project-stack__dot:focus-visible {
@@ -100,19 +108,33 @@
 @media (max-width: 767px) {
   .project-stack__chrome {
     position: static;
+    flex-wrap: wrap;
     max-width: none;
-    align-items: flex-start;
-    text-align: left;
+    justify-content: flex-start;
     margin: 0 0 0.75rem;
-    padding-inline: 0.15rem;
+    border-radius: 0.75rem;
+  }
+
+  .project-stack__hint {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    flex: 1 1 100%;
+    order: 3;
+    text-align: left;
+    font-family: var(--font-sans);
+    font-size: max(var(--text-meta-xs), 0.75rem);
+    font-weight: 500;
+    line-height: 1.3;
+    color: color-mix(in srgb, var(--black) 72%, transparent);
   }
 
   .project-stack__dots {
     justify-content: flex-start;
-  }
-
-  .project-stack__hint {
-    max-width: none;
   }
 }
 

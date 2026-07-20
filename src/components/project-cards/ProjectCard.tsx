@@ -33,8 +33,9 @@ export default function ProjectCard({
   const triggerId = `project-trigger-${project.id}`
   const panelId = `project-panel-${project.id}`
   const compact = layoutMode !== 'desktop'
+  // Six folder tabs need short labels or 06 clips off the sticky edge
   const tabLabel =
-    (compact && project.tabLabelCompact) || project.tabLabel
+    ((compact || total >= 5) && project.tabLabelCompact) || project.tabLabel
 
   return (
     <article
