@@ -4256,6 +4256,7 @@ body:has(.folio--fullgrid) .app {
 }
 
 .folio-recs__label {
+  margin: 0;
   font-family: var(--font-mono, "DM Sans", sans-serif);
   font-size: var(--text-meta);
   letter-spacing: 0.12em;
@@ -4893,6 +4894,12 @@ body:has(.folio--fullgrid) .app {
   animation: folio-bounce-down 1.4s ease-in-out infinite;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .folio-btn__arrow-down {
+    animation: none;
+  }
+}
+
 .folio-btn__arrows {
   width: 1.15rem;
   height: 1.15rem;
@@ -5043,6 +5050,7 @@ body:has(.folio--fullgrid) .app {
 
 /* ── Career Path ──────────────────────────────────────── */
 .career-path {
+  position: relative;
   width: 100%;
   max-width: 640px;
   margin: var(--space-7) auto var(--space-3);
@@ -5066,13 +5074,27 @@ body:has(.folio--fullgrid) .app {
   display: block;
 }
 
-/* Mobile HTML timeline — readable type (SVG labels crush below ~11px) */
+/* Mobile HTML timeline — always in DOM for SR; visual on small screens */
 .career-path__list {
-  display: none;
   list-style: none;
   margin: 0;
   padding: 0 0 0 1.1rem;
   border-left: 1.5px solid var(--line-cool);
+}
+
+/* Desktop: keep list for assistive tech (SVG is decorative aria-hidden) */
+@media (min-width: 601px) {
+  .career-path__list {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 
 .career-path__item {
@@ -5187,7 +5209,15 @@ body:has(.folio--fullgrid) .app {
   }
 
   .career-path__list {
-    display: block;
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0 0 0 1.1rem;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    border-left: 1.5px solid var(--line-cool);
   }
 
   .career-path__svg {
@@ -6463,13 +6493,6 @@ body:has(.folio--fullgrid) .site-footer {
   .folio-hero--canvas {
     min-height: 0;
   }
-}
-
-.folio--rich .folio-about,
-.folio--rich .folio-work__head,
-.folio--rich .folio-contact {
-  max-width: 72rem;
-  margin-inline: auto;
 }
 
 .folio--rich .folio-about,

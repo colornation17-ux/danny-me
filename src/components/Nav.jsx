@@ -140,13 +140,16 @@ export default function Nav() {
           >
             Resume
           </a>
-          <a
+          <Link
             className="nav-cta nav-cta--contact"
-            href={`mailto:${SITE.email}`}
-            onClick={() => track('contact_click', { source: 'nav', channel: 'email' })}
+            to="/#contact"
+            onClick={() => {
+              track('contact_click', { source: 'nav', channel: 'contact_section' })
+              close()
+            }}
           >
             Contact
-          </a>
+          </Link>
           {/* Hamburger — mobile only */}
           <button
             ref={menuButtonRef}

@@ -24,6 +24,7 @@ export default function CaseStudyContact({
       id={id}
       className={`folio-contact cs-folio-contact${className ? ` ${className}` : ''}`}
       aria-labelledby={headingId}
+      tabIndex={-1}
     >
       <div className="folio-contact__inner">
         <div className="folio-contact__left">

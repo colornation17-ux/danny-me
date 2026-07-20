@@ -246,7 +246,7 @@ export default function CareerPath() {
     <div className="career-path" aria-label="Career journey">
       <p className="career-path__eyebrow">The path so far</p>
 
-      {/* Mobile: readable HTML timeline (SVG label text scales too small) */}
+      {/* Always in DOM for screen readers; SVG is decorative on desktop */}
       <ol className="career-path__list">
         {STOPS.map((s) => (
           <li key={s.id} className="career-path__item">

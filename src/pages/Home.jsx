@@ -1,8 +1,6 @@
 ﻿import { useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SITE } from '../data/site'
 import { featuredProjects } from '../data/featuredProjects'
 import { ProjectStack } from '../components/project-cards'
 import SpringWire from '../components/SpringWire'
@@ -74,7 +72,6 @@ export default function Home() {
             '.folio-hero__lead',
             '.folio-btn--contact',
             '.folio-about__body',
-            '.folio-polaroid',
             '.folio-skills li',
             '.folio-work__title',
             '.folio-sticky',
@@ -101,11 +98,16 @@ export default function Home() {
 
         // Split display name into characters and stagger them in
         const nameEl = document.querySelector('.folio-hero__name--display')
-        if (nameEl) {
+        if (nameEl && !nameEl.querySelector('.gs-char')) {
           const raw = nameEl.textContent.trim()
+          nameEl.setAttribute('aria-label', raw)
           nameEl.innerHTML = raw
             .split('')
-            .map((c) => `<span class="gs-char" style="display:inline-block">${c}</span>`)
+            .map((c) =>
+              c === ' '
+                ? '<span class="gs-char gs-char--space" aria-hidden="true">&nbsp;</span>'
+                : `<span class="gs-char" aria-hidden="true" style="display:inline-block">${c}</span>`,
+            )
             .join('')
           tl.from('.folio-hero__name--display .gs-char', {
             opacity: 0,
@@ -172,32 +174,6 @@ export default function Home() {
             onEnter: revealAbout,
             onRefresh(self) {
               if (self.progress > 0 || self.isActive) revealAbout()
-            },
-          })
-        }
-        const polaroids = gsap.utils.toArray('.folio-polaroid')
-        if (polaroids.length) {
-          const revealPolaroids = () => {
-            gsap.to(polaroids, {
-              autoAlpha: 1,
-              y: 0,
-              rotation: 0,
-              duration: 0.55,
-              stagger: 0.12,
-              ease: 'back.out(1.4)',
-              overwrite: 'auto',
-              clearProps: 'transform',
-            })
-          }
-          gsap.set(polaroids, { autoAlpha: 0, y: 24, rotation: 4 })
-          ScrollTrigger.create({
-            trigger: '.folio-about__grid',
-            start: 'top 80%',
-            once: true,
-            invalidateOnRefresh: true,
-            onEnter: revealPolaroids,
-            onRefresh(self) {
-              if (self.progress > 0 || self.isActive) revealPolaroids()
             },
           })
         }
@@ -326,8 +302,11 @@ export default function Home() {
           })
         })
 
+        // Magnetic hover — fine pointer only (avoid touch jitter / sticky offsets)
         const mouseMm = gsap.matchMedia()
         mouseMm.add('(hover: hover) and (pointer: fine)', () => {
+          const cleanups = []
+
           const select = document.querySelector('.folio-hero__select')
           if (select) {
             const xTo = gsap.quickTo(select, 'x', { duration: 0.4, ease: 'power2.out' })
@@ -356,43 +335,42 @@ export default function Home() {
             }
             select.addEventListener('mousemove', onMove)
             select.addEventListener('mouseleave', onLeave)
-            return () => {
+            cleanups.push(() => {
               select.removeEventListener('mousemove', onMove)
               select.removeEventListener('mouseleave', onLeave)
-            }
-          }
-          return undefined
-        })
-
-        // ── Magnetic hover on the hero CTA ──────────────────────────────
-        const cta = document.querySelector('.folio-btn--contact')
-        if (cta) {
-          const xTo = gsap.quickTo(cta, 'x', { duration: 0.22, ease: 'power3.out' })
-          const yTo = gsap.quickTo(cta, 'y', { duration: 0.22, ease: 'power3.out' })
-          const onMove = (e) => {
-            const r = cta.getBoundingClientRect()
-            const cx = r.left + r.width / 2
-            const cy = r.top + r.height / 2
-            xTo((e.clientX - cx) * 0.25)
-            yTo((e.clientY - cy) * 0.25)
-          }
-          const onLeave = () => {
-            gsap.to(cta, {
-              x: 0,
-              y: 0,
-              duration: 0.5,
-              ease: 'elastic.out(1, 0.4)',
-              overwrite: 'auto',
             })
           }
-          cta.addEventListener('mousemove', onMove)
-          cta.addEventListener('mouseleave', onLeave)
-          return () => {
-            mouseMm.revert()
-            cta.removeEventListener('mousemove', onMove)
-            cta.removeEventListener('mouseleave', onLeave)
+
+          const cta = document.querySelector('.folio-btn--contact')
+          if (cta) {
+            const xTo = gsap.quickTo(cta, 'x', { duration: 0.22, ease: 'power3.out' })
+            const yTo = gsap.quickTo(cta, 'y', { duration: 0.22, ease: 'power3.out' })
+            const onMove = (e) => {
+              const r = cta.getBoundingClientRect()
+              const cx = r.left + r.width / 2
+              const cy = r.top + r.height / 2
+              xTo((e.clientX - cx) * 0.25)
+              yTo((e.clientY - cy) * 0.25)
+            }
+            const onLeave = () => {
+              gsap.to(cta, {
+                x: 0,
+                y: 0,
+                duration: 0.5,
+                ease: 'elastic.out(1, 0.4)',
+                overwrite: 'auto',
+              })
+            }
+            cta.addEventListener('mousemove', onMove)
+            cta.addEventListener('mouseleave', onLeave)
+            cleanups.push(() => {
+              cta.removeEventListener('mousemove', onMove)
+              cta.removeEventListener('mouseleave', onLeave)
+            })
           }
-        }
+
+          return () => cleanups.forEach((fn) => fn())
+        })
 
         return () => mouseMm.revert()
       })
@@ -419,18 +397,24 @@ export default function Home() {
           </span>
         </p>
 
-        <div className="folio-sticker folio-sticker--green" style={{ '--rot': '14deg' }}>
+        <div className="folio-sticker folio-sticker--green" style={{ '--rot': '14deg' }} aria-hidden="true">
           Currently shipping AI for La Bodega
         </div>
-        <div className="folio-sticker folio-sticker--yellow" style={{ '--rot': '-8deg' }}>
+        <div className="folio-sticker folio-sticker--yellow" style={{ '--rot': '-8deg' }} aria-hidden="true">
           Previously CODE19 Racing · IU HCI
         </div>
-        <div className="folio-sticker folio-sticker--amber folio-sticker--pill" style={{ '--rot': '-3deg' }}>
+        <div className="folio-sticker folio-sticker--amber folio-sticker--pill" style={{ '--rot': '-3deg' }} aria-hidden="true">
           Product Designer
         </div>
-        <div className="folio-sticker folio-sticker--pink folio-sticker--pill" style={{ '--rot': '3deg' }}>
+        <div className="folio-sticker folio-sticker--pink folio-sticker--pill" style={{ '--rot': '3deg' }} aria-hidden="true">
           Indianapolis / Georgia
         </div>
+        <ul className="sr-only">
+          <li>Currently shipping AI for La Bodega</li>
+          <li>Previously CODE19 Racing · IU HCI</li>
+          <li>Product Designer</li>
+          <li>Indianapolis / Georgia</li>
+        </ul>
 
         <p className="folio-hero__lead folio-hero__lead--center">
           A product designer who ships AI into <em className="folio-lead__impact">real operations</em>
@@ -490,8 +474,10 @@ export default function Home() {
       </section>
 
       {/* ── Recommendations ─────────────────────────────────────────── */}
-      <section className="folio-recs" aria-label="Recommendations">
-        <p className="folio-recs__label">What people say</p>
+      <section className="folio-recs" aria-labelledby="recs-heading">
+        <h2 id="recs-heading" className="folio-recs__label">
+          Recommendation
+        </h2>
         <div className="folio-recs__grid">
 
           <article className="rec-card">
@@ -499,15 +485,14 @@ export default function Home() {
               <div className="rec-card__avatar">
                 <img
                   src="/recs/lawrence-walter.png"
-                  alt="Lawrence Walter"
+                  alt=""
                 />
               </div>
               <div className="rec-card__meta">
                 <strong className="rec-card__name">Lawrence Walter</strong>
                 <span className="rec-card__role">CEO · Code19 Racing</span>
               </div>
-              {/* LinkedIn bird */}
-              <span className="rec-card__source" aria-label="LinkedIn">
+              <span className="rec-card__source" aria-hidden="true">
                 <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
                   <path fill="#0077B5" d="M4.5 6.5h-3v9h3v-9Zm-1.5-4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 3 2.5ZM7 15.5h3v-5c0-1.1.9-2 2-2s2 .9 2 2v5h3v-5.5a4.5 4.5 0 0 0-4.5-4.5c-1.3 0-2.4.6-3.1 1.5H9.1L9 6.5H7v9Z"/>
                 </svg>
@@ -519,12 +504,12 @@ export default function Home() {
                 Danny brought a rare blend of <em>creative vision and methodical design thinking</em>, ensuring every interface decision was grounded in user insights. His expertise in <em>UX research, interaction design, and usability testing</em> played a pivotal role in shaping both our website and our AI-driven fan experience.
               </blockquote>
 
-              <div className="rec-card__source-bar">
+              <p className="rec-card__source-bar">
                 <svg viewBox="0 0 20 20" width="12" height="12" aria-hidden="true">
                   <path fill="#0077B5" d="M4.5 6.5h-3v9h3v-9Zm-1.5-4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 3 2.5ZM7 15.5h3v-5c0-1.1.9-2 2-2s2 .9 2 2v5h3v-5.5a4.5 4.5 0 0 0-4.5-4.5c-1.3 0-2.4.6-3.1 1.5H9.1L9 6.5H7v9Z"/>
                 </svg>
                 LinkedIn recommendation
-              </div>
+              </p>
             </div>
           </article>
 

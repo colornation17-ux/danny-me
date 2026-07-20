@@ -81,6 +81,7 @@
 
 .project-stack__dot {
   appearance: none;
+  position: relative;
   width: 0.5rem;
   height: 0.5rem;
   padding: 0;
@@ -88,6 +89,13 @@
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
+}
+
+/* Expand hit area to ~44px without changing visual size */
+.project-stack__dot::before {
+  content: '';
+  position: absolute;
+  inset: -0.85rem;
 }
 
 .project-stack__dot--active {

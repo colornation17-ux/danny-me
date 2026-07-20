@@ -71,7 +71,12 @@ export default function ProjectMedia({
 
   return (
     <div className="folder-card__img">
-      <div className="folder-card__image folder-card__image--fill">
+      <div
+        className="folder-card__image folder-card__image--fill"
+        {...(media.kind === 'video' || media.kind === 'motion'
+          ? { role: 'img', 'aria-label': alt }
+          : {})}
+      >
         {media.kind === 'video' ? (
           <video
             ref={videoRef}

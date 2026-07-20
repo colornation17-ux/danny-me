@@ -182,6 +182,16 @@ export default function ProjectStack({ projects }: Props) {
       if (layoutMode !== 'desktop') {
         activeIndexRef.current = index
         setActiveIndex(index)
+        // Bring the opened accordion / rail panel into view after layout
+        window.requestAnimationFrame(() => {
+          const card = stackRef.current?.querySelector(
+            `[data-index="${index}"]`,
+          )
+          card?.scrollIntoView({
+            block: 'nearest',
+            behavior: reduceMotion ? 'auto' : 'smooth',
+          })
+        })
         return
       }
       const stack = stackRef.current

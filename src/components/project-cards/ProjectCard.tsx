@@ -23,7 +23,7 @@ type Props = {
 export default function ProjectCard({
   project,
   index,
-  total: _total,
+  total,
   cardState,
   layoutMode,
   reduceMotion,
