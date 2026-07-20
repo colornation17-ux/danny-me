@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import gsap from 'gsap'
 import ProjectMotionPreview, { hasMotionPreview } from './motion/ProjectMotionPreview'
 import {
   projectCaseCtaLabel,
@@ -7,7 +8,6 @@ import {
   projectLiveCtaLabel,
   projectNavLabel,
 } from '../lib/projectLinks'
-import { buildFeaturedSecondaryActions } from '../data/featuredCardSchema'
 
 // color-cyan-58 · color-grey-7 · color-orange-55 · color-rose-50 · color-spring-green-45 · color-orange-80
 export const FOLDER_TONES = [
@@ -19,14 +19,54 @@ export const FOLDER_TONES = [
   { fill: '#F5DDA1', ink: '#111212' },
 ]
 
-// Nav height in px — default; runtime measurement syncs --folder-nav-h (measured, not layout tab width)
+// Nav height in px — default; runtime measurement syncs --folder-nav-h
 const NAV_H = 74
 
-/** Desktop folder stack only when both dimensions support it (no undefined 680–719 band). */
-function resolveLayoutMode(width, height) {
-  if (width >= 1200 && height >= 720) return 'desktop'
-  if (width < 768) return 'mobile'
-  return 'tablet'
+function StairsIcon({ size = 14 }) {
+  return (
+    <svg viewBox="0 0 16 16" width={size} height={size} aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M1 14h4v-3h3V8h3V5h4V2H9v3H6v3H3v3H1v3Z"
+      />
+    </svg>
+  )
+}
+
+function JpgGlyph() {
+  return (
+    <svg viewBox="0 0 23 23" width="18" height="18" aria-hidden="true">
+      <path
+        d="M10.7334 12.2667H11.5001C11.7034 12.2667 11.8984 12.186 12.0422 12.0422C12.186 11.8984 12.2667 11.7034 12.2667 11.5001C12.2667 11.2967 12.186 11.1017 12.0422 10.958C11.8984 10.8142 11.7034 10.7334 11.5001 10.7334H10.7334V12.2667Z"
+        fill="currentColor"
+      />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M1.5332 2.3C1.5332 1.69 1.77552 1.10499 2.20686 0.673654C2.63819 0.242321 3.22321 0 3.8332 0L16.4173 0L21.4665 5.04927V20.7C21.4665 21.31 21.2242 21.895 20.7929 22.3263C20.3615 22.7577 19.7765 23 19.1665 23H3.8332C3.22321 23 2.63819 22.7577 2.20686 22.3263C1.77552 21.895 1.5332 21.31 1.5332 20.7V2.3ZM6.1332 10.7333H3.06654V9.2H7.66654V16.8667H3.06654V13.8H4.59987V15.3333H6.1332V10.7333ZM9.19987 9.2H11.4999C12.1099 9.2 12.6949 9.44232 13.1262 9.87365C13.5575 10.305 13.7999 10.89 13.7999 11.5C13.7999 12.11 13.5575 12.695 13.1262 13.1263C12.6949 13.5577 12.1099 13.8 11.4999 13.8H10.7332V16.8667H9.19987V9.2ZM15.3332 9.2H19.9332V10.7333H16.8665V15.3333H18.3999V13.0333H19.9332V16.8667H15.3332V9.2Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <path
+        d="M3.99984 13.0001L3.99984 11.0001L15.9998 11.0001L10.4998 5.50008L11.9198 4.08008L19.8398 12.0001L11.9198 19.9201L10.4998 18.5001L15.9998 13.0001L3.99984 13.0001Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+function FolderTag({ label }) {
+  return (
+    <span className="folder-card__tag">
+      <span className="folder-card__tag-label">{label}</span>
+    </span>
+  )
 }
 
 function FolderCard({
@@ -34,11 +74,11 @@ function FolderCard({
   index,
   total,
   tone: baseTone,
+  tabW,
   cardState,
   onJump,
   reduceMotion,
   isInitialCard,
-  layoutMode,
 }) {
   const mediaVideoRef = useRef(null)
   const [isAudioOn, setIsAudioOn] = useState(false)
@@ -51,12 +91,8 @@ function FolderCard({
   const motion = hasMotionPreview(project.slug)
   const cta = projectCaseCtaLabel(project)
   const title = projectNavLabel(project)
-  const tabLabel =
-    (layoutMode !== 'desktop' && project.tabLabelCompact) ||
-    project.tabLabel ||
-    title
   const label = project.index || String(index + 1).padStart(2, '0')
-  const tags = (project.tags || project.skills?.slice(0, 3) || []).slice(0, 3)
+  const tags = project.tags || project.skills?.slice(0, 2) || []
   const mediaAlt = project.coverAlt || `${title} preview`
   const company =
     project.company ||
@@ -66,13 +102,9 @@ function FolderCard({
   const liveLabel = projectLiveCtaLabel(project)
   const hasAudioControl = Boolean(project.reelAudioControl && project.reel)
   const isActive = cardState === 'active'
-  const panelId = `project-panel-${project.slug}`
-  const triggerId = `project-trigger-${project.slug}`
+  const contentId = `project-content-${project.slug}`
+  const buttonId = `project-button-${project.slug}`
   const poster = project.reelPoster || project.cover || project.hero || undefined
-  const compactCtas = layoutMode !== 'desktop'
-  // `hidden` only for tablet/mobile accordion — desktop keeps shell measurements
-  const hidePanel =
-    layoutMode !== 'desktop' && !isActive && !reduceMotion
 
   useEffect(() => {
     const video = mediaVideoRef.current
@@ -119,38 +151,37 @@ function FolderCard({
     }
   }, [isAudioOn])
 
+  // Past cards sit underneath the active card — their tab buttons stay visible
+  // through the transparent indent holes in the active card's chrome row.
+  // Active card sits on top. Future cards are hidden off-screen below.
+  const zIndex = cardState === 'active' ? total + 10 : index + 1
+
   const CtaEl = isExternalCase ? 'a' : Link
   const ctaProps = isExternalCase
     ? {
         href: to,
         target: '_blank',
         rel: 'noopener noreferrer',
+        'aria-label': `${cta} for ${title} (opens in a new tab)`,
       }
-    : { to }
+    : { to, 'aria-label': `${cta}: ${title}` }
 
   const showLive =
     Boolean(project.liveUrl) &&
     to !== project.liveUrl &&
     !/^https?:\/\/wa\.me\//i.test(project.liveUrl || '')
 
-  const secondaryLinks = buildFeaturedSecondaryActions(project, {
-    showLive,
-    liveLabel,
-  })
-  const useOverflow = compactCtas && secondaryLinks.length > 1
-  const visibleSecondaries = useOverflow ? [] : secondaryLinks
-  const overflowSecondaries = useOverflow ? secondaryLinks : []
-
   return (
     <article
-      className={`folder-card folder-card--${cardState}${project.variant ? ` folder-card--${project.variant}` : ''}`}
+      className={`folder-card folder-card--${cardState}${isActive ? '' : ' folder-card--inactive'}`}
       id={`project-${project.slug}`}
       data-index={index}
-      data-state={cardState}
       style={{
         '--folder-fill': tone.fill,
         '--folder-ink': tone.ink,
         '--folder-index': index,
+        '--folder-tab-w': `${tabW}px`,
+        zIndex,
       }}
     >
       <div className="folder-card__chrome">
@@ -159,42 +190,36 @@ function FolderCard({
         )}
         <button
           type="button"
-          id={triggerId}
+          id={buttonId}
           className="folder-card__tab"
+          aria-label={`Project ${label}: ${title}`}
           aria-expanded={isActive}
-          aria-controls={panelId}
+          aria-controls={contentId}
           onClick={() => onJump(index)}
         >
-          <span className="folder-card__tab-num" aria-hidden="true">
-            {label}
-          </span>
-          <span className="folder-card__tab-label">{tabLabel}</span>
+          <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
+          <span className="folder-card__tab-label">{title}</span>
         </button>
         <div className="folder-card__tab-slope" aria-hidden="true" />
         <div className="folder-card__ledge" aria-hidden="true" />
       </div>
 
       <div
-        id={panelId}
-        className={`folder-card__content${isActive ? '' : ' folder-card__content--inactive'}`}
-        role="region"
-        aria-labelledby={triggerId}
-        hidden={hidePanel}
+        id={contentId}
+        className="folder-card__content"
+        aria-labelledby={buttonId}
         aria-hidden={!isActive}
-        inert={!isActive ? true : undefined}
+        {...(!isActive ? { inert: true } : {})}
       >
         <div className="folder-card__text">
-          <div className="folder-card__heading folder-card__text-head">
-            <p className="folder-card__progress" aria-hidden="true">
-              {label} / {String(total).padStart(2, '0')}
-            </p>
-            <p className="folder-card__date">
+          <p className="folder-card__progress" aria-hidden="true">
+            {label} / {String(total).padStart(2, '0')}
+          </p>
+          <div className="folder-card__text-main">
+            <div className="folder-card__date">
               <span className="folder-card__date-dot" aria-hidden="true" />
               <span>{project.folderDate || project.year || '2026'}</span>
-            </p>
-          </div>
-
-          <div className="folder-card__summary folder-card__text-main">
+            </div>
             <h3
               className="folder-card__title"
               data-font={project.folderTitleFont || ''}
@@ -214,91 +239,71 @@ function FolderCard({
             <p className="folder-card__blurb">
               {project.outcome || project.blurb}
             </p>
+            {project.connectSpine?.length > 0 && (
+              <ul className="folder-card__spine" aria-label="Lola Connect navigation">
+                {project.connectSpine.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div
-            className={`folder-card__metric-slot${project.metric ? '' : ' folder-card__metric-slot--empty'}`}
-          >
-            <p
-              className={`folder-card__metric${project.metric ? '' : ' folder-card__metric--empty'}`}
-              {...(!project.metric ? { 'aria-hidden': true } : {})}
-            >
-              {project.metric ? (
-                <>
-                  {project.metricKind && (
-                    <span className="folder-card__metric-kind">
-                      {project.metricKind}
-                    </span>
-                  )}
-                  <span className="folder-card__metric-value">{project.metric}</span>
-                </>
-              ) : (
-                '\u00a0'
-              )}
-            </p>
-          </div>
-
-          <div
-            className={`folder-card__actions folder-card__cta-row${
-              secondaryLinks.length > 1 && !compactCtas
+            className={`folder-card__cta-row${
+              project.whatsappUrl && project.connectUrl
                 ? ' folder-card__cta-row--split'
                 : ''
             }`}
           >
-            <CtaEl {...ctaProps} className="folder-card__cta folder-card__primary">
+            <CtaEl {...ctaProps} className="folder-card__cta">
               <span>{cta}</span>
-              {isExternalCase && (
-                <span className="sr-only"> (opens in a new tab)</span>
-              )}
-              <span className="folder-card__cta-arrow" aria-hidden="true">
-                ↗
-              </span>
+              <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
             </CtaEl>
-            {overflowSecondaries.length > 0 ? (
-              <details className="folder-card__more">
-                <summary>
-                  {project.whatsappUrl || project.connectUrl
-                    ? 'Live experiences'
-                    : 'More actions'}
-                </summary>
-                {overflowSecondaries.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="folder-card__live folder-card__secondary"
-                  >
-                    {link.label}
-                    <span className="sr-only"> (opens in a new tab)</span>
-                    <span aria-hidden="true"> ↗</span>
-                  </a>
-                ))}
-              </details>
-            ) : (
-              visibleSecondaries.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="folder-card__live folder-card__secondary"
-                >
-                  {link.label}
-                  <span className="sr-only"> (opens in a new tab)</span>
-                  <span aria-hidden="true"> ↗</span>
-                </a>
-              ))
+            {showLive && (
+              <a
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="folder-card__live"
+                aria-label={`${liveLabel} for ${title} (opens in a new tab)`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {liveLabel} <span aria-hidden="true">↗</span>
+              </a>
+            )}
+            {project.whatsappUrl && (
+              <a
+                href={project.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="folder-card__live folder-card__live--secondary"
+                aria-label={`Try ${title} on WhatsApp (opens in a new tab)`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                Try on WhatsApp <span aria-hidden="true">↗</span>
+              </a>
+            )}
+            {project.connectUrl && (
+              <a
+                href={project.connectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="folder-card__live folder-card__live--secondary"
+                aria-label={`${project.connectCta || 'Lola Connect'} (opens in a new tab)`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {project.connectCta || 'Lola Connect'} <span aria-hidden="true">↗</span>
+              </a>
             )}
           </div>
 
-          <ul className="folder-card__tags" aria-label="Project skills">
-            {tags.map((tag) => (
-              <li className="folder-card__tag" key={tag}>
-                <span className="folder-card__tag-label">{tag}</span>
-              </li>
-            ))}
-          </ul>
+          {tags.length > 0 && (
+            <div className="folder-card__tags">
+              {tags.map((tag) => (
+                <FolderTag key={tag} label={tag} />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="folder-card__img">
@@ -335,6 +340,8 @@ function FolderCard({
               >
                 <source src={project.reel} type="video/mp4" />
               </video>
+            ) : motion ? (
+              <ProjectMotionPreview slug={project.slug} size="card" />
             ) : project.cover ? (
               <img
                 src={project.cover}
@@ -343,8 +350,6 @@ function FolderCard({
                 decoding="async"
                 fetchPriority={isInitialCard ? 'high' : 'auto'}
               />
-            ) : motion ? (
-              <ProjectMotionPreview slug={project.slug} size="card" />
             ) : (
               <div className="folder-card__placeholder" aria-hidden="true">
                 <span>{title}</span>
@@ -357,15 +362,35 @@ function FolderCard({
                 className="folder-card__audio"
                 onClick={toggleAudio}
                 aria-pressed={isAudioOn}
-                aria-label={
-                  isAudioOn
-                    ? `Mute ${title} preview audio`
-                    : `Play ${title} preview audio`
-                }
               >
                 {isAudioOn ? 'Audio on' : 'Play audio'}
               </button>
             )}
+
+            {project.connectPreviews?.length > 0 && (
+              <div className="folder-card__connect-strip folder-card__connect-strip--overlay" aria-label="Lola Connect preview">
+                {project.connectPreviews.map((clip) => (
+                  <figure key={clip.label} className="folder-card__connect-clip">
+                    <video
+                      src={clip.src}
+                      muted
+                      loop
+                      playsInline
+                      preload={isActive ? 'metadata' : 'none'}
+                      aria-hidden="true"
+                    />
+                    <figcaption>{clip.label}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            )}
+
+            <div className="folder-card__corners" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
         </div>
       </div>
@@ -379,23 +404,16 @@ function FolderCard({
  * under the active card so their tab buttons show through indent holes,
  * building the full tab row naturally. Future cards wait off-screen below.
  *
- * Desktop: scroll owns active state; tab clicks only scroll to that segment.
- * Tablet/mobile: selectedIndex owns active state (disclosure / accordion).
+ * Index mapping uses round(progress * (N-1)) so first/last cards land cleanly
+ * on tab jumps (avoids floor(progress * N) starving the last card).
  */
 export default function FolderStack({ projects }) {
   const stackRef = useRef(null)
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const [scrollActiveIndex, setScrollActiveIndex] = useState(0)
+  const [tabW, setTabW] = useState(100)
+  const [activeIndex, setActiveIndex] = useState(0)
   const [navH, setNavH] = useState(NAV_H)
   const [reduceMotion, setReduceMotion] = useState(false)
-  const [layoutMode, setLayoutMode] = useState(() => {
-    if (typeof window === 'undefined') return 'desktop'
-    return resolveLayoutMode(window.innerWidth, window.innerHeight)
-  })
   const total = projects.length
-  const isDesktopStack = layoutMode === 'desktop' && !reduceMotion
-  const activeIndex = isDesktopStack ? scrollActiveIndex : selectedIndex
-  const scrollActiveRef = useRef(0)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -407,26 +425,30 @@ export default function FolderStack({ projects }) {
 
   useEffect(() => {
     const el = stackRef.current
-    if (!el) return undefined
-
-    const syncMode = () => {
-      const width = el.clientWidth || window.innerWidth
-      const height = window.innerHeight
-      setLayoutMode(resolveLayoutMode(width, height))
+    if (!el) return
+    const measure = () => {
+      const sticky = el.querySelector('.folder-sticky')
+      const width = sticky?.clientWidth || el.clientWidth
+      const compact = width < 700 || window.innerWidth < 700
+      if (compact) {
+        // Leave room for slope so past tabs stay visible through the indent
+        const slope = 16
+        const safety = 4
+        const usable = Math.max(180, width - slope - safety)
+        setTabW(Math.max(24, Math.floor(usable / total)))
+        return
+      }
+      const usable = Math.max(300, width * 0.88)
+      // Prefer wider tabs so longer titles truncate less (indent math still uses --folder-tab-w)
+      setTabW(Math.floor(Math.min(168, Math.max(112, usable / total))))
     }
-
-    syncMode()
-    const ro = new ResizeObserver(syncMode)
+    measure()
+    const ro = new ResizeObserver(measure)
     ro.observe(el)
-    window.addEventListener('resize', syncMode, { passive: true })
-    window.visualViewport?.addEventListener('resize', syncMode)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', syncMode)
-      window.visualViewport?.removeEventListener('resize', syncMode)
-    }
-  }, [])
+    return () => ro.disconnect()
+  }, [total])
 
+  // Measure real nav height (mobile can differ from the 74px desktop assumption)
   useEffect(() => {
     const nav = document.querySelector('.site-nav--folio, .site-nav')
     if (!nav) return undefined
@@ -447,9 +469,9 @@ export default function FolderStack({ projects }) {
     }
   }, [])
 
-  useEffect(() => {
-    if (!isDesktopStack) return undefined
+  const activeIndexRef = useRef(0)
 
+  useEffect(() => {
     const stack = stackRef.current
     if (!stack) return undefined
 
@@ -458,33 +480,22 @@ export default function FolderStack({ projects }) {
       if (raf) return
       raf = window.requestAnimationFrame(() => {
         raf = 0
-        const focused = document.activeElement
-        const currentPanel = stack.querySelector(
-          `[data-index="${scrollActiveRef.current}"] .folder-card__content`,
-        )
-        if (focused && currentPanel?.contains(focused)) {
-          return
-        }
-
         const rect = stack.getBoundingClientRect()
         const scrolled = -(rect.top - navH)
         const stickyH = window.innerHeight - navH
         const scrollRange = stack.offsetHeight - stickyH
         if (scrollRange <= 0 || total <= 1) {
-          if (scrollActiveRef.current !== 0) {
-            scrollActiveRef.current = 0
-            setScrollActiveIndex(0)
+          if (activeIndexRef.current !== 0) {
+            activeIndexRef.current = 0
+            setActiveIndex(0)
           }
           return
         }
         const progress = Math.max(0, Math.min(1, scrolled / scrollRange))
-        const idx = Math.min(
-          total - 1,
-          Math.max(0, Math.floor(progress * total - 1e-6)),
-        )
-        if (idx !== scrollActiveRef.current) {
-          scrollActiveRef.current = idx
-          setScrollActiveIndex(idx)
+        const idx = Math.round(progress * (total - 1))
+        if (idx !== activeIndexRef.current) {
+          activeIndexRef.current = idx
+          setActiveIndex(idx)
         }
       })
     }
@@ -499,50 +510,57 @@ export default function FolderStack({ projects }) {
       window.visualViewport?.removeEventListener('resize', onScroll)
       if (raf) window.cancelAnimationFrame(raf)
     }
-  }, [total, navH, isDesktopStack])
+  }, [total, navH])
+
+  const prevActive = useRef(0)
+  useLayoutEffect(() => {
+    if (reduceMotion) return
+    const prev = prevActive.current
+    prevActive.current = activeIndex
+    if (activeIndex <= prev) return
+    const stack = stackRef.current
+    if (!stack) return
+    const card = stack.querySelector(`[data-index="${activeIndex}"]`)
+    if (!card) return
+    gsap.killTweensOf(card)
+    gsap.fromTo(
+      card,
+      { y: '105%' },
+      { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
+    )
+  }, [activeIndex, reduceMotion])
 
   const jumpTo = useCallback(
     (index) => {
-      if (!isDesktopStack) {
-        setSelectedIndex(index)
-        if (reduceMotion) {
-          document
-            .getElementById(`project-${projects[index]?.slug}`)
-            ?.scrollIntoView({ behavior: 'auto', block: 'nearest' })
-        }
-        return
-      }
-      // Desktop: click only scrolls to that segment — scroll owns activeIndex
       const stack = stackRef.current
       if (!stack || total <= 0) return
       const stackAbsTop = stack.getBoundingClientRect().top + window.scrollY
       const stickyH = window.innerHeight - navH
       const scrollRange = Math.max(0, stack.offsetHeight - stickyH)
-      const progress = total <= 1 ? 0 : (index + 0.5) / total
+      const progress = total <= 1 ? 0 : index / (total - 1)
       const targetScroll = stackAbsTop - navH + progress * scrollRange
       window.scrollTo({
         top: targetScroll,
-        behavior: 'smooth',
+        behavior: reduceMotion ? 'auto' : 'smooth',
       })
     },
-    [total, navH, isDesktopStack, reduceMotion, projects],
+    [total, navH, reduceMotion],
   )
 
   return (
     <div
-      className={`folder-stack folder-stack--${layoutMode}${
-        reduceMotion ? ' folder-stack--static' : ''
-      }`}
+      className="folder-stack"
       ref={stackRef}
       style={{
         '--folder-count': total,
+        '--folder-tab-w': `${tabW}px`,
+        '--folder-nav-h': `${navH}px`,
       }}
     >
       <div className="folder-sticky">
         {projects.map((project, index) => {
-          const cardState = reduceMotion
-            ? 'active'
-            : index < activeIndex
+          const cardState =
+            index < activeIndex
               ? 'past'
               : index === activeIndex
                 ? 'active'
@@ -554,11 +572,11 @@ export default function FolderStack({ projects }) {
               index={index}
               total={total}
               tone={FOLDER_TONES[index % FOLDER_TONES.length]}
+              tabW={tabW}
               cardState={cardState}
               onJump={jumpTo}
               reduceMotion={reduceMotion}
               isInitialCard={index === 0}
-              layoutMode={layoutMode}
             />
           )
         })}
