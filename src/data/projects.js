@@ -77,7 +77,7 @@ export const work = [
       {
         eyebrow: 'Decision 1 · Contain',
         title: 'Keep selling while building the correction queue',
-        body: 'Hours 0–10. Containment first: split checkout into billing, price lookup, and packing so transactions could continue. Cashiers used a short transparency script — observed customer patience when delays were explained as a launch issue, not a measured goodwill metric. Contested prices could be temporarily matched to visible competitor rates as a trust stabilizer — not the permanent pricing system. Live unidentified scans fed the same correction queue the aisle audit would use.',
+        body: 'Hours 0–10. Containment first: split checkout into billing, price lookup, and packing so transactions could continue. At peak, affected registers used three roles — cashier, price matcher/runner, and POS editor — so identification could continue without stopping every sale. Cashiers used a short transparency script — observed customer patience when delays were explained as a launch issue, not a measured goodwill metric. Contested prices could be temporarily matched to visible competitor rates as a trust stabilizer — not the permanent pricing system. Live unidentified scans fed the same correction queue the aisle audit would use.',
       },
       {
         eyebrow: 'Decision 2 · Diagnose',
@@ -112,7 +112,7 @@ export const work = [
       {
         eyebrow: 'Limitations',
         title: 'What this evidence does and does not prove',
-        body: '500+ is transactions processed, not failure count. ~2,000 is corrected records unless the log proves 1:1 unique products. Pricing examples show catalog variation — not that every price variation caused a scan failure. Temporary competitor matching is not Competitor Watch. Independent rescan was operationally complete; first-pass pass rate is not yet published. Full methods and boundaries are in the research appendix.',
+        body: '500+ is transactions processed, not failure count. ~2,000 is corrected records unless the log proves 1:1 unique products. A later catalog snapshot (7,408 rows / 6,366 GTINs) is not the active launch assortment — do not merge 2,500+ / 3,000+ / 7,408 into one recognition rate. Older portfolio KPI percentages lack scan logs and are not evidence. Independent rescan method is locked; first-pass pass rate is unrecovered. Full methods and boundaries are in the research appendix.',
       },
     ],
   },
