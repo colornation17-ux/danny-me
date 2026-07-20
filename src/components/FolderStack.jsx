@@ -348,6 +348,10 @@ function FolderCard({
                   : ' folder-card__image--fill'
               }${
                 !project.reel && project.cover ? ' folder-card__image--photo' : ''
+              }${
+                project.reel && !project.reelPortrait
+                  ? ' folder-card__image--reel'
+                  : ''
               }${project.reelObjectPosition === 'top' ? ' folder-card__image--pos-top' : ''}`}
               {...(project.reel
                 ? { role: 'img', 'aria-label': `${title} product reel, silent` }

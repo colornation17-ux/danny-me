@@ -6999,7 +6999,7 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__summary,
 .folder-card__blurb {
-  margin: 1.4rem 0 0;
+  margin: 1rem 0 0;
   max-width: 42ch;
   font-family: var(--font-sans);
   font-size: max(var(--text-body), 1rem);
@@ -7011,8 +7011,8 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__evidence,
 .folder-card__metric {
   display: grid;
-  gap: 0.4rem;
-  margin: 1.25rem 0 0;
+  gap: 0.35rem;
+  margin: 0.85rem 0 0;
   max-width: 35ch;
   padding: 0 0 0 1rem;
   border-left: 3px solid color-mix(in srgb, currentColor 50%, transparent);
@@ -7039,21 +7039,21 @@ body:has(.folio--fullgrid) .site-footer {
   line-height: 1.5;
 }
 
-/* CTAs sit directly under evidence — card ends here (no auto-pin gap) */
+/* CTAs sit directly under evidence — no auto-pin gap above the button */
 .folder-card__actions,
 .folder-card__cta-row {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.8rem;
-  margin-top: 1.6rem;
+  gap: 0.55rem;
+  margin-top: 0.85rem;
   padding-top: 0;
 }
 
 /* Dense footer (2 secondary links): slightly tighter stack so CTAs stay inside the box */
 .folder-card__actions--dense {
-  margin-top: 1.25rem;
-  gap: 0.65rem;
+  margin-top: 0.7rem;
+  gap: 0.45rem;
 }
 
 .folder-card__actions--dense .folder-card__secondary-actions {
@@ -7270,8 +7270,8 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__cta-row {
-    margin-top: auto;
-    padding-top: var(--folder-space-5);
+    margin-top: 0.85rem;
+    padding-top: 0;
   }
 
   .folder-card__tags {
@@ -7348,8 +7348,8 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__cta-row {
-    margin-top: auto;
-    padding-top: var(--folder-space-5);
+    margin-top: 0.85rem;
+    padding-top: 0;
   }
 
   .folder-card__tags {
@@ -7621,7 +7621,7 @@ body:has(.folio--fullgrid) .site-footer {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--folder-space-2, var(--space-2)) var(--folder-space-3, var(--space-3));
-  margin-top: var(--folder-space-6, var(--space-6));
+  margin-top: 0.85rem;
 }
 
 .folder-card__secondary-links {
@@ -7798,8 +7798,8 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 /*
- * Photos + reels: fill column width at native aspect — no forced crop.
- * Absolute + object-fit:cover was clipping video frames.
+ * Photos + horizontal reels: 16:9 cover on the media itself (no absolute wells).
+ * Portrait reels keep contain inside the phone frame.
  */
 .folder-card__image > img,
 .folder-card__image > video {
@@ -7858,18 +7858,16 @@ body:has(.folio--fullgrid) .site-footer {
   background: transparent;
 }
 
-/*
- * Still photos (Checkout Ops, CODE19): 16:9 cover on the img itself.
- * Avoid absolute + empty-height wells — those collapsed and hid the photos.
- */
-.folder-card__image--photo {
+.folder-card__image--photo,
+.folder-card__image--reel {
   aspect-ratio: auto;
   max-height: none;
   overflow: hidden;
   background: color-mix(in srgb, var(--folder-ink) 8%, transparent);
 }
 
-.folder-card__image--photo > img {
+.folder-card__image--photo > img,
+.folder-card__image--reel > video {
   position: relative !important;
   inset: auto !important;
   display: block;
@@ -8223,7 +8221,8 @@ body:has(.folio--fullgrid) .site-footer {
     object-position: center;
   }
 
-  .folder-card__image--photo > img {
+  .folder-card__image--photo > img,
+  .folder-card__image--reel > video {
     position: relative !important;
     inset: auto !important;
     max-height: min(36vh, 18rem);
@@ -8353,7 +8352,7 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__cta-row {
     gap: var(--folder-space-2);
     flex-wrap: wrap;
-    margin-top: var(--folder-space-5);
+    margin-top: 0.75rem;
   }
 
   /* Split CTAs: --mobile class owns column stack; don't force a 2-col grid here */
@@ -8422,7 +8421,8 @@ body:has(.folio--fullgrid) .site-footer {
     object-position: center;
   }
 
-  .folder-card__image--photo > img {
+  .folder-card__image--photo > img,
+  .folder-card__image--reel > video {
     position: relative !important;
     inset: auto !important;
     max-height: min(28vh, 12.5rem);
@@ -8484,8 +8484,8 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__text:has(.folder-card__cta-row--split) .folder-card__cta-row {
-    margin-top: auto;
-    padding-top: var(--folder-space-5);
+    margin-top: 0.75rem;
+    padding-top: 0;
   }
 
   .folder-card__text:has(.folder-card__cta-row--split) .folder-card__tags {
@@ -8648,8 +8648,8 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-stack--mobile .folder-card__actions,
 .folder-stack--mobile .folder-card__cta-row {
-  margin-top: auto;
-  padding-top: 0.75rem;
+  margin-top: 0.65rem;
+  padding-top: 0;
   width: 100%;
   flex: 0 0 auto;
   flex-direction: column;
@@ -8720,7 +8720,8 @@ body:has(.folio--fullgrid) .site-footer {
   max-height: min(26vh, 11.5rem);
 }
 
-.folder-stack--mobile .folder-card__image--photo > img {
+.folder-stack--mobile .folder-card__image--photo > img,
+.folder-stack--mobile .folder-card__image--reel > video {
   position: relative !important;
   inset: auto !important;
   max-height: min(28vh, 12.5rem);
