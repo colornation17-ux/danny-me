@@ -45,7 +45,6 @@ function FolderCard({
   onJump,
   reduceMotion,
   isInitialCard,
-  layoutMode,
 }) {
   const mediaVideoRef = useRef(null)
   const [isAudioOn, setIsAudioOn] = useState(false)
@@ -58,10 +57,11 @@ function FolderCard({
   const motion = hasMotionPreview(project.slug)
   const cta = projectCaseCtaLabel(project)
   const title = projectNavLabel(project)
-  const tabTitle =
-    layoutMode === 'desktop'
-      ? project.tabLabel || title
-      : project.tabLabelCompact || project.tabLabel || title
+  const isActive = cardState === 'active'
+  // Active tab: full name. Inactive: compact so the rail stays readable.
+  const tabTitle = isActive
+    ? project.tabLabel || title
+    : project.tabLabelCompact || project.tabLabel || title
   const label = project.index || String(index + 1).padStart(2, '0')
   const tags = project.tags || project.skills?.slice(0, 2) || []
   const mediaAlt = project.coverAlt || `${title} preview`
@@ -72,12 +72,43 @@ function FolderCard({
   const role = project.role || null
   const liveLabel = projectLiveCtaLabel(project)
   const hasAudioControl = Boolean(project.reelAudioControl && project.reel)
-  const isActive = cardState === 'active'
   const contentId = `project-content-${project.slug}`
   const buttonId = `project-button-${project.slug}`
   const poster = project.reelPoster || project.cover || project.hero || undefined
   // Past cards stay under the active one — higher index = higher paint order
   const zIndex = isActive ? total + 10 : index + 1
+
+  const showLive =
+    Boolean(project.liveUrl) &&
+    to !== project.liveUrl &&
+    !/^https?:\/\/wa\.me\//i.test(project.liveUrl || '')
+
+  // Cap at 2 secondary actions so footers don't blow the sticky frame
+  const secondaryLinks = []
+  if (showLive) {
+    secondaryLinks.push({
+      href: project.liveUrl,
+      label: liveLabel,
+      aria: `${liveLabel} for ${title} (opens in a new tab)`,
+    })
+  }
+  if (project.whatsappUrl) {
+    secondaryLinks.push({
+      href: project.whatsappUrl,
+      label: project.whatsappCta || `Try ${title}`,
+      aria: `${project.whatsappCta || `Try ${title}`} (opens in a new tab)`,
+    })
+  }
+  if (project.connectUrl) {
+    secondaryLinks.push({
+      href: project.connectUrl,
+      label: project.connectCta || 'Open staff app',
+      aria: `${project.connectCta || 'Open staff app'} (opens in a new tab)`,
+    })
+  }
+  const visibleSecondary = secondaryLinks.slice(0, 2)
+  const isDenseFooter = visibleSecondary.length >= 2
+  const showMetaSub = Boolean(project.timeline || project.team) && !isDenseFooter
 
   useEffect(() => {
     const video = mediaVideoRef.current
@@ -129,11 +160,6 @@ function FolderCard({
         'aria-label': `${cta} for ${title} (opens in a new tab)`,
       }
     : { to, 'aria-label': `${cta}: ${title}` }
-
-  const showLive =
-    Boolean(project.liveUrl) &&
-    to !== project.liveUrl &&
-    !/^https?:\/\/wa\.me\//i.test(project.liveUrl || '')
 
   return (
     <article
@@ -195,7 +221,7 @@ function FolderCard({
                 {[role, company, status].filter(Boolean).join(' · ')}
               </p>
             )}
-            {(project.timeline || project.team) && (
+            {showMetaSub && (
               <p className="folder-card__meta folder-card__meta--sub">
                 {[project.timeline, project.team].filter(Boolean).join(' · ')}
               </p>
@@ -215,51 +241,26 @@ function FolderCard({
 
           <div
             className={`folder-card__cta-row${
-              project.whatsappUrl && project.connectUrl
-                ? ' folder-card__cta-row--split'
-                : ''
+              isDenseFooter ? ' folder-card__cta-row--split' : ''
             }`}
           >
             <CtaEl {...ctaProps} className="folder-card__cta">
               <span>{cta}</span>
               <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
             </CtaEl>
-            {showLive && (
+            {visibleSecondary.map((link) => (
               <a
-                href={project.liveUrl}
+                key={link.href}
+                href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="folder-card__live"
-                aria-label={`${liveLabel} for ${title} (opens in a new tab)`}
+                aria-label={link.aria}
                 onClick={(e) => e.stopPropagation()}
               >
-                {liveLabel} <span aria-hidden="true">↗</span>
+                {link.label} <span aria-hidden="true">↗</span>
               </a>
-            )}
-            {project.whatsappUrl && (
-              <a
-                href={project.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="folder-card__live folder-card__live--secondary"
-                aria-label={`${project.whatsappCta || `Try ${title}`} (opens in a new tab)`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                {project.whatsappCta || 'Try Lola'} <span aria-hidden="true">↗</span>
-              </a>
-            )}
-            {project.connectUrl && (
-              <a
-                href={project.connectUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="folder-card__live folder-card__live--secondary"
-                aria-label={`${project.connectCta || 'Open staff app'} (opens in a new tab)`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                {project.connectCta || 'Open staff app'} <span aria-hidden="true">↗</span>
-              </a>
-            )}
+            ))}
           </div>
 
           {tags.length > 0 && (
@@ -522,7 +523,6 @@ export default function FolderStack({ projects }) {
               onJump={jumpTo}
               reduceMotion={reduceMotion}
               isInitialCard={index === 0}
-              layoutMode={layoutMode}
             />
           )
         })}

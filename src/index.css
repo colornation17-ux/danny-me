@@ -6575,8 +6575,8 @@ body:has(.folio--fullgrid) .site-footer {
   --folder-pad-inline: var(--space-5);
   --folder-pad-start: var(--space-5);
   --folder-pad-end: var(--space-6);
-  /* Shorter than full viewport — room for pad-end without clipping */
-  --folder-card-h: clamp(30rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5.5rem), 35rem);
+  /* Fit densest card (Checkout ~608px copy) + pad-end without clipping */
+  --folder-card-h: clamp(40rem, calc(var(--folder-vh) - var(--folder-nav-h) - 1.75rem), 46rem);
   --card-pad-inline: clamp(1.25rem, 3vw, 3rem);
   --card-pad-block: clamp(1.5rem, 4vw, 3.5rem);
   position: relative;
@@ -6778,6 +6778,18 @@ body:has(.folio--fullgrid) .site-footer {
   text-transform: inherit;
 }
 
+/* Active tab can grow so the full name is readable */
+.folder-card--active .folder-card__tab {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: var(--folder-tab-w);
+  max-width: min(13.5rem, 42%);
+}
+
+.folder-card--active .folder-card__tab-label {
+  text-overflow: clip;
+}
+
 .folder-card__ledge {
   flex: 1 1 auto;
   min-width: 1.25rem;
@@ -6796,6 +6808,19 @@ body:has(.folio--fullgrid) .site-footer {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--folder-ink) 68%, transparent);
+}
+
+/* Dense footer: protect bottom inset — drop secondary meta */
+.folder-card__text:has(.folder-card__cta-row--split) .folder-card__meta--sub {
+  display: none;
+}
+
+/* Long titles: keep balanced wraps under the title */
+@media (min-width: 900px) {
+  .folder-card__title {
+    text-wrap: balance;
+    max-width: 18ch;
+  }
 }
 
 .folder-card__content {
@@ -6878,7 +6903,7 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-card__title {
     margin: 0 0 var(--folder-space-3);
-    font-size: clamp(1.85rem, 2.8vw, 2.85rem);
+    font-size: clamp(1.7rem, 2.5vw, 2.55rem);
     line-height: 1.05;
   }
 
@@ -6942,7 +6967,7 @@ body:has(.folio--fullgrid) .site-footer {
     align-self: start;
     width: 100%;
     height: auto;
-    max-height: min(44vh, 22rem);
+    max-height: min(48vh, 24rem);
     aspect-ratio: 16 / 9;
     min-height: 0;
   }
@@ -7912,7 +7937,7 @@ body:has(.folio--fullgrid) .site-footer {
 @media (max-width: 600px) {
   /* Shorter sticky scrub — less scroll tax on phones */
   .folder-stack {
-    --folder-card-h: clamp(26rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5rem), 32rem);
+    --folder-card-h: clamp(32rem, calc(var(--folder-vh) - var(--folder-nav-h) - 3.5rem), 40rem);
     height: calc(var(--folder-count) * 42dvh + var(--folder-card-h));
     padding-inline: 0;
     padding-bottom: 4vh;
@@ -8139,7 +8164,7 @@ body:has(.folio--fullgrid) .site-footer {
  */
 .folder-stack--mobile {
   /* Shorter runway so phone scrub feels snappy, not endless */
-  --folder-card-h: clamp(28rem, calc(var(--folder-vh) - var(--folder-nav-h) - 4.5rem), 33rem);
+  --folder-card-h: clamp(34rem, calc(var(--folder-vh) - var(--folder-nav-h) - 3rem), 42rem);
   --folder-pad-start: var(--space-4);
   --folder-pad-end: var(--space-5);
   --folder-pad-inline: var(--space-4);
@@ -8148,7 +8173,7 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-stack--tablet {
-  --folder-card-h: clamp(29rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5rem), 34rem);
+  --folder-card-h: clamp(36rem, calc(var(--folder-vh) - var(--folder-nav-h) - 2.5rem), 44rem);
   --folder-pad-end: var(--space-6);
   height: calc(var(--folder-count) * 50dvh + var(--folder-card-h));
 }
