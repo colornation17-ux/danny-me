@@ -424,13 +424,17 @@ export default function FolderStack({ projects }) {
     if (!stack) return undefined
 
     let raf = 0
+    const stickyHOf = () => {
+      const sticky = stack.querySelector('.folder-sticky')
+      return sticky?.clientHeight || Math.max(1, window.innerHeight - navH)
+    }
     const onScroll = () => {
       if (raf) return
       raf = window.requestAnimationFrame(() => {
         raf = 0
         const rect = stack.getBoundingClientRect()
         const scrolled = -(rect.top - navH)
-        const stickyH = window.innerHeight - navH
+        const stickyH = stickyHOf()
         const scrollRange = stack.offsetHeight - stickyH
         if (scrollRange <= 0 || total <= 1) {
           if (activeIndexRef.current !== 0) {
@@ -475,8 +479,9 @@ export default function FolderStack({ projects }) {
         return
       }
 
+      const sticky = stack.querySelector('.folder-sticky')
+      const stickyH = sticky?.clientHeight || Math.max(1, window.innerHeight - navH)
       const stackAbsTop = stack.getBoundingClientRect().top + window.scrollY
-      const stickyH = window.innerHeight - navH
       const scrollRange = Math.max(0, stack.offsetHeight - stickyH)
       const progress = total <= 1 ? 0 : index / (total - 1)
       window.scrollTo({

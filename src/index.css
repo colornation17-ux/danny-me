@@ -6570,6 +6570,8 @@ body:has(.folio--fullgrid) .site-footer {
   --folder-space-4: var(--space-4); /* 16px — soft section */
   --folder-space-5: var(--space-5); /* 24px — clear section */
   --folder-space-6: var(--space-6); /* 32px — action break */
+  /* Shorter than full viewport — kills empty bottom band */
+  --folder-card-h: clamp(28rem, calc(var(--folder-vh) - var(--folder-nav-h) - 6.5rem), 33.5rem);
   --card-pad-inline: clamp(1.25rem, 3vw, 3rem);
   --card-pad-block: clamp(1.5rem, 4vw, 3.5rem);
   position: relative;
@@ -6578,8 +6580,8 @@ body:has(.folio--fullgrid) .site-footer {
   max-width: var(--max);
   margin-inline: auto;
   padding-inline: clamp(0.75rem, 2.5vw, 1.5rem);
-  /* Scroll runway for sticky scrub */
-  height: calc(var(--folder-count) * 70dvh + (var(--folder-vh) - var(--folder-nav-h)));
+  /* Scroll runway for sticky scrub — match tighter card height */
+  height: calc(var(--folder-count) * 52dvh + var(--folder-card-h));
 }
 
 .folder-stack--desktop {
@@ -6616,7 +6618,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-sticky {
   position: sticky;
   top: var(--folder-nav-h);
-  height: calc(var(--folder-vh) - var(--folder-nav-h));
+  height: var(--folder-card-h);
   overflow: hidden;
   background: transparent;
   border: 0;
@@ -6925,7 +6927,7 @@ body:has(.folio--fullgrid) .site-footer {
     align-self: start;
     width: 100%;
     height: auto;
-    max-height: min(52vh, 26rem);
+    max-height: min(44vh, 22rem);
     aspect-ratio: 16 / 9;
     min-height: 0;
   }
@@ -6990,7 +6992,7 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image,
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    max-height: min(48vh, 24rem);
+    max-height: min(42vh, 20rem);
   }
 }
 
@@ -7594,7 +7596,7 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    max-height: min(52vh, 26rem);
+    max-height: min(44vh, 22rem);
     height: auto;
     aspect-ratio: 16 / 9;
   }
@@ -7869,7 +7871,8 @@ body:has(.folio--fullgrid) .site-footer {
 @media (max-width: 600px) {
   /* Shorter sticky scrub — less scroll tax on phones */
   .folder-stack {
-    height: calc(var(--folder-count) * 42dvh + (var(--folder-vh) - var(--folder-nav-h)));
+    --folder-card-h: clamp(26rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5rem), 32rem);
+    height: calc(var(--folder-count) * 42dvh + var(--folder-card-h));
     padding-inline: 0;
     padding-bottom: 4vh;
   }
@@ -8091,12 +8094,14 @@ body:has(.folio--fullgrid) .site-footer {
  */
 .folder-stack--mobile {
   /* Shorter runway so phone scrub feels snappy, not endless */
-  height: calc(var(--folder-count) * 55dvh + (var(--folder-vh) - var(--folder-nav-h)));
+  --folder-card-h: clamp(26rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5rem), 31.5rem);
+  height: calc(var(--folder-count) * 48dvh + var(--folder-card-h));
   padding-inline: clamp(0.5rem, 2vw, 1rem);
 }
 
 .folder-stack--tablet {
-  height: calc(var(--folder-count) * 62dvh + (var(--folder-vh) - var(--folder-nav-h)));
+  --folder-card-h: clamp(28rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5.5rem), 33rem);
+  height: calc(var(--folder-count) * 50dvh + var(--folder-card-h));
 }
 
 .folder-stack--mobile .folder-card__tab-label,
