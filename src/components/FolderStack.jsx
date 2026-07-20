@@ -8,6 +8,7 @@ import {
   projectLiveCtaLabel,
   projectNavLabel,
 } from '../lib/projectLinks'
+import { buildFeaturedSecondaryActions } from '../data/featuredCardSchema'
 
 // color-cyan-58 · color-grey-7 · color-orange-55 · color-rose-50 · color-spring-green-45 · color-orange-80
 export const FOLDER_TONES = [
@@ -19,55 +20,8 @@ export const FOLDER_TONES = [
   { fill: '#F5DDA1', ink: '#111212' },
 ]
 
-// Nav height in px — default; runtime measurement syncs --folder-nav-h
+// Nav height in px — default; runtime measurement syncs --folder-nav-h (measured, not layout tab width)
 const NAV_H = 74
-
-function StairsIcon({ size = 14 }) {
-  return (
-    <svg viewBox="0 0 16 16" width={size} height={size} aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M1 14h4v-3h3V8h3V5h4V2H9v3H6v3H3v3H1v3Z"
-      />
-    </svg>
-  )
-}
-
-function JpgGlyph() {
-  return (
-    <svg viewBox="0 0 23 23" width="18" height="18" aria-hidden="true">
-      <path
-        d="M10.7334 12.2667H11.5001C11.7034 12.2667 11.8984 12.186 12.0422 12.0422C12.186 11.8984 12.2667 11.7034 12.2667 11.5001C12.2667 11.2967 12.186 11.1017 12.0422 10.958C11.8984 10.8142 11.7034 10.7334 11.5001 10.7334H10.7334V12.2667Z"
-        fill="currentColor"
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M1.5332 2.3C1.5332 1.69 1.77552 1.10499 2.20686 0.673654C2.63819 0.242321 3.22321 0 3.8332 0L16.4173 0L21.4665 5.04927V20.7C21.4665 21.31 21.2242 21.895 20.7929 22.3263C20.3615 22.7577 19.7765 23 19.1665 23H3.8332C3.22321 23 2.63819 22.7577 2.20686 22.3263C1.77552 21.895 1.5332 21.31 1.5332 20.7V2.3ZM6.1332 10.7333H3.06654V9.2H7.66654V16.8667H3.06654V13.8H4.59987V15.3333H6.1332V10.7333ZM9.19987 9.2H11.4999C12.1099 9.2 12.6949 9.44232 13.1262 9.87365C13.5575 10.305 13.7999 10.89 13.7999 11.5C13.7999 12.11 13.5575 12.695 13.1262 13.1263C12.6949 13.5577 12.1099 13.8 11.4999 13.8H10.7332V16.8667H9.19987V9.2ZM15.3332 9.2H19.9332V10.7333H16.8665V15.3333H18.3999V13.0333H19.9332V16.8667H15.3332V9.2Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
-
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-      <path
-        d="M3.99984 13.0001L3.99984 11.0001L15.9998 11.0001L10.4998 5.50008L11.9198 4.08008L19.8398 12.0001L11.9198 19.9201L10.4998 18.5001L15.9998 13.0001L3.99984 13.0001Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
-
-function FolderTag({ label }) {
-  return (
-    <span className="folder-card__tag">
-      <span className="folder-card__tag-label">{label}</span>
-    </span>
-  )
-}
 
 function FolderCard({
   project,
@@ -91,9 +45,12 @@ function FolderCard({
   const motion = hasMotionPreview(project.slug)
   const cta = projectCaseCtaLabel(project)
   const title = projectNavLabel(project)
-  const tabLabel = project.tabLabel || title
+  const tabLabel =
+    (layoutMode !== 'desktop' && project.tabLabelCompact) ||
+    project.tabLabel ||
+    title
   const label = project.index || String(index + 1).padStart(2, '0')
-  const tags = project.tags || project.skills?.slice(0, 2) || []
+  const tags = (project.tags || project.skills?.slice(0, 3) || []).slice(0, 3)
   const mediaAlt = project.coverAlt || `${title} preview`
   const company =
     project.company ||
@@ -103,8 +60,8 @@ function FolderCard({
   const liveLabel = projectLiveCtaLabel(project)
   const hasAudioControl = Boolean(project.reelAudioControl && project.reel)
   const isActive = cardState === 'active'
-  const contentId = `project-content-${project.slug}`
-  const buttonId = `project-button-${project.slug}`
+  const panelId = `project-panel-${project.slug}`
+  const triggerId = `project-trigger-${project.slug}`
   const poster = project.reelPoster || project.cover || project.hero || undefined
   const compactCtas = layoutMode !== 'desktop'
 
@@ -153,51 +110,31 @@ function FolderCard({
     }
   }, [isAudioOn])
 
-  // Past cards sit underneath the active card — their tab buttons stay visible
-  // through the transparent indent holes in the active card's chrome row.
-  // z-index comes from CSS (--folder-index + active state), not inline scroll math.
-
   const CtaEl = isExternalCase ? 'a' : Link
   const ctaProps = isExternalCase
     ? {
         href: to,
         target: '_blank',
         rel: 'noopener noreferrer',
-        'aria-label': `${cta} for ${title} (opens in a new tab)`,
       }
-    : { to, 'aria-label': `${cta}: ${title}` }
+    : { to }
 
   const showLive =
     Boolean(project.liveUrl) &&
     to !== project.liveUrl &&
     !/^https?:\/\/wa\.me\//i.test(project.liveUrl || '')
 
-  const secondaryLinks = []
-  if (showLive) {
-    secondaryLinks.push({
-      href: project.liveUrl,
-      label: liveLabel,
-      aria: `${liveLabel} for ${title} (opens in a new tab)`,
-    })
-  }
-  if (project.whatsappUrl) {
-    secondaryLinks.push({
-      href: project.whatsappUrl,
-      label: project.whatsappCta || 'Try Lola',
-      aria: `Try ${title} on WhatsApp (opens in a new tab)`,
-    })
-  }
-  if (project.connectUrl) {
-    secondaryLinks.push({
-      href: project.connectUrl,
-      label: project.connectCta || 'Open staff app',
-      aria: `${project.connectCta || 'Open staff app'} (opens in a new tab)`,
-    })
-  }
+  const secondaryLinks = buildFeaturedSecondaryActions(project, {
+    showLive,
+    liveLabel,
+  })
+  const useOverflow = compactCtas && secondaryLinks.length > 1
+  const visibleSecondaries = useOverflow ? [] : secondaryLinks
+  const overflowSecondaries = useOverflow ? secondaryLinks : []
 
   return (
     <article
-      className={`folder-card folder-card--${cardState}${isActive ? '' : ' folder-card--inactive'}`}
+      className={`folder-card folder-card--${cardState}${project.variant ? ` folder-card--${project.variant}` : ''}`}
       id={`project-${project.slug}`}
       data-index={index}
       style={{
@@ -212,14 +149,15 @@ function FolderCard({
         )}
         <button
           type="button"
-          id={buttonId}
+          id={triggerId}
           className="folder-card__tab"
-          aria-label={`Project ${label}: ${title}`}
           aria-expanded={isActive}
-          aria-controls={contentId}
+          aria-controls={panelId}
           onClick={() => onJump(index)}
         >
-          <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
+          <span className="folder-card__tab-num" aria-hidden="true">
+            {label}
+          </span>
           <span className="folder-card__tab-label">{tabLabel}</span>
         </button>
         <div className="folder-card__tab-slope" aria-hidden="true" />
@@ -227,21 +165,24 @@ function FolderCard({
       </div>
 
       <div
-        id={contentId}
+        id={panelId}
         className="folder-card__content"
-        aria-labelledby={buttonId}
-        aria-hidden={!isActive}
-        {...(!isActive ? { inert: true } : {})}
+        role="region"
+        aria-labelledby={triggerId}
+        hidden={!isActive}
       >
         <div className="folder-card__text">
-          <p className="folder-card__progress" aria-hidden="true">
-            {label} / {String(total).padStart(2, '0')}
-          </p>
-          <div className="folder-card__text-main">
-            <div className="folder-card__date">
+          <div className="folder-card__text-head">
+            <p className="folder-card__progress" aria-hidden="true">
+              {label} / {String(total).padStart(2, '0')}
+            </p>
+            <p className="folder-card__date">
               <span className="folder-card__date-dot" aria-hidden="true" />
               <span>{project.folderDate || project.year || '2026'}</span>
-            </div>
+            </p>
+          </div>
+
+          <div className="folder-card__text-main">
             <h3
               className="folder-card__title"
               data-font={project.folderTitleFont || ''}
@@ -261,71 +202,87 @@ function FolderCard({
             <p className="folder-card__blurb">
               {project.outcome || project.blurb}
             </p>
-            {project.metric && (
-              <p className="folder-card__metric">{project.metric}</p>
-            )}
-            {project.connectSpine?.length > 0 && (
-              <ul className="folder-card__spine" aria-label="Lola Connect navigation">
-                {project.connectSpine.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            )}
+            <p
+              className={`folder-card__metric${project.metric ? '' : ' folder-card__metric--empty'}`}
+              {...(!project.metric ? { 'aria-hidden': true } : {})}
+            >
+              {project.metric ? (
+                <>
+                  {project.metricKind && (
+                    <span className="folder-card__metric-kind">
+                      {project.metricKind}
+                    </span>
+                  )}
+                  <span className="folder-card__metric-value">{project.metric}</span>
+                </>
+              ) : (
+                '\u00a0'
+              )}
+            </p>
           </div>
 
           <div
-            className={`folder-card__cta-row${
-              secondaryLinks.length > 1 ? ' folder-card__cta-row--split' : ''
+            className={`folder-card__actions folder-card__cta-row${
+              secondaryLinks.length > 1 && !compactCtas
+                ? ' folder-card__cta-row--split'
+                : ''
             }`}
           >
-            <CtaEl {...ctaProps} className="folder-card__cta">
+            <CtaEl {...ctaProps} className="folder-card__cta folder-card__primary">
               <span>{cta}</span>
-              <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
+              {isExternalCase && (
+                <span className="sr-only"> (opens in a new tab)</span>
+              )}
+              <span className="folder-card__cta-arrow" aria-hidden="true">
+                ↗
+              </span>
             </CtaEl>
-            {compactCtas && secondaryLinks.length > 1 ? (
+            {overflowSecondaries.length > 0 ? (
               <details className="folder-card__more">
                 <summary>
                   {project.whatsappUrl || project.connectUrl
                     ? 'Live experiences'
                     : 'More actions'}
                 </summary>
-                {secondaryLinks.map((link) => (
+                {overflowSecondaries.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="folder-card__live folder-card__live--secondary"
-                    aria-label={link.aria}
-                    onClick={(e) => e.stopPropagation()}
+                    className="folder-card__live folder-card__secondary"
                   >
-                    {link.label} <span aria-hidden="true">↗</span>
+                    {link.label}
+                    <span className="sr-only"> (opens in a new tab)</span>
+                    <span aria-hidden="true"> ↗</span>
                   </a>
                 ))}
               </details>
             ) : (
-              secondaryLinks.map((link) => (
+              visibleSecondaries.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="folder-card__live folder-card__live--secondary"
-                  aria-label={link.aria}
-                  onClick={(e) => e.stopPropagation()}
+                  className="folder-card__live folder-card__secondary"
                 >
-                  {link.label} <span aria-hidden="true">↗</span>
+                  {link.label}
+                  <span className="sr-only"> (opens in a new tab)</span>
+                  <span aria-hidden="true"> ↗</span>
                 </a>
               ))
             )}
           </div>
 
           {tags.length > 0 && (
-            <div className="folder-card__tags">
+            <ul className="folder-card__tags" aria-label="Project skills">
               {tags.map((tag) => (
-                <FolderTag key={tag} label={tag} />
+                <li className="folder-card__tag" key={tag}>
+                  <span className="folder-card__tag-label">{tag}</span>
+                </li>
               ))}
-            </div>
+            </ul>
           )}
         </div>
 
@@ -385,27 +342,14 @@ function FolderCard({
                 className="folder-card__audio"
                 onClick={toggleAudio}
                 aria-pressed={isAudioOn}
+                aria-label={
+                  isAudioOn
+                    ? `Mute ${title} preview audio`
+                    : `Play ${title} preview audio`
+                }
               >
                 {isAudioOn ? 'Audio on' : 'Play audio'}
               </button>
-            )}
-
-            {project.connectPreviews?.length > 0 && (
-              <div className="folder-card__connect-strip folder-card__connect-strip--overlay" aria-label="Lola Connect preview">
-                {project.connectPreviews.map((clip) => (
-                  <figure key={clip.label} className="folder-card__connect-clip">
-                    <video
-                      src={clip.src}
-                      muted
-                      loop
-                      playsInline
-                      preload={isActive ? 'metadata' : 'none'}
-                      aria-hidden="true"
-                    />
-                    <figcaption>{clip.label}</figcaption>
-                  </figure>
-                ))}
-              </div>
             )}
 
             <div className="folder-card__corners" aria-hidden="true">
@@ -427,8 +371,8 @@ function FolderCard({
  * under the active card so their tab buttons show through indent holes,
  * building the full tab row naturally. Future cards wait off-screen below.
  *
- * Index mapping uses round(progress * (N-1)) so first/last cards land cleanly
- * on tab jumps (avoids floor(progress * N) starving the last card).
+ * Disclosure buttons (aria-expanded / aria-controls) — not APG tabs —
+ * so every project selector stays in the normal keyboard sequence.
  */
 export default function FolderStack({ projects }) {
   const stackRef = useRef(null)
@@ -606,7 +550,7 @@ export default function FolderStack({ projects }) {
         '--folder-count': total,
       }}
     >
-      <div className="folder-sticky" role={layoutMode === 'desktop' ? undefined : 'tablist'}>
+      <div className="folder-sticky">
         {projects.map((project, index) => {
           const cardState =
             index < activeIndex

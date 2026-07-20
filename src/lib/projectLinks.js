@@ -30,14 +30,13 @@ export function projectCaseCtaLabel(project) {
   if (project.placeholder) return 'Case study soon'
   if (project.caseCta) return project.caseCta
   if (project.conceptOnly) return 'View in Lab'
-  return project.liveCta || 'View case study'
+  return 'View case study'
 }
 
 export function projectLiveCtaLabel(project) {
   if (!project) return 'Open live site'
-  if (project.liveCta && /case study/i.test(project.liveCta)) {
-    // liveCta reserved for case-study entry; don't reuse on product links
-    return project.whatsappUrl ? 'Open live site' : 'Open live app'
+  if (project.liveCta && !/case study/i.test(project.liveCta)) {
+    return project.liveCta
   }
   if (project.slug === 'competitor-watch') return 'Open live app'
   return 'Open live site'

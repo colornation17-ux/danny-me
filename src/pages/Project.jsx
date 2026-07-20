@@ -41,21 +41,22 @@ export default function Project() {
   const { prev, next } = useMemo(() => {
     if (!project) return { prev: null, next: null }
     const resolveNav = (s) => featuredBySlug[s] || getProjectBySlug(s)
+    // Featured strip wins — WING concepts stay in lab data but navigate with Work
+    if (featuredIndex !== -1) {
+      const len = featuredOrder.length
+      return {
+        prev: resolveNav(featuredOrder[(featuredIndex - 1 + len) % len]),
+        next: resolveNav(featuredOrder[(featuredIndex + 1) % len]),
+      }
+    }
     if (isLab) {
       const i = lab.findIndex((p) => p.slug === project.slug)
       const len = lab.length
       return { prev: lab[(i - 1 + len) % len], next: lab[(i + 1) % len] }
     }
-    if (featuredIndex === -1) {
-      const i = work.findIndex((p) => p.slug === project.slug)
-      const len = work.length
-      return { prev: work[(i - 1 + len) % len], next: work[(i + 1) % len] }
-    }
-    const len = featuredOrder.length
-    return {
-      prev: resolveNav(featuredOrder[(featuredIndex - 1 + len) % len]),
-      next: resolveNav(featuredOrder[(featuredIndex + 1) % len]),
-    }
+    const i = work.findIndex((p) => p.slug === project.slug)
+    const len = work.length
+    return { prev: work[(i - 1 + len) % len], next: work[(i + 1) % len] }
   }, [project, isLab, featuredIndex, featuredBySlug, featuredOrder])
 
   const isCwCase = project?.caseStudyBody === 'competitor-watch'
@@ -124,8 +125,9 @@ export default function Project() {
     )
   }
 
-  const backTo = isLab ? '/play' : '/'
-  const backLabel = isLab ? 'Lab' : 'Work'
+  const onFeaturedStrip = featuredIndex !== -1
+  const backTo = onFeaturedStrip ? '/' : isLab ? '/play' : '/'
+  const backLabel = onFeaturedStrip || !isLab ? 'Work' : 'Lab'
   const layout = project.layout || 'default'
   const motion = hasMotionPreview(project.slug)
   const hasMedia = Boolean(project.hero || project.cover || project.reel || motion || isCwCase)

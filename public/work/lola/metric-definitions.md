@@ -14,6 +14,7 @@ Conversations that never entered a staff-help / human-reply path
 - **Not the same as:** resolved to customer satisfaction, order completed, or “closed successfully.”
 - **Evidence note:** 14 of 380 threads escalated to staff.
 - Prefer public wording: **“96.3% of conversations did not require staff escalation.”**
+- Folder cards may label this as **Pilot signal** and say **“valid conversations”** when the denominator (n=380, spam/test/incomplete excluded) is defined in this note.
 - Avoid: “closed without staff,” “96.3% resolution.”
 
 ### 97.7% — first bot reply under 2 minutes

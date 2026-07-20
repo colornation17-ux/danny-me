@@ -1,12 +1,15 @@
-import { work } from './projects'
+import { lab, work } from './projects'
+import { normalizeFeaturedCards } from './featuredCardSchema'
 
-const bySlug = Object.fromEntries(work.map((p) => [p.slug, p]))
+const bySlug = Object.fromEntries(
+  [...work, ...lab].map((p) => [p.slug, p]),
+)
 
 /**
- * Homepage featured strip — four shipped proof cases.
- * WING HMI + Edge AI live under /play (explorations).
+ * Homepage featured strip — six folder cards (schema-normalized).
+ * WING HMI + Edge AI included as concept cards 05–06.
  */
-export const featured = [
+const featuredRaw = [
   {
     ...bySlug['lola'],
     index: '01',
@@ -16,20 +19,21 @@ export const featured = [
     folderDate: 'Jun 28, 2026',
     role: 'Design technologist',
     status: 'Live pilot',
-    timeline: 'May – July 2026',
-    team: 'Solo design and build',
+    timeline: 'May–July 2026',
+    team: 'Solo product design and development',
     outcome:
-      'Bilingual WhatsApp shopping and pickup, connected to a staff workspace for orders, tickets and human handoff. 96.3% of conversations did not require staff escalation.',
+      'Bilingual WhatsApp shopping and pickup connected to a staff workspace for orders, tickets and human handoff.',
     blurb:
-      'Bilingual WhatsApp shopping and pickup, connected to a staff workspace for orders, tickets and human handoff. 96.3% of conversations did not require staff escalation.',
-    tags: ['Conversational AI', 'Service design', 'PWA'],
+      'Bilingual WhatsApp shopping and pickup connected to a staff workspace for orders, tickets and human handoff.',
+    metricKind: 'Pilot signal',
+    metric: '96.3% of valid conversations did not require staff escalation.',
+    tags: ['Conversational UX', 'Service design', 'PWA'],
     reel: '/work/lola/motion/Lola-Reel-Horizontal.mp4',
     reelPoster: '/work/lola/journey.png',
     reelAudioControl: true,
     folderFill: '#290545',
     folderInk: '#ffffff',
     folderTitleFont: 'pixelify',
-    connectSpine: ['Home', 'Inbox', 'Orders', 'Tickets', 'Reminders'],
     whatsappCta: 'Try Lola',
     connectCta: 'Open staff app',
   },
@@ -42,35 +46,38 @@ export const featured = [
     folderDate: 'Feb 24, 2026',
     role: 'Service designer',
     status: 'Shipped',
-    timeline: '72-hour launch recovery',
+    timeline: '72-hour recovery',
     team: 'Store operations team',
     outcome:
-      'Recovered a live checkout failure by redesigning receiving and building a barcode-normalization tool that cut product-fix time from 2–5 minutes to under 30 seconds.',
+      'Redesigned receiving and built a barcode-normalization tool to prevent product failures from reaching checkout.',
     blurb:
-      'Recovered a live checkout failure by redesigning receiving and building a barcode-normalization tool that cut product-fix time from 2–5 minutes to under 30 seconds.',
+      'Redesigned receiving and built a barcode-normalization tool to prevent product failures from reaching checkout.',
+    metricKind: 'Outcome',
+    metric: 'Item correction fell from 2–5 minutes to under 30 seconds.',
     tags: ['Service design', 'Retail operations', 'Workflow automation'],
     cover: '/work/bodega-ops/store-floor.jpg',
     coverAlt: 'La Bodega store floor during checkout ops recovery',
     folderFill: '#E8A030',
     folderInk: '#111212',
-    caseCta: 'View recovery case study',
   },
   {
     ...bySlug['competitor-watch'],
     index: '03',
-    tabLabel: 'Market Watch',
+    tabLabel: 'Competitor Watch',
+    tabLabelCompact: 'Competitors',
     displayTitle: 'Competitor Watch',
     company: 'La Bodega',
     folderDate: 'Jun 10, 2026',
     role: 'Design technologist',
     status: 'In production',
     timeline: 'Two-week MVP',
-    team: 'Solo design and build',
+    team: 'Solo product design and development',
     outcome:
-      'Decision-support platform combining competitor promotions, store sales, weather and customer behavior into weekly merchandising actions.',
+      'Turns competitor promotions, store sales, weather and customer behavior into weekly merchandising decisions.',
     blurb:
-      'Decision-support platform combining competitor promotions, store sales, weather and customer behavior into weekly merchandising actions.',
-    metric: 'WhatsApp-to-POS attribution across 2,088 recorded visits.',
+      'Turns competitor promotions, store sales, weather and customer behavior into weekly merchandising decisions.',
+    metricKind: 'Usage signal',
+    metric: '2,088 attributed POS visits from WhatsApp outreach.',
     tags: ['Decision support', 'Retail intelligence', 'Full-stack'],
     reel: '/work/competitor-watch/motion/CompetitorWatch-Reel.mp4',
     reelPoster: '/work/competitor-watch/motion/CW-02-CompetitorDeals.png',
@@ -84,19 +91,75 @@ export const featured = [
     displayTitle: 'CODE19 Racing',
     company: 'CODE19 Racing',
     folderDate: 'Dec 2024',
-    role: 'Product designer',
+    role: 'Product designer and UX engineer',
     status: 'Shipped',
-    timeline: 'October – December 2024',
-    team: 'Cross-functional team',
+    timeline: 'Three-month launch',
+    team: 'Design, engineering and leadership',
     outcome:
-      'Redesigned the site’s information architecture, content and SEO to better serve fans, sponsors, engineers and prospective partners.',
+      'Reframed a technical racing site around four audiences through new information architecture, content and SEO.',
     blurb:
-      'Redesigned the site’s information architecture, content and SEO to better serve fans, sponsors, engineers and prospective partners.',
-    metric: '1,500+ monthly sessions · 36% lower organic bounce rate',
+      'Reframed a technical racing site around four audiences through new information architecture, content and SEO.',
+    metricKind: 'Outcome',
+    metric: '1,500+ new monthly sessions · 36% lower organic bounce.',
     tags: ['Information architecture', 'Content strategy', 'SEO'],
     cover: '/work/code19/hero-2.jpg',
     coverAlt: 'CODE19 Racing website hero — race car and brand',
     folderFill: '#111212',
     folderInk: '#ffffff',
+    liveCta: 'Visit live site',
+  },
+  {
+    ...bySlug['wing-hmi'],
+    index: '05',
+    tabLabel: 'HMI',
+    displayTitle: 'WING Automotive HMI',
+    company: null,
+    folderDate: 'Aug 18, 2025',
+    role: 'Product designer',
+    status: 'Independent concept',
+    timeline: 'Two-week design sprint',
+    team: null,
+    outcome:
+      'Explored how cluster, HUD and voice interfaces could reduce attention shifts during common driving tasks.',
+    blurb:
+      'Explored how cluster, HUD and voice interfaces could reduce attention shifts during common driving tasks.',
+    metricKind: 'Testing result',
+    metric: '92% task success in simulator testing.',
+    tags: ['Automotive UX', 'HMI', 'Interaction design'],
+    reel: '/work/wing-hmi/demo-1.mp4',
+    reelPoster: '/work/wing-hmi/hero.png',
+    cover: '/work/wing-hmi/hero.png',
+    coverAlt: 'WING automotive HMI cluster and HUD concept',
+    folderFill: '#7C5CFF',
+    folderInk: '#ffffff',
+    caseCta: 'View case study',
+  },
+  {
+    ...bySlug['edge-ai'],
+    index: '06',
+    tabLabel: 'Edge AI',
+    displayTitle: 'WING Edge AI',
+    company: null,
+    folderDate: 'Nov 2025',
+    role: 'Product designer',
+    status: 'Independent concept',
+    timeline: 'November 2025',
+    team: null,
+    outcome:
+      'Explored on-device vehicle AI through local inference, transparent data controls and responsive in-car interactions.',
+    blurb:
+      'Explored on-device vehicle AI through local inference, transparent data controls and responsive in-car interactions.',
+    metricKind: 'Design target',
+    metric: 'Under 20 ms edge-inference latency.',
+    tags: ['Edge AI', 'Data controls', 'Automotive UX'],
+    reel: '/work/edge-ai/demo-1.mp4',
+    reelPoster: '/work/edge-ai/hero.jpg',
+    cover: '/work/edge-ai/hero.jpg',
+    coverAlt: 'WING Edge AI vehicle concept',
+    folderFill: '#0891B2',
+    folderInk: '#111212',
+    caseCta: 'View concept',
   },
 ]
+
+export const featured = normalizeFeaturedCards(featuredRaw)
