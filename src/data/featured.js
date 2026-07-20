@@ -41,7 +41,7 @@ export const featured = [
     timeline: '72-hour recovery · store operations',
     team: 'Reported to CEO',
     outcome:
-      'Led launch-week checkout recovery on Odoo: diagnosed barcode format mismatch, moved validation upstream, and shipped a scanner tool that trims codes to Datalogic EAN-13, exports Excel, and batch-imports into Odoo.',
+      'During the first 72 hours of live launch, organized a three-team recovery (aisle audit + checkout incidents): corrected ~2,000 UPC records and independently revalidated via Odoo POS + Datalogic while supporting 500+ transactions.',
     tags: ['Service design', 'Ops'],
     cover: '/work/bodega-ops/store-floor.jpg',
     coverAlt: 'La Bodega store floor during checkout ops recovery',
