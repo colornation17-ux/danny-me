@@ -96,7 +96,8 @@
   --radius-pill: 999px;
   --radius-sticker: 0.9rem 0.9rem 0.9rem 0.35rem;
   --radius-folder-ledge: 0 0.85rem 0 0;
-  --radius-folder-body: 0 0 1.15rem 1.15rem;
+  /* Soft enough that tags/CTAs clear the curve with pad-end */
+  --radius-folder-body: 0 0 1.35rem 1.35rem;
   --radius: var(--radius-md);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   /* motion-site-builder playful / interaction craft */
@@ -6570,8 +6571,12 @@ body:has(.folio--fullgrid) .site-footer {
   --folder-space-4: var(--space-4); /* 16px — soft section */
   --folder-space-5: var(--space-5); /* 24px — clear section */
   --folder-space-6: var(--space-6); /* 32px — action break */
-  /* Shorter than full viewport — kills empty bottom band */
-  --folder-card-h: clamp(28rem, calc(var(--folder-vh) - var(--folder-nav-h) - 6.5rem), 33.5rem);
+  /* Shared card inset — pad-end clears the body radius on every project */
+  --folder-pad-inline: var(--space-5);
+  --folder-pad-start: var(--space-5);
+  --folder-pad-end: var(--space-6);
+  /* Shorter than full viewport — room for pad-end without clipping */
+  --folder-card-h: clamp(30rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5.5rem), 35rem);
   --card-pad-inline: clamp(1.25rem, 3vw, 3rem);
   --card-pad-block: clamp(1.5rem, 4vw, 3.5rem);
   position: relative;
@@ -6846,7 +6851,11 @@ body:has(.folio--fullgrid) .site-footer {
     gap: 0;
     height: auto;
     min-height: 0;
-    padding: var(--folder-space-5) var(--folder-space-4) var(--folder-space-5) var(--folder-space-5);
+    padding:
+      var(--folder-pad-start)
+      var(--folder-space-4)
+      var(--folder-pad-end)
+      var(--folder-pad-inline);
     overflow: visible;
   }
 
@@ -6908,6 +6917,8 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__tags {
     margin-top: var(--folder-space-4);
     padding-top: 0;
+    /* Keep tags inside the radius — never flush to the curve */
+    margin-bottom: 0;
   }
 
   .folder-card__img {
@@ -6916,7 +6927,11 @@ body:has(.folio--fullgrid) .site-footer {
     align-self: start;
     height: auto;
     min-height: 0;
-    padding: var(--folder-space-5) var(--folder-space-5) var(--folder-space-5) var(--folder-space-2);
+    padding:
+      var(--folder-pad-start)
+      var(--folder-pad-inline)
+      var(--folder-pad-end)
+      var(--folder-space-2);
   }
 
   /* Original media well size — 16:9, capped, no stretch crop */
@@ -6933,10 +6948,20 @@ body:has(.folio--fullgrid) .site-footer {
   }
 }
 
-/* Short desktop — keep hierarchy, compress one step */
+/* Short desktop — keep hierarchy + bottom inset */
 @media (min-width: 900px) and (max-height: 820px) {
+  .folder-stack {
+    --folder-pad-start: var(--space-4);
+    --folder-pad-end: var(--space-5);
+    --folder-pad-inline: var(--space-4);
+  }
+
   .folder-card__text {
-    padding: var(--folder-space-4) var(--folder-space-3) var(--folder-space-4) var(--folder-space-4);
+    padding:
+      var(--folder-pad-start)
+      var(--folder-space-3)
+      var(--folder-pad-end)
+      var(--folder-pad-inline);
   }
 
   .folder-card__progress {
@@ -6971,7 +6996,11 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__img {
-    padding: var(--folder-space-4) var(--folder-space-4) var(--folder-space-4) var(--folder-space-2);
+    padding:
+      var(--folder-pad-start)
+      var(--folder-pad-inline)
+      var(--folder-pad-end)
+      var(--folder-space-2);
   }
 
   .folder-card__image,
@@ -7003,7 +7032,11 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__text {
-    padding: var(--folder-space-4) var(--folder-space-3) var(--folder-space-4) var(--folder-space-4);
+    padding:
+      var(--folder-pad-start, var(--space-4))
+      var(--folder-space-3)
+      var(--folder-pad-end, var(--space-5))
+      var(--folder-pad-inline, var(--space-4));
     gap: 0;
   }
 
@@ -7053,7 +7086,11 @@ body:has(.folio--fullgrid) .site-footer {
   justify-content: flex-start;
   align-content: start;
   gap: 0;
-  padding: 1.15rem 1.2rem;
+  padding:
+    var(--folder-pad-start, var(--space-5))
+    var(--folder-pad-inline, var(--space-5))
+    var(--folder-pad-end, var(--space-6))
+    var(--folder-pad-inline, var(--space-5));
   min-width: 0;
 }
 
@@ -7445,7 +7482,11 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__img {
   position: relative;
   min-height: 0;
-  padding: 1rem;
+  padding:
+    var(--folder-pad-start, var(--space-5))
+    var(--folder-pad-inline, var(--space-5))
+    var(--folder-pad-end, var(--space-6))
+    var(--folder-pad-inline, var(--space-5));
   display: flex;
   align-items: center;
 }
@@ -8067,7 +8108,11 @@ body:has(.folio--fullgrid) .site-footer {
 @media (min-width: 900px) and (max-width: 1180px) and (max-height: 820px) {
   .folder-card__text:has(.folder-card__cta-row--split) {
     gap: 0;
-    padding: var(--folder-space-3) var(--folder-space-3) var(--folder-space-4);
+    padding:
+      var(--folder-pad-start, var(--space-3))
+      var(--folder-space-3)
+      var(--folder-pad-end, var(--space-5))
+      var(--folder-pad-inline, var(--space-3));
   }
 
   .folder-card__text:has(.folder-card__cta-row--split) .folder-card__blurb {
@@ -8094,13 +8139,17 @@ body:has(.folio--fullgrid) .site-footer {
  */
 .folder-stack--mobile {
   /* Shorter runway so phone scrub feels snappy, not endless */
-  --folder-card-h: clamp(26rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5rem), 31.5rem);
+  --folder-card-h: clamp(28rem, calc(var(--folder-vh) - var(--folder-nav-h) - 4.5rem), 33rem);
+  --folder-pad-start: var(--space-4);
+  --folder-pad-end: var(--space-5);
+  --folder-pad-inline: var(--space-4);
   height: calc(var(--folder-count) * 48dvh + var(--folder-card-h));
   padding-inline: clamp(0.5rem, 2vw, 1rem);
 }
 
 .folder-stack--tablet {
-  --folder-card-h: clamp(28rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5.5rem), 33rem);
+  --folder-card-h: clamp(29rem, calc(var(--folder-vh) - var(--folder-nav-h) - 5rem), 34rem);
+  --folder-pad-end: var(--space-6);
   height: calc(var(--folder-count) * 50dvh + var(--folder-card-h));
 }
 
@@ -8132,7 +8181,11 @@ body:has(.folio--fullgrid) .site-footer {
   order: -1;
   flex: 0 0 auto;
   min-height: 0;
-  padding: 0.55rem 0.85rem 0.55rem;
+  padding:
+    var(--folder-pad-start)
+    var(--folder-pad-inline)
+    var(--folder-space-3)
+    var(--folder-pad-inline);
   display: flex;
   align-items: center;
 }
@@ -8143,7 +8196,11 @@ body:has(.folio--fullgrid) .site-footer {
   flex-direction: column;
   justify-content: flex-start;
   gap: 0.4rem;
-  padding: 0.45rem 0.85rem 0.85rem;
+  padding:
+    var(--folder-space-3)
+    var(--folder-pad-inline)
+    var(--folder-pad-end)
+    var(--folder-pad-inline);
   min-width: 0;
   overflow: visible;
 }
