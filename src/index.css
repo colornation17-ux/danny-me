@@ -8179,19 +8179,19 @@ body:has(.folio--fullgrid) .site-footer {
 
 /*
  * Layout modes (JS sets .folder-stack--mobile|tablet|desktop).
- * All modes share sticky scrub scroll; these rules only densify chrome/copy.
- *  <768px   → compact tabs + stacked card body
+ * Same scrub + arrange rules as desktop; mobile densifies chrome only.
+ *  <768px   → number tabs + stacked body
  *  768–1199 → mid tabs + denser body
  *  ≥1200px  → full desktop chrome
  */
 .folder-stack--mobile {
-  /* Shorter runway so phone scrub feels snappy, not endless */
-  --folder-card-h: clamp(34rem, calc(var(--folder-vh) - var(--folder-nav-h) - 3rem), 42rem);
+  --folder-card-h: clamp(40rem, calc(var(--folder-vh) - var(--folder-nav-h) - 1rem), 52rem);
   --folder-pad-start: var(--space-4);
   --folder-pad-end: var(--space-5);
   --folder-pad-inline: var(--space-4);
+  --folder-tab-h: 2.35rem;
   height: calc(var(--folder-count) * 48dvh + var(--folder-card-h));
-  padding-inline: clamp(0.5rem, 2vw, 1rem);
+  padding-inline: clamp(0.5rem, 2vw, 0.85rem);
 }
 
 .folder-stack--tablet {
@@ -8200,7 +8200,27 @@ body:has(.folio--fullgrid) .site-footer {
   height: calc(var(--folder-count) * 50dvh + var(--folder-card-h));
 }
 
-.folder-stack--mobile .folder-card__tab-label,
+/* Mobile: numbers-only tabs — keep cascade widths, drop labels */
+.folder-stack--mobile .folder-card__tab-label {
+  display: none;
+}
+
+.folder-stack--mobile .folder-card__tab {
+  justify-content: center;
+  gap: 0;
+  padding: 0 0.35rem;
+}
+
+.folder-stack--mobile .folder-card__tab-num {
+  opacity: 1;
+  font-size: max(var(--text-meta), 0.8125rem);
+  letter-spacing: 0.04em;
+}
+
+.folder-stack--mobile .folder-card__tab-slope {
+  width: 1.15rem;
+}
+
 .folder-stack--tablet .folder-card__tab-label {
   display: inline;
   overflow: hidden;
@@ -8209,17 +8229,14 @@ body:has(.folio--fullgrid) .site-footer {
   max-width: 100%;
 }
 
-.folder-stack--mobile .folder-card__meta--sub,
-.folder-stack--tablet .folder-card__meta--sub {
-  display: block;
-}
-
+/* Mobile body: top-aligned stack — media then copy (same arrange rhythm) */
 .folder-stack--mobile .folder-card__content {
   display: flex;
   flex-direction: column;
   grid-template-columns: none;
-  justify-content: center;
-  gap: 0.35rem;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0;
   height: 100%;
   min-height: 0;
 }
@@ -8228,40 +8245,95 @@ body:has(.folio--fullgrid) .site-footer {
   order: -1;
   flex: 0 0 auto;
   min-height: 0;
+  align-self: stretch;
   padding:
     var(--folder-pad-start)
     var(--folder-pad-inline)
     var(--folder-space-3)
     var(--folder-pad-inline);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .folder-stack--mobile .folder-card__text {
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 0.4rem;
+  gap: 0;
+  min-height: 0;
   padding:
-    var(--folder-space-3)
+    0
     var(--folder-pad-inline)
     var(--folder-pad-end)
     var(--folder-pad-inline);
-  min-width: 0;
   overflow: visible;
 }
 
 .folder-stack--mobile .folder-card__text-main {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0;
+}
+
+.folder-stack--mobile .folder-card__progress {
+  margin: 0 0 var(--folder-space-2);
+}
+
+.folder-stack--mobile .folder-card__date {
+  margin: 0 0 var(--folder-space-2);
+}
+
+.folder-stack--mobile .folder-card__title {
+  margin: 0 0 var(--folder-space-3);
+  font-size: clamp(1.55rem, 7vw, 2.1rem);
+  max-width: none;
+}
+
+.folder-stack--mobile .folder-card__meta--sub {
+  display: none;
+}
+
+/* Metrics blow the sticky frame on phone — keep them on tablet+ */
+.folder-stack--mobile .folder-card__metric {
+  display: none;
+}
+
+.folder-stack--mobile .folder-card__blurb {
+  margin-top: var(--folder-space-4);
+  max-width: none;
+  font-size: max(var(--text-body), 1rem);
+  line-height: 1.45;
+}
+
+.folder-stack--mobile .folder-card__metric {
+  margin-top: var(--folder-space-4);
 }
 
 .folder-stack--mobile .folder-card__cta-row,
 .folder-stack--mobile .folder-card__actions {
-  gap: 0.4rem 0.5rem;
-  margin-top: 0.15rem;
+  margin-top: var(--folder-space-5);
+  gap: var(--folder-space-2);
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.folder-stack--mobile .folder-card__cta-row--split {
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: none;
+}
+
+.folder-stack--mobile .folder-card__cta-row--split .folder-card__cta,
+.folder-stack--mobile .folder-card__cta-row--split .folder-card__live,
+.folder-stack--mobile .folder-card__cta,
+.folder-stack--mobile .folder-card__live {
+  width: 100%;
+  justify-content: center;
+}
+
+.folder-stack--mobile .folder-card__tags {
+  margin-top: var(--folder-space-3);
 }
 
 .folder-stack--mobile .folder-card__image,
@@ -8270,25 +8342,36 @@ body:has(.folio--fullgrid) .site-footer {
   flex: none;
   width: 100%;
   height: auto;
-  max-height: min(38vh, 16rem);
+  max-height: min(30vh, 12.5rem);
   min-height: 0;
   aspect-ratio: 16 / 9;
   border-radius: var(--radius-xs);
+  background: color-mix(in srgb, var(--folder-ink) 6%, var(--folder-fill));
 }
 
+/* Dense footers already hide metric via the rule above */
+
 .folder-stack--tablet .folder-card__content {
-  gap: 0.45rem;
+  gap: 0;
 }
 
 .folder-stack--tablet .folder-card__text {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  padding: 0.85rem 1rem 0.35rem;
+  gap: 0;
+  padding:
+    var(--folder-pad-start, var(--space-4))
+    var(--folder-pad-inline, var(--space-4))
+    var(--folder-pad-end, var(--space-5))
+    var(--folder-pad-inline, var(--space-4));
 }
 
 .folder-stack--tablet .folder-card__img {
-  padding: 0.65rem 1rem 0.9rem;
+  padding:
+    var(--folder-pad-start, var(--space-4))
+    var(--folder-pad-inline, var(--space-4))
+    var(--folder-space-3)
+    var(--folder-pad-inline, var(--space-4));
 }
 
 .folder-stack--tablet .folder-card__blurb {
@@ -8297,6 +8380,10 @@ body:has(.folio--fullgrid) .site-footer {
   -webkit-line-clamp: unset;
   line-clamp: unset;
   max-width: none;
+}
+
+.folder-stack--tablet .folder-card__meta--sub {
+  display: block;
 }
 
 @media (prefers-reduced-motion: reduce) {

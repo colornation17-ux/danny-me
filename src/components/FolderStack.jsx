@@ -45,6 +45,7 @@ function FolderCard({
   onJump,
   reduceMotion,
   isInitialCard,
+  layoutMode,
 }) {
   const mediaVideoRef = useRef(null)
   const [isAudioOn, setIsAudioOn] = useState(false)
@@ -58,10 +59,13 @@ function FolderCard({
   const cta = projectCaseCtaLabel(project)
   const title = projectNavLabel(project)
   const isActive = cardState === 'active'
-  // Active tab: full name. Inactive: compact so the rail stays readable.
-  const tabTitle = isActive
-    ? project.tabLabel || title
-    : project.tabLabelCompact || project.tabLabel || title
+  // Mobile: numbers only. Else active = full label, inactive = compact.
+  const tabTitle =
+    layoutMode === 'mobile'
+      ? null
+      : isActive
+        ? project.tabLabel || title
+        : project.tabLabelCompact || project.tabLabel || title
   const label = project.index || String(index + 1).padStart(2, '0')
   const tags = project.tags || project.skills?.slice(0, 2) || []
   const mediaAlt = project.coverAlt || `${title} preview`
@@ -74,7 +78,9 @@ function FolderCard({
   const hasAudioControl = Boolean(project.reelAudioControl && project.reel)
   const contentId = `project-content-${project.slug}`
   const buttonId = `project-button-${project.slug}`
-  const poster = project.reelPoster || project.cover || project.hero || undefined
+  const poster = project.reel
+    ? project.reelPoster || undefined
+    : project.cover || project.hero || undefined
   // Past cards stay under the active one — higher index = higher paint order
   const zIndex = isActive ? total + 10 : index + 1
 
@@ -188,7 +194,9 @@ function FolderCard({
           onClick={() => onJump(index)}
         >
           <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
-          <span className="folder-card__tab-label">{tabTitle}</span>
+          {tabTitle ? (
+            <span className="folder-card__tab-label">{tabTitle}</span>
+          ) : null}
         </button>
         <div className="folder-card__tab-slope" aria-hidden="true" />
         <div className="folder-card__ledge" aria-hidden="true" />
@@ -288,7 +296,7 @@ function FolderCard({
                   loop
                   playsInline
                   preload={isActive ? 'metadata' : 'none'}
-                  poster={poster}
+                  {...(poster ? { poster } : {})}
                   aria-hidden="true"
                 >
                   <source src={project.reel} type="video/mp4" />
@@ -301,7 +309,7 @@ function FolderCard({
                 loop
                 playsInline
                 preload={isActive ? 'metadata' : 'none'}
-                poster={poster}
+                {...(poster ? { poster } : {})}
                 aria-hidden="true"
               >
                 <source src={project.reel} type="video/mp4" />
@@ -523,6 +531,7 @@ export default function FolderStack({ projects }) {
               onJump={jumpTo}
               reduceMotion={reduceMotion}
               isInitialCard={index === 0}
+              layoutMode={layoutMode}
             />
           )
         })}

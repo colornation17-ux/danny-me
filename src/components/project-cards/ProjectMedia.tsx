@@ -84,7 +84,7 @@ export default function ProjectMedia({
             loop
             playsInline
             preload={isActive ? 'metadata' : 'none'}
-            poster={poster}
+            {...(poster ? { poster } : {})}
             aria-hidden="true"
           >
             <source src={media.src} type="video/mp4" />

@@ -67,7 +67,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     tags: ['Conversational UX', 'Service design', 'PWA'],
     media: mediaVideo(
       '/work/lola/motion/Lola-Reel-Horizontal.mp4',
-      '/work/lola/journey.png',
+      undefined,
       'Lola preview',
       true,
     ),
@@ -282,14 +282,11 @@ export const featured = featuredProjects.map((card) => {
     variant: card.variant,
     // Media — must win over base + motion-preview fallback
     reel: isVideo ? media.src : undefined,
-    reelPoster: isVideo ? media.poster || undefined : undefined,
+    // Only an explicit poster — never fall back to cover PNG under the video
+    reelPoster: isVideo && media.poster ? media.poster : undefined,
     reelAudioControl: isVideo ? Boolean(media.audioControl) : undefined,
     reelPortrait: undefined,
-    cover: isImage
-      ? media.src
-      : isVideo
-        ? media.poster || base.cover
-        : base.cover,
+    cover: isImage ? media.src : isVideo ? undefined : base.cover,
     coverAlt: media?.alt || base.coverAlt,
     card,
   }
