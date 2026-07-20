@@ -1,6 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
 import ProjectMotionPreview, { hasMotionPreview } from './motion/ProjectMotionPreview'
 import {
   projectCaseCtaLabel,
@@ -9,7 +8,6 @@ import {
   projectNavLabel,
 } from '../lib/projectLinks'
 
-// color-cyan-58 · color-grey-7 · color-orange-55 · color-rose-50 · color-spring-green-45 · color-orange-80
 export const FOLDER_TONES = [
   { fill: '#36C5F0', ink: '#111212' },
   { fill: '#111212', ink: '#ffffff' },
@@ -19,46 +17,14 @@ export const FOLDER_TONES = [
   { fill: '#F5DDA1', ink: '#111212' },
 ]
 
-// Nav height in px — default; runtime measurement syncs --folder-nav-h
 const NAV_H = 74
 
-function StairsIcon({ size = 14 }) {
-  return (
-    <svg viewBox="0 0 16 16" width={size} height={size} aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M1 14h4v-3h3V8h3V5h4V2H9v3H6v3H3v3H1v3Z"
-      />
-    </svg>
-  )
-}
-
-function JpgGlyph() {
-  return (
-    <svg viewBox="0 0 23 23" width="18" height="18" aria-hidden="true">
-      <path
-        d="M10.7334 12.2667H11.5001C11.7034 12.2667 11.8984 12.186 12.0422 12.0422C12.186 11.8984 12.2667 11.7034 12.2667 11.5001C12.2667 11.2967 12.186 11.1017 12.0422 10.958C11.8984 10.8142 11.7034 10.7334 11.5001 10.7334H10.7334V12.2667Z"
-        fill="currentColor"
-      />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M1.5332 2.3C1.5332 1.69 1.77552 1.10499 2.20686 0.673654C2.63819 0.242321 3.22321 0 3.8332 0L16.4173 0L21.4665 5.04927V20.7C21.4665 21.31 21.2242 21.895 20.7929 22.3263C20.3615 22.7577 19.7765 23 19.1665 23H3.8332C3.22321 23 2.63819 22.7577 2.20686 22.3263C1.77552 21.895 1.5332 21.31 1.5332 20.7V2.3ZM6.1332 10.7333H3.06654V9.2H7.66654V16.8667H3.06654V13.8H4.59987V15.3333H6.1332V10.7333ZM9.19987 9.2H11.4999C12.1099 9.2 12.6949 9.44232 13.1262 9.87365C13.5575 10.305 13.7999 10.89 13.7999 11.5C13.7999 12.11 13.5575 12.695 13.1262 13.1263C12.6949 13.5577 12.1099 13.8 11.4999 13.8H10.7332V16.8667H9.19987V9.2ZM15.3332 9.2H19.9332V10.7333H16.8665V15.3333H18.3999V13.0333H19.9332V16.8667H15.3332V9.2Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
-
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-      <path
-        d="M3.99984 13.0001L3.99984 11.0001L15.9998 11.0001L10.4998 5.50008L11.9198 4.08008L19.8398 12.0001L11.9198 19.9201L10.4998 18.5001L15.9998 13.0001L3.99984 13.0001Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
+function resolveLayoutMode() {
+  if (typeof window === 'undefined') return 'desktop'
+  const w = window.innerWidth
+  if (w < 768) return 'mobile'
+  if (w < 1200) return 'tablet'
+  return 'desktop'
 }
 
 function FolderTag({ label }) {
@@ -67,16 +33,6 @@ function FolderTag({ label }) {
       <span className="folder-card__tag-label">{label}</span>
     </span>
   )
-}
-
-function resolveLayoutMode() {
-  if (typeof window === 'undefined') return 'desktop'
-  const w = window.innerWidth
-  // Width-only: short laptop height must NOT drop desktop sticky stack
-  // (that made past cards “disappear” while scrubbing).
-  if (w < 768) return 'mobile'
-  if (w < 1200) return 'tablet'
-  return 'desktop'
 }
 
 function FolderCard({
@@ -121,6 +77,8 @@ function FolderCard({
   const buttonId = `project-button-${project.slug}`
   const poster = project.reelPoster || project.cover || project.hero || undefined
   const isStacked = layoutMode !== 'desktop'
+  // Past cards stay under the active one — higher index = higher paint order
+  const zIndex = isActive ? total + 10 : index + 1
 
   useEffect(() => {
     const video = mediaVideoRef.current
@@ -139,9 +97,7 @@ function FolderCard({
     }
 
     video.muted = !isAudioOn
-    video.play().catch(() => {
-      /* Poster remains if autoplay is blocked */
-    })
+    video.play().catch(() => {})
 
     return () => {
       video.pause()
@@ -157,20 +113,13 @@ function FolderCard({
     video.volume = nextAudioState ? 1 : 0
 
     try {
-      if (nextAudioState) {
-        await video.play()
-      }
+      if (nextAudioState) await video.play()
       setIsAudioOn(nextAudioState)
     } catch {
       video.muted = true
       setIsAudioOn(false)
     }
   }, [isAudioOn])
-
-  // Past cards sit underneath the active card — their tab buttons stay visible
-  // through the transparent indent holes in the active card's chrome row.
-  // Active card sits on top. Future cards are hidden off-screen below.
-  const zIndex = cardState === 'active' ? total + 10 : index + 1
 
   const CtaEl = isExternalCase ? 'a' : Link
   const ctaProps = isExternalCase
@@ -222,7 +171,7 @@ function FolderCard({
 
       <div
         id={contentId}
-        className={`folder-card__content${isActive ? '' : ' folder-card__content--inactive'}`}
+        className="folder-card__content"
         aria-labelledby={buttonId}
         aria-hidden={!isActive}
         hidden={isStacked && !isActive ? true : undefined}
@@ -385,24 +334,6 @@ function FolderCard({
               </button>
             )}
 
-            {project.connectPreviews?.length > 0 && (
-              <div className="folder-card__connect-strip folder-card__connect-strip--overlay" aria-label="Lola Connect preview">
-                {project.connectPreviews.map((clip) => (
-                  <figure key={clip.label} className="folder-card__connect-clip">
-                    <video
-                      src={clip.src}
-                      muted
-                      loop
-                      playsInline
-                      preload={isActive ? 'metadata' : 'none'}
-                      aria-hidden="true"
-                    />
-                    <figcaption>{clip.label}</figcaption>
-                  </figure>
-                ))}
-              </div>
-            )}
-
             <div className="folder-card__corners" aria-hidden="true">
               <span />
               <span />
@@ -417,9 +348,9 @@ function FolderCard({
 }
 
 /**
- * Desktop (≥1200px, tall): sticky overlapping folder scrub.
- * Tablet / short windows: tab rail + one open panel.
- * Mobile: accordion — tap a named tab, no scroll scrub, media never clips.
+ * Desktop sticky folder scrub — CSS transforms only (no GSAP).
+ * Past cards stay painted underneath so the stack never flashes empty grid.
+ * Mobile/tablet: accordion / tab rail.
  */
 export default function FolderStack({ projects }) {
   const stackRef = useRef(null)
@@ -427,9 +358,12 @@ export default function FolderStack({ projects }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [navH, setNavH] = useState(NAV_H)
   const [reduceMotion, setReduceMotion] = useState(false)
-  const [layoutMode, setLayoutMode] = useState('desktop')
+  const [layoutMode, setLayoutMode] = useState(() =>
+    typeof window !== 'undefined' ? resolveLayoutMode() : 'desktop',
+  )
   const total = projects.length
   const isDesktop = layoutMode === 'desktop'
+  const activeIndexRef = useRef(0)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -452,22 +386,24 @@ export default function FolderStack({ projects }) {
 
   useEffect(() => {
     const el = stackRef.current
-    if (!el) return
+    if (!el) return undefined
     const measure = () => {
       const sticky = el.querySelector('.folder-sticky')
       const width = sticky?.clientWidth || el.clientWidth
-      if (layoutMode !== 'desktop') {
-        setTabW(Math.max(72, Math.floor(width / Math.min(total, 4))) )
+      if (!isDesktop) {
+        setTabW(Math.max(72, Math.floor(width / Math.min(total, 4))))
         return
       }
-      const usable = Math.max(300, width * 0.88)
-      setTabW(Math.floor(Math.min(168, Math.max(112, usable / total))))
+      // Fit all tabs in the chrome row with room for slope
+      const slope = 40
+      const usable = Math.max(280, width - slope - 8)
+      setTabW(Math.floor(Math.min(140, Math.max(96, usable / total))))
     }
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [total, layoutMode])
+  }, [total, isDesktop])
 
   useEffect(() => {
     const nav = document.querySelector('.site-nav--folio, .site-nav')
@@ -475,9 +411,7 @@ export default function FolderStack({ projects }) {
     const read = () => {
       const h = Math.round(nav.getBoundingClientRect().height) || NAV_H
       setNavH(h)
-      if (stackRef.current) {
-        stackRef.current.style.setProperty('--folder-nav-h', `${h}px`)
-      }
+      stackRef.current?.style.setProperty('--folder-nav-h', `${h}px`)
     }
     read()
     const ro = new ResizeObserver(read)
@@ -488,9 +422,6 @@ export default function FolderStack({ projects }) {
       window.visualViewport?.removeEventListener('resize', read)
     }
   }, [])
-
-  const activeIndexRef = useRef(0)
-  activeIndexRef.current = activeIndex
 
   useEffect(() => {
     if (!isDesktop) return undefined
@@ -534,43 +465,15 @@ export default function FolderStack({ projects }) {
     }
   }, [total, navH, isDesktop])
 
-  const prevActive = useRef(0)
-  useLayoutEffect(() => {
-    if (!isDesktop) {
-      prevActive.current = activeIndex
-      return
-    }
-    const stack = stackRef.current
-    if (!stack) return
-
-    const cards = [...stack.querySelectorAll('.folder-card')]
-    cards.forEach((card) => gsap.killTweensOf(card))
-    // Drop any leftover inline transforms so CSS past/active/future classes win
-    cards.forEach((card) => gsap.set(card, { clearProps: 'transform' }))
-
-    const prev = prevActive.current
-    prevActive.current = activeIndex
-    if (reduceMotion || activeIndex <= prev) return
-
-    const card = cards[activeIndex]
-    if (!card) return
-    gsap.fromTo(
-      card,
-      { y: '105%' },
-      { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
-    )
-  }, [activeIndex, reduceMotion, isDesktop])
-
   const jumpTo = useCallback(
     (index) => {
       const stack = stackRef.current
       if (!stack || total <= 0) return
 
       if (!isDesktop) {
-        setActiveIndex(index)
         activeIndexRef.current = index
-        const card = stack.querySelector(`[data-index="${index}"]`)
-        card?.scrollIntoView({
+        setActiveIndex(index)
+        stack.querySelector(`[data-index="${index}"]`)?.scrollIntoView({
           block: 'nearest',
           behavior: reduceMotion ? 'auto' : 'smooth',
         })
@@ -581,9 +484,8 @@ export default function FolderStack({ projects }) {
       const stickyH = window.innerHeight - navH
       const scrollRange = Math.max(0, stack.offsetHeight - stickyH)
       const progress = total <= 1 ? 0 : index / (total - 1)
-      const targetScroll = stackAbsTop - navH + progress * scrollRange
       window.scrollTo({
-        top: targetScroll,
+        top: stackAbsTop - navH + progress * scrollRange,
         behavior: reduceMotion ? 'auto' : 'smooth',
       })
     },
