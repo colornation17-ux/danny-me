@@ -18,7 +18,7 @@ export const featured = [
     timeline: 'May – July 2026',
     team: 'Solo design and development',
     outcome:
-      'Guest WhatsApp pickup flows + Lola Connect staff CRM — ~1,200 loyalty families, 96.3% closed without staff.',
+      'Guest WhatsApp pickup flows + Lola Connect staff CRM — ~1,200 loyalty families; 96.3% of conversations did not require staff escalation.',
     blurb:
       'Six bilingual guest flows; staff close pickup in Connect. Flyer-grounded answers — no invented prices.',
     tags: ['WhatsApp', 'PWA', 'Staff CRM'],

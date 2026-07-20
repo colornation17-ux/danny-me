@@ -11,7 +11,7 @@ export const work = [
     domain: 'Product design · Full-stack',
     layer: 'Customer + staff product',
     blurb:
-      'Designed guest WhatsApp flows and built Lola Connect (staff PWA) solo: flyer-grounded deals Q&A, pickup order quote→confirm, reminders, voice, and handoff. ~1,200 weekly loyalty reach; 96.3% of conversations closed without staff; 97.7% first bot replies under 2 min.',
+      'Designed guest WhatsApp flows and built Lola Connect (staff PWA) solo: flyer-grounded deals Q&A, pickup order quote→confirm, reminders, voice, and handoff. ~1,200 weekly loyalty reach; 96.3% of conversations did not require staff escalation; 97.7% first bot replies under 2 min.',
     role: 'Design technologist',
     timeline: 'May – Jul 2026',
     team: 'Solo design and development',

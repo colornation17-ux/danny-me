@@ -26,7 +26,7 @@ export const STORY_BEATS = {
     ],
   },
   deliver: {
-    body: "Live pilot under real rush — 97.7% first reply <2 min, 96.3% closed without staff.",
+    body: "Live pilot under real rush — 97.7% first reply <2 min, 96.3% did not require staff escalation.",
     bullets: [
       "Tap buttons replaced numbered menus",
       "Place order replaced vague Hi Lola taps",

@@ -142,7 +142,7 @@ export const PORTFOLIO = {
 export const SITE = {
   title: "Designing Lola: A Bilingual WhatsApp Assistant for La Bodega",
   description:
-    "A bilingual WhatsApp assistant that closed 96.3% of guest conversations without staff — designed and built solo for La Bodega.",
+    "A bilingual WhatsApp assistant where 96.3% of guest conversations did not require staff escalation — designed and built solo for La Bodega.",
   url: (import.meta.env.VITE_SITE_URL ?? "").replace(/\/$/, ""),
   ogImagePath: "/og-image.svg",
 } as const;
@@ -159,7 +159,7 @@ export const PROJECT = {
 export const HEADLINE_SPINE = {
   primary: "A Bilingual WhatsApp Assistant for La Bodega",
   supporting:
-    "A bilingual WhatsApp assistant that closed 96.3% of guest conversations without staff. I designed the flows and built Lola Connect solo.",
+    "A bilingual WhatsApp assistant where 96.3% of guest conversations did not require staff escalation. I designed the flows and built Lola Connect solo.",
 } as const;
 
 /** ~1,200 on weekly deal blast list — scale makes manual reply impossible at rush */
@@ -167,11 +167,11 @@ export const LOYALTY_MEMBER_COUNT = "~1,200" as const;
 
 /** Hero body copy under H1 */
 export const HERO_SUBTITLE =
-  "A bilingual WhatsApp assistant that closed 96.3% of guest conversations without staff. I designed the flows and built Lola Connect solo.";
+  "A bilingual WhatsApp assistant where 96.3% of guest conversations did not require staff escalation. I designed the flows and built Lola Connect solo.";
 
 /** Compact proof pills — hero key results (six weeks in) */
 export const HERO_PROOF_PILLS = [
-  "96.3% resolution · closed without staff",
+  "96.3% did not require staff escalation",
   "97.7% first replies under 2 min",
   "~4 sec average first reply",
 ] as const;
@@ -280,9 +280,9 @@ export const PROJECT_STATS = [
     detail: "Lola bot · median ~4 sec · n=353",
   },
   {
-    label: "Closed without staff",
+    label: "Did not require staff escalation",
     value: "96.3%",
-    detail: "On-thread · no escalation",
+    detail: "On-thread · 14 of 380 escalated",
   },
   {
     label: "Languages",
@@ -303,7 +303,7 @@ export const DESIGN_GOAL_PILLARS = [
   },
   {
     title: "Clean handoff when unsure",
-    detail: "14 of 380 conversations escalated to staff — the rest closed without a human loop.",
+    detail: "14 of 380 conversations escalated to staff — the rest did not require a human loop.",
   },
 ] as const;
 
@@ -586,16 +586,16 @@ export const BUSINESS_BET = {
     "Answer repeat questions on-thread and capture pickup intent on the weekly deals thread — without adding counter headcount or a shopper app.",
   successMetrics: [
     { signal: "First reply", target: "97.7% under 2 min" },
-    { signal: "FAQ load", target: "96.3% closed without staff" },
+    { signal: "FAQ load", target: "96.3% did not require staff escalation" },
     { signal: "Pickup", target: "Lead-time % still measuring" },
   ] as const,
   successSignals: [
     "97.7% of first replies under 2 minutes",
-    "96.3% of conversations closed without staff",
+    "96.3% of conversations did not require staff escalation",
     "Pickup lead-time still instrumenting",
   ] as const,
   success:
-    "97.7% under 2 min first reply · 96.3% closed without staff · pickup lead-time still measuring.",
+    "97.7% under 2 min first reply · 96.3% did not require staff escalation · pickup lead-time still measuring.",
   headline: STORY.heroThesis,
 } as const;
 
@@ -1264,7 +1264,7 @@ export const TESTIMONIALS = [
 
 export const PILOT_IMPACT = [
   {
-    signal: "96.3% closed without staff",
+    signal: "96.3% did not require staff escalation",
     detail: "Guests got answers or a clean handoff — 14 of 380 threads needed a human.",
   },
   {
@@ -1284,7 +1284,7 @@ export const PILOT_IMPACT = [
 /** Peak-end close — honest open work + shopper quote (staff quote stays in PilotVoices) */
 export const CLOSING_BEAT = {
   eyebrow: "Where this stands",
-  body: "Six weeks, 380 real conversations, 96.3% closed without staff. Escalation solve/expire rates stay in Still Measuring until test traffic is filtered from the ticket sample — same honesty bar as pickup lead time.",
+  body: "Six weeks, 380 real conversations, 96.3% did not require staff escalation. Escalation solve/expire rates stay in Still Measuring until test traffic is filtered from the ticket sample — same honesty bar as pickup lead time.",
   quote: TESTIMONIALS[1].quote,
   attribution: TESTIMONIALS[1].who,
 } as const;
