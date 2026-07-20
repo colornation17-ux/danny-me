@@ -5227,15 +5227,13 @@ body:has(.folio--fullgrid) .app {
 
 /* ── Skills ──────────────────────────────────────────── */
 .folio-skills--rich {
-  display: grid;
-  grid-template-columns: repeat(2, max-content);
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  justify-items: stretch;
-  align-items: stretch;
-  gap: var(--space-3);
+  gap: var(--space-2);
   width: 100%;
   max-width: 52rem;
-  margin: var(--space-4) auto 0;
+  margin: var(--space-5) auto 0;
   padding: 0;
   border: none;
   box-shadow: none;
@@ -5251,9 +5249,8 @@ body:has(.folio--fullgrid) .app {
   overflow: hidden;
   box-shadow: 3px 3px 0 var(--black);
   min-height: 48px;
-  width: auto;
+  width: fit-content;
   max-width: 100%;
-  /* GSAP owns transform during reveal; avoid a sticky stylesheet transform */
 }
 
 .folio-skills--rich li span:first-child {
@@ -5292,7 +5289,6 @@ body:has(.folio--fullgrid) .app {
 
 @media (max-width: 560px) {
   .folio-skills--rich {
-    grid-template-columns: 1fr;
     max-width: 22rem;
     padding-inline: var(--space-3);
   }
@@ -6149,7 +6145,7 @@ body.game-embed .site-radio {
   max-width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: 0;
-  margin-block: 0.35rem 0.5rem;
+  margin-block: 0.15rem;
 }
 
 /* Kill leftover paper tint seams on the full-grid home */
@@ -6226,10 +6222,9 @@ body:has(.folio--fullgrid) .site-footer {
   grid-template-columns: none !important;
   align-items: center !important;
   text-align: center;
-  gap: var(--space-3);
-  /* Pack the hero — avoid a tall empty band between CTA and the spring wire */
-  min-height: min(72vh, 40rem);
-  padding: clamp(2.25rem, 6vh, 4rem) 0 clamp(1rem, 2.5vh, 1.75rem);
+  gap: var(--space-4);
+  padding: var(--section-y) 0;
+  min-height: min(88vh, 52rem);
   justify-content: center;
   max-width: none !important;
   width: 100%;
@@ -6416,8 +6411,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folio-hero--canvas .folio-btn--contact {
   position: relative;
   z-index: 3;
-  margin-top: 0.35rem;
-  margin-bottom: 0;
+  margin-top: 0.75rem;
 }
 
 .folio-about__script {
@@ -6665,8 +6659,6 @@ body:has(.folio--fullgrid) .site-footer {
   gap: 0;
   height: var(--folder-tab-h);
   min-height: 58px;
-  /* Kill subpixel hairlines between tab / slope / ledge */
-  transform: translateZ(0);
 }
 
 /* Hole for earlier sticky tabs — clicks pass through to those tabs */

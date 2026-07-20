@@ -105,9 +105,9 @@ export function resolveLayoutMode(
   width: number,
   height: number,
 ): LayoutMode {
-  // Handoff: short height always non-sticky; desktop only ≥1200 and ≥720 tall
+  // Match pre-break FolderStack: short height → mobile; desktop is width-only ≥1200
   if (height < 680 || width < 768) return 'mobile'
-  if (width < 1200 || height < 720) return 'tablet'
+  if (width < 1200) return 'tablet'
   return 'desktop'
 }
 

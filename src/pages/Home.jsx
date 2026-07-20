@@ -152,131 +152,114 @@ export default function Home() {
             '-=0.1',
           )
 
-        // ── About section — safe reveal (same pin/refresh hazard as contact) ──
-        const aboutBody = document.querySelector('.folio-about__body')
-        if (aboutBody) {
-          const revealAbout = () => {
-            gsap.to(aboutBody, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.6,
-              ease: 'power2.out',
-              overwrite: 'auto',
-              clearProps: 'transform',
-            })
-          }
-          gsap.set(aboutBody, { autoAlpha: 0, y: 28 })
-          ScrollTrigger.create({
-            trigger: '.folio-about',
-            start: 'top 78%',
-            once: true,
-            invalidateOnRefresh: true,
-            onEnter: revealAbout,
-            onRefresh(self) {
-              if (self.progress > 0 || self.isActive) revealAbout()
-            },
-          })
-        }
-        // ── Skills — safe reveal (folder stack height used to strand gsap.from) ──
-        const skillEls = gsap.utils.toArray('.folio-skills li')
-        if (skillEls.length) {
-          const revealSkills = () => {
-            gsap.to(skillEls, {
+        // ── Scroll reveals — never leave sections invisible after ST refresh ──
+        // ProjectStack scroll height used to strand gsap.from / pre-hidden sets.
+        // Pattern: hide → reveal on enter OR if already in view → hard failsafe.
+        const safeScrollReveal = (targets, trigger, opts = {}) => {
+          const els = gsap.utils.toArray(targets)
+          if (!els.length) return
+          const {
+            start = 'top 85%',
+            from = { y: 24 },
+            duration = 0.5,
+            stagger = 0.08,
+            ease = 'power2.out',
+          } = opts
+          let done = false
+          const finish = () => {
+            if (done) return
+            done = true
+            gsap.to(els, {
               autoAlpha: 1,
               y: 0,
               rotation: 0,
-              duration: 0.55,
-              stagger: 0.08,
-              ease: 'back.out(1.4)',
+              duration,
+              stagger,
+              ease,
               overwrite: 'auto',
               clearProps: 'transform',
             })
           }
-          gsap.set(skillEls, { autoAlpha: 0, y: 28, rotation: 0 })
+          const forceVisible = () => {
+            if (done) return
+            done = true
+            gsap.set(els, {
+              autoAlpha: 1,
+              opacity: 1,
+              visibility: 'visible',
+              y: 0,
+              rotation: 0,
+              clearProps: 'transform',
+            })
+          }
+          const inView = () => {
+            const node = document.querySelector(trigger)
+            if (!node) return false
+            return node.getBoundingClientRect().top < window.innerHeight * 0.95
+          }
+          gsap.set(els, { autoAlpha: 0, ...from })
           ScrollTrigger.create({
-            trigger: '.folio-skills',
-            start: 'top 88%',
+            trigger,
+            start,
             once: true,
             invalidateOnRefresh: true,
-            onEnter: revealSkills,
-            onRefresh(self) {
-              if (self.progress > 0 || self.isActive) revealSkills()
+            onEnter: finish,
+            onRefresh() {
+              if (inView()) finish()
             },
           })
-        }
-
-        // ── Work heading ────────────────────────────────────────────────
-        const workTitle = document.querySelector('.folio-work__title')
-        const workSticky = document.querySelector('.folio-sticky')
-        const revealWorkHead = () => {
-          if (workTitle) {
-            gsap.to(workTitle, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.5,
-              ease: 'power2.out',
-              overwrite: 'auto',
-              clearProps: 'transform',
-            })
-          }
-          if (workSticky) {
-            gsap.to(workSticky, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.4,
-              delay: 0.08,
-              ease: 'power2.out',
-              overwrite: 'auto',
-              clearProps: 'transform',
-            })
-          }
-        }
-        if (workTitle) gsap.set(workTitle, { autoAlpha: 0, y: 24 })
-        if (workSticky) gsap.set(workSticky, { autoAlpha: 0, y: 12 })
-        if (workTitle || workSticky) {
-          ScrollTrigger.create({
-            trigger: '.folio-work__head',
-            start: 'top 85%',
-            once: true,
-            invalidateOnRefresh: true,
-            onEnter: revealWorkHead,
-            onRefresh(self) {
-              if (self.progress > 0 || self.isActive) revealWorkHead()
-            },
+          // Layout/refresh can miss onEnter — never strand copy
+          requestAnimationFrame(() => {
+            if (inView()) finish()
           })
+          window.setTimeout(() => {
+            if (inView()) finish()
+            else forceVisible()
+          }, 1800)
         }
 
-        // ── Contact section ─────────────────────────────────────────────
-        // Do not use gsap.from({ opacity: 0 }) here. ProjectStack pin/refresh
-        // can prevent the tween from playing and leave the copy invisible
-        // (eyebrow + CTA visible, headline/body gone). Animate only on enter
-        // and force-visible if the section is already past the start line.
-        const contactEls = gsap.utils.toArray(
+        safeScrollReveal('.folio-about__body', '.folio-about', {
+          start: 'top 78%',
+          from: { y: 28 },
+          duration: 0.6,
+          stagger: 0,
+        })
+        safeScrollReveal('.folio-polaroid', '.folio-about__grid', {
+          start: 'top 80%',
+          from: { y: 24, rotation: 4 },
+          duration: 0.55,
+          stagger: 0.12,
+          ease: 'back.out(1.4)',
+        })
+        safeScrollReveal('.folio-skills li', '.folio-skills', {
+          start: 'top 88%',
+          from: { y: 28 },
+          duration: 0.55,
+          stagger: 0.08,
+          ease: 'back.out(1.4)',
+        })
+        safeScrollReveal('.folio-work__title', '.folio-work__head', {
+          start: 'top 85%',
+          from: { y: 24 },
+          duration: 0.5,
+          stagger: 0,
+        })
+        safeScrollReveal('.folio-sticky', '.folio-work__head', {
+          start: 'top 85%',
+          from: { y: 12 },
+          duration: 0.4,
+          stagger: 0,
+        })
+        safeScrollReveal(
           '.folio-contact__title, .folio-contact__body, .folio-contact__cta',
-        )
-        if (contactEls.length) {
-          const revealContact = () => {
-            gsap.to(contactEls, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.45,
-              stagger: 0.08,
-              ease: 'power2.out',
-              overwrite: 'auto',
-            })
-          }
-          gsap.set(contactEls, { autoAlpha: 0, y: 20 })
-          ScrollTrigger.create({
-            trigger: '.folio-contact',
+          '.folio-contact',
+          {
             start: 'top 90%',
-            once: true,
-            invalidateOnRefresh: true,
-            onEnter: revealContact,
-            onRefresh(self) {
-              if (self.progress > 0 || self.isActive) revealContact()
-            },
-          })
-        }
+            from: { y: 20 },
+            duration: 0.45,
+            stagger: 0.08,
+          },
+        )
 
         // ── Hero stickers + DANNY box ────────────────────────────────────
         const stickers = gsap.utils.toArray('.folio-sticker')
@@ -466,7 +449,7 @@ export default function Home() {
             Featured work
           </h2>
           <p className="folio-sticky">
-            Four shipped systems from live ops, then two automotive concepts.
+            Systems built to hold up in live ops: grocery floors, WhatsApp inboxes, and race weekends.
           </p>
         </div>
 

@@ -42,7 +42,7 @@ for (const [index, card] of featuredProjects.entries()) {
 assert.equal(resolveLayoutMode(375, 800), 'mobile')
 assert.equal(resolveLayoutMode(900, 800), 'tablet')
 assert.equal(resolveLayoutMode(1280, 900), 'desktop')
-assert.equal(resolveLayoutMode(1440, 700), 'tablet')
+assert.equal(resolveLayoutMode(1440, 700), 'desktop')
 assert.equal(resolveLayoutMode(1440, 600), 'mobile')
 
 console.log('project-card contract: ok (%d cards)', featuredProjects.length)
