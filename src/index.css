@@ -6575,7 +6575,7 @@ body:has(.folio--fullgrid) .site-footer {
   --folder-pad-inline: var(--space-5);
   --folder-pad-start: var(--space-5);
   --folder-pad-end: var(--space-6);
-  /* Fit densest card (Checkout ~608px copy) + pad-end without clipping */
+  /* Fit densest card + pad-end; desktop bumps taller in .folder-stack--desktop */
   --folder-card-h: clamp(40rem, calc(var(--folder-vh) - var(--folder-nav-h) - 1.75rem), 46rem);
   --card-pad-inline: clamp(1.25rem, 3vw, 3rem);
   --card-pad-block: clamp(1.5rem, 4vw, 3.5rem);
@@ -6591,6 +6591,8 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-stack--desktop {
   --folder-tab-w: clamp(4.5rem, 7.5vw, 6.25rem);
+  /* Laptop/desktop: ~+4rem presence without going full-viewport */
+  --folder-card-h: clamp(42rem, calc(var(--folder-vh) - var(--folder-nav-h) - 1.25rem), 50rem);
 }
 
 /*
