@@ -23,7 +23,7 @@ type Props = {
 export default function ProjectCard({
   project,
   index,
-  total,
+  total: _total,
   cardState,
   layoutMode,
   reduceMotion,
@@ -67,12 +67,12 @@ export default function ProjectCard({
       >
         <div className="folder-card__text">
           <div className="folder-card__text-head">
-            <p className="folder-card__progress" aria-hidden="true">
-              {project.indexLabel} / {String(total).padStart(2, '0')}
-            </p>
             <p className="folder-card__date">
               <span className="folder-card__date-dot" aria-hidden="true" />
               <span>{project.date}</span>
+              {project.variant === 'concept' && (
+                <span className="folder-card__badge">Concept</span>
+              )}
             </p>
           </div>
 
@@ -84,13 +84,14 @@ export default function ProjectCard({
               {project.title}
             </h3>
             <p className="folder-card__meta">
-              {[project.role, project.organization, project.status]
-                .filter(Boolean)
-                .join(' · ')}
+              {[project.role, project.organization].filter(Boolean).join(' · ')}
+              {project.variant !== 'concept' && project.status
+                ? ` · ${project.status}`
+                : ''}
             </p>
-            {(project.timeline || project.team) && (
+            {project.timeline && (
               <p className="folder-card__meta folder-card__meta--sub">
-                {[project.timeline, project.team].filter(Boolean).join(' · ')}
+                {project.timeline}
               </p>
             )}
             <p className="folder-card__blurb">{project.summary}</p>

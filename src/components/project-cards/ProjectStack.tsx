@@ -7,6 +7,7 @@ import {
   type CSSProperties,
 } from 'react'
 import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ProjectCard from './ProjectCard'
 import {
   resolveLayoutMode,
@@ -14,6 +15,8 @@ import {
   type LayoutMode,
 } from './project-card.types'
 import './project-cards.css'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const NAV_H = 74
 
@@ -158,6 +161,14 @@ export default function ProjectStack({ projects }: Props) {
     return undefined
   }, [layoutMode])
 
+  useEffect(() => {
+    // Folder stack scroll height changes document metrics — refresh page triggers
+    const id = window.requestAnimationFrame(() => {
+      ScrollTrigger.refresh()
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [layoutMode, projects.length])
+
   const activate = useCallback(
     (index: number) => {
       if (layoutMode !== 'desktop') {
@@ -180,6 +191,9 @@ export default function ProjectStack({ projects }: Props) {
     [total, navH, reduceMotion, layoutMode],
   )
 
+  const shippedCount = projects.filter((p) => p.variant !== 'concept').length
+  const conceptCount = total - shippedCount
+
   return (
     <div
       className={`folder-stack project-stack folder-stack--${layoutMode}`}
@@ -192,6 +206,48 @@ export default function ProjectStack({ projects }: Props) {
       data-layout={layoutMode}
     >
       <div className="folder-sticky">
+        <div className="project-stack__chrome" aria-live="polite">
+          <p className="project-stack__progress">
+            <span className="project-stack__progress-num">
+              {activeIndex + 1} of {total}
+            </span>
+            <span className="project-stack__progress-label">projects</span>
+          </p>
+          {layoutMode === 'desktop' ? (
+            <p className="project-stack__hint">
+              Scroll for the next folder, or select a tab
+            </p>
+          ) : (
+            <p className="project-stack__hint">
+              {shippedCount} shipped
+              {conceptCount > 0 ? ` · ${conceptCount} concept` : ''}
+              {' · '}
+              select a tab
+            </p>
+          )}
+          <ol className="project-stack__dots" aria-label="Project position">
+            {projects.map((project, index) => (
+              <li key={project.id}>
+                <button
+                  type="button"
+                  className={`project-stack__dot${
+                    index === activeIndex ? ' project-stack__dot--active' : ''
+                  }${
+                    project.variant === 'concept'
+                      ? ' project-stack__dot--concept'
+                      : ''
+                  }`}
+                  aria-label={`${project.title}${
+                    project.variant === 'concept' ? ' (concept)' : ''
+                  }`}
+                  aria-current={index === activeIndex ? 'true' : undefined}
+                  onClick={() => activate(index)}
+                />
+              </li>
+            ))}
+          </ol>
+        </div>
+
         {projects.map((project, index) => {
           const cardState =
             index < activeIndex

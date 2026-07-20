@@ -52,11 +52,7 @@ export default function ProjectActions({
   const overflow = useOverflow ? secondary : []
 
   return (
-    <div
-      className={`folder-card__actions folder-card__cta-row${
-        secondary.length > 1 && !compact ? ' folder-card__cta-row--split' : ''
-      }`}
-    >
+    <div className="folder-card__actions folder-card__cta-row">
       <ActionLink
         action={primary}
         className="folder-card__cta folder-card__primary"
@@ -64,22 +60,26 @@ export default function ProjectActions({
       {overflow.length > 0 ? (
         <details className="folder-card__more">
           <summary>Live experiences</summary>
-          {overflow.map((action) => (
+          <div className="folder-card__more-links">
+            {overflow.map((action) => (
+              <ActionLink
+                key={action.href}
+                action={action}
+                className="folder-card__secondary-link"
+              />
+            ))}
+          </div>
+        </details>
+      ) : (
+        <div className="folder-card__secondary-links">
+          {visible.map((action) => (
             <ActionLink
               key={action.href}
               action={action}
-              className="folder-card__live folder-card__secondary"
+              className="folder-card__secondary-link"
             />
           ))}
-        </details>
-      ) : (
-        visible.map((action) => (
-          <ActionLink
-            key={action.href}
-            action={action}
-            className="folder-card__live folder-card__secondary"
-          />
-        ))
+        </div>
       )}
     </div>
   )

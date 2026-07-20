@@ -26,9 +26,10 @@ export default function ProjectSelector({
       <button
         type="button"
         id={triggerId}
-        className="folder-card__tab"
+        className={`folder-card__tab${isActive ? ' folder-card__tab--active' : ''}`}
         aria-expanded={isActive}
         aria-controls={panelId}
+        aria-current={isActive ? 'true' : undefined}
         onClick={onActivate}
       >
         <span className="folder-card__tab-num" aria-hidden="true">

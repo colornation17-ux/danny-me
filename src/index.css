@@ -5045,7 +5045,7 @@ body:has(.folio--fullgrid) .app {
 .career-path {
   width: 100%;
   max-width: 640px;
-  margin: var(--space-7) auto var(--space-4);
+  margin: var(--space-7) auto var(--space-3);
 }
 
 .career-path__eyebrow {
@@ -5197,16 +5197,19 @@ body:has(.folio--fullgrid) .app {
 
 /* ── Skills ──────────────────────────────────────────── */
 .folio-skills--rich {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
   justify-content: center;
-  gap: var(--space-2);
+  justify-items: stretch;
+  align-items: stretch;
+  gap: var(--space-3);
   width: 100%;
   max-width: 52rem;
-  margin-inline: auto;
+  margin: var(--space-4) auto 0;
   padding: 0;
   border: none;
   box-shadow: none;
+  list-style: none;
 }
 
 .folio-skills--rich li {
@@ -5218,7 +5221,9 @@ body:has(.folio--fullgrid) .app {
   overflow: hidden;
   box-shadow: 3px 3px 0 var(--black);
   min-height: 48px;
-  width: fit-content;
+  width: auto;
+  max-width: 100%;
+  /* GSAP owns transform during reveal; avoid a sticky stylesheet transform */
 }
 
 .folio-skills--rich li span:first-child {
@@ -5254,6 +5259,24 @@ body:has(.folio--fullgrid) .app {
 .folio-skills--rich li[data-tone="pink"] .folio-skills__icon { background: #b8154a; color: var(--white); }
 .folio-skills--rich li[data-tone="sky"] span:first-child { background: #36C5F0; }
 .folio-skills--rich li[data-tone="sky"] .folio-skills__icon { background: #1ea8d1; }
+
+@media (max-width: 560px) {
+  .folio-skills--rich {
+    grid-template-columns: 1fr;
+    max-width: 22rem;
+    padding-inline: var(--space-3);
+  }
+
+  .folio-skills--rich li {
+    width: 100%;
+  }
+
+  .folio-skills--rich li span:first-child {
+    flex: 1;
+    justify-content: flex-start;
+    white-space: normal;
+  }
+}
 
 .folio-work__head {
   position: relative;
@@ -6499,12 +6522,13 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folio-work--folders {
   max-width: none;
-  padding-block: var(--section-y);
+  padding-block: var(--space-6) var(--space-6);
   padding-bottom: var(--space-6);
 }
 
 .folio-work--folders .folio-work__head {
   margin-bottom: var(--space-5);
+  margin-top: 0;
 }
 
 .folder-stack {
@@ -6670,6 +6694,50 @@ body:has(.folio--fullgrid) .site-footer {
   filter: brightness(1.04);
 }
 
+.folder-card__tab--active {
+  filter: brightness(1.05);
+  box-shadow:
+    inset 0 -3px 0 color-mix(in srgb, var(--folder-ink) 55%, transparent),
+    0 2px 0 0 var(--folder-fill);
+}
+
+.folder-card:not(.folder-card--active) .folder-card__tab {
+  opacity: 0.88;
+}
+
+.folder-card:not(.folder-card--active) .folder-card__tab:hover {
+  opacity: 1;
+}
+
+/* Concept cards — quieter fill + badge so shipped proof leads */
+.folder-card--concept .folder-card__content,
+.folder-card--concept .folder-card__tab,
+.folder-card--concept .folder-card__tab-slope,
+.folder-card--concept .folder-card__ledge {
+  filter: saturate(0.78) brightness(1.06);
+}
+
+.folder-card--concept.folder-card--active .folder-card__tab {
+  filter: saturate(0.82) brightness(1.08);
+}
+
+.folder-card__badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.35rem;
+  padding: 0.12rem 0.45rem;
+  border: 1.5px solid color-mix(in srgb, var(--folder-ink) 55%, transparent);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: max(var(--text-meta-xs), 0.6875rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--folder-ink);
+  background: color-mix(in srgb, var(--folder-ink) 12%, transparent);
+}
+
 .folder-card__tab:focus-visible,
 .folder-card__cta:focus-visible,
 .folder-card__live:focus-visible,
@@ -6721,7 +6789,7 @@ body:has(.folio--fullgrid) .site-footer {
   font-size: max(var(--text-meta-xs), 0.75rem);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.55;
+  color: color-mix(in srgb, var(--folder-ink) 72%, transparent);
 }
 
 .folder-card__content {
@@ -7000,14 +7068,14 @@ body:has(.folio--fullgrid) .site-footer {
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 1.35;
-  opacity: 0.78;
+  color: color-mix(in srgb, var(--folder-ink) 88%, transparent);
   text-wrap: balance;
 }
 
 .folder-card__meta--sub {
   margin-top: 0.2rem;
   font-weight: 500;
-  opacity: 0.62;
+  color: color-mix(in srgb, var(--folder-ink) 78%, transparent);
 }
 
 .folder-card__blurb {
@@ -7017,7 +7085,7 @@ body:has(.folio--fullgrid) .site-footer {
   font-size: max(var(--text-body), 1rem);
   font-weight: 400;
   line-height: 1.45;
-  opacity: 0.92;
+  color: color-mix(in srgb, var(--folder-ink) 96%, transparent);
 }
 
 .folder-card__metric {
@@ -7031,7 +7099,7 @@ body:has(.folio--fullgrid) .site-footer {
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: 0.01em;
-  opacity: 0.78;
+  color: color-mix(in srgb, var(--folder-ink) 90%, transparent);
 }
 
 .folder-card__metric--empty {
@@ -7045,7 +7113,7 @@ body:has(.folio--fullgrid) .site-footer {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.72;
+  color: color-mix(in srgb, var(--folder-ink) 78%, transparent);
 }
 
 .folder-card__metric-value {
@@ -7086,10 +7154,16 @@ body:has(.folio--fullgrid) .site-footer {
   background: color-mix(in srgb, var(--folder-ink) 12%, transparent);
 }
 
-.folder-card__more .folder-card__live {
+.folder-card__more .folder-card__secondary-link {
   display: flex;
   width: 100%;
-  margin-top: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.folder-card__more-links {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.35rem;
 }
 
 @media (max-width: 991px) {
@@ -7151,10 +7225,46 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__cta-row,
 .folder-card__actions {
   display: flex;
-  align-items: center;
-  gap: 0.75rem 1rem;
   flex-wrap: wrap;
-  margin-top: var(--folder-space-5, 2rem);
+  align-items: center;
+  gap: 0.65rem 1.15rem;
+  margin-top: var(--folder-space-4, 1.5rem);
+}
+
+.folder-card__secondary-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 1rem;
+}
+
+.folder-card__secondary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 44px;
+  padding: 0.15rem 0;
+  border: 0;
+  background: none;
+  color: var(--folder-ink);
+  font-family: var(--font-sans);
+  font-size: max(var(--text-meta), 0.8125rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.folder-card__secondary-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+.folder-card__secondary-link:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 0.25rem;
 }
 
 .folder-card__live {
