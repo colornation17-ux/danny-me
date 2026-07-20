@@ -72,6 +72,7 @@ export default function Home() {
             '.folio-hero__lead',
             '.folio-btn--contact',
             '.folio-about__body',
+            '.folio-polaroid',
             '.folio-skills li',
             '.folio-work__title',
             '.folio-sticky',
@@ -152,119 +153,99 @@ export default function Home() {
             '-=0.1',
           )
 
-        // ── Scroll reveals — never leave sections invisible after ST refresh ──
-        // Folder stack scroll height can strand gsap.from / pre-hidden sets.
-        // Pattern: hide → reveal on enter OR if already in view → hard failsafe.
-        const safeScrollReveal = (targets, trigger, opts = {}) => {
+        // ── About / skills / work — morning physics (with strand failsafe) ──
+        const guardVisible = (targets, ms = 2800) => {
           const els = gsap.utils.toArray(targets)
           if (!els.length) return
-          const {
-            start = 'top 85%',
-            from = { y: 24 },
-            duration = 0.5,
-            stagger = 0.08,
-            ease = 'power2.out',
-            failsafeMs = 900,
-          } = opts
-          let done = false
-          const finish = () => {
-            if (done) return
-            done = true
-            gsap.to(els, {
-              autoAlpha: 1,
-              y: 0,
-              rotation: 0,
-              duration,
-              stagger,
-              ease,
-              overwrite: 'auto',
-              clearProps: 'transform',
-            })
-          }
-          const forceVisible = () => {
-            done = true
+          window.setTimeout(() => {
             gsap.set(els, {
-              autoAlpha: 1,
               opacity: 1,
               visibility: 'visible',
+              autoAlpha: 1,
               y: 0,
               rotation: 0,
-              clearProps: 'transform,opacity,visibility',
+              clearProps: 'transform',
             })
-          }
-          const inView = () => {
-            const node = document.querySelector(trigger)
-            if (!node) return false
-            return node.getBoundingClientRect().top < window.innerHeight * 0.95
-          }
-          // If already on screen, never pre-hide (skills chips left empty flex gaps)
-          if (inView()) {
-            gsap.set(els, { autoAlpha: 1, y: 0, rotation: 0 })
-            return
-          }
-          gsap.set(els, { autoAlpha: 0, ...from })
-          ScrollTrigger.create({
-            trigger,
-            start,
-            once: true,
-            invalidateOnRefresh: true,
-            onEnter: finish,
-            onRefresh() {
-              if (inView()) finish()
-            },
-          })
-          requestAnimationFrame(() => {
-            if (inView()) finish()
-          })
-          window.setTimeout(() => {
-            if (inView()) finish()
-            else forceVisible()
-          }, failsafeMs)
+          }, ms)
         }
 
-        safeScrollReveal('.folio-about__body', '.folio-about', {
-          start: 'top 78%',
-          from: { y: 28 },
+        gsap.from('.folio-about__body', {
+          scrollTrigger: { trigger: '.folio-about', start: 'top 78%' },
+          opacity: 0,
+          y: 36,
           duration: 0.6,
-          stagger: 0,
         })
-        safeScrollReveal('.folio-polaroid', '.folio-about__grid', {
-          start: 'top 80%',
-          from: { y: 24, rotation: 4 },
-          duration: 0.55,
+        guardVisible('.folio-about__body')
+
+        gsap.from('.folio-polaroid', {
+          scrollTrigger: { trigger: '.folio-about__grid', start: 'top 80%' },
+          opacity: 0,
+          y: 24,
+          rotation: 4,
           stagger: 0.12,
+          duration: 0.55,
           ease: 'back.out(1.4)',
         })
-        safeScrollReveal('.folio-skills li', '.folio-skills', {
-          start: 'top 88%',
-          from: { y: 20 },
-          duration: 0.45,
-          stagger: 0.06,
+
+        // Skills — drop-and-tumble (GSAP SplitText demo physics)
+        gsap.from('.folio-skills li', {
+          scrollTrigger: { trigger: '.folio-skills', start: 'top 85%' },
+          y: -100,
+          opacity: 0,
+          rotation: 'random(-80, 80)',
+          stagger: 0.1,
+          duration: 1,
+          ease: 'back',
+        })
+        guardVisible('.folio-skills li', 3200)
+
+        gsap.from('.folio-work__title', {
+          scrollTrigger: { trigger: '.folio-work__head', start: 'top 82%' },
+          opacity: 0,
+          y: 32,
+          duration: 0.55,
           ease: 'power2.out',
-          failsafeMs: 500,
         })
-        safeScrollReveal('.folio-work__title', '.folio-work__head', {
-          start: 'top 85%',
-          from: { y: 24 },
-          duration: 0.5,
-          stagger: 0,
-        })
-        safeScrollReveal('.folio-sticky', '.folio-work__head', {
-          start: 'top 85%',
-          from: { y: 12 },
+        gsap.from('.folio-sticky', {
+          scrollTrigger: { trigger: '.folio-work__head', start: 'top 75%' },
+          opacity: 0,
+          y: 16,
           duration: 0.4,
-          stagger: 0,
+          delay: 0.15,
         })
-        safeScrollReveal(
+        guardVisible('.folio-work__title, .folio-sticky')
+
+        // Contact stays on the safe path — folder ST refresh used to strand it
+        const contactEls = gsap.utils.toArray(
           '.folio-contact__title, .folio-contact__body, .folio-contact__cta',
-          '.folio-contact',
-          {
-            start: 'top 90%',
-            from: { y: 20 },
-            duration: 0.45,
-            stagger: 0.08,
-          },
         )
+        if (contactEls.length) {
+          let contactDone = false
+          const revealContact = () => {
+            if (contactDone) return
+            contactDone = true
+            gsap.to(contactEls, {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.45,
+              stagger: 0.08,
+              ease: 'power2.out',
+              overwrite: 'auto',
+            })
+          }
+          gsap.set(contactEls, { autoAlpha: 0, y: 20 })
+          ScrollTrigger.create({
+            trigger: '.folio-contact',
+            start: 'top 90%',
+            once: true,
+            invalidateOnRefresh: true,
+            onEnter: revealContact,
+            onRefresh(self) {
+              if (self.progress > 0 || self.isActive) revealContact()
+            },
+          })
+          window.setTimeout(revealContact, 4000)
+        }
 
         // ── Hero stickers + DANNY box ────────────────────────────────────
         const stickers = gsap.utils.toArray('.folio-sticker')
