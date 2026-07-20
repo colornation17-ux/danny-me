@@ -24,7 +24,7 @@ Use these La Bodega bullets (do not weaken back to “shipped / designed dashboa
 1. **Loyalty/CRM** — discount 0.29%→0.09%, 13% revenue lift (keep; separate from Lola/CW cases)
 2. **Lola** — *Designed bilingual WhatsApp guest flows and built Lola Connect (staff PWA) solo — deals Q&A, pickup orders, reminders, and staff handoff; 96.3% of conversations did not require staff escalation.*
 3. **Competitor Watch** — *Designed and built Competitor Watch solo (React + Python) — Thursday merchandising decision loop: competitor deals, shelf-vs-floor pricing, weekend playbook, demand bands, and WhatsApp→POS visit attribution.*
-4. **Checkout Ops** — *During the first 72 hours of a live store launch, organized a three-team recovery (aisle audit + checkout incidents): corrected ~2,000 UPC records and independently revalidated via Odoo POS + Datalogic while supporting 500+ transactions.* (Do not claim ~100% recognition; 500+ = window transactions, not failed scans; ~2,000 = corrected records.)
+4. **Checkout Ops** — *During the first 72 hours of La Bodega’s live launch, organized a three-team recovery (aisle audit + checkout incidents): corrected ~2,000 UPC records, introduced unit-cost and market-price verification, and independently revalidated via Odoo POS + Datalogic while supporting 500+ transactions.* (500+ = window transactions; ~2,000 = corrected records; no invented recognition %.)
 5. **Ops PWA** — shift/approvals/vendor (separate product)
 6. Partnered with store leadership…
 

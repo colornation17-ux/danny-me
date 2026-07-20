@@ -1,15 +1,31 @@
 # Checkout Operations — Research evidence appendix
 
 **Document type:** Rapid operational investigation → evidence trail for portfolio / resume / interview defense  
-**Not:** A controlled academic study or a Framer webpage printout  
+**Sources:** Live launch checkout investigation (first 72 hours) + February–March pricing / unit-cost work folded into product onboarding  
 
-**Status:** Operational sample, correction volume, three-team workflow, and live validation method locked (2026-07-20). Remaining TODO: first-pass revalidation pass rate (e.g. X of ~2,000), timed stall sample N, participant headcounts, Odoo full-export date for the 6,890 composition table.
+**Status:** Recognition sample, correction volume, three-team workflow, POS validation, and pricing-onboarding method locked (2026-07-20). Remaining TODO: first-pass revalidation pass rate (X of Y), timed stall sample N, participant headcounts, Odoo full-export date for the 6,890 composition table.
 
 **How to use:**  
 `/projects/bodega-ops` = short systems story.  
 **This file** = research questions → method → sample → observations → hypotheses → insight → decision → measured/observed result → limitations.
 
-**Locked architecture:** scan → normalize to **Datalogic / Odoo barcode contract** → **Excel** → **batch import to Odoo** → independent POS rescan. Not a public UPC API product path.
+**Locked architecture:**
+
+```text
+Receive / collect physical sample
+→ POS scan test
+→ confirm exact product, brand, size
+→ normalize barcode to Datalogic EAN-13 contract
+→ normalize case cost → unit cost
+→ same-UPC or equivalent competitor price
+→ viability check
+→ review name, cost, price, duplicates
+→ Excel batch → Odoo import
+→ independent POS / Datalogic rescan
+→ approve for sale
+```
+
+Not a public UPC API product path. Not a separate “pricing strategy” case — pricing enters only as **onboarding data integrity**.
 
 ---
 
@@ -21,19 +37,20 @@
 | Terminals | Locked | 4 shared POS · one Odoo catalog |
 | Launch narrative | Locked | **Day-1 live launch week** |
 | Timeline | Locked | First **72 hours** after launch · ~1 week monitoring handoff |
-| Transactions (window) | Locked | **500+** customer transactions processed during the recovery window — **not** “500 failed scans” |
-| Correction volume | Locked | **~2,000 UPC records** corrected — **not** automatically “2,000 unique physical products” unless the log confirms 1:1 |
-| UPC-A scope | Locked | **3,000+** UPC-A-coded products in the active/relevant catalog; remaining products largely internal / specialized codes (retained when intentional and working) |
+| Transactions (window) | Locked | **500+** customer transactions — **not** “500 failed scans” |
+| Correction volume | Locked | **~2,000 UPC records** corrected — **not** automatically unique physical SKUs |
+| UPC-A scope | Locked | **3,000+** UPC-A-coded products; internal codes retained when intentional and working |
 | Workflow | Locked | **Three teams:** collect+POS audit · normalize+Excel+Odoo · independent POS/scale verification |
-| Validation method | Locked | Product validated only when the **physical sample** is successfully retrieved by Odoo via the **checkout scanner/scale** |
-| Tool timing | Locked | First usable tool ~24h focused build inside the 72h window; staff teach staff by Day 3 |
-| Recognition % | Soft / prefer process claim | Prefer the **defensible portfolio claim** below over “~100%” or unsubstantiated “near-complete” |
-| Stall timing | Observed range | 2–5 min → toward &lt;30s on affected lines — timed sample N still soft |
-| Out of scope | Do not claim | Loyalty lift · cart abandonment “near-eliminated” · formal usability % |
+| Pricing in onboarding | Locked | Unit-cost normalization from case cost + same-UPC / equivalent market check + individual price set (not one universal markup) |
+| Temporary trust method | Locked | Contested prices could be temporarily compared to visible competitor rates — **not** the permanent pricing system |
+| Validation method | Locked | Pass only when **physical sample** is retrieved by Odoo via checkout scanner/scale |
+| Tool timing | Locked | First usable tool ~24h focused build inside 72h; staff teach staff by Day 3 |
+| Recognition % | Prefer process claim | Do not invent ~100% / unsubstantiated near-complete |
+| Out of scope | Do not claim | Loyalty · cart abandonment “near-eliminated” · formal usability % · every Feb price tied to one named competitor + date |
 
 ### Defensible portfolio claim (preferred)
 
-> During the first 72 hours of a live store launch, I organized a three-team recovery workflow that combined checkout incidents with an aisle-by-aisle product audit. The team corrected approximately 2,000 UPC records and independently revalidated the products through the existing Odoo POS and Datalogic scanner/scale while supporting more than 500 customer transactions.
+> During the first 72 hours of La Bodega’s live launch, I organized a three-team recovery workflow that combined more than 500 active customer transactions with an aisle-by-aisle product audit. The team corrected approximately 2,000 UPC records, introduced unit-cost and market-price verification, and independently revalidated affected products through the existing Odoo POS and Datalogic scanner/scale.
 
 ---
 
@@ -49,157 +66,193 @@
 | Role | Service designer · reported to CEO |
 | Constraint | No POS replacement · no new hardware procurement |
 | Decision deadline | ~72 hours after live launch |
+| Related pricing work | Feb–Mar unit-cost / market-check method folded into onboarding |
 
 ## Research questions → answers
 
-### Q1. Where did the failure originate?
+### Q1. Where did the product-data failure originate?
 
-Primarily in the **upstream product-onboarding and catalog process**.
+Two connected upstream problems:
 
-Products reached the sales floor with missing, inconsistent, or incompatible barcode records. Checkout became the first place many products were tested against Odoo. Because all four terminals shared one catalog, the failure followed the **product**, not a particular register.
+#### Product-recognition problem
 
-### Q2. Which barcode patterns were most affected?
+Products reached the sales floor before their physical barcode was validated against Odoo. Many standard UPC-A records also did not match the **EAN-13** value produced by the Datalogic scanner/scale.
 
-The relevant assortment included **3,000+ UPC-A-coded products**, plus products using **internal store codes** and specialized formats.
+Because all four checkout terminals used the same Odoo catalog, the problem followed the **product record**, not an individual register.
 
-**~2,000 UPC records** required correction in the first 72 hours. Common problems: inconsistent barcode length, leading-zero differences, missing records, duplicates, and physical barcodes that did not match the code stored in Odoo.
+#### Pricing-data problem
 
-**Internal codes were not automatically treated as errors** — retained when intentional and working correctly within the store’s catalog.
+Vendor costs were sometimes entered as **total case cost** without correctly dividing by sellable units — an incorrect unit-cost basis.
 
-*(Secondary composition context from a full Odoo export — confirm export date before treating as launch-week fact: 6,890 total records · 6,208 with barcodes · 682 without · mixed digit lengths. Do not use 6,890 as the recognition denominator.)*
+Prices were then entered without consistently comparing them against the **same product or an equivalent product** in the local market. A price could look fine inside Odoo while still being:
 
-### Q3. How did staff respond to unidentified products?
+- Above the local market price  
+- Below the actual unit cost  
+- Based on the wrong pack size  
+- Attached to the wrong product variation  
+- Impossible to defend during a checkout dispute  
 
-**Live checkout:** unidentified products were escalated for manual identification or catalog correction (manager call, name search, Miscellaneous, manual price, etc.).
+**Compounding failure:** incorrect unit-cost basis + absence of a market benchmark.
 
-**In parallel, three-team workflow:**
+### Q2. Which barcode and catalog patterns were disproportionately affected?
 
-1. Collect and initially scan product samples at a real POS  
-2. Normalize barcodes and update Odoo via Excel batches  
-3. Independently rescan corrected products through POS + Datalogic scanner/scale  
+Correction effort principally involved the store’s **UPC-A** assortment: **3,000+** UPC-A-coded products; remaining assortment largely **internal store codes** and specialized formats. **~2,000 UPC records** corrected in the first 72 hours.
 
-### Q4. What intervention prevented repeated failures?
+**Affected patterns:**
 
-A validation stage before products were considered checkout-ready:
+- UPC-A values that did not match Datalogic EAN-13 output  
+- Leading-zero differences  
+- Shortened or inconsistently stored barcode values  
+- Products missing from Odoo  
+- Products registered under a different barcode  
+- Duplicate products or duplicate product names  
+- Case-versus-unit ambiguity  
+- Similar products with different brands, package sizes, or prices  
+- Variable-weight meat and produce  
+- Internal store codes requiring separate handling (not automatic UPC normalization)  
+
+**Why a product name alone was insufficient:** the same product family could contain multiple brands, sizes, and prices. Examples from the pricing catalog (catalog variation evidence — **not** proof that every price variation caused a scan failure):
+
+- Jarritos 1.5 L products at **$2.49** and **$2.99**  
+- Goya 15.5 oz bean variations at **$1.77** and **$2.20**  
+
+Workflow needed:
 
 ```text
-Physical product
-→ POS scan test
-→ normalization and catalog review
-→ Excel batch
-→ Odoo update
-→ independent POS verification
-→ approve or return for correction
+Physical barcode
+→ exact product
+→ brand
+→ package size
+→ unit or case
+→ cost
+→ sale price
 ```
 
-Odoo remained system of record; existing Datalogic hardware retained.
+*(Secondary full-export composition — confirm export date: 6,890 records · digit-length mix. Do not use as recognition denominator.)*
 
-### Q5. Could staff operate the intervention?
+### Q3. How did staff respond when products failed at checkout?
 
-**Yes, operationally** — observed adoption, not a formal usability study.
+During the first 72 hours the store processed **500+ transactions** (total window — **not** failed-scan count).
 
-Work was divided across three teams with clear handoffs. Staff collected products, generated a correction queue, updated records, and independently verified changes through POS. The workflow did not depend on one person performing every step.
+When a product was not identified:
+
+- Cashier escalated for identification  
+- Physical item entered the correction queue  
+- Staff searched Odoo  
+- Price and product identity reviewed manually  
+- Contested prices could be **temporarily** compared with visible competitor-market prices  
+- Barcode and catalog record corrected  
+- Product independently rescanned through POS + Datalogic  
+
+**Temporary trust-stabilization:** matching disputed items to visible competitor rates while the cost/catalog pipeline was corrected — **not** treated as the permanent pricing system.
+
+In parallel: proactive aisle audit (not only customer-facing failures) + three-team workflow.
+
+### Q4. What upstream intervention prevented failures without replacing Odoo?
+
+Barcode validation + cost normalization + market-based price verification in **one product-onboarding process**:
+
+```text
+Receive product
+→ collect physical sample
+→ scan through POS
+→ confirm exact product, brand and size
+→ normalize barcode to Datalogic EAN-13
+→ normalize case cost to unit cost
+→ identify same-UPC or equivalent competitor price
+→ evaluate financial viability
+→ review name, cost, price and duplicates
+→ prepare Excel batch
+→ import into Odoo
+→ independently rescan through POS
+→ approve product for sale
+```
+
+**Pricing method (four core steps):**
+
+1. Normalize vendor cost to the actual sellable unit  
+2. Find market price for the **same UPC** or an **equivalent** product  
+3. Compare market price with corrected unit cost  
+4. Set product price **individually** — not one universal markup  
+
+Retained: Odoo · four POS terminals · Datalogic scanner/scale · Excel batch bridge · human review for ambiguous products.
+
+### Q5. Could floor staff operate the intervention without continuous designer involvement?
+
+**Operationally yes** — observed transfer, not formal usability %.
+
+**Team 1 — Collection and initial scan:** aisle-by-aisle samples → designated counter → POS scan  
+
+**Team 2 — Normalization and Odoo update:** failed queue → normalize UPC · verify product info · Excel · Odoo  
+
+**Team 3 — Independent POS revalidation:** rescan physical products; fails return to Team 2  
+
+```text
+Initial scan → failed-item queue → correction → Odoo update → independent physical rescan → pass or return
+```
+
+Staff observed teaching other staff by Day 3. No systematic participant counts, task-error rates, or assistance levels retained.
 
 ---
 
 # Launch-week investigation and correction workflow
 
-During the first **72 hours** after launch, the store processed **more than 500** customer transactions across four shared POS terminals. Product-recognition failures were identified through **two parallel channels**:
+## Parallel channels
 
-1. **Live checkout incidents** — whenever a cashier scanned an item Odoo could not identify.  
-2. **Proactive aisle-by-aisle audit** of the active launch assortment.
+1. **Live checkout incidents** during **500+** transactions  
+2. **Aisle-by-aisle audit** of the active launch assortment  
 
-## Team 1 — Product collection and initial POS audit
+## Three teams
 
-Moved systematically through store aisles and collected **one representative sample of each active product**. Samples were brought to a designated POS counter and scanned using the **same checkout terminal and scanner configuration** used during customer transactions.
+### Team 1 — Product collection and initial POS audit
 
-Recorded whether each product:
+One representative sample of each active product; scanned at a designated POS using the **same terminal/scanner config** as customer checkout.
 
-- Was immediately recognized by Odoo  
-- Returned “Item Not Found”  
-- Was associated with the wrong product  
-- Used an internal store code rather than a standard UPC-A code  
-- Required barcode normalization or catalog correction  
+Recorded: recognized · Item Not Found · wrong product · internal store code · needs normalization/catalog correction.
 
-This tested products under **real checkout conditions**, not catalog rows in isolation.
+### Team 2 — Barcode normalization, cost/price review, catalog correction
 
-## Team 2 — Barcode normalization and catalog correction
+- Normalize inconsistent UPC values to Datalogic / Odoo contract  
+- Normalize case → unit cost where needed  
+- Same-UPC or equivalent market check before locking sale price  
+- Excel batches → Odoo updates  
+- **~2,000 UPC records** corrected in 72 hours  
+- Prioritized UPC-A checkout failures; kept working internal codes  
 
-Handled products that failed the initial scan.
+Also reviewed: duplicates · name mismatches · unit vs case · variable-weight · missing/incorrect price or cost · internal codes · existing records under a different barcode.
 
-Used the barcode-normalization tool to convert inconsistent values into the format expected by the **Datalogic scanner and Odoo catalog**. Corrected records were organized in **Excel** and uploaded to Odoo through **batch updates**.
+### Team 3 — Independent POS and scale verification
 
-- **~2,000 UPC records** corrected during the initial 72-hour recovery  
-- Active/relevant catalog included **3,000+ UPC-A-coded products**  
-- Remaining products primarily used internal store codes or specialized formats  
-- Effort **prioritized UPC-A products causing immediate checkout-recognition failures** rather than replacing every internal code  
-
-Also reviewed cases that could not be safely fixed by normalization alone:
-
-- Duplicate barcodes  
-- Product-name mismatches  
-- Unit-versus-case ambiguity  
-- Variable-weight meat and produce  
-- Missing or incorrect prices / cost  
-- Internal-code products  
-- Records that already existed in Odoo under a different barcode  
-
-## Team 3 — Independent POS and scale verification
-
-After Team 2 updated records, Team 3 **independently rescanned** corrected products using the POS terminal and Datalogic scanner/scale.
-
-A product was considered **validated only when** the physical product was successfully retrieved by Odoo through the checkout scanner.
-
-Failed verification items returned to the correction team — closed loop:
-
-```text
-Collect product sample
-→ scan at POS
-→ identify failure
-→ normalize and update record
-→ import into Odoo
-→ independently rescan at POS
-→ approve or return for correction
-```
+Pass only if physical product is retrieved by Odoo via checkout scanner/scale. Failures returned to Team 2.
 
 ## Live-checkout feedback loop
 
-The aisle audit ran **alongside** active customer checkout.
-
-Whenever one of the four registers encountered an unidentified product during the **500+** transactions in the first 72 hours, the item entered the correction workflow — normalize, update Odoo, rescan — while store operations continued.
+Unidentified register scans joined the same correction queue as aisle-audit failures while operations continued.
 
 ---
 
 # 2. Methods and sample
 
-| Method | Sample or participants | Purpose | Output | Status |
-| --- | ---: | --- | --- | --- |
-| Live checkout observation | **500+** transactions during first 72 hours | Identify real customer-facing scan failures and staff workarounds | Incident and correction queue | **Completed** operational sample |
-| Aisle-by-aisle product audit | One representative sample from active products across the store | Test recognition before products hit checkout again | Initial scan-status dataset | **Completed** for prioritized launch assortment |
-| Barcode and catalog review | **3,000+** UPC-A-coded products + internal-code products | Identify format and catalog mismatches | Affected-product dataset | **Completed** operational review |
-| Barcode correction | **~2,000** UPC records | Normalize codes and correct Odoo records | Excel batches and Odoo updates | **Completed** during initial recovery |
-| Cross-terminal diagnosis | Same affected products vs shared POS catalog | Rule out single-register / scanner-only failure | Eliminated hardware-only hypotheses | **Completed** |
-| Post-update POS verification | Corrected physical samples rescanned via POS scanner/scale | Confirm successful product retrieval in Odoo | Pass/fail validation loop | **Completed** operationally |
-| Staff workflow observation | Three operational teams + checkout staff | Evaluate divided operation by store staff | Role and handoff model | **Completed** qualitatively |
-| Full Odoo export composition | **6,890** records (date **TODO confirm**) | Secondary format-mix context | Composition table | Pending date confirm |
-
-## Participant table
-
-| Group | Number | Contribution |
-| --- | ---: | --- |
-| Team 1 / 2 / 3 members | **TODO** headcount | Collection, correction, verification |
-| Cashiers | **TODO** | Live incident queue |
-| Store manager / leadership | **TODO** | Escalation and approvals |
+| Method | Sample | Purpose | Status |
+| --- | ---: | --- | --- |
+| Live checkout observation | **500+** txns / first 72h | Customer-facing failures + workarounds | Completed |
+| Aisle-by-aisle product audit | One sample per active product | Recognition under real POS conditions | Completed |
+| Barcode / catalog review | **3,000+** UPC-A + internal codes | Format and identity mismatches | Completed |
+| Barcode correction | **~2,000** UPC records | Normalize + Odoo update | Completed |
+| Unit-cost / market-price review | Feb–Mar pricing method on onboarding path | Correct cost basis + defendable price | Completed method (not every row dated to one competitor) |
+| Cross-terminal diagnosis | Shared catalog | Reject hardware-only hypothesis | Completed |
+| Independent POS revalidation | Corrected physical samples | Confirm retrieval in Odoo | Completed operationally |
+| Staff workflow observation | Three teams + cashiers | Operational transfer | Completed qualitatively |
 
 ## Denominators (do not mix)
 
 | Denominator | Count | Notes |
 | --- | ---: | --- |
-| Launch-window transactions | **500+** | Total processed — **not** count of failed-scan transactions |
-| UPC-A products in relevant catalog | **3,000+** | Prioritized correction scope |
-| UPC records corrected in 72h | **~2,000** | Rows corrected — **not** proven unique physical SKUs 1:1 |
-| First-pass revalidation pass rate | **TODO** | e.g. X of ~2,000 retrieved on first rescan |
-| Full Odoo catalog export | **6,890** | Composition only · export date TODO |
+| Launch-window transactions | **500+** | Not failed-scan count |
+| UPC-A products in scope | **3,000+** | Prioritized class |
+| UPC records corrected | **~2,000** | Rows — not proven unique SKUs |
+| First-pass revalidation pass rate | **TODO** | X ÷ Y in first-pass set |
+| Full Odoo export | **6,890** | Composition · export date TODO |
 
 ---
 
@@ -207,25 +260,26 @@ Whenever one of the four registers encountered an unidentified product during th
 
 | ID | Observation | Confidence |
 | --- | --- | --- |
-| O1 | Same affected product fails across shared catalog / all registers | High |
-| O2 | Failures cluster by barcode/catalog mismatch, not by terminal | High |
-| O3 | Physical aisle samples fail/succeed under real POS + Datalogic config | High |
-| O4 | Live checkout incidents feed the same correction queue as aisle audit | High |
-| O5 | ~2,000 UPC records required correction in 72h within 3,000+ UPC-A scope | High |
-| O6 | Internal codes often intentional — not auto-errors | High |
-| O7 | Stall times 2–5 min common on affected lines (timed N soft) | Medium |
+| O1 | Failure follows product across shared catalog | High |
+| O2 | UPC-A / EAN-13 / leading-zero / missing / wrong-code patterns dominate recognition failures | High |
+| O3 | Case cost entered as unit cost creates bad pricing basis | High |
+| O4 | Price without same-UPC/equivalent market check is hard to defend at checkout | High |
+| O5 | Same name family can have multiple brands/sizes/prices (e.g. Jarritos, Goya) | High (catalog variation) |
+| O6 | Temporary competitor-visible price match used for dispute trust — not permanent system | High |
+| O7 | Stall 2–5 min common on affected lines (timed N soft) | Medium |
 
 ---
 
 # 4. Hypothesis testing
 
-| Hypothesis | Test | Result |
-| --- | --- | --- |
-| Scanner / one-terminal malfunction | Same products vs shared catalog; other products scan OK | **Rejected** |
-| Terminal-specific config | Cross-register pattern | **Rejected** |
-| Missing / mismatched catalog records | Aisle POS audit + Odoo updates | **Confirmed contributing** |
-| Barcode normalization needed for UPC-A class | Tool + ~2,000 corrections | **Confirmed** |
-| Receiving / onboarding gap | Shelf before checkout-ready validation | **Confirmed systemic** |
+| Hypothesis | Result |
+| --- | --- |
+| Scanner / one-terminal malfunction | **Rejected** |
+| Terminal-specific config | **Rejected** |
+| Barcode / catalog mismatch on UPC-A class | **Confirmed** |
+| Receiving before validation | **Confirmed systemic** |
+| Case→unit cost error + missing market check | **Confirmed contributing** (pricing-data problem) |
+| Name-only matching is safe for price/barcode | **Rejected** |
 
 ---
 
@@ -233,15 +287,15 @@ Whenever one of the four registers encountered an unidentified product during th
 
 | Insight | Confidence |
 | --- | --- |
-| Checkout was the first barcode test — too late | High |
-| Parallel live incidents + aisle audit beats reactive-only fixes | High |
-| Separate detection / correction / verification teams prevent self-confirming updates | High |
-| Prioritize UPC-A checkout failures; keep working internal codes | High |
-| Independent POS rescan is the validation gate — not “Excel uploaded” | High |
+| Recognition and pricing integrity share one onboarding gate | High |
+| Physical POS scan is the recognition test; independent rescan is the proof | High |
+| Brand + size + unit/case are required identity fields, not optional | High |
+| Individual pricing beats universal markup for this assortment | High |
+| Three-team separation prevents self-confirming uploads | High |
 
 ### Residual risks
 
-Duplicates · variable-weight · pack/unit · price/cost errors · import failures · historic rows outside prioritized set · correction log may count rows ≠ unique products.
+Duplicates · variable-weight · pack/unit mistakes · wrong variation priced · import errors · historic rows outside prioritized set · correction rows ≠ unique SKUs · competitor match temporary vs permanent governance.
 
 ---
 
@@ -249,53 +303,52 @@ Duplicates · variable-weight · pack/unit · price/cost errors · import failur
 
 | Finding | Decision |
 | --- | --- |
-| Failures follow product across shared catalog | Do not replace POS/scanners as first move |
-| Need real checkout conditions | Team 1 scans physical samples at live POS config |
-| Format mismatch on UPC-A class | Team 2 normalize → Excel → Odoo batch |
-| Upload ≠ proof | Team 3 independent rescan required for pass |
-| Launch still running | Live incident queue + aisle audit in parallel |
+| Shared catalog failures | Keep Odoo; don’t replace POS first |
+| Need real checkout conditions | Team 1 physical POS audit |
+| UPC-A format mismatch | Team 2 normalize → Excel → Odoo |
+| Case cost / no market check | Fold unit-cost + same-UPC/equivalent check into onboarding |
+| Upload ≠ proof | Team 3 independent rescan |
+| Checkout disputes | Temporary visible-competitor match while pipeline fixed |
 
 ### Decision log
 
 | Initial belief | Evidence | Concern | Options | Decision | Consequence |
 | --- | --- | --- | --- | --- | --- |
-| Scanners or one POS might be broken | Same barcodes fail across shared catalog; other products OK | Replace hardware = time, cost, disruption | Replace hardware; manual checkout fixes only; normalize upstream | Keep Odoo + Datalogic; three-team onboarding + normalize + independent verify | Shared recognition recovery without POS replacement; validation moved off the customer-only path |
+| Scanners or one POS might be broken | Same barcodes fail on shared catalog; other products OK | Hardware swap = time/cost/disruption | Replace hardware; manual-only fixes; normalize upstream | Keep Odoo + Datalogic; three-team onboarding with barcode + unit-cost + market check + independent verify | Shared recognition recovery; pricing integrity moved into onboarding; no POS replacement |
 
 ---
 
 # 7. Validation and outcomes
 
-## What happened in the first 72 hours
+## What the evidence supports
 
-- Supported **500+** customer transactions  
-- Audited active assortment via **physical product samples**  
-- Identified failures through **checkout incidents + aisle testing**  
-- Corrected **~2,000 UPC records**  
-- Ran **three-team** correction + independent verification  
-- Confirmed corrected products by **rescanning through actual POS + Datalogic**  
-- Retained Odoo and existing checkout hardware  
+- Individual product prices reviewed rather than one fixed markup  
+- Unit cost needed normalization from case cost  
+- Competitor prices checked using same UPC or equivalent product  
+- Brand and package size matter when selecting a price  
+- Pricing moved upstream into product onboarding  
+- Physical POS validation required after catalog updates  
+- ~2,000 UPC records corrected; 500+ transactions supported; three-team closed loop  
 
-## Metric caveats (critical)
+## What it does **not** prove
 
-| Figure | Means | Does **not** mean |
-| --- | --- | --- |
-| 500+ | Transactions processed in the recovery window | 500 transactions with scan failures |
-| ~2,000 | UPC **records** corrected | Proven unique physical products (unless log is 1:1) |
-| 3,000+ | UPC-A-coded products in relevant catalog | Every product in the store |
-| Independent rescan | Operational pass/fail loop completed | Published first-pass % until X of Y recovered |
+- All ~2,000 corrected records = unique SKUs  
+- All 500+ transactions contained failures  
+- All ~2,000 records were in the first-pass revalidation set  
+- A specific pre/post recognition percentage  
+- The number that passed on first independent rescan  
+- Every February price came from one named competitor and collection date  
 
-**Stronger than inventing a recognition %:** describe the **correction and validation process** with the numbers above.  
-**Next metric to recover:** first-pass revalidation rate — e.g. *“1,920 of 2,000 corrected records successfully retrieved on first revalidation.”*
+## Highest-value remaining metric
 
-## Soft claims
+```text
+First-pass successful rescans
+÷ records included in the first-pass revalidation set
+```
 
-| Claim | Label |
-| --- | --- |
-| Staff three-team operation | Observed operational adoption |
-| Day-3 staff teach staff | Observed transfer |
-| Stall 2–5 min → &lt;30s | Observed range · N soft |
-| Formal usability % | Do not publish |
-| ~100% recognition | Do not publish |
+Preferred once recovered:
+
+> X of Y corrected UPC records were successfully retrieved during the first independent POS rescan.
 
 ---
 
@@ -303,20 +356,18 @@ Duplicates · variable-weight · pack/unit · price/cost errors · import failur
 
 ## Limitations
 
-- Rapid live-launch investigation, not a controlled experiment.  
-- 500+ is a **transaction window** sample, not a failure-count sample.  
-- ~2,000 are **corrected records**, not proven unique SKUs without log confirmation.  
-- First-pass independent-rescan **pass rate** not yet recovered from the validation log.  
-- Timed identification-time sample N not locked.  
-- Full 6,890 export composition awaits **export-date** confirmation.  
-- No formal usability task-success study retained.
+- Rapid live-launch investigation + Feb–Mar pricing method — not a controlled experiment.  
+- Pricing catalog examples show **variation**, not that every variation caused a scan failure.  
+- Temporary competitor matching ≠ permanent pricing system / Competitor Watch.  
+- First-pass revalidation X/Y not yet recovered.  
+- No formal usability study retained.
 
 ## Still TODO
 
-1. [ ] First-pass revalidation: X of ~2,000 (or of unique products if log differs)  
-2. [ ] Timed stall sample N / median  
-3. [ ] Team / cashier headcounts  
-4. [ ] Confirm whether ~2,000 rows = unique physical products  
+1. [ ] First-pass revalidation: X of Y  
+2. [ ] Confirm ~2,000 rows vs unique physical products  
+3. [ ] Timed stall sample N  
+4. [ ] Team / cashier headcounts  
 5. [ ] Confirm Odoo 6,890 export date  
 
 ## Relationship to other documents
@@ -325,5 +376,5 @@ Duplicates · variable-weight · pack/unit · price/cost errors · import failur
 | --- | --- |
 | Portfolio case `/projects/bodega-ops` | Short systems story — use **defensible portfolio claim** |
 | **This appendix** | Research evidence trail |
-| Old 9-page Framer PDF | Superseded for research claims |
-| Lola / CRM / CW | Loyalty and pricing intelligence — not this recovery |
+| Competitor Watch | Ongoing Thursday market intelligence — not the temporary dispute match |
+| Lola / CRM | Loyalty — out of scope here |

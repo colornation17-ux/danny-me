@@ -59,7 +59,7 @@ export const work = [
     domain: 'Service design',
     cover: '/work/bodega-ops/store-floor.jpg',
     blurb:
-      'During the first 72 hours of a live store launch, organized a three-team recovery that combined checkout incidents with an aisle-by-aisle product audit. Corrected ~2,000 UPC records and independently revalidated physical samples through Odoo POS and Datalogic scanners while supporting 500+ customer transactions — no POS replacement.',
+      'During the first 72 hours of a live store launch, organized a three-team recovery that combined checkout incidents with an aisle-by-aisle product audit. Corrected ~2,000 UPC records, introduced unit-cost and market-price verification into onboarding, and independently revalidated physical samples through Odoo POS and Datalogic while supporting 500+ customer transactions — no POS replacement.',
     role: 'Service designer',
     timeline: '72-hour recovery · ~1 week monitoring handoff',
     team: 'Reported to CEO · with store ops',
@@ -77,17 +77,17 @@ export const work = [
       {
         eyebrow: 'Decision 1 · Contain',
         title: 'Keep selling while building the correction queue',
-        body: 'Hours 0–10. Containment first: split checkout into billing, price lookup, and packing so transactions could continue. Cashiers used a short transparency script — observed customer patience when delays were explained as a launch issue, not a measured goodwill metric. Early close supported aisle walks. Live unidentified scans fed the same correction queue the aisle audit would use.',
+        body: 'Hours 0–10. Containment first: split checkout into billing, price lookup, and packing so transactions could continue. Cashiers used a short transparency script — observed customer patience when delays were explained as a launch issue, not a measured goodwill metric. Contested prices could be temporarily matched to visible competitor rates as a trust stabilizer — not the permanent pricing system. Live unidentified scans fed the same correction queue the aisle audit would use.',
       },
       {
         eyebrow: 'Decision 2 · Diagnose',
-        title: 'Shared catalog + barcode mismatch — not four broken scanners',
-        body: 'Cross-terminal tests: the same affected products failed everywhere on one Odoo catalog; other products scanned fine. The relevant assortment included 3,000+ UPC-A-coded products plus intentional internal codes. Failures clustered on missing records, length/leading-zero inconsistency, and physical barcodes that did not match Odoo — not on replacing every internal code. Rejected: postpone opening, replace Odoo, or “fix” one register at a time.',
+        title: 'Recognition mismatch + pricing-data integrity',
+        body: 'Cross-terminal tests: the same affected products failed everywhere on one Odoo catalog. UPC-A records often did not match Datalogic EAN-13 output; internal codes were kept when intentional and working. A second upstream failure compounded checkout risk: case costs entered as unit costs, and sale prices set without a same-UPC or equivalent market check — hard to defend in a dispute. Name alone was unsafe: the same family could span brands and sizes (e.g. Jarritos 1.5 L at different prices; Goya bean variations). Rejected: postpone opening, replace Odoo, or “fix” one register at a time.',
       },
       {
         eyebrow: 'Decision 3 · Three-team fix',
-        title: 'Collect → normalize → independently rescan',
-        body: 'Team 1 collected one physical sample per active product and scanned it at a real POS + Datalogic config. Team 2 normalized failing UPC records with the scanner tool, reviewed name/price/pack/duplicates, wrote Excel, and batch-imported to Odoo — ~2,000 UPC records corrected in 72 hours. Team 3 independently rescanned corrected samples; pass only if Odoo retrieved the physical product. Failures returned to Team 2. Closed loop kept upload from pretending to be validation.',
+        title: 'Collect → normalize barcode, cost, and price → independently rescan',
+        body: 'Team 1 collected one physical sample per active product and scanned it at a real POS + Datalogic config. Team 2 normalized failing UPC records, confirmed brand/size/unit-or-case, normalized case→unit cost, checked same-UPC or equivalent market price, reviewed duplicates, wrote Excel, and batch-imported to Odoo — ~2,000 UPC records corrected in 72 hours. Team 3 independently rescanned corrected samples; pass only if Odoo retrieved the physical product. Failures returned to Team 2.',
         mobileGallery: [
           { src: '/work/bodega-ops/scanner-app-1.jpg', caption: 'Scan & normalize for Datalogic / Odoo' },
           { src: '/work/bodega-ops/scanner-app-2.jpg', caption: 'Excel export for Odoo batch import' },
@@ -95,13 +95,13 @@ export const work = [
       },
       {
         eyebrow: 'Shipped system',
-        title: 'Receiving-before-shelf + tool + verification gate',
-        body: 'Durable path: physical product → POS scan test → normalization and catalog review → Excel → Odoo → independent POS verification → shelf. First usable tool in ~24 hours of focused build inside the 72-hour window. Staff operated the divided workflow; staff taught staff by Day 3. Odoo and existing Datalogic hardware stayed. Residual risks: duplicates, variable-weight, pack/unit, import errors, historic rows outside the prioritized UPC-A set.',
+        title: 'One onboarding gate for scan + cost + price',
+        body: 'Durable path: physical sample → POS scan → identity (brand/size) → Datalogic EAN-13 normalize → unit-cost normalize → market check → Excel → Odoo → independent POS verification → shelf. Prices set individually, not via one universal markup. First usable tool in ~24 hours of focused build inside the 72-hour window. Staff operated the divided workflow; staff taught staff by Day 3. Odoo and Datalogic stayed. Residual risks: duplicates, variable-weight, wrong variation, import errors, historic rows outside the prioritized UPC-A set.',
       },
       {
         eyebrow: 'Results',
         title: 'Process evidence — not an invented recognition %',
-        body: 'In the first 72 hours: supported 500+ transactions (window total — not 500 failed scans); audited via physical samples; corrected ~2,000 UPC records (rows — not automatically unique SKUs); independently revalidated through POS + Datalogic. Prefer that process claim over “~100% recognition.” Stall times on affected lines moved from multi-minute waits toward sub-30-second identification (observed; timed N soft). First-pass revalidation rate (X of ~2,000) remains the next metric to recover from the validation log.',
+        body: 'In the first 72 hours: supported 500+ transactions (window total — not 500 failed scans); audited via physical samples; corrected ~2,000 UPC records (rows — not automatically unique SKUs); introduced unit-cost and market-price verification into onboarding; independently revalidated through POS + Datalogic. Prefer that process claim over “~100% recognition.” First-pass revalidation rate (X of Y) remains the highest-value metric still to recover from the validation log.',
         metrics: [
           { value: '500+', label: 'Transactions in 72h window' },
           { value: '~2,000', label: 'UPC records corrected' },
@@ -112,7 +112,7 @@ export const work = [
       {
         eyebrow: 'Limitations',
         title: 'What this evidence does and does not prove',
-        body: '500+ is transactions processed, not failure count. ~2,000 is corrected records unless the log proves 1:1 unique products. Independent rescan was operationally complete; first-pass pass rate is not yet published. No formal usability study. Full methods, caveats, and residual TODOs are in the research appendix — that file is the evidence artifact.',
+        body: '500+ is transactions processed, not failure count. ~2,000 is corrected records unless the log proves 1:1 unique products. Pricing examples show catalog variation — not that every price variation caused a scan failure. Temporary competitor matching is not Competitor Watch. Independent rescan was operationally complete; first-pass pass rate is not yet published. Full methods and boundaries are in the research appendix.',
       },
     ],
   },
