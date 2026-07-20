@@ -70,24 +70,24 @@ export const work = [
       {
         eyebrow: 'Baseline',
         title: 'Four shared terminals. One broken product path.',
-        body: 'La Bodega is a ~25,000 sq ft hybrid grocery and restaurant serving a working-class Latino neighborhood. During Day-1 launch week, a large share of the active assortment returned “Item Not Found” at checkout. All four registers shared one Odoo product database — grocery and restaurant billing failed together. Staff improvised with manager calls, Miscellaneous charges, and English-name search. Checkout stalls of two to five minutes were common on affected lines. Recognition denominators and timing sample Ns stay in the research appendix until locked from source records.',
+        body: 'La Bodega is a ~25,000 sq ft hybrid grocery and restaurant serving a working-class Latino neighborhood. During Day-1 launch week — customers already at registers — a large share of the active assortment returned “Item Not Found.” All four registers shared one Odoo catalog, so grocery and restaurant billing failed together. Staff improvised with manager calls, Miscellaneous charges, and English-name search. Affected-line stalls of two to five minutes (identification time, not payment) were common. Sample Ns and research questions live in the research appendix.',
         image: '/work/bodega-ops/store-floor.jpg',
         caption: 'La Bodega store floor during launch-week recovery',
       },
       {
         eyebrow: 'Decision 1 · Contain',
         title: 'Stabilize revenue before diagnosing root cause',
-        body: 'Hours 0–10. The first decision was containment, not a permanent fix. Checkout was split into billing, price lookup, and packing so transactions could continue while unknowns were resolved. Staff were reassigned to failure points without adding headcount. Cashiers used a short transparency script so delays were explained as a launch issue rather than silence. The store closed two hours early so the full team could walk aisles and correct barcodes. Outcome of containment: the floor stayed open and a first batch of flagged items was corrected — enough stability to diagnose safely.',
+        body: 'Hours 0–10. Containment first, not a permanent fix. Checkout was split into billing, price lookup, and packing so transactions could continue. Staff were reassigned to failure points without adding headcount. Cashiers used a short transparency script: during floor observation, customers appeared more receptive when delays were explained as a launch issue — an observation, not a measured goodwill outcome. The store closed two hours early so the team could walk aisles and flag barcodes. Enough stability to diagnose safely.',
       },
       {
         eyebrow: 'Decision 2 · Diagnose',
         title: 'Barcode format mismatch — not four broken scanners',
-        body: 'Hours 10–36. Floor audit by aisle, invoice-to-catalog comparison, and hardware checks. Failures followed barcode format, not individual terminals: the same affected items failed everywhere because all registers shared one Odoo catalog. Datalogic scales output EAN-13; codes reaching the catalog did not reliably match that format. Rejected alternatives: postpone opening, replace Odoo, enter every item by hand, or “fix” one register at a time. The controllable fix was upstream normalization into the format Odoo and the scales already agreed on.',
+        body: 'Hours 10–36. Floor audit, invoice-to-catalog comparison, and cross-terminal tests. Failures followed barcode/catalog format, not individual registers: the same affected items failed everywhere on one shared Odoo database. Datalogic scales output EAN-13; codes reaching the catalog often did not match that contract. Rejected: postpone opening, replace Odoo, hand-key every item, or “fix” one register at a time. Hypothesis matrix and confidence labels are in the research appendix.',
       },
       {
         eyebrow: 'Decision 3 · Fix upstream',
         title: 'Scan → trim to Datalogic EAN-13 → Excel → batch import to Odoo',
-        body: 'Hours 36–72. No product reached the shelf without a mandatory onboarding stage. Staff used a scanner tool that reads barcodes, trims them to match Datalogic scales’ EAN-13 output, and saves rows to an Excel sheet for batch import into Odoo. Receiving, Cashier, Stock, and Restaurant each got a named owner and a plain-language checklist. Pricing and naming still needed a human review gate before import — the tool fixed format alignment; governance kept bad records out of the live catalog.',
+        body: 'Hours 36–72. Mandatory onboarding before shelving. Staff used a scanner tool that reads barcodes, trims them to Datalogic EAN-13, writes Excel, and batch-imports to Odoo. Pricing and naming still required a human review gate — the tool fixed format alignment; governance kept bad rows out. One upstream stage addressed connected failure categories (recognition, setup pricing integrity, attribution hygiene, role ownership) without claiming every data or staff error was eliminated. Residual risks: duplicates, variable-weight produce, pack/unit mistakes, import errors, historic catalog outside the validation set.',
         mobileGallery: [
           { src: '/work/bodega-ops/scanner-app-1.jpg', caption: 'Scan & trim to Datalogic EAN-13' },
           { src: '/work/bodega-ops/scanner-app-2.jpg', caption: 'Excel export for Odoo batch import' },
@@ -96,12 +96,12 @@ export const work = [
       {
         eyebrow: 'Shipped system',
         title: 'Service change + scanner tool in the same recovery window',
-        body: 'The scanner tool ran on existing staff devices as a lightweight client: scan, trim to Datalogic EAN-13, write Excel, batch-import to Odoo. Design-to-first-live-use landed inside the 72-hour recovery (about one day of focused build once the onboarding stage was defined). Staff taught staff on Day 3. Weekly governance with leadership kept a short decision log. The durable fix is receiving-before-shelf plus format-aligned imports — not a one-off spreadsheet scrub.',
+        body: 'Lightweight client on existing staff devices: scan, trim, Excel, Odoo import — no POS replacement and no custom account backend for this path. First usable version landed in about one day of focused build inside the 72-hour window; expanded handoff and staff-taught-staff by Day 3. Weekly leadership review kept a short decision log. Durable fix = receiving-before-shelf + format-aligned imports, not a one-off scrub.',
       },
       {
         eyebrow: 'Results',
         title: 'What was measured vs what was observed',
-        body: 'Measured only where samples are defined in the research appendix. Until those Ns are locked: recognition on the active launch assortment is an ops estimate of roughly ~60% workable scans pre-fix, then near-complete success on the revalidated assortment after EAN-13-aligned rows were imported to Odoo — do not treat as “~100%.” Affected checkout lines moved from multi-minute stalls (observed 2–5 min) toward sub-30-second identification (observed). Observed (not instrumented experiments): fewer manager escalations at the register, fewer price disputes once shelf and Odoo matched, and staff completing onboarding without designer presence after Day 3. Hypothesis (not proven attribution): loyalty enrollment at end of transaction strengthened repeat relationship — treat separately from checkout recovery.',
+        body: 'Until appendix sample Ns are locked: recognition on the active launch assortment is an ops estimate of roughly ~60% workable scans pre-fix, then near-complete success on the revalidated assortment after EAN-13-aligned import — not “~100%.” Affected lines moved from multi-minute stalls (observed 2–5 min) toward sub-30-second identification (observed). Observed, not counted: fewer manager escalations and price disputes; staff running onboarding without designer presence after Day 3. Loyalty and retention are out of scope for this case.',
         metrics: [
           { value: '~60% → near-complete', label: 'Recognition (ops est. · active assortment)' },
           { value: '2–5 min → <30s', label: 'Lookup stall (observed)' },
@@ -110,9 +110,9 @@ export const work = [
         ],
       },
       {
-        eyebrow: 'Reflection',
-        title: 'What I’d tighten next time',
-        body: 'The first tool build prioritized getting EAN-13-aligned Excel into Odoo quickly; edge cases like duplicate barcodes, variable-weight produce, and clearer import-error recovery needed a second pass. Upstream process design beat interface polish — checkout was acting as product onboarding. Limitation: this was a live launch recovery, not a controlled study; longer-term metrics need continuous instrumentation, not only launch-week observation.',
+        eyebrow: 'Limitations',
+        title: 'Rapid ops investigation, not a controlled study',
+        body: 'Some baselines may be reconstructed from launch notes. Validation focused on the active assortment, not every historic catalog row. No formal usability error-rate study was retained for the tool. Longer-term adoption needs continuous instrumentation. Full methods, hypothesis matrix, residual risks, and TODO denominators are in the research appendix — that file is the evidence artifact; the case page is the short systems story.',
       },
     ],
   },
