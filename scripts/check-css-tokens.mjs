@@ -23,6 +23,10 @@ const ALLOW = new Set(
     '#ff4d7a',
     '#ecb22e',
     '#2eb67d',
+    '#1a7a52',
+    '#156644',
+    '#25925f',
+    '#595959', // case-study rail inactive (AA)
     '#e01e5a',
     '#ffd166',
     '#fff3a3',

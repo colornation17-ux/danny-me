@@ -21,8 +21,10 @@ export default function ProjectMedia({
 }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [isAudioOn, setIsAudioOn] = useState(false)
+  const [isReelPaused, setIsReelPaused] = useState(false)
   const hasAudio =
     media.kind === 'video' && Boolean(media.audioControl) && Boolean(media.src)
+  const hasVideo = media.kind === 'video' && Boolean(media.src)
 
   useEffect(() => {
     const video = videoRef.current
@@ -31,11 +33,20 @@ export default function ProjectMedia({
     if (!isActive) {
       video.pause()
       video.muted = true
-      if (isAudioOn) setIsAudioOn(false)
+      setIsAudioOn(false)
+      setIsReelPaused(false)
       return undefined
     }
 
-    if (reduceMotion) {
+    video.load()
+    return undefined
+  }, [isActive])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !isActive) return undefined
+
+    if (reduceMotion || isReelPaused) {
       video.pause()
       return undefined
     }
@@ -48,7 +59,7 @@ export default function ProjectMedia({
     return () => {
       video.pause()
     }
-  }, [isActive, reduceMotion, isAudioOn])
+  }, [isActive, reduceMotion, isAudioOn, isReelPaused])
 
   const toggleAudio = useCallback(async () => {
     const video = videoRef.current
@@ -57,12 +68,30 @@ export default function ProjectMedia({
     video.muted = !next
     video.volume = next ? 1 : 0
     try {
-      if (next) await video.play()
+      if (next) {
+        setIsReelPaused(false)
+        await video.play()
+      }
       setIsAudioOn(next)
     } catch {
       video.muted = true
       setIsAudioOn(false)
     }
+  }, [isAudioOn])
+
+  const toggleReelPlayback = useCallback(() => {
+    const video = videoRef.current
+    if (!video) return
+    setIsReelPaused((paused) => {
+      const next = !paused
+      if (next) {
+        video.pause()
+      } else {
+        video.muted = !isAudioOn
+        video.play().catch(() => {})
+      }
+      return next
+    })
   }, [isAudioOn])
 
   const poster =
@@ -74,7 +103,13 @@ export default function ProjectMedia({
       <div
         className="folder-card__image folder-card__image--fill"
         {...(media.kind === 'video' || media.kind === 'motion'
-          ? { role: 'img', 'aria-label': alt }
+          ? {
+              role: 'img',
+              'aria-label':
+                media.kind === 'video'
+                  ? `${alt}, silent`
+                  : alt,
+            }
           : {})}
       >
         {media.kind === 'video' ? (
@@ -87,7 +122,7 @@ export default function ProjectMedia({
             {...(poster ? { poster } : {})}
             aria-hidden="true"
           >
-            <source src={media.src} type="video/mp4" />
+            {isActive ? <source src={media.src} type="video/mp4" /> : null}
           </video>
         ) : media.kind === 'motion' && hasMotionPreview(media.slug) ? (
           <ProjectMotionPreview slug={media.slug} size="card" />
@@ -103,6 +138,32 @@ export default function ProjectMedia({
           <div className="folder-card__placeholder" aria-hidden="true">
             <span>{title}</span>
           </div>
+        )}
+
+        {hasVideo && isActive && !reduceMotion && (
+          <button
+            type="button"
+            className="folder-card__audio folder-card__reel-toggle"
+            onClick={toggleReelPlayback}
+            aria-pressed={!isReelPaused}
+            aria-label={
+              isReelPaused ? `Play ${title} reel` : `Pause ${title} reel`
+            }
+          >
+            <span className="sr-only">
+              {isReelPaused ? 'Play reel' : 'Pause reel'}
+            </span>
+            {isReelPaused ? (
+              <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                <path fill="currentColor" d="M3 1.5v11l9-5.5L3 1.5Z" />
+              </svg>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                <rect x="3" y="2" width="3" height="10" rx="0.5" fill="currentColor" />
+                <rect x="8" y="2" width="3" height="10" rx="0.5" fill="currentColor" />
+              </svg>
+            )}
+          </button>
         )}
 
         {hasAudio && isActive && !reduceMotion && (

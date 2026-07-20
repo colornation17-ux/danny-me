@@ -80,7 +80,7 @@
   display: none !important;
 }
 
-/* Rail fills use project accent */
+/* Rail fills use project accent on the dot only — text stays ink for AA */
 .cs--with-rail .cs-rail__fill,
 .cs--with-rail .cs-rail__step.is-active .cs-rail__dot {
   background: var(--cs-accent);
@@ -88,7 +88,7 @@
 }
 
 .cs--with-rail .cs-rail__step.is-active {
-  color: var(--cs-accent);
+  color: var(--cs-ink);
 }
 
 .cs--with-rail .cs-rail__brand {

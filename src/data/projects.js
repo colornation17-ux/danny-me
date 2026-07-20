@@ -52,7 +52,7 @@ export const work = [
   {
     slug: 'bodega-ops',
     outcome: 'Three-team checkout recovery: ~2,000 UPC records corrected in 72 hours',
-    title: 'Checkout Operations',
+    title: 'Checkout Ops',
     meta: 'La Bodega Supermercado · Shipped 2026',
     status: 'Shipped',
     year: '2026',
@@ -260,7 +260,7 @@ export const lab = [
     slug: 'wing-hmi',
     collection: 'lab',
     outcome: 'Concept HMI prototype validated in a driving simulator',
-    title: 'WING Automotive HMI',
+    title: 'WING HMI',
     meta: 'WING · Concept 2025',
     status: 'Concept',
     year: '2025',
@@ -512,7 +512,7 @@ export const lab = [
 export const play = [
   {
     slug: 'wing-hmi',
-    title: 'WING Automotive HMI',
+    title: 'WING HMI',
     blurb: 'Cluster, HUD, and voice concept validated in a driving simulator (92% task success).',
     meta: 'Concept · 2025',
     href: '/projects/wing-hmi',

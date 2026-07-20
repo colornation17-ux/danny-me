@@ -194,7 +194,7 @@ export function KeyFlowsMotion() {
           <div className="cs-flows-sticky__pin">
             <div className="cs-flows-sticky__layout">
               <div className="cs-flows-sticky__rail">
-                <div className="cs-flows-sticky__steps" role="list" aria-label="Key flow steps">
+                <div className="cs-flows-sticky__steps" role="group" aria-label="Key flow steps">
                   {KEY_FLOW_CLIPS.map((c, i) => {
                     const dist = Math.abs(stepFloat - i);
                     const focus = clamp01(1 - dist);
@@ -203,7 +203,6 @@ export function KeyFlowsMotion() {
                       <button
                         key={c.src}
                         type="button"
-                        role="listitem"
                         className={`cs-flows-sticky__step${on ? " is-active" : ""}`}
                         aria-current={on ? "step" : undefined}
                         aria-label={`Beat ${i + 1}: ${c.kicker} — ${c.headline}`}

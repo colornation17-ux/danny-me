@@ -1,4 +1,4 @@
-﻿import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { play } from '../data/projects'
 import CaseStudyContact from '../components/CaseStudyContact'
 import { projectCaseCtaLabel, projectDestination } from '../lib/projectLinks'
@@ -23,7 +23,7 @@ export default function Play() {
                 </div>
               )}
               <p className="play-card__meta">{item.meta}</p>
-              <h3>{item.title}</h3>
+              <h2>{item.title}</h2>
               <p>{item.blurb}</p>
               {dest && <span className="play-card__cta">{cta}</span>}
             </>

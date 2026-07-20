@@ -1,4 +1,4 @@
-﻿import { SITE } from '../data/site'
+import { SITE } from '../data/site'
 
 export default function Footer() {
   return (
@@ -11,9 +11,11 @@ export default function Footer() {
           <a href={`mailto:${SITE.email}`}>Email</a>
           <a href={SITE.linkedIn} target="_blank" rel="noreferrer">
             LinkedIn
+            <span className="sr-only"> (opens in a new tab)</span>
           </a>
           <a href={SITE.resume} target="_blank" rel="noreferrer">
             Resume
+            <span className="sr-only"> (opens in a new tab)</span>
           </a>
         </div>
       </div>

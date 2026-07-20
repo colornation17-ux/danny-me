@@ -243,7 +243,7 @@ export default function CareerPath() {
   }, [])
 
   return (
-    <div className="career-path" aria-label="Career journey">
+    <section className="career-path" aria-label="Career journey">
       <p className="career-path__eyebrow">The path so far</p>
 
       {/* Always in DOM for screen readers; SVG is decorative on desktop */}
@@ -459,6 +459,6 @@ export default function CareerPath() {
         <circle cx="200" cy="1385" r="5" fill="#111212" />
         <text x="200" y="1405" fontSize="11" fontFamily="DM Sans, sans-serif" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
       </svg>
-    </div>
+    </section>
   )
 }

@@ -538,6 +538,7 @@ export function FlowExplorer() {
           <div
             className="cs-flow-progress cs-flow-explorer__progress"
             role="progressbar"
+            aria-label="Case study section progress"
             aria-valuemin={0}
             aria-valuemax={allSteps.length}
             aria-valuenow={visible.length}

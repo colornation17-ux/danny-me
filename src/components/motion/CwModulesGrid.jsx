@@ -178,7 +178,7 @@ export default function CwModulesGrid() {
       </p>
       <motion.div
         className="cw-modules cw-modules--seven"
-        role="list"
+        role="group"
         aria-labelledby={labelId}
         initial={reduceMotion ? false : 'hidden'}
         whileInView="show"
@@ -196,7 +196,6 @@ export default function CwModulesGrid() {
             <motion.button
               key={mod.id}
               type="button"
-              role="listitem"
               className={`cw-module cw-module--${mod.tone}${isActive ? ' cw-module--active' : ''}`}
               aria-pressed={isActive}
               onClick={() => {

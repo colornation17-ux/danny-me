@@ -63,7 +63,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     primaryAction: primary('View case study', '/projects/lola'),
     secondaryActions: [
       secondary('Try Lola', bySlug['lola'].whatsappUrl),
-      secondary('Open staff app', bySlug['lola'].connectUrl),
+      secondary('Open Lola Connect', bySlug['lola'].connectUrl),
     ],
     tags: ['Conversational UX', 'Service design', 'PWA'],
     media: mediaVideo(
@@ -82,7 +82,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     indexLabel: '02',
     tabLabel: 'Checkout Ops',
     tabLabelCompact: 'Checkout',
-    title: 'Checkout Operations',
+    title: 'Checkout Ops',
     role: 'Service designer',
     organization: 'La Bodega',
     status: 'Shipped',
@@ -120,10 +120,11 @@ export const featuredProjects: FeaturedProjectCard[] = [
     team: 'Solo product design and development',
     date: 'Jun 10, 2026',
     summary:
-      'Turns competitor promotions, store sales, weather and customer behavior into weekly merchandising decisions.',
+      'Turns competitor promos and basket patterns into pricing moves and win-back outreach.',
     metric: {
-      kind: 'Usage signal',
-      value: '2,088 POS visits matched within 7 days (CRM phone → WhatsApp outreach).',
+      kind: 'Pilot signal',
+      value:
+        '102+ customers recaptured in the first two months via basket segmentation.',
     },
     primaryAction: primary('View case study', '/projects/competitor-watch'),
     secondaryActions: [
@@ -173,7 +174,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     slug: 'wing-hmi',
     indexLabel: '05',
     tabLabel: 'HMI',
-    title: 'WING Automotive HMI',
+    title: 'WING HMI',
     role: 'Product designer',
     organization: 'WING',
     status: 'Independent concept',

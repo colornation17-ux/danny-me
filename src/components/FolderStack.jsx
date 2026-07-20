@@ -19,6 +19,14 @@ export const FOLDER_TONES = [
 
 const NAV_H = 74
 
+/** Best-effort ISO date for <time dateTime> from display strings like "Jun 28, 2026". */
+function folderDateTime(raw) {
+  if (!raw) return undefined
+  const parsed = Date.parse(String(raw))
+  if (Number.isNaN(parsed)) return undefined
+  return new Date(parsed).toISOString().slice(0, 10)
+}
+
 function resolveLayoutMode() {
   if (typeof window === 'undefined') return 'desktop'
   const w = window.innerWidth
@@ -50,6 +58,7 @@ function FolderCard({
 }) {
   const mediaVideoRef = useRef(null)
   const [isAudioOn, setIsAudioOn] = useState(false)
+  const [isReelPaused, setIsReelPaused] = useState(false)
   const tone = project.folderFill
     ? { fill: project.folderFill, ink: project.folderInk ?? baseTone.ink }
     : baseTone
@@ -96,21 +105,18 @@ function FolderCard({
     secondaryLinks.push({
       href: project.liveUrl,
       label: liveLabel,
-      aria: `${liveLabel} for ${title} (opens in a new tab)`,
     })
   }
   if (project.whatsappUrl) {
     secondaryLinks.push({
       href: project.whatsappUrl,
       label: project.whatsappCta || `Try ${title}`,
-      aria: `${project.whatsappCta || `Try ${title}`} (opens in a new tab)`,
     })
   }
   if (project.connectUrl) {
     secondaryLinks.push({
       href: project.connectUrl,
-      label: project.connectCta || 'Open staff app',
-      aria: `${project.connectCta || 'Open staff app'} (opens in a new tab)`,
+      label: project.connectCta || 'Open Lola Connect',
     })
   }
   const visibleSecondary = secondaryLinks.slice(0, 2)
@@ -124,11 +130,21 @@ function FolderCard({
     if (!isActive) {
       video.pause()
       video.muted = true
-      if (isAudioOn) setIsAudioOn(false)
+      setIsAudioOn(false)
+      setIsReelPaused(false)
       return undefined
     }
 
-    if (reduceMotion) {
+    // Source just mounted — load once when card becomes active
+    video.load()
+    return undefined
+  }, [isActive])
+
+  useEffect(() => {
+    const video = mediaVideoRef.current
+    if (!video || !isActive) return undefined
+
+    if (reduceMotion || isReelPaused) {
       video.pause()
       return undefined
     }
@@ -139,7 +155,7 @@ function FolderCard({
     return () => {
       video.pause()
     }
-  }, [isActive, reduceMotion, isAudioOn])
+  }, [isActive, reduceMotion, isAudioOn, isReelPaused])
 
   const toggleAudio = useCallback(async () => {
     const video = mediaVideoRef.current
@@ -150,12 +166,30 @@ function FolderCard({
     video.volume = nextAudioState ? 1 : 0
 
     try {
-      if (nextAudioState) await video.play()
+      if (nextAudioState) {
+        setIsReelPaused(false)
+        await video.play()
+      }
       setIsAudioOn(nextAudioState)
     } catch {
       video.muted = true
       setIsAudioOn(false)
     }
+  }, [isAudioOn])
+
+  const toggleReelPlayback = useCallback(() => {
+    const video = mediaVideoRef.current
+    if (!video) return
+    setIsReelPaused((paused) => {
+      const next = !paused
+      if (next) {
+        video.pause()
+      } else {
+        video.muted = !isAudioOn
+        video.play().catch(() => {})
+      }
+      return next
+    })
   }, [isAudioOn])
 
   const CtaEl = isExternalCase ? 'a' : Link
@@ -211,19 +245,26 @@ function FolderCard({
       <div
         id={contentId}
         className="folder-card__content"
+        role="group"
         aria-labelledby={buttonId}
         aria-hidden={reduceMotion ? undefined : !isActive}
         {...(!isActive && !reduceMotion ? { inert: true } : {})}
       >
-        <div className="folder-card__text">
-          <p className="folder-card__progress" aria-hidden="true">
+        {/* Eyebrow outside the 2-col grid — aligns title row with media top */}
+        <div className="folder-card__eyebrow" aria-hidden="true">
+          <span>
             {label} / {String(total).padStart(2, '0')}
-          </p>
-          <div className="folder-card__text-main">
-            <div className="folder-card__date">
-              <span className="folder-card__date-dot" aria-hidden="true" />
-              <span>{project.folderDate || project.year || '2026'}</span>
-            </div>
+          </span>
+          <span className="folder-card__eyebrow-dot" aria-hidden="true">
+            •
+          </span>
+          <time dateTime={folderDateTime(project.folderDate || project.year)}>
+            {project.folderDate || project.year || '2026'}
+          </time>
+        </div>
+
+        <div className="folder-card__main">
+          <div className="folder-card__copy">
             <h3
               className="folder-card__title"
               data-font={project.folderTitleFont || ''}
@@ -231,12 +272,12 @@ function FolderCard({
               {title}
             </h3>
             {(role || company || status) && (
-              <p className="folder-card__meta">
+              <p className="folder-card__role">
                 {[role, company, status].filter(Boolean).join(' · ')}
               </p>
             )}
             {showMetaSub && (
-              <p className="folder-card__meta folder-card__meta--sub">
+              <p className="folder-card__role folder-card__role--sub">
                 {[project.timeline, project.team].filter(Boolean).join(' · ')}
               </p>
             )}
@@ -247,54 +288,83 @@ function FolderCard({
                 ))}
               </div>
             )}
-            <p className="folder-card__blurb">
+            <p className="folder-card__summary">
               {project.blurb || project.outcome}
             </p>
             {project.metric ? (
-              <p className="folder-card__metric">
+              <div className="folder-card__evidence">
                 {project.metricKind ? (
-                  <span className="folder-card__metric-kind">{project.metricKind}</span>
+                  <span className="folder-card__evidence-label">
+                    {project.metricKind}
+                  </span>
                 ) : null}
-                <span className="folder-card__metric-value">{project.metric}</span>
-              </p>
+                <p className="folder-card__evidence-value">{project.metric}</p>
+              </div>
             ) : null}
-          </div>
 
-          <div
-            className={`folder-card__cta-row${
-              isDenseFooter ? ' folder-card__cta-row--split' : ''
-            }`}
-          >
-            <CtaEl {...ctaProps} className="folder-card__cta">
-              <span>{cta}</span>
-              <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
-            </CtaEl>
-            {visibleSecondary.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="folder-card__live"
-                aria-label={link.aria}
-                onClick={(e) => e.stopPropagation()}
+            <div
+              className={`folder-card__actions${
+                isDenseFooter ? ' folder-card__actions--dense' : ''
+              }`}
+            >
+              <CtaEl
+                {...ctaProps}
+                className="folder-card__primary-action folder-card__cta"
               >
-                {link.label} <span aria-hidden="true">↗</span>
-              </a>
-            ))}
+                <span>{cta}</span>
+                <span className="folder-card__cta-arrow" aria-hidden="true">
+                  →
+                </span>
+              </CtaEl>
+              {visibleSecondary.length > 0 ? (
+                <div className="folder-card__secondary-actions">
+                  {visibleSecondary.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="folder-card__secondary-action"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {link.label}{' '}
+                      <span aria-hidden="true">↗</span>
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
 
-        <div className="folder-card__img">
-          <div
-            className={`folder-card__image${
-              project.reelPortrait
-                ? ' folder-card__image--portrait'
-                : ' folder-card__image--fill'
-            }${project.reelObjectPosition === 'top' ? ' folder-card__image--pos-top' : ''}`}
-          >
-            {project.reel && project.reelPortrait ? (
-              <div className="folder-card__portrait-wrap">
+          <div className="folder-card__media folder-card__img">
+            <div
+              className={`folder-card__image${
+                project.reelPortrait
+                  ? ' folder-card__image--portrait'
+                  : ' folder-card__image--fill'
+              }${project.reelObjectPosition === 'top' ? ' folder-card__image--pos-top' : ''}`}
+              {...(project.reel
+                ? { role: 'img', 'aria-label': `${title} product reel, silent` }
+                : {})}
+            >
+              {project.reel && project.reelPortrait ? (
+                <div className="folder-card__portrait-wrap">
+                  <video
+                    ref={mediaVideoRef}
+                    muted
+                    loop
+                    playsInline
+                    preload={isActive ? 'metadata' : 'none'}
+                    {...(poster ? { poster } : {})}
+                    aria-hidden="true"
+                  >
+                    {isActive ? (
+                      <source src={project.reel} type="video/mp4" />
+                    ) : null}
+                  </video>
+                </div>
+              ) : project.reel ? (
                 <video
                   ref={mediaVideoRef}
                   muted
@@ -304,53 +374,71 @@ function FolderCard({
                   {...(poster ? { poster } : {})}
                   aria-hidden="true"
                 >
-                  <source src={project.reel} type="video/mp4" />
+                  {isActive ? (
+                    <source src={project.reel} type="video/mp4" />
+                  ) : null}
                 </video>
-              </div>
-            ) : project.reel ? (
-              <video
-                ref={mediaVideoRef}
-                muted
-                loop
-                playsInline
-                preload={isActive ? 'metadata' : 'none'}
-                {...(poster ? { poster } : {})}
-                aria-hidden="true"
-              >
-                <source src={project.reel} type="video/mp4" />
-              </video>
-            ) : motion ? (
-              <ProjectMotionPreview slug={project.slug} size="card" />
-            ) : project.cover ? (
-              <img
-                src={project.cover}
-                alt={mediaAlt}
-                loading={isInitialCard ? 'eager' : 'lazy'}
-                decoding="async"
-                fetchPriority={isInitialCard ? 'high' : 'auto'}
-              />
-            ) : (
-              <div className="folder-card__placeholder" aria-hidden="true">
-                <span>{title}</span>
-              </div>
-            )}
+              ) : motion ? (
+                <ProjectMotionPreview slug={project.slug} size="card" />
+              ) : project.cover ? (
+                <img
+                  src={project.cover}
+                  alt={mediaAlt}
+                  loading={isInitialCard ? 'eager' : 'lazy'}
+                  decoding="async"
+                  fetchPriority={isInitialCard ? 'high' : 'auto'}
+                />
+              ) : (
+                <div className="folder-card__placeholder" aria-hidden="true">
+                  <span>{title}</span>
+                </div>
+              )}
 
-            {hasAudioControl && isActive && !reduceMotion && (
-              <button
-                type="button"
-                className="folder-card__audio"
-                onClick={toggleAudio}
-                aria-pressed={isAudioOn}
-              >
-                {isAudioOn ? 'Audio on' : 'Play audio'}
-              </button>
-            )}
+              {project.reel && isActive && !reduceMotion && (
+                <button
+                  type="button"
+                  className="folder-card__audio folder-card__reel-toggle"
+                  onClick={toggleReelPlayback}
+                  aria-pressed={!isReelPaused}
+                  aria-label={
+                    isReelPaused
+                      ? `Play ${title} reel`
+                      : `Pause ${title} reel`
+                  }
+                >
+                  <span className="sr-only">
+                    {isReelPaused ? 'Play reel' : 'Pause reel'}
+                  </span>
+                  {isReelPaused ? (
+                    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                      <path fill="currentColor" d="M3 1.5v11l9-5.5L3 1.5Z" />
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+                      <rect x="3" y="2" width="3" height="10" rx="0.5" fill="currentColor" />
+                      <rect x="8" y="2" width="3" height="10" rx="0.5" fill="currentColor" />
+                    </svg>
+                  )}
+                </button>
+              )}
 
-            <div className="folder-card__corners" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
+              {hasAudioControl && isActive && !reduceMotion && (
+                <button
+                  type="button"
+                  className="folder-card__audio"
+                  onClick={toggleAudio}
+                  aria-pressed={isAudioOn}
+                >
+                  {isAudioOn ? 'Audio on' : 'Play audio'}
+                </button>
+              )}
+
+              <div className="folder-card__corners" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
             </div>
           </div>
         </div>

@@ -37,3 +37,6 @@ public/audio/*.mp3
 .env
 .env.*
 !.env.example
+
+.media-archive/
+

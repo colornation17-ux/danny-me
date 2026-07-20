@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { SITE } from '../data/site'
 import { track } from '../lib/track'
@@ -53,6 +53,7 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
   const menuButtonRef = useRef(null)
+  const firstMobileLinkRef = useRef(null)
 
   // Close on outside pointer + Escape; restore focus to hamburger
   useEffect(() => {
@@ -79,6 +80,15 @@ export default function Nav() {
       document.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('keydown', onKeyDown)
     }
+  }, [menuOpen])
+
+  // Move focus into the open menu (first link)
+  useEffect(() => {
+    if (!menuOpen) return undefined
+    const id = requestAnimationFrame(() => {
+      firstMobileLinkRef.current?.focus()
+    })
+    return () => cancelAnimationFrame(id)
   }, [menuOpen])
 
   // Close on route change (link click)
@@ -126,7 +136,7 @@ export default function Nav() {
             href={SITE.linkedIn}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="LinkedIn profile"
+            aria-label="LinkedIn profile (opens in a new tab)"
             onClick={() => track('contact_click', { source: 'nav', channel: 'linkedin' })}
           >
             in
@@ -139,6 +149,7 @@ export default function Nav() {
             onClick={() => track('contact_click', { source: 'nav', channel: 'resume' })}
           >
             Resume
+            <span className="sr-only"> (opens in a new tab)</span>
           </a>
           <Link
             className="nav-cta nav-cta--contact"
@@ -167,60 +178,70 @@ export default function Nav() {
         </div>
       </div>
 
-      {/* Mobile dropdown — only mount when open so links are not focusable while closed */}
-      {menuOpen ? (
-        <div id="mobile-navigation" className="nav-mobile-menu nav-mobile-menu--open">
-          <ul className="nav-mobile-links">
-            {links.map(({ to, label, end, hash, icon }) => (
-              <li key={`mob-${label}`}>
-                {hash ? (
-                  <Link to={to} className="nav-mobile-link" onClick={close}>
-                    <NavIcon type={icon} />
-                    {label}
-                  </Link>
-                ) : (
-                  <NavLink
-                    to={to}
-                    end={end}
-                    className={({ isActive }) =>
-                      `nav-mobile-link${isActive ? ' active' : ''}`
-                    }
-                    onClick={close}
-                  >
-                    <NavIcon type={icon} />
-                    {label}
-                  </NavLink>
-                )}
-              </li>
-            ))}
-            <li>
-              <a
-                className="nav-mobile-link"
-                href={SITE.resume}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={close}
-              >
-                Resume
-              </a>
+      {/* Always in DOM so aria-controls stays valid; hidden when closed */}
+      <div
+        id="mobile-navigation"
+        className={`nav-mobile-menu${menuOpen ? ' nav-mobile-menu--open' : ''}`}
+        hidden={!menuOpen}
+      >
+        <ul className="nav-mobile-links">
+          {links.map(({ to, label, end, hash, icon }, i) => (
+            <li key={`mob-${label}`}>
+              {hash ? (
+                <Link
+                  ref={i === 0 ? firstMobileLinkRef : undefined}
+                  to={to}
+                  className="nav-mobile-link"
+                  onClick={close}
+                >
+                  <NavIcon type={icon} />
+                  {label}
+                </Link>
+              ) : (
+                <NavLink
+                  ref={i === 0 ? firstMobileLinkRef : undefined}
+                  to={to}
+                  end={end}
+                  className={({ isActive }) =>
+                    `nav-mobile-link${isActive ? ' active' : ''}`
+                  }
+                  onClick={close}
+                >
+                  <NavIcon type={icon} />
+                  {label}
+                </NavLink>
+              )}
             </li>
-            <li>
-              <a
-                className="nav-mobile-link"
-                href={SITE.linkedIn}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={close}
-              >
-                <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true">
-                  <path fill="currentColor" d="M4.5 6.5h-3v9h3v-9Zm-1.5-4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 3 2.5ZM7 15.5h3v-5c0-1.1.9-2 2-2s2 .9 2 2v5h3v-5.5a4.5 4.5 0 0 0-4.5-4.5c-1.3 0-2.4.6-3.1 1.5H9.1L9 6.5H7v9Z"/>
-                </svg>
-                LinkedIn
-              </a>
-            </li>
-          </ul>
-        </div>
-      ) : null}
+          ))}
+          <li>
+            <a
+              className="nav-mobile-link"
+              href={SITE.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={close}
+            >
+              Resume
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a
+              className="nav-mobile-link"
+              href={SITE.linkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={close}
+            >
+              <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true">
+                <path fill="currentColor" d="M4.5 6.5h-3v9h3v-9Zm-1.5-4a1.75 1.75 0 1 0 0 3.5A1.75 1.75 0 0 0 3 2.5ZM7 15.5h3v-5c0-1.1.9-2 2-2s2 .9 2 2v5h3v-5.5a4.5 4.5 0 0 0-4.5-4.5c-1.3 0-2.4.6-3.1 1.5H9.1L9 6.5H7v9Z"/>
+              </svg>
+              LinkedIn
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </header>
   )
 }

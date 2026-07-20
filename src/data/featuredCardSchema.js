@@ -55,7 +55,7 @@ export function buildFeaturedSecondaryActions(project, { showLive, liveLabel }) 
   if (typeof project.connectUrl === 'string' && project.connectUrl) {
     links.push({
       href: project.connectUrl,
-      label: String(project.connectCta || 'Open staff app'),
+      label: String(project.connectCta || 'Open Lola Connect'),
       kind: 'connect',
     })
   }

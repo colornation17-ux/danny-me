@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { featured } from '../data/featured'
@@ -72,7 +72,6 @@ export default function Home() {
             '.folio-hero__lead',
             '.folio-btn--contact',
             '.folio-about__body',
-            '.folio-polaroid',
             '.folio-skills li',
             '.folio-work__title',
             '.folio-sticky',
@@ -176,16 +175,6 @@ export default function Home() {
           duration: 0.6,
         })
         guardVisible('.folio-about__body')
-
-        gsap.from('.folio-polaroid', {
-          scrollTrigger: { trigger: '.folio-about__grid', start: 'top 80%' },
-          opacity: 0,
-          y: 24,
-          rotation: 4,
-          stagger: 0.12,
-          duration: 0.55,
-          ease: 'back.out(1.4)',
-        })
 
         // Skills — drop-and-tumble (GSAP SplitText demo physics)
         gsap.from('.folio-skills li', {
