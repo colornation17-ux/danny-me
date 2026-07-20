@@ -284,7 +284,7 @@ export default function Project() {
                 <div><dt>Skills</dt><dd>{project.skills.join(' · ')}</dd></div>
               </dl>
               <div className="cs-actions">
-                <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>Ask about this work</a>
+                <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>Discuss this project</a>
                 {project.evidenceDoc && (
                   <a className="folio-btn" href={project.evidenceDoc} target="_blank" rel="noopener noreferrer">
                     {project.evidenceDocLabel || 'Research appendix'} ↗
@@ -388,7 +388,7 @@ export default function Project() {
           </dl>
           <div className="cs-actions">
             <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>
-              Ask about this work
+              Discuss this project
             </a>
             {project.evidenceDoc && (
               <a className="folio-btn" href={project.evidenceDoc} target="_blank" rel="noopener noreferrer">

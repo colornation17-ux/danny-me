@@ -23,7 +23,7 @@ export function projectNavBlurb(project) {
  * - View case study — open the write-up
  * - View in Lab — concept / play-only
  * - Open live site / Open live app — product URL
- * - Ask about this work — mailto from case heroes
+ * - Discuss this project — mailto from case heroes
  */
 export function projectCaseCtaLabel(project) {
   if (!project) return 'View case study'

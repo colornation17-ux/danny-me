@@ -11,7 +11,7 @@ export const work = [
     domain: 'Product design · Full-stack',
     layer: 'Customer + staff product',
     blurb:
-      'Designed guest WhatsApp flows and built Lola Connect (staff PWA) solo: flyer-grounded deals Q&A, pickup order quote→confirm, reminders, voice, and handoff. ~1,200 weekly loyalty reach; 96.3% of conversations did not require staff escalation; 97.7% first bot replies under 2 min.',
+      'Designed guest WhatsApp flows and built Lola Connect (staff PWA) solo: flyer-grounded deals Q&A, pickup order quote→confirm, reminders, voice, and handoff. ~1,200 weekly loyalty reach; 96.3% of eligible conversations did not require staff escalation (Lola answered on-thread or opened structured tickets; staff handoff for sensitive or unclear asks); 97.7% first bot replies under 2 min.',
     role: 'Design technologist',
     timeline: 'May – Jul 2026',
     team: 'Solo design and development',
@@ -36,7 +36,7 @@ export const work = [
     domain: 'Product design',
     layer: 'Ops + analytics product',
     blurb:
-      'Solo React + Python decision-support product for the Thursday planning call: competitor deals + shelf-vs-floor pricing → weekend playbook → demand buy/hold/reduce bands → RFM visit-rhythm nudges → WhatsApp outreach → POS visit attribution (2,088 visits). Engagement stays with loyalty/Lola; this product owns visibility and proof.',
+      'Solo React + Python decision-support product for the Thursday planning call: competitor deals + shelf-vs-floor pricing → weekend playbook → demand buy/hold/reduce bands → RFM visit-rhythm nudges → WhatsApp outreach → POS visit match (2,088 visits within 7 days via CRM phone). Engagement stays with loyalty/Lola; this product owns visibility and proof.',
     role: 'Design technologist · Solo design & build',
     timeline: 'MVP in ~2 weeks · ongoing production',
     team: 'Solo design & build',
@@ -125,7 +125,7 @@ export const work = [
     year: '2025',
     domain: 'Website redesign',
     blurb:
-      'Redesigned the CODE19 digital platform for fans, sponsors, engineers, and drivers: UI/UX, content strategy, and SEO. Measured: 1,500+ new monthly sessions; direct avg 3.6 min; organic bounce −36% (to 58.5%). Concurrent: seed rose $150K→$500K with stronger brand presence — correlation, not sole attribution.',
+      'Redesigned the CODE19 digital platform for fans, sponsors, engineers, and drivers: UI/UX, content strategy, and SEO. Measured: 1,500+ new monthly sessions; direct avg 3.6 min; organic bounce −36% (to 58.5%).',
     role: 'UI · UX · Content strategy · SEO',
     timeline: '3 months · Oct – Dec 2024',
     team: 'With CODE19',
@@ -187,14 +187,18 @@ export const work = [
       },
       {
         eyebrow: 'Outcomes',
-        title: 'What was measured vs what was concurrent',
-        body: 'Measured after redesign: SEO and optimized direct channels drove 1,500+ new monthly sessions; direct traffic averaged 3.6-minute sessions; organic averaged 96 seconds; organic bounce rate fell 36% to 58.5%. Concurrent (not sole attribution): elevating digital brand presence supported seed funding rising from $150K to $500K — treat funding as a credibility signal alongside the site work, not a website A/B result.',
+        title: 'What was measured',
+        body: 'Measured after redesign: SEO and optimized direct channels drove 1,500+ new monthly sessions; direct traffic averaged 3.6-minute sessions; organic averaged 96 seconds; organic bounce rate fell 36% to 58.5%.',
         metrics: [
           { value: '1,500+', label: 'New monthly sessions' },
           { value: '3.6 min', label: 'Avg. direct session' },
           { value: '−36%', label: 'Organic bounce (to 58.5%)' },
-          { value: '$150K → $500K', label: 'Seed (concurrent)' },
         ],
+      },
+      {
+        eyebrow: 'Business context',
+        title: 'Funding moved with the broader brand system',
+        body: 'During the same growth period, seed commitments rose from $150K to $500K. The website redesign contributed to that story alongside branding, ads, and revenue work — it was not the sole driver, and no causal attribution is claimed for design alone.',
       },
       {
         eyebrow: 'What I learned',

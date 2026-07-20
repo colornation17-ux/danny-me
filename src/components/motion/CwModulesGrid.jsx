@@ -80,7 +80,7 @@ const MODULES = [
     n: '07',
     title: 'WhatsApp attribution',
     body: 'Did the outreach work? Match each message to a POS visit within seven days.',
-    metricLabel: 'Attributed visits',
+    metricLabel: '7-day POS matches',
     metricDisplay: '2,088',
     metric: 66,
     tags: ['8,369 sent', '65.9% read', '7-day match'],

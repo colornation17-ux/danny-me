@@ -111,11 +111,11 @@ export const CW_CLIPS = [
     label: 'WhatsApp attribution',
     job: 'Did the outreach work?',
     problem:
-      'Every message matched to a POS visit within seven days, proof on the channel the store already runs.',
+      'Match outreach to POS visits within seven days — proof on the channel the store already runs.',
     signature: '2,088',
-    signatureLabel: 'Attributed visits',
+    signatureLabel: '7-day POS matches',
     proof: ['8,369 sent', '65.9% read', '7-day match'],
-    caption: 'WhatsApp attribution: CRM phone → POS visit, not vanity sends.',
+    caption: 'WhatsApp match: CRM phone → POS visit within 7 days, not vanity sends.',
     decision:
       'Attribution is the product: close the loop with loyalty/Lola outreach, don’t rebuild CRM from scratch.',
   },

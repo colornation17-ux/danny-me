@@ -77,12 +77,12 @@ const DECISIONS = [
   },
   {
     title: 'Attribution over send counts',
-    body: 'WhatsApp is the channel the store already runs. The product is CRM phone → POS visit within seven days, not vanity campaign metrics.',
+    body: 'WhatsApp is the channel the store already runs. Proof is CRM phone → POS visit within seven days (2,088 matched visits) — not vanity send counts.',
   },
 ]
 
 const IMPACT = [
-  { value: '2,088', label: 'Attributed POS visits' },
+  { value: '2,088', label: 'POS visits matched in 7 days' },
   { value: '65.9%', label: 'WhatsApp read rate' },
   { value: '277', label: 'Shoppers due to return' },
   { value: '144', label: 'Live ads indexed' },
