@@ -47,7 +47,7 @@
   z-index: 40;
   backdrop-filter: blur(14px);
   background: color-mix(in srgb, var(--bg) 82%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  border-bottom: 0;
 }
 
 .site-nav__inner {
@@ -173,7 +173,7 @@
 /* ── Folio nav overrides (danny-me) ── */
 
 .site-nav--folio {
-  border-bottom: 1px solid var(--folio-line);
+  border-bottom: 0;
   background: #ffffff;
 }
 
