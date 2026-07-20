@@ -70,7 +70,7 @@ export const work = [
       {
         eyebrow: 'Baseline',
         title: 'Four shared terminals. One broken product path.',
-        body: 'La Bodega is a ~25,000 sq ft hybrid grocery and restaurant serving a working-class Latino neighborhood. During launch week, a large share of the active assortment returned “Item Not Found” at checkout. All four registers shared one Odoo product database — grocery and restaurant billing failed together. Staff improvised with manager calls, Miscellaneous charges, and English-name search. Checkout stalls of two to five minutes were common on affected lines. Catalog denominators and failure samples are locked in the research appendix.',
+        body: 'La Bodega is a ~25,000 sq ft hybrid grocery and restaurant serving a working-class Latino neighborhood. During Day-1 launch week, a large share of the active assortment returned “Item Not Found” at checkout. All four registers shared one Odoo product database — grocery and restaurant billing failed together. Staff improvised with manager calls, Miscellaneous charges, and English-name search. Checkout stalls of two to five minutes were common on affected lines. Recognition denominators and timing sample Ns stay in the research appendix until locked from source records.',
         image: '/work/bodega-ops/store-floor.jpg',
         caption: 'La Bodega store floor during launch-week recovery',
       },
@@ -101,9 +101,9 @@ export const work = [
       {
         eyebrow: 'Results',
         title: 'What was measured vs what was observed',
-        body: 'Measured (define samples in the research appendix before treating as absolute): recognition on the active launch assortment moved from roughly 60% workable scans to near-complete success in post-fix validation once EAN-13-aligned rows were imported to Odoo; affected checkout lines moved from multi-minute stalls toward sub-30-second identification. Observed (not instrumented experiments): fewer manager escalations at the register, fewer price disputes once shelf and Odoo matched, and staff completing onboarding without designer presence after Day 3. Hypothesis (not proven attribution): loyalty enrollment at end of transaction strengthened repeat relationship — treat separately from checkout recovery.',
+        body: 'Measured only where samples are defined in the research appendix. Until those Ns are locked: recognition on the active launch assortment is an ops estimate of roughly ~60% workable scans pre-fix, then near-complete success on the revalidated assortment after EAN-13-aligned rows were imported to Odoo — do not treat as “~100%.” Affected checkout lines moved from multi-minute stalls (observed 2–5 min) toward sub-30-second identification (observed). Observed (not instrumented experiments): fewer manager escalations at the register, fewer price disputes once shelf and Odoo matched, and staff completing onboarding without designer presence after Day 3. Hypothesis (not proven attribution): loyalty enrollment at end of transaction strengthened repeat relationship — treat separately from checkout recovery.',
         metrics: [
-          { value: '~60% → validated', label: 'Recognition (active assortment)' },
+          { value: '~60% → near-complete', label: 'Recognition (ops est. · active assortment)' },
           { value: '2–5 min → <30s', label: 'Lookup stall (observed)' },
           { value: '72 hrs', label: 'Contain → diagnose → ship' },
           { value: '~24 hrs', label: 'Tool: design to first live use' },

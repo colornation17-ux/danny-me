@@ -44,12 +44,12 @@ My foundation in Human-Machine Interaction was built at Indiana University (HCI)
 ### 01 — La Bodega
 
 - **Title:** La Bodega  
-- **Subtitle / one-liner:** Stabilized a live retail launch — SKU recognition 60% → 100%, checkout 5 min → &lt;30 sec.  
+- **Subtitle / one-liner:** Led Day-1 launch-week checkout recovery on Odoo — Datalogic EAN-13 trim → Excel → batch import; stalls 2–5 min → &lt;30s (observed).  
 - **Date:** 2026  
 - **Tags:** Service Design · Systems · Operational Recovery  
 - **Role:** Service designer  
 - **Body (short):** Inserted a missing product-onboarding stage and barcode normalization pipeline so grocery + restaurant lanes stopped failing on day one.  
-- **Metrics:** 60%→100% SKU · &lt;30s checkout · 72 hrs to stabilize  
+- **Metrics:** ~60% → near-complete recognition (ops est.) · &lt;30s lookup (observed) · 72 hrs contain→ship — lock Ns in research appendix before claiming 100%  
 - **Link:** (case study page or internal)  
 - **Image:** use La Bodega / ops screenshots from current portfolio  
 
