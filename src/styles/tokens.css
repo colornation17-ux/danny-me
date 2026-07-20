@@ -1,5 +1,10 @@
+/**
+ * Tokens kept for the optional project-cards package.
+ * Do NOT remap .folder-stack / --folder-tab-w here — that override
+ * (loaded after index.css) clipped tabs and broke the sticky fill.
+ */
+
 :root {
-  /* Project-card system tokens (portfolio component system) */
   --pc-space-1: 0.25rem;
   --pc-space-2: 0.5rem;
   --pc-space-3: 0.75rem;
@@ -18,86 +23,4 @@
 
   --pc-focus-width: 3px;
   --pc-focus-offset: 4px;
-
-  --pc-card-pad-inline: clamp(1.25rem, 3vw, 3rem);
-  --pc-card-pad-block: clamp(1.5rem, 4vw, 3.5rem);
-
-  /* Default / tablet-ish; desktop override fits six tabs without clipping 06 */
-  --pc-tab-w: 5.75rem;
-  --pc-tab-h: 2.55rem;
-  --pc-tab-slope-w: 40px;
-  --pc-nav-h: 74px;
-}
-
-@media (max-width: 1199px) {
-  :root {
-    --pc-tab-w: 4.5rem;
-    --pc-tab-h: 2.35rem;
-    --pc-tab-slope-w: 32px;
-    --pc-card-pad-inline: 1.75rem;
-    --pc-card-pad-block: 2rem;
-  }
-}
-
-@media (max-width: 767px) {
-  :root {
-    --pc-tab-w: 3.25rem;
-    --pc-tab-h: 2.2rem;
-    --pc-tab-slope-w: 24px;
-    --pc-card-pad-inline: 1.25rem;
-    --pc-card-pad-block: 1.5rem;
-  }
-}
-
-/* Bridge folder-stack vars → project-card tokens (single source of truth) */
-.folder-stack {
-  --folder-tab-w: var(--pc-tab-w);
-  --folder-tab-h: var(--pc-tab-h);
-  --folder-nav-h: var(--pc-nav-h);
-  --card-pad-inline: var(--pc-card-pad-inline);
-  --card-pad-block: var(--pc-card-pad-block);
-  --folder-space-1: var(--pc-space-1);
-  --folder-space-2: var(--pc-space-2);
-  --folder-space-3: var(--pc-space-3);
-  --folder-space-4: var(--pc-space-4);
-  --folder-space-5: var(--pc-space-5);
-  max-width: var(--pc-card-max);
-  width: min(100%, var(--pc-card-max));
-}
-
-/* Desktop: fit six tabs; keep labels readable */
-.folder-stack--desktop {
-  --folder-tab-w: clamp(4.25rem, 8vw, 7rem);
-  --pc-tab-slope-w: 32px;
-}
-
-.folder-stack--desktop .folder-card__tab-slope {
-  width: var(--pc-tab-slope-w);
-}
-
-.folder-stack--desktop .folder-card__tab {
-  gap: 0.28rem;
-  padding: 0 0.55rem;
-  font-size: clamp(0.68rem, 1.05vw, 0.8rem);
-}
-
-.folder-stack--desktop .folder-card__tab-num {
-  font-size: 0.92em;
-}
-
-.folder-card__tab:focus-visible,
-.folder-card__cta:focus-visible,
-.folder-card__live:focus-visible,
-.folder-card__secondary-link:focus-visible,
-.folder-card__more summary:focus-visible,
-.folder-card__audio:focus-visible {
-  outline: var(--pc-focus-width) solid currentColor;
-  outline-offset: var(--pc-focus-offset);
-  border-radius: var(--pc-radius-sm);
-}
-
-.folder-card__image,
-.folder-card__image--fill,
-.folder-card__image--portrait {
-  aspect-ratio: var(--pc-media-ratio);
 }

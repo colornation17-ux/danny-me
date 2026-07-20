@@ -6590,8 +6590,8 @@ body:has(.folio--fullgrid) .site-footer {
   }
 }
 
-.folder-stack--desktop .folder-sticky {
-  border-radius: 0;
+.folder-stack--desktop {
+  --folder-tab-w: clamp(5.5rem, 11vw, 8.75rem);
 }
 
 /* Single sticky viewport holding all cards at the same position */
@@ -6601,6 +6601,10 @@ body:has(.folio--fullgrid) .site-footer {
   height: calc(var(--folder-vh) - var(--folder-nav-h));
   overflow: hidden;
   background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
 }
 
 .folder-card {
@@ -6610,10 +6614,8 @@ body:has(.folio--fullgrid) .site-footer {
   flex-direction: column;
   background: transparent;
   color: var(--folder-ink);
+  will-change: transform;
   z-index: calc(var(--folder-index) + 1);
-  /* Avoid permanent layer promotion — causes white hairline seams on the grid */
-  will-change: auto;
-  backface-visibility: hidden;
 }
 
 /* Past cards sit at position 0 — hidden behind the active card.
@@ -6632,7 +6634,6 @@ body:has(.folio--fullgrid) .site-footer {
    Do NOT disable pointer-events on the whole article — tabs must stay reachable. */
 .folder-card--future {
   transform: translateY(105%);
-  will-change: transform;
 }
 
 /* Inactive bodies can't be clicked / focused — tabs in chrome stay interactive */
@@ -6710,33 +6711,9 @@ body:has(.folio--fullgrid) .site-footer {
   box-shadow: 0 2px 0 0 var(--folder-fill);
 }
 
-/* Past cards: only the tab button should show through active indent holes.
-   Hide slope/ledge so a previous project’s fill can’t peek as a color band. */
-.folder-card--past .folder-card__tab-slope,
-.folder-card--past .folder-card__ledge {
-  visibility: hidden;
-}
-
-.folder-card--past .folder-card__indent {
-  visibility: hidden;
-}
-
-
-.folder-card__badge {
-  display: inline-flex;
-  align-items: center;
-  margin-left: 0.35rem;
-  padding: 0.12rem 0.45rem;
-  border: 1.5px solid color-mix(in srgb, var(--folder-ink) 55%, transparent);
-  border-radius: 999px;
-  font-family: var(--font-sans);
-  font-size: max(var(--text-meta-xs), 0.6875rem);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  line-height: 1.2;
-  color: var(--folder-ink);
-  background: color-mix(in srgb, var(--folder-ink) 12%, transparent);
+.folder-card__tab:hover {
+  outline: none;
+  filter: brightness(1.04);
 }
 
 .folder-card__tab:focus-visible,
@@ -6827,9 +6804,10 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__content {
     grid-template-columns: minmax(14rem, 0.9fr) minmax(18rem, 1.4fr);
     align-items: stretch;
-    /* Fill sticky height so the grid never reads as a white “border” around the card */
+    /* Fill the sticky viewport — never hug content (that left an empty paper “box”) */
     flex: 1 1 auto;
     min-height: 0;
+    height: 100%;
   }
 
   .folder-card__text {

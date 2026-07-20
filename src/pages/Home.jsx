@@ -1,8 +1,8 @@
 ﻿import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { featuredProjects } from '../data/featuredProjects'
-import { ProjectStack } from '../components/project-cards'
+import { featured } from '../data/featured'
+import FolderStack from '../components/FolderStack'
 import SpringWire from '../components/SpringWire'
 import CareerPath from '../components/CareerPath'
 import CaseStudyContact from '../components/CaseStudyContact'
@@ -153,7 +153,7 @@ export default function Home() {
           )
 
         // ── Scroll reveals — never leave sections invisible after ST refresh ──
-        // ProjectStack scroll height used to strand gsap.from / pre-hidden sets.
+        // Folder stack scroll height can strand gsap.from / pre-hidden sets.
         // Pattern: hide → reveal on enter OR if already in view → hard failsafe.
         const safeScrollReveal = (targets, trigger, opts = {}) => {
           const els = gsap.utils.toArray(targets)
@@ -453,7 +453,7 @@ export default function Home() {
           </p>
         </div>
 
-        <ProjectStack projects={featuredProjects} />
+        <FolderStack projects={featured} />
       </section>
 
       {/* ── Recommendations ─────────────────────────────────────────── */}
