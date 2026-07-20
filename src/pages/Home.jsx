@@ -395,7 +395,7 @@ export default function Home() {
         </a>
       </section>
 
-      <SpringWire className="folio-spring" seed={2} radio invite />
+      <SpringWire className="folio-spring" seed={2} radio />
 
       <section className="folio-about" id="about" aria-labelledby="about-hello-heading">
 

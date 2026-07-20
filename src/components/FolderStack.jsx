@@ -319,8 +319,6 @@ function FolderCard({
               >
                 <source src={project.reel} type="video/mp4" />
               </video>
-            ) : motion ? (
-              <ProjectMotionPreview slug={project.slug} size="card" />
             ) : project.cover ? (
               <img
                 src={project.cover}
@@ -329,6 +327,8 @@ function FolderCard({
                 decoding="async"
                 fetchPriority={isInitialCard ? 'high' : 'auto'}
               />
+            ) : motion ? (
+              <ProjectMotionPreview slug={project.slug} size="card" />
             ) : (
               <div className="folder-card__placeholder" aria-hidden="true">
                 <span>{title}</span>

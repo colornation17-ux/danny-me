@@ -239,10 +239,16 @@ export const featuredProjects: FeaturedProjectCard[] = [
 })
 
 /**
- * Homepage / pager compatibility layer — spreads case-study records onto card fields.
+ * Homepage / FolderStack compatibility layer — spreads case-study records onto card fields.
+ * FolderStack reads `reel` / `cover` / `reelPoster`, NOT `card.media`. Mapping those
+ * is required or Lola/CW fall through to the wrong motion-preview mocks.
  */
 export const featured = featuredProjects.map((card) => {
   const base = bySlug[card.slug] || {}
+  const media = card.media
+  const isVideo = media?.kind === 'video'
+  const isImage = media?.kind === 'image'
+
   return {
     ...base,
     slug: card.slug,
@@ -267,8 +273,24 @@ export const featured = featuredProjects.map((card) => {
     caseCta: card.primaryAction.label,
     liveCta: card.secondaryActions.find((a) => /live|visit/i.test(a.label))
       ?.label,
+    whatsappCta: card.secondaryActions.find((a) =>
+      /try lola|whatsapp/i.test(a.label),
+    )?.label,
+    connectCta: card.secondaryActions.find((a) =>
+      /staff|connect/i.test(a.label),
+    )?.label,
     variant: card.variant,
-    // Card system view model
+    // Media — must win over base + motion-preview fallback
+    reel: isVideo ? media.src : undefined,
+    reelPoster: isVideo ? media.poster || undefined : undefined,
+    reelAudioControl: isVideo ? Boolean(media.audioControl) : undefined,
+    reelPortrait: undefined,
+    cover: isImage
+      ? media.src
+      : isVideo
+        ? media.poster || base.cover
+        : base.cover,
+    coverAlt: media?.alt || base.coverAlt,
     card,
   }
 })
