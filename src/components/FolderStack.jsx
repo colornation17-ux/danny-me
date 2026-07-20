@@ -237,15 +237,16 @@ function FolderCard({
               </p>
             )}
             <p className="folder-card__blurb">
-              {project.outcome || project.blurb}
+              {project.blurb || project.outcome}
             </p>
-            {project.connectSpine?.length > 0 && (
-              <ul className="folder-card__spine" aria-label="Lola Connect navigation">
-                {project.connectSpine.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            )}
+            {project.metric ? (
+              <p className="folder-card__metric">
+                {project.metricKind ? (
+                  <span className="folder-card__metric-kind">{project.metricKind}</span>
+                ) : null}
+                <span className="folder-card__metric-value">{project.metric}</span>
+              </p>
+            ) : null}
           </div>
 
           <div
@@ -277,10 +278,10 @@ function FolderCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="folder-card__live folder-card__live--secondary"
-                aria-label={`Try ${title} on WhatsApp (opens in a new tab)`}
+                aria-label={`${project.whatsappCta || `Try ${title}`} (opens in a new tab)`}
                 onClick={(e) => e.stopPropagation()}
               >
-                Try on WhatsApp <span aria-hidden="true">↗</span>
+                {project.whatsappCta || 'Try Lola'} <span aria-hidden="true">↗</span>
               </a>
             )}
             {project.connectUrl && (
@@ -289,10 +290,10 @@ function FolderCard({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="folder-card__live folder-card__live--secondary"
-                aria-label={`${project.connectCta || 'Lola Connect'} (opens in a new tab)`}
+                aria-label={`${project.connectCta || 'Open staff app'} (opens in a new tab)`}
                 onClick={(e) => e.stopPropagation()}
               >
-                {project.connectCta || 'Lola Connect'} <span aria-hidden="true">↗</span>
+                {project.connectCta || 'Open staff app'} <span aria-hidden="true">↗</span>
               </a>
             )}
           </div>
