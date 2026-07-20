@@ -1969,7 +1969,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   width: 100%;
   height: min(78vh, 52rem);
   height: min(78dvh, 52rem);
-  background: var(--tone-navy, #0b1220);
+  background: var(--tone-navy);
   overflow: hidden;
   isolation: isolate;
 }
@@ -2013,7 +2013,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
   height: 100%;
   border: none;
   display: block;
-  background: var(--tone-navy, #0b1220);
+  background: var(--tone-navy);
   /* Helps iOS not steal all page scroll forever */
   touch-action: manipulation;
 }

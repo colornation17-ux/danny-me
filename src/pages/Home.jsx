@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SITE } from '../data/site'
-import { featured } from '../data/featured'
-import FolderStack from '../components/FolderStack'
+import { featuredProjects } from '../data/featuredProjects'
+import { ProjectStack } from '../components/project-cards'
 import SpringWire from '../components/SpringWire'
 import CareerPath from '../components/CareerPath'
 import CaseStudyContact from '../components/CaseStudyContact'
@@ -194,7 +194,7 @@ export default function Home() {
         })
 
         // ── Contact section ─────────────────────────────────────────────
-        // Do not use gsap.from({ opacity: 0 }) here. FolderStack pin/refresh
+        // Do not use gsap.from({ opacity: 0 }) here. ProjectStack pin/refresh
         // can prevent the tween from playing and leave the copy invisible
         // (eyebrow + CTA visible, headline/body gone). Animate only on enter
         // and force-visible if the section is already past the start line.
@@ -409,7 +409,7 @@ export default function Home() {
           </p>
         </div>
 
-        <FolderStack projects={featured} />
+        <ProjectStack projects={featuredProjects} />
       </section>
 
       {/* ── Recommendations ─────────────────────────────────────────── */}

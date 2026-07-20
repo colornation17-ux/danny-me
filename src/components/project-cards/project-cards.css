@@ -1,0 +1,21 @@
+/**
+ * Project-card system layout notes + mode helpers.
+ * Visual chrome still uses folder-* BEM in index.css; tokens bridge in tokens.css.
+ */
+
+.project-stack[data-layout='mobile'] .folder-card__img {
+  order: -1;
+}
+
+@media (max-width: 479px) {
+  .project-stack[data-layout='mobile'] .folder-card__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-stack .folder-card {
+    transition: none !important;
+  }
+}
