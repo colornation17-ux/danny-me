@@ -5593,8 +5593,8 @@ body:has(.folio--fullgrid) .app {
   position: relative;
   width: 100%;
   margin: 0;
-  /* Compact hit band — still pullable without a huge empty strip */
-  padding: 0.45rem 0;
+  /* Tall hit band — hover anywhere along the line pulls it */
+  padding: 0.85rem 0;
   background-color: var(--folio-paper, var(--white));
   background-image: none;
   touch-action: none;
@@ -6146,7 +6146,7 @@ body.game-embed .site-radio {
   max-width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: 0;
-  margin-block: 0;
+  margin-block: 0.15rem;
 }
 
 /* Kill leftover paper tint seams on the full-grid home */
@@ -6668,6 +6668,19 @@ body:has(.folio--fullgrid) .site-footer {
   pointer-events: auto;
 }
 
+/*
+ * Desktop: never collapse inactive panels with display:none.
+ * Keep flex shell measurements; hide visually + inert (set in JSX).
+ */
+.folder-stack--desktop .folder-card__content--inactive {
+  visibility: hidden;
+}
+
+.folder-stack--desktop .folder-card__content[hidden] {
+  display: grid !important;
+  visibility: hidden;
+}
+
 .folder-card__chrome {
   position: relative;
   z-index: 2;
@@ -6984,9 +6997,14 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card__text {
   display: grid;
-  grid-template-rows: auto auto auto auto;
+  grid-template-rows:
+    auto
+    minmax(5rem, 1fr)
+    minmax(2.75rem, auto)
+    auto
+    auto;
   align-content: start;
-  gap: 0.85rem;
+  gap: 0.65rem;
   padding: 0;
   min-width: 0;
 }
@@ -7003,6 +7021,15 @@ body:has(.folio--fullgrid) .site-footer {
   flex-direction: column;
   gap: var(--folder-space-1, 0.375rem);
   margin-bottom: 0;
+}
+
+.folder-card__metric-slot {
+  min-block-size: 2.75rem;
+}
+
+.folder-card__metric-slot--empty {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .folder-stack--desktop .folder-card__blurb {
@@ -7094,8 +7121,8 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__metric {
   display: grid;
   gap: 0.15rem;
-  margin: var(--folder-space-2, 0.75rem) 0 0;
-  min-height: 0;
+  margin: 0;
+  min-height: 2.75rem;
   max-width: 36ch;
   font-family: var(--font-sans);
   font-size: max(var(--text-meta), 0.8125rem);
@@ -7106,7 +7133,8 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__metric--empty {
-  display: none;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .folder-card__metric-kind {

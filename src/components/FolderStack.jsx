@@ -22,6 +22,13 @@ export const FOLDER_TONES = [
 // Nav height in px — default; runtime measurement syncs --folder-nav-h (measured, not layout tab width)
 const NAV_H = 74
 
+/** Desktop folder stack only when both dimensions support it (no undefined 680–719 band). */
+function resolveLayoutMode(width, height) {
+  if (width >= 1200 && height >= 720) return 'desktop'
+  if (width < 768) return 'mobile'
+  return 'tablet'
+}
+
 function FolderCard({
   project,
   index,
@@ -63,6 +70,9 @@ function FolderCard({
   const triggerId = `project-trigger-${project.slug}`
   const poster = project.reelPoster || project.cover || project.hero || undefined
   const compactCtas = layoutMode !== 'desktop'
+  // `hidden` only for tablet/mobile accordion — desktop keeps shell measurements
+  const hidePanel =
+    layoutMode !== 'desktop' && !isActive && !reduceMotion
 
   useEffect(() => {
     const video = mediaVideoRef.current
@@ -136,6 +146,7 @@ function FolderCard({
       className={`folder-card folder-card--${cardState}${project.variant ? ` folder-card--${project.variant}` : ''}`}
       id={`project-${project.slug}`}
       data-index={index}
+      data-state={cardState}
       style={{
         '--folder-fill': tone.fill,
         '--folder-ink': tone.ink,
@@ -165,13 +176,15 @@ function FolderCard({
 
       <div
         id={panelId}
-        className="folder-card__content"
+        className={`folder-card__content${isActive ? '' : ' folder-card__content--inactive'}`}
         role="region"
         aria-labelledby={triggerId}
-        hidden={!(isActive || reduceMotion)}
+        hidden={hidePanel}
+        aria-hidden={!isActive}
+        inert={!isActive ? true : undefined}
       >
         <div className="folder-card__text">
-          <div className="folder-card__text-head">
+          <div className="folder-card__heading folder-card__text-head">
             <p className="folder-card__progress" aria-hidden="true">
               {label} / {String(total).padStart(2, '0')}
             </p>
@@ -181,7 +194,7 @@ function FolderCard({
             </p>
           </div>
 
-          <div className="folder-card__text-main">
+          <div className="folder-card__summary folder-card__text-main">
             <h3
               className="folder-card__title"
               data-font={project.folderTitleFont || ''}
@@ -201,6 +214,11 @@ function FolderCard({
             <p className="folder-card__blurb">
               {project.outcome || project.blurb}
             </p>
+          </div>
+
+          <div
+            className={`folder-card__metric-slot${project.metric ? '' : ' folder-card__metric-slot--empty'}`}
+          >
             <p
               className={`folder-card__metric${project.metric ? '' : ' folder-card__metric--empty'}`}
               {...(!project.metric ? { 'aria-hidden': true } : {})}
@@ -274,15 +292,13 @@ function FolderCard({
             )}
           </div>
 
-          {tags.length > 0 && (
-            <ul className="folder-card__tags" aria-label="Project skills">
-              {tags.map((tag) => (
-                <li className="folder-card__tag" key={tag}>
-                  <span className="folder-card__tag-label">{tag}</span>
-                </li>
-              ))}
-            </ul>
-          )}
+          <ul className="folder-card__tags" aria-label="Project skills">
+            {tags.map((tag) => (
+              <li className="folder-card__tag" key={tag}>
+                <span className="folder-card__tag-label">{tag}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="folder-card__img">
@@ -363,23 +379,23 @@ function FolderCard({
  * under the active card so their tab buttons show through indent holes,
  * building the full tab row naturally. Future cards wait off-screen below.
  *
- * Disclosure buttons (aria-expanded / aria-controls) — not APG tabs —
- * so every project selector stays in the normal keyboard sequence.
+ * Desktop: scroll owns active state; tab clicks only scroll to that segment.
+ * Tablet/mobile: selectedIndex owns active state (disclosure / accordion).
  */
 export default function FolderStack({ projects }) {
   const stackRef = useRef(null)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [scrollActiveIndex, setScrollActiveIndex] = useState(0)
   const [navH, setNavH] = useState(NAV_H)
   const [reduceMotion, setReduceMotion] = useState(false)
   const [layoutMode, setLayoutMode] = useState(() => {
     if (typeof window === 'undefined') return 'desktop'
-    const width = window.innerWidth
-    const height = window.innerHeight
-    if (width < 768 || height < 680) return 'mobile'
-    if (width < 1200) return 'tablet'
-    return 'desktop'
+    return resolveLayoutMode(window.innerWidth, window.innerHeight)
   })
   const total = projects.length
+  const isDesktopStack = layoutMode === 'desktop' && !reduceMotion
+  const activeIndex = isDesktopStack ? scrollActiveIndex : selectedIndex
+  const scrollActiveRef = useRef(0)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -396,13 +412,7 @@ export default function FolderStack({ projects }) {
     const syncMode = () => {
       const width = el.clientWidth || window.innerWidth
       const height = window.innerHeight
-      if (width < 768 || height < 680) {
-        setLayoutMode('mobile')
-      } else if (width < 1200) {
-        setLayoutMode('tablet')
-      } else {
-        setLayoutMode('desktop')
-      }
+      setLayoutMode(resolveLayoutMode(width, height))
     }
 
     syncMode()
@@ -417,7 +427,6 @@ export default function FolderStack({ projects }) {
     }
   }, [])
 
-  // Measure real nav height for sticky offset (data value — not tab width)
   useEffect(() => {
     const nav = document.querySelector('.site-nav--folio, .site-nav')
     if (!nav) return undefined
@@ -438,11 +447,8 @@ export default function FolderStack({ projects }) {
     }
   }, [])
 
-  const activeIndexRef = useRef(0)
-
   useEffect(() => {
-    // Scroll-scrubbed index only for desktop overlapping stack
-    if (reduceMotion || layoutMode !== 'desktop') return undefined
+    if (!isDesktopStack) return undefined
 
     const stack = stackRef.current
     if (!stack) return undefined
@@ -452,26 +458,33 @@ export default function FolderStack({ projects }) {
       if (raf) return
       raf = window.requestAnimationFrame(() => {
         raf = 0
+        const focused = document.activeElement
+        const currentPanel = stack.querySelector(
+          `[data-index="${scrollActiveRef.current}"] .folder-card__content`,
+        )
+        if (focused && currentPanel?.contains(focused)) {
+          return
+        }
+
         const rect = stack.getBoundingClientRect()
         const scrolled = -(rect.top - navH)
         const stickyH = window.innerHeight - navH
         const scrollRange = stack.offsetHeight - stickyH
         if (scrollRange <= 0 || total <= 1) {
-          if (activeIndexRef.current !== 0) {
-            activeIndexRef.current = 0
-            setActiveIndex(0)
+          if (scrollActiveRef.current !== 0) {
+            scrollActiveRef.current = 0
+            setScrollActiveIndex(0)
           }
           return
         }
         const progress = Math.max(0, Math.min(1, scrolled / scrollRange))
-        // Floor-biased so cards don't flicker at midpoints while scrolling
         const idx = Math.min(
           total - 1,
           Math.max(0, Math.floor(progress * total - 1e-6)),
         )
-        if (idx !== activeIndexRef.current) {
-          activeIndexRef.current = idx
-          setActiveIndex(idx)
+        if (idx !== scrollActiveRef.current) {
+          scrollActiveRef.current = idx
+          setScrollActiveIndex(idx)
         }
       })
     }
@@ -486,13 +499,12 @@ export default function FolderStack({ projects }) {
       window.visualViewport?.removeEventListener('resize', onScroll)
       if (raf) window.cancelAnimationFrame(raf)
     }
-  }, [total, navH, layoutMode, reduceMotion])
+  }, [total, navH, isDesktopStack])
 
   const jumpTo = useCallback(
     (index) => {
-      if (reduceMotion || layoutMode !== 'desktop') {
-        activeIndexRef.current = index
-        setActiveIndex(index)
+      if (!isDesktopStack) {
+        setSelectedIndex(index)
         if (reduceMotion) {
           document
             .getElementById(`project-${projects[index]?.slug}`)
@@ -500,19 +512,20 @@ export default function FolderStack({ projects }) {
         }
         return
       }
+      // Desktop: click only scrolls to that segment — scroll owns activeIndex
       const stack = stackRef.current
       if (!stack || total <= 0) return
       const stackAbsTop = stack.getBoundingClientRect().top + window.scrollY
       const stickyH = window.innerHeight - navH
       const scrollRange = Math.max(0, stack.offsetHeight - stickyH)
-      const progress = total <= 1 ? 0 : index / (total - 1)
+      const progress = total <= 1 ? 0 : (index + 0.5) / total
       const targetScroll = stackAbsTop - navH + progress * scrollRange
       window.scrollTo({
         top: targetScroll,
         behavior: 'smooth',
       })
     },
-    [total, navH, reduceMotion, layoutMode, projects],
+    [total, navH, isDesktopStack, reduceMotion, projects],
   )
 
   return (
