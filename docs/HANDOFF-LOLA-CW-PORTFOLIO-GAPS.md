@@ -23,11 +23,12 @@ Use these La Bodega bullets (do not weaken back to “shipped / designed dashboa
 
 1. **Loyalty/CRM** — discount 0.29%→0.09%, 13% revenue lift (keep; separate from Lola/CW cases)
 2. **Lola** — *Designed bilingual WhatsApp guest flows and built Lola Connect (staff PWA) solo — deals Q&A, pickup orders, reminders, and staff handoff; 96.3% of conversations did not require staff escalation.*
-3. **Competitor Watch** — *Designed and built Competitor Watch solo (React + Python) — competitor ads, weekend playbook, store pulse, demand forecast, and WhatsApp→POS visit attribution for Thursday merchandising decisions.*
-4. **Ops PWA** — shift/approvals/vendor (separate product)
-5. Partnered with store leadership…
+3. **Competitor Watch** — *Designed and built Competitor Watch solo (React + Python) — Thursday merchandising decision loop: competitor deals, shelf-vs-floor pricing, weekend playbook, demand bands, and WhatsApp→POS visit attribution.*
+4. **Checkout Ops** — *Led Day-1 launch-week checkout recovery on Odoo (4 shared terminals): diagnosed Datalogic EAN-13 format mismatch, moved validation upstream, shipped scanner → Excel → Odoo batch import within ~72 hours.* (Do not claim ~100% SKU recognition until appendix sample Ns are locked.)
+5. **Ops PWA** — shift/approvals/vendor (separate product)
+6. Partnered with store leadership…
 
-**Portfolio header / forms:** GA default (`address-rule.md`). Portfolio URL always `https://danny-me-rho.vercel.app/`.
+**Resume sources updated 2026-07-20:** `resume.md`, `build_spd_ga.py`, `build_amazon_dt_ads.py`, `build_resume.py`. Re-export DOCX/PDF after regenerating. LinkedIn About/Experience should mirror the same Lola + Checkout Ops wording.
 
 ---
 

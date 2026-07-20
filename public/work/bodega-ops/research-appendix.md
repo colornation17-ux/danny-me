@@ -196,7 +196,8 @@ Paste or reply with these five fields to upgrade “ops estimate / observed” �
 3. [ ] Recognition: pre count / post count / sample date / all four terminals?
 4. [ ] Checkout timing: sample N transactions (pre and/or post)
 5. [x] Day-0 vs Day-1 — **Day-1 live launch week**
-6. [ ] Strip resume / LinkedIn / portfolio to the same locked set
+6. [x] Strip resume sources to the same locked set (Lola escalation wording + Checkout Ops without ~100%) — LinkedIn paste still manual
+7. [ ] Lock SKU / timing sample Ns to upgrade recognition claims
 
 ### Resume / LinkedIn alignment (when Ns locked)
 
