@@ -30,6 +30,8 @@ Use these La Bodega bullets (do not weaken back to “shipped / designed dashboa
 
 **Resume sources updated 2026-07-20:** `resume.md`, `build_spd_ga.py`, `build_amazon_dt_ads.py`, `build_resume.py`. Re-export DOCX/PDF after regenerating. LinkedIn About/Experience should mirror the same Lola + Checkout Ops wording.
 
+**Portfolio header / forms:** GA default (`address-rule.md`). Portfolio URL always `https://danny-me-rho.vercel.app/`.
+
 ---
 
 # A. Lola — what to add to portfolio
