@@ -1,4 +1,4 @@
-﻿/** Work = curated flagship. Play = side quests. Keep Work ≤ 6. */
+﻿/** Work = curated flagship (homepage featured pulls from here). Lab/Play = explorations. */
 
 export const work = [
   {
@@ -28,7 +28,7 @@ export const work = [
   },
   {
     slug: 'competitor-watch',
-    outcome: 'Planning and attribution product for store merchandising',
+    outcome: 'Thursday merchandising decision loop with visit attribution',
     title: 'Competitor Watch',
     meta: 'La Bodega · Shipped 2026',
     status: 'Shipped',
@@ -36,7 +36,7 @@ export const work = [
     domain: 'Product design',
     layer: 'Ops + analytics product',
     blurb:
-      'Solo React + Python ops product: competitor deals (Flipp winners + combo packs + national rank), competitive shelf-vs-market pricing, weekend playbook, store pulse, market trends, demand forecast, labeled RFM tiers with visit-rhythm nudges, and WhatsApp→POS visit attribution (2,088 visits).',
+      'Solo React + Python decision-support product for the Thursday planning call: competitor deals + shelf-vs-floor pricing → weekend playbook → demand buy/hold/reduce bands → RFM visit-rhythm nudges → WhatsApp outreach → POS visit attribution (2,088 visits). Engagement stays with loyalty/Lola; this product owns visibility and proof.',
     role: 'Design technologist · Solo design & build',
     timeline: 'MVP in ~2 weeks · ongoing production',
     team: 'Solo design & build',
@@ -117,75 +117,15 @@ export const work = [
     ],
   },
   {
-    slug: 'wing-hmi',
-    outcome: 'Concept HMI prototype validated in a driving simulator',
-    title: 'Wing HMI',
-    meta: 'Wing · Concept 2025',
-    status: 'Concept',
-    year: '2025',
-    domain: 'Automotive HMI',
-    cover: '/work/wing-hmi/hero.png',
-    hero: '/work/wing-hmi/hero.png',
-    reel: '/work/wing-hmi/demo-1.mp4',
-    gallery: [
-      { src: '/work/wing-hmi/screen-1.png', caption: 'Cluster and HUD layout' },
-      { src: '/work/wing-hmi/screen-2.png', caption: 'Center display system state' },
-      { src: '/work/wing-hmi/screen-3.png', caption: 'Voice interface layer' },
-      { src: '/work/wing-hmi/screen-4.png', caption: 'Alert states and attention zones' },
-    ],
-    blurb:
-      'Concept in-vehicle HMI for premium smart vehicles: cluster, HUD, center display, and voice. Validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view. 92% task success.',
-    role: 'Product designer',
-    timeline: '2 weeks · 3-phase design sprint',
-    team: 'Design exploration',
-    skills: ['HMI', 'UX/UI', 'Voice UI', 'Simulator testing'],
-    accent: '#7C5CFF',
-    sections: [
-      {
-        eyebrow: 'Overview',
-        title: 'An HMI that feels like mission control, not a tablet glued to a dash',
-        body: 'Wing needed a premium smart-vehicle interface for tech-driven buyers aged 28–42 who expect intelligence and immersion, without drowning the driver in chrome.',
-      },
-      {
-        eyebrow: 'Problem',
-        title: 'Automotive UI still copies phone patterns',
-        body: 'Dense menus, shallow hierarchy, and little sense of system state. Drivers need glanceable status and calm motion, not app-drawer thinking at highway speed.',
-      },
-      {
-        eyebrow: 'Foundation',
-        title: 'Three phases, two weeks, one simulator',
-        body: 'Mapped use cases and interaction zones (HUD, cluster, center display) against a segmentation study of tech-savvy premium buyers aged 28–42. Built low-fi flows and tested light/dark modes and alert states. Refined into hi-fi frames with a voice interface, then validated in a driving simulator using a 20mm camera rig matched to natural human eye field-of-view.',
-      },
-      {
-        eyebrow: 'Outcome',
-        title: '92% task success in simulation',
-        body: 'Critical information landed in the driver\'s primary line of sight; secondary controls stayed reachable without breaking focus. Limitation: generative features stayed surface-level, personalization lacked deep logic or multi-turn context.',
-        metrics: [
-          { value: '92%', label: 'Task success rate in simulator' },
-        ],
-      },
-      {
-        eyebrow: 'Delivered',
-        title: 'Hi-fi screens, voice interface, simulator-tested prototype',
-        body: 'A direction for next-gen mobility UX, hi-fi HMI screens, a voice interface layer, and a simulator-tested interactive prototype. Concept work positioning Wing for younger buyers who want intelligence without surveillance theater.',
-      },
-      {
-        eyebrow: 'Next',
-        title: 'Where this would go with more time',
-        body: 'Integrate a fine-tuned model for contextual, multi-turn dialogue. Link voice commands to intent and logic maps. Test stress states, low-light conditions, and new-driver onboarding.',
-      },
-    ],
-  },
-  {
     slug: 'code19',
-    outcome: 'Website redesign that grew sessions, dwell time, and seed credibility',
+    outcome: 'Website redesign that grew sessions and cut organic bounce',
     title: 'CODE19 Racing',
     meta: 'CODE19 · Shipped 2024–25',
     status: 'Shipped',
     year: '2025',
     domain: 'Website redesign',
     blurb:
-      'Redesigned the CODE19 digital platform for fans, sponsors, engineers, and drivers: UI/UX, content strategy, and SEO. Seed funding rose $150K→$500K with stronger brand presence; 1,500+ new monthly sessions; direct sessions 3.6 min; organic bounce −36% (to 58.5%).',
+      'Redesigned the CODE19 digital platform for fans, sponsors, engineers, and drivers: UI/UX, content strategy, and SEO. Measured: 1,500+ new monthly sessions; direct avg 3.6 min; organic bounce −36% (to 58.5%). Concurrent: seed rose $150K→$500K with stronger brand presence — correlation, not sole attribution.',
     role: 'UI · UX · Content strategy · SEO',
     timeline: '3 months · Oct – Dec 2024',
     team: 'With CODE19',
@@ -195,6 +135,8 @@ export const work = [
     hero: '/work/code19/hero-2.jpg',
     layout: 'photo',
     liveUrl: 'https://code19.ai',
+    evidenceDoc: '/work/code19/metric-definitions.md',
+    evidenceDocLabel: 'Metric definitions',
     gallery: [
       { src: '/work/code19/screen-4.jpg', caption: 'Competitive analysis: Alpine, Aston Martin, Mercedes AMG F1' },
       { src: '/work/code19/screen-5.jpg', caption: 'Field research at Indianapolis Motor Speedway' },
@@ -245,13 +187,13 @@ export const work = [
       },
       {
         eyebrow: 'Outcomes',
-        title: 'Investment, engagement, dwell, and bounce',
-        body: 'Elevating digital brand presence and credibility supported seed funding rising from $150K to $500K. SEO and optimized direct channels drove 1,500+ new monthly sessions. Direct traffic averaged 3.6-minute sessions; organic averaged 96 seconds. Organic bounce rate fell 36% to 58.5%.',
+        title: 'What was measured vs what was concurrent',
+        body: 'Measured after redesign: SEO and optimized direct channels drove 1,500+ new monthly sessions; direct traffic averaged 3.6-minute sessions; organic averaged 96 seconds; organic bounce rate fell 36% to 58.5%. Concurrent (not sole attribution): elevating digital brand presence supported seed funding rising from $150K to $500K — treat funding as a credibility signal alongside the site work, not a website A/B result.',
         metrics: [
-          { value: '$150K → $500K', label: 'Seed funding' },
           { value: '1,500+', label: 'New monthly sessions' },
           { value: '3.6 min', label: 'Avg. direct session' },
           { value: '−36%', label: 'Organic bounce (to 58.5%)' },
+          { value: '$150K → $500K', label: 'Seed (concurrent)' },
         ],
       },
       {
@@ -260,73 +202,6 @@ export const work = [
         body: 'Real-time feeds from multiple third-party sources required demanding technical coordination. Serving four audiences on one platform meant real IA trade-offs, not just responsive breakpoints. Next: broader usability testing across user segments, and gradually introducing interactive analytics and AR/VR fan experience modules.',
         image: '/work/code19/final-screens.png',
         caption: 'Shipped platform, multi-audience navigation',
-      },
-    ],
-  },
-  {
-    slug: 'edge-ai',
-    outcome: 'Concept on-device AI UX with driver data controls',
-    title: 'WING Edge AI',
-    meta: 'Wing · Concept 2025',
-    status: 'Concept',
-    year: '2025',
-    domain: 'Edge AI',
-    cover: '/work/edge-ai/hero.jpg',
-    hero: '/work/edge-ai/hero.jpg',
-    reel: '/work/edge-ai/demo-1.mp4',
-    gallery: [
-      { src: '/work/edge-ai/screen-2.png', caption: 'Local-first architecture overview' },
-      { src: '/work/edge-ai/screen-3.png', caption: 'Driver transparency controls' },
-      { src: '/work/edge-ai/screen-4.png', caption: 'Edge inference pipeline' },
-      { src: '/work/edge-ai/screen-5.png', caption: 'Privacy data boundary diagram' },
-    ],
-    blurb:
-      'Concept extension of Wing HMI: local-first vehicle AI, transparent controls, and data that stays in the car. Design targets (not measured results) include <20ms edge latency and stronger driver control over what leaves the vehicle.',
-    role: 'Product designer',
-    timeline: '2025',
-    team: 'Design exploration',
-    skills: ['HAI', 'UX/UI', 'Edge AI', 'Systems design'],
-    accent: '#0891B2',
-    sections: [
-      {
-        eyebrow: 'Overview',
-        title: 'Extending WING HMI into real-time, privacy-first AI',
-        body: 'Smart-vehicle AI leans on cloud compute, adding latency to split-second decisions and drivers have no visibility into how their data is used. WING Edge AI brings personalization on-device, where it belongs.',
-      },
-      {
-        eyebrow: 'Problem',
-        title: 'Cloud dependency at highway speed',
-        body: 'Mission-critical vehicle decisions (lane assist, hazard alerts, adaptive routing) shouldn\'t wait on a network round-trip. And drivers increasingly want to know and control, what data leaves the car.',
-      },
-      {
-        eyebrow: 'Research method',
-        title: 'AI-assisted synthesis, not primary research',
-        body: 'Conceptual project. Research was AI-assisted synthesis across automotive forums, product reviews, and driver-safety reports, not direct interviews or usability studies. Findings informed design principles, not validated user needs.',
-      },
-      {
-        eyebrow: 'Design principles',
-        title: 'Transparency, control, efficiency',
-        body: 'Transparency: show how AI decisions get made. Control: driver-facing toggles over training, sync, and data use. Efficiency: cut visual scan time under driving load. All three principles apply to the interaction layer above the architecture.',
-      },
-      {
-        eyebrow: 'Architecture',
-        title: 'Local-first, cloud-optional',
-        body: 'Sensitive data, driving behavior, routes, voice, stays on-device. Only generalized data (firmware updates, public maps) syncs to cloud. The driver controls what crosses that boundary.',
-      },
-      {
-        eyebrow: 'Target outcomes',
-        title: 'Targets, not measured results',
-        body: 'These are design targets from the concept phase, not measured outcomes. Visual scan time ↓30% vs. legacy systems · edge latency <20ms · AI trust index >80% · cloud opt-out sustained >65% · alert response time ↓25%.',
-        metrics: [
-          { value: '<20ms', label: 'Target edge latency' },
-          { value: '>80%', label: 'Target AI trust index' },
-          { value: '↓30%', label: 'Target scan time vs. legacy' },
-        ],
-      },
-      {
-        eyebrow: 'Roadmap',
-        title: 'Phases 1–2 complete, 3–4 planned',
-        body: 'Phase 1 (architecture + design principles) and Phase 2 (hi-fi prototyping) are complete. Phase 3 (companion watch app) is in progress. Phase 4 (OEM pilot integration) is planned.',
       },
     ],
   },
@@ -377,6 +252,137 @@ export const work = [
 
 /** Lab case studies (not in curated Work). Linked from /play. */
 export const lab = [
+  {
+    slug: 'wing-hmi',
+    collection: 'lab',
+    outcome: 'Concept HMI prototype validated in a driving simulator',
+    title: 'WING Automotive HMI',
+    meta: 'WING · Concept 2025',
+    status: 'Concept',
+    year: '2025',
+    domain: 'Automotive HMI',
+    cover: '/work/wing-hmi/hero.png',
+    hero: '/work/wing-hmi/hero.png',
+    reel: '/work/wing-hmi/demo-1.mp4',
+    gallery: [
+      { src: '/work/wing-hmi/screen-1.png', caption: 'Cluster and HUD layout' },
+      { src: '/work/wing-hmi/screen-2.png', caption: 'Center display system state' },
+      { src: '/work/wing-hmi/screen-3.png', caption: 'Voice interface layer' },
+      { src: '/work/wing-hmi/screen-4.png', caption: 'Alert states and attention zones' },
+    ],
+    blurb:
+      'Concept in-vehicle HMI for premium smart vehicles: cluster, HUD, center display, and voice. Validated in a driving simulator with a 20mm camera rig matched to human eye field-of-view. 92% task success.',
+    role: 'Product designer',
+    timeline: '2 weeks · 3-phase design sprint',
+    team: 'Design exploration',
+    skills: ['HMI', 'UX/UI', 'Voice UI', 'Simulator testing'],
+    accent: '#7C5CFF',
+    conceptOnly: true,
+    sections: [
+      {
+        eyebrow: 'Overview',
+        title: 'An HMI that feels like mission control, not a tablet glued to a dash',
+        body: 'Wing needed a premium smart-vehicle interface for tech-driven buyers aged 28–42 who expect intelligence and immersion, without drowning the driver in chrome.',
+      },
+      {
+        eyebrow: 'Problem',
+        title: 'Automotive UI still copies phone patterns',
+        body: 'Dense menus, shallow hierarchy, and little sense of system state. Drivers need glanceable status and calm motion, not app-drawer thinking at highway speed.',
+      },
+      {
+        eyebrow: 'Foundation',
+        title: 'Three phases, two weeks, one simulator',
+        body: 'Mapped use cases and interaction zones (HUD, cluster, center display) against a segmentation study of tech-savvy premium buyers aged 28–42. Built low-fi flows and tested light/dark modes and alert states. Refined into hi-fi frames with a voice interface, then validated in a driving simulator using a 20mm camera rig matched to natural human eye field-of-view.',
+      },
+      {
+        eyebrow: 'Outcome',
+        title: '92% task success in simulation',
+        body: 'Critical information landed in the driver\'s primary line of sight; secondary controls stayed reachable without breaking focus. Limitation: generative features stayed surface-level, personalization lacked deep logic or multi-turn context.',
+        metrics: [
+          { value: '92%', label: 'Task success rate in simulator' },
+        ],
+      },
+      {
+        eyebrow: 'Delivered',
+        title: 'Hi-fi screens, voice interface, simulator-tested prototype',
+        body: 'A direction for next-gen mobility UX, hi-fi HMI screens, a voice interface layer, and a simulator-tested interactive prototype. Concept work positioning Wing for younger buyers who want intelligence without surveillance theater.',
+      },
+      {
+        eyebrow: 'Next',
+        title: 'Where this would go with more time',
+        body: 'Integrate a fine-tuned model for contextual, multi-turn dialogue. Link voice commands to intent and logic maps. Test stress states, low-light conditions, and new-driver onboarding.',
+      },
+    ],
+  },
+  {
+    slug: 'edge-ai',
+    collection: 'lab',
+    outcome: 'Concept on-device AI UX with driver data controls',
+    title: 'WING Edge AI',
+    meta: 'WING · Concept 2025',
+    status: 'Concept',
+    year: '2025',
+    domain: 'Edge AI',
+    cover: '/work/edge-ai/hero.jpg',
+    hero: '/work/edge-ai/hero.jpg',
+    reel: '/work/edge-ai/demo-1.mp4',
+    gallery: [
+      { src: '/work/edge-ai/screen-2.png', caption: 'Local-first architecture overview' },
+      { src: '/work/edge-ai/screen-3.png', caption: 'Driver transparency controls' },
+      { src: '/work/edge-ai/screen-4.png', caption: 'Edge inference pipeline' },
+      { src: '/work/edge-ai/screen-5.png', caption: 'Privacy data boundary diagram' },
+    ],
+    blurb:
+      'Concept extension of Wing HMI: local-first vehicle AI, transparent controls, and data that stays in the car. Design targets (not measured results) include <20ms edge latency and stronger driver control over what leaves the vehicle.',
+    role: 'Product designer',
+    timeline: '2025',
+    team: 'Design exploration',
+    skills: ['HAI', 'UX/UI', 'Edge AI', 'Systems design'],
+    accent: '#0891B2',
+    conceptOnly: true,
+    sections: [
+      {
+        eyebrow: 'Overview',
+        title: 'Extending WING HMI into real-time, privacy-first AI',
+        body: 'Smart-vehicle AI leans on cloud compute, adding latency to split-second decisions and drivers have no visibility into how their data is used. WING Edge AI brings personalization on-device, where it belongs.',
+      },
+      {
+        eyebrow: 'Problem',
+        title: 'Cloud dependency at highway speed',
+        body: 'Mission-critical vehicle decisions (lane assist, hazard alerts, adaptive routing) shouldn\'t wait on a network round-trip. And drivers increasingly want to know and control, what data leaves the car.',
+      },
+      {
+        eyebrow: 'Research method',
+        title: 'AI-assisted synthesis, not primary research',
+        body: 'Conceptual project. Research was AI-assisted synthesis across automotive forums, product reviews, and driver-safety reports, not direct interviews or usability studies. Findings informed design principles, not validated user needs.',
+      },
+      {
+        eyebrow: 'Design principles',
+        title: 'Transparency, control, efficiency',
+        body: 'Transparency: show how AI decisions get made. Control: driver-facing toggles over training, sync, and data use. Efficiency: cut visual scan time under driving load. All three principles apply to the interaction layer above the architecture.',
+      },
+      {
+        eyebrow: 'Architecture',
+        title: 'Local-first, cloud-optional',
+        body: 'Sensitive data, driving behavior, routes, voice, stays on-device. Only generalized data (firmware updates, public maps) syncs to cloud. The driver controls what crosses that boundary.',
+      },
+      {
+        eyebrow: 'Target outcomes',
+        title: 'Targets, not measured results',
+        body: 'These are design targets from the concept phase, not measured outcomes. Visual scan time ↓30% vs. legacy systems · edge latency <20ms · AI trust index >80% · cloud opt-out sustained >65% · alert response time ↓25%.',
+        metrics: [
+          { value: '<20ms', label: 'Target edge latency' },
+          { value: '>80%', label: 'Target AI trust index' },
+          { value: '↓30%', label: 'Target scan time vs. legacy' },
+        ],
+      },
+      {
+        eyebrow: 'Roadmap',
+        title: 'Phases 1–2 complete, 3–4 planned',
+        body: 'Phase 1 (architecture + design principles) and Phase 2 (hi-fi prototyping) are complete. Phase 3 (companion watch app) is in progress. Phase 4 (OEM pilot integration) is planned.',
+      },
+    ],
+  },
   {
     slug: 'ocusync',
     collection: 'lab',
@@ -501,6 +507,24 @@ export const lab = [
 
 export const play = [
   {
+    slug: 'wing-hmi',
+    title: 'WING Automotive HMI',
+    blurb: 'Cluster, HUD, and voice concept validated in a driving simulator (92% task success).',
+    meta: 'Concept · 2025',
+    href: '/projects/wing-hmi',
+    cover: '/work/wing-hmi/hero.png',
+    conceptOnly: true,
+  },
+  {
+    slug: 'edge-ai',
+    title: 'WING Edge AI',
+    blurb: 'On-device vehicle AI concept: local inference and driver data controls (targets, not measured results).',
+    meta: 'Concept · 2025',
+    href: '/projects/edge-ai',
+    cover: '/work/edge-ai/hero.jpg',
+    conceptOnly: true,
+  },
+  {
     slug: 'ocusync',
     title: 'Ocusync',
     blurb: 'Y Combinator pitch prototype: CRM inside the NLE for video production.',
@@ -515,13 +539,6 @@ export const play = [
     meta: 'Student project · 2023',
     href: '/projects/stutax',
     cover: '/work/stutax/cover.png',
-  },
-  {
-    slug: 'edge-ai',
-    title: 'Wing Edge AI',
-    blurb: 'On-device personalization for next-gen mobility.',
-    meta: 'Concept · 2025',
-    href: '/projects/edge-ai',
   },
   {
     slug: 'loom',

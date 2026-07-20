@@ -88,6 +88,12 @@ const IMPACT = [
   { value: '144', label: 'Live ads indexed' },
 ]
 
+const LOOP_STEPS = [
+  { n: '01', label: 'See the floor', detail: 'Deals + shelf-vs-ad pricing' },
+  { n: '02', label: 'Call the weekend', detail: 'Playbook + demand bands' },
+  { n: '03', label: 'Reach & prove', detail: 'WhatsApp → POS visit' },
+]
+
 function ImpactStats({ compact = false }) {
   return (
     <div className={`cs-metrics${compact ? ' cs-metrics--hook' : ''}`}>
@@ -122,13 +128,23 @@ function BriefToggle() {
   return (
     <section className="cs-section cw-cs__brief" id="cw-brief">
       <p className="cs-section__eyebrow">Problem → solution</p>
-      <h2>Thursday decides the weekend, without a decision system</h2>
+      <h2>One Thursday decision loop — not a dashboard pile</h2>
       <p>
-        La Bodega already had loyalty and WhatsApp reach. What it lacked was an intelligence layer:
-        live competitor prices, weather-tied weekend calls, and demand signal in one place, in the
-        twelve minutes between ad drop and the order. Competitor Watch is that decision-support
-        stack; attribution closes the loop with the engagement layer already in market.
+        La Bodega already had loyalty and WhatsApp reach. What it lacked was an intelligence layer
+        for the twelve minutes between chain ad drop and the order call: live competitor prices,
+        weather-tied weekend actions, and demand signal in one place. Competitor Watch is that
+        decision loop; attribution closes it with the engagement layer already in market.
       </p>
+
+      <ol className="cw-loop" aria-label="Thursday decision loop">
+        {LOOP_STEPS.map((s) => (
+          <li key={s.n} className="cw-loop__step">
+            <span className="cw-loop__n">{s.n}</span>
+            <span className="cw-loop__label">{s.label}</span>
+            <span className="cw-loop__detail">{s.detail}</span>
+          </li>
+        ))}
+      </ol>
 
       <ImpactStats compact />
 
@@ -318,12 +334,13 @@ export default function CompetitorWatchCaseStudy() {
 
       <section className="cs-section cw-cs__system" id="cw-product">
         <p className="cs-section__eyebrow">Product</p>
-        <h2>Seven proof surfaces for one planning call</h2>
+        <h2>Surfaces that serve one planning call</h2>
         <p>
-          Watch competitors and shelf-vs-floor pricing → set the weekend → forecast demand → see
-          who&apos;s slipping → message on WhatsApp → prove the visit. Market trends (Latino vs
-          mainstream national pulse) lives in the live app as a fifth primary tab; clip recording is
-          next. Engagement stays with loyalty and Lola; this product owns visibility and proof.
+          The product is a loop, not a feature list: watch competitors and shelf-vs-floor pricing →
+          set the weekend → forecast demand → see who&apos;s slipping → message on WhatsApp → prove
+          the visit. Market trends (Latino vs mainstream national pulse) lives in the live app as a
+          fifth primary tab; clip recording is next. Engagement stays with loyalty and Lola; this
+          product owns visibility and proof.
         </p>
         <CwModulesGrid />
       </section>
@@ -340,10 +357,10 @@ export default function CompetitorWatchCaseStudy() {
 
       <section className="cs-section" id="cw-impact">
         <p className="cs-section__eyebrow">Impact</p>
-        <h2>Planning signal + attributed visits</h2>
+        <h2>Did the Thursday call get better — and did outreach land?</h2>
         <p>
-          Success is twofold: operators can see competitor and demand signal before the weekend, and
-          outreach is measured as register visits, not send counts alone.
+          Success is the loop: operators can see competitor and demand signal before the weekend,
+          then measure outreach as register visits — not send counts alone.
         </p>
         <ImpactStats />
         <p className="cw-cs__impact-closer">

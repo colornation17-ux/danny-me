@@ -3353,6 +3353,51 @@ body.game-embed .main { padding: 0; overflow: visible; }
 }
 
 /* Brief problem / solution toggle */
+.cw-loop {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 720px) {
+  .cw-loop {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+.cw-loop__step {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--white);
+}
+
+.cw-loop__n {
+  font-family: var(--font-sans);
+  font-size: var(--text-meta-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--cs-accent, var(--tone-forest));
+}
+
+.cw-loop__label {
+  font-family: var(--font-sans);
+  font-size: var(--text-meta-lg);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cw-loop__detail {
+  font-size: var(--text-meta);
+  color: var(--muted);
+}
+
 .cw-brief {
   margin-top: 1.35rem;
   padding: 1rem;

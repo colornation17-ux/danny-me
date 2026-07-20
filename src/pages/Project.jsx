@@ -285,7 +285,7 @@ export default function Project() {
                 <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>Ask about this work</a>
                 {project.evidenceDoc && (
                   <a className="folio-btn" href={project.evidenceDoc} target="_blank" rel="noopener noreferrer">
-                    Research appendix ↗
+                    {project.evidenceDocLabel || 'Research appendix'} ↗
                   </a>
                 )}
               </div>
@@ -390,7 +390,7 @@ export default function Project() {
             </a>
             {project.evidenceDoc && (
               <a className="folio-btn" href={project.evidenceDoc} target="_blank" rel="noopener noreferrer">
-                Research appendix ↗
+                {project.evidenceDocLabel || 'Research appendix'} ↗
               </a>
             )}
             {project.liveUrl && (

@@ -8,8 +8,8 @@ export default function Play() {
     <div className="page-hero folio--fullgrid">
       <h1>I lose sleep to prototypes, race weekends, and silly side quests.</h1>
       <p className="about-lead" style={{ color: 'var(--muted)', marginBottom: '2rem' }}>
-        Work stays curated. Everything else lives here: pitch prototypes, student
-        projects, design systems, branding, and motion.
+        Work stays curated to four shipped proof cases. Explorations live here: WING concepts,
+        pitch prototypes, student projects, design systems, branding, and motion.
       </p>
       <div className="play-grid">
         {play.map((item) => {

@@ -3,8 +3,8 @@ import { work } from './projects'
 const bySlug = Object.fromEntries(work.map((p) => [p.slug, p]))
 
 /**
- * Homepage featured strip, Nudge-style ordered showcase.
- * Edge AI lives in Play; shown here as a concept card.
+ * Homepage featured strip — four shipped proof cases.
+ * WING HMI + Edge AI live under /play (explorations).
  */
 export const featured = [
   {
@@ -59,7 +59,7 @@ export const featured = [
     timeline: 'Two-week MVP · Ongoing production',
     team: 'Solo design and development',
     outcome:
-      'Built a React + Python retail intelligence platform combining competitor deals, pricing checks, forecasting, customer visit rhythms, and WhatsApp-to-POS attribution across 2,088 visits.',
+      'Thursday decision loop for merchandising: live competitor deals and shelf-vs-floor pricing → weekend playbook → demand bands → WhatsApp outreach → POS visit attribution (2,088 visits).',
     tags: ['Web app', 'Full-stack', 'Retail'],
     reel: '/work/competitor-watch/motion/CompetitorWatch-Reel.mp4',
     reelPoster: '/work/competitor-watch/motion/CW-02-CompetitorDeals.png',
@@ -77,51 +77,11 @@ export const featured = [
     timeline: 'Content strategy and SEO',
     team: null,
     outcome:
-      'Website redesign: UI/UX, IA, content & SEO for fans, sponsors, engineers, and drivers. 1,500+ monthly sessions · −36% organic bounce · seed $150K→$500K.',
+      'Website redesign for fans, sponsors, engineers, and drivers: 1,500+ new monthly sessions; organic bounce −36% (to 58.5%). Seed rose $150K→$500K alongside stronger brand presence — not claimed as sole cause.',
     tags: ['Website redesign', 'SEO'],
     cover: '/work/code19/hero-2.jpg',
     coverAlt: 'CODE19 Racing website hero — race car and brand',
     folderFill: '#111212',
     folderInk: '#ffffff',
-  },
-  {
-    ...bySlug['wing-hmi'],
-    index: '05',
-    displayTitle: 'WING Automotive HMI',
-    company: 'WING',
-    folderDate: 'Aug 18, 2025',
-    role: 'Product designer',
-    status: 'Concept',
-    timeline: 'Two-week, three-phase design sprint',
-    team: null,
-    outcome:
-      'Designed a connected vehicle HMI concept spanning the instrument cluster, HUD, and voice interface, achieving 92% task success during simulator testing.',
-    tags: ['HMI', 'Concept'],
-    reel: '/work/wing-hmi/demo-1.mp4',
-    reelPoster: '/work/wing-hmi/hero.png',
-    cover: '/work/wing-hmi/hero.png',
-    coverAlt: 'WING automotive HMI cluster and HUD concept',
-    folderFill: '#7C5CFF',
-    folderInk: '#ffffff',
-  },
-  {
-    ...bySlug['edge-ai'],
-    index: '06',
-    displayTitle: 'WING Edge AI',
-    company: 'WING',
-    folderDate: 'Nov 2025',
-    role: 'Product designer',
-    status: 'Concept',
-    timeline: 'Design exploration',
-    team: null,
-    outcome:
-      'Designed an on-device vehicle AI experience focused on local inference, responsive interactions, and transparent driver-data controls, with a target inference latency below 20 milliseconds.',
-    tags: ['Edge AI', 'Concept'],
-    reel: '/work/edge-ai/demo-1.mp4',
-    reelPoster: '/work/edge-ai/hero.jpg',
-    cover: '/work/edge-ai/hero.jpg',
-    coverAlt: 'WING Edge AI vehicle concept',
-    folderFill: '#0891B2',
-    folderInk: '#111212',
   },
 ]
