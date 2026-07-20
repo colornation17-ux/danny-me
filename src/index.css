@@ -3598,15 +3598,16 @@ body.game-embed .main { padding: 0; overflow: visible; }
 }
 
 .folio--fullgrid {
-  /* 100% not 100vw — avoids horizontal scrollbar from scrollbar gutter math */
+  /* Full-bleed graph paper — gutters live on cards, not the page shell */
   width: 100%;
   max-width: 100%;
   margin-left: 0;
   margin-right: 0;
-  padding-inline: var(--gutter);
+  padding-inline: 0;
   border-inline: 0;
   min-height: 100vh;
-  overflow-x: clip;
+  /* Must not clip — overflow-x:clip was cutting spring wires at the edges */
+  overflow-x: visible;
   /* Graph paper: line layers use transparent cells so both axes show.
      Paper color comes only from background-color (keeps fill uniform). */
   background-color: var(--folio-paper);
@@ -6140,11 +6141,11 @@ body.game-embed .site-radio {
   color: #4a5560;
 }
 
-/* Edge-to-edge across the viewport (parent clips overflow) */
+/* End-to-end wires — parent .folio--fullgrid is already full-bleed */
 .folio-spring {
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
   margin-right: 0;
   margin-block: 0.15rem;
 }
@@ -6617,9 +6618,10 @@ body:has(.folio--fullgrid) .site-footer {
   inset: 0;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  background: var(--folder-fill);
+  /* Transparent shell — only tab/slope/ledge/body paint fill (folder silhouette) */
+  background: transparent;
   color: var(--folder-ink);
+  will-change: transform;
   z-index: calc(var(--folder-index) + 1);
   transition: none;
 }
@@ -6630,21 +6632,13 @@ body:has(.folio--fullgrid) .site-footer {
   transform: translateY(0);
 }
 
-/* Hide past slope/ledge so they don't peek as colored bands under active chrome */
-.folder-card--past .folder-card__tab-slope,
-.folder-card--past .folder-card__ledge {
-  visibility: hidden;
-  pointer-events: none;
-}
-
 /* Active card floats on top via CSS z-index (not scroll-updated inline) */
 .folder-card--active {
   transform: translateY(0);
   z-index: 20;
 }
 
-/* Future cards wait below viewport; slide up when activated.
-   Instant snap (no transition) — animated slides were reading as “breaks”. */
+/* Future cards wait below viewport; slide up when activated. */
 .folder-card--future {
   transform: translateY(105%);
 }
@@ -6688,6 +6682,8 @@ body:has(.folio--fullgrid) .site-footer {
   gap: 0;
   height: var(--folder-tab-h);
   min-height: 58px;
+  /* Kill subpixel hairlines between tab / slope / ledge */
+  transform: translateZ(0);
 }
 
 /* Hole for earlier sticky tabs — clicks pass through to those tabs */
@@ -6734,7 +6730,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__tab-slope {
   flex-shrink: 0;
   align-self: stretch;
-  width: min(40px, 4vw);
+  width: 40px;
   margin-right: -1px;
   background: var(--folder-fill);
   clip-path: polygon(0 0, 0 100%, 100% 100%);
@@ -6805,8 +6801,7 @@ body:has(.folio--fullgrid) .site-footer {
   z-index: 1;
   display: grid;
   gap: 0;
-  flex: 1 1 auto;
-  align-self: stretch;
+  flex: 1;
   min-height: 0;
   margin-top: -2px;
   padding: 0;
@@ -6814,9 +6809,10 @@ body:has(.folio--fullgrid) .site-footer {
   color: var(--folder-ink);
   border: 0;
   outline: none;
-  border-radius: 0;
+  border-radius: var(--radius-folder-body);
   overflow: hidden;
   box-shadow: none;
+  /* Avoid compositing seam that reads as a white hairline on the grid */
   transform: translateZ(0);
   backface-visibility: hidden;
 }
@@ -7394,7 +7390,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__img {
   position: relative;
   min-height: 0;
-  padding: 0;
+  padding: 1rem;
   display: flex;
   align-items: center;
 }
@@ -7408,19 +7404,18 @@ body:has(.folio--fullgrid) .site-footer {
   }
 }
 
-/* One shared media well for every card — same size as Lola / Competitor Watch.
-   16:10 frame keeps image and video cards aligned. */
+/* Shared media well — no stroke on the container; L-bracket corners are the edge frame */
 .folder-card__image {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   min-height: 0;
   overflow: hidden;
   background: transparent;
-  border: 2px solid color-mix(in srgb, var(--folder-ink) 18%, transparent);
+  border: 0;
   outline: none;
   box-shadow: none;
-  border-radius: 0.85rem;
+  border-radius: var(--radius-xs);
 }
 
 .folder-card__image img,
@@ -7444,7 +7439,7 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__image--fill {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   flex: none;
   align-self: flex-start;
   width: 100%;
@@ -7494,6 +7489,51 @@ body:has(.folio--fullgrid) .site-footer {
   outline-offset: 3px;
 }
 
+/* L-bracket edge frame on media wells (not a container stroke) */
+.folder-card__corners {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.folder-card__corners span {
+  position: absolute;
+  width: 1.1rem;
+  height: 1.1rem;
+  /* Always white — never inherit dark folder ink (e.g. Checkout ops) */
+  border: 2px solid var(--white);
+  filter: none;
+}
+
+.folder-card__corners span:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.folder-card__corners span:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.folder-card__corners span:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-right: 0;
+  border-top: 0;
+}
+
+.folder-card__corners span:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-left: 0;
+  border-top: 0;
+}
+
 @media (min-width: 900px) {
   .folder-card__img {
     align-items: flex-start;
@@ -7505,9 +7545,9 @@ body:has(.folio--fullgrid) .site-footer {
   }
 }
 
-/* Portrait still uses the shared 16:10 well; phone frames sit inside */
+/* Portrait still uses the shared 16:9 well; phone frames sit inside */
 .folder-card__image--portrait {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   flex: none;
   height: auto;
   min-height: 0;
@@ -7711,7 +7751,7 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image,
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     width: 100%;
     height: auto;
     max-height: 100%;
@@ -7900,7 +7940,7 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__image,
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     width: 100%;
     height: auto;
     max-height: 100%;
