@@ -41,7 +41,7 @@ export const featured = [
     timeline: '72-hour recovery · store operations',
     team: 'Reported to CEO',
     outcome:
-      'Led launch-week checkout recovery: diagnosed a shared POS data failure, moved product validation upstream into receiving, and shipped a barcode-normalization tool — so recognition happened before the shelf, not at the register.',
+      'Led launch-week checkout recovery on Odoo: diagnosed barcode format mismatch, moved validation upstream, and shipped a scanner tool that trims codes to Datalogic EAN-13, exports Excel, and batch-imports into Odoo.',
     tags: ['Service design', 'Ops'],
     cover: '/work/bodega-ops/store-floor.jpg',
     coverAlt: 'La Bodega store floor during checkout ops recovery',

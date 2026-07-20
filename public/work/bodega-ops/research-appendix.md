@@ -93,7 +93,7 @@ Example pattern (replace with real counts):
 | Individual scanner fault | Failures at scan | Same items failed on all terminals | Rejected |
 | Terminal-specific config | Multiple terminals | Pattern followed barcode type | Rejected |
 | Missing product records | “Item Not Found” | Some items existed under altered codes | Partial |
-| Leading-zero normalization | EAN-13 / UPC mismatch | Needed broader sample | Confirmed (pending TODO sample) |
+| Leading-zero / format mismatch with Datalogic EAN-13 | Scale output vs catalog codes | Needed broader sample | Confirmed — tool trims to Datalogic EAN-13 |
 | Receiving workflow gap | Shelf before validation | Didn’t explain all historic records | Contributing |
 
 ---
@@ -103,10 +103,10 @@ Example pattern (replace with real counts):
 | Finding | Principle | Decision |
 | --- | --- | --- |
 | Checkout was first barcode test | Validate before customer | Mandatory onboarding before shelving |
-| Leading-zero formats failed | Normalize upstream | EAN-13 → UPC-A in tool |
+| Codes didn’t match Datalogic EAN-13 scale output | Normalize to hardware/catalog contract | Scanner tool trims barcodes to EAN-13 |
+| Catalog lived in Odoo | Keep existing system of record | Excel export → batch import to Odoo |
 | Inconsistent escalation | Explicit ownership | Role owners + checklist |
-| Manual name search | Reduce re-entry | Browser UPC lookup (public API; no custom backend) |
-| Spreadsheet cleanup before import | Remove formatting work | POS-ready CSV + human review gate |
+| Bad rows still possible after trim | Preserve human verification | Review gate before import |
 
 ---
 
@@ -151,9 +151,11 @@ Time from first affected-item scan attempt → product identified
 
 ---
 
-## 8. Architecture note (for case study accuracy)
+## 8. Architecture note (locked)
 
-Browser client called a **public UPC lookup service**. No custom store backend, account system, or store-managed server was required for the first live tool. Competitor price checks used available public / web references — document sources in TODO before implying proprietary data partnerships.
+**Pipeline:** scan barcode → **trim to match Datalogic scales’ EAN-13 output** → save to **Excel** → **batch import to Odoo**.
+
+No POS replacement. Odoo remained the system of record. The tool’s job was format alignment with Datalogic EAN-13 so imported rows matched what checkout and scales already expected.
 
 ---
 
