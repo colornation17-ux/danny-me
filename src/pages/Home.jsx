@@ -164,6 +164,7 @@ export default function Home() {
             duration = 0.5,
             stagger = 0.08,
             ease = 'power2.out',
+            failsafeMs = 900,
           } = opts
           let done = false
           const finish = () => {
@@ -181,7 +182,6 @@ export default function Home() {
             })
           }
           const forceVisible = () => {
-            if (done) return
             done = true
             gsap.set(els, {
               autoAlpha: 1,
@@ -189,13 +189,18 @@ export default function Home() {
               visibility: 'visible',
               y: 0,
               rotation: 0,
-              clearProps: 'transform',
+              clearProps: 'transform,opacity,visibility',
             })
           }
           const inView = () => {
             const node = document.querySelector(trigger)
             if (!node) return false
             return node.getBoundingClientRect().top < window.innerHeight * 0.95
+          }
+          // If already on screen, never pre-hide (skills chips left empty flex gaps)
+          if (inView()) {
+            gsap.set(els, { autoAlpha: 1, y: 0, rotation: 0 })
+            return
           }
           gsap.set(els, { autoAlpha: 0, ...from })
           ScrollTrigger.create({
@@ -208,14 +213,13 @@ export default function Home() {
               if (inView()) finish()
             },
           })
-          // Layout/refresh can miss onEnter — never strand copy
           requestAnimationFrame(() => {
             if (inView()) finish()
           })
           window.setTimeout(() => {
             if (inView()) finish()
             else forceVisible()
-          }, 1800)
+          }, failsafeMs)
         }
 
         safeScrollReveal('.folio-about__body', '.folio-about', {
@@ -233,10 +237,11 @@ export default function Home() {
         })
         safeScrollReveal('.folio-skills li', '.folio-skills', {
           start: 'top 88%',
-          from: { y: 28 },
-          duration: 0.55,
-          stagger: 0.08,
-          ease: 'back.out(1.4)',
+          from: { y: 20 },
+          duration: 0.45,
+          stagger: 0.06,
+          ease: 'power2.out',
+          failsafeMs: 500,
         })
         safeScrollReveal('.folio-work__title', '.folio-work__head', {
           start: 'top 85%',

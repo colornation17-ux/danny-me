@@ -5230,6 +5230,7 @@ body:has(.folio--fullgrid) .app {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: stretch;
   gap: var(--space-2);
   width: 100%;
   max-width: 52rem;
@@ -5251,6 +5252,10 @@ body:has(.folio--fullgrid) .app {
   min-height: 48px;
   width: fit-content;
   max-width: 100%;
+  /* Never leave invisible chips reserving empty flex gaps */
+  opacity: 1;
+  visibility: visible;
+  transform: none;
 }
 
 .folio-skills--rich li span:first-child {
@@ -6591,7 +6596,8 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-stack--desktop {
-  --folder-tab-w: clamp(5.5rem, 11vw, 8.75rem);
+  /* Fit all six tabs inside the sticky frame — never clip tab 06 */
+  --folder-tab-w: clamp(5rem, 9.5vw, 7.25rem);
 }
 
 /* Single sticky viewport holding all cards at the same position */
@@ -6612,10 +6618,12 @@ body:has(.folio--fullgrid) .site-footer {
   inset: 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
   background: transparent;
   color: var(--folder-ink);
-  will-change: transform;
   z-index: calc(var(--folder-index) + 1);
+  /* Transitions only when becoming active — avoids CLS flicker on past/future */
+  transition: none;
 }
 
 /* Past cards sit at position 0 — hidden behind the active card.
@@ -6624,16 +6632,34 @@ body:has(.folio--fullgrid) .site-footer {
   transform: translateY(0);
 }
 
+/* Hide past slope/ledge so they don't peek as colored bands under active chrome */
+.folder-card--past .folder-card__tab-slope,
+.folder-card--past .folder-card__ledge {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* Active card floats on top via CSS z-index (not scroll-updated inline) */
 .folder-card--active {
   transform: translateY(0);
   z-index: 20;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Future cards wait below viewport; slide up when activated.
+/* Future cards wait below viewport; slide up when activated via CSS transition.
    Do NOT disable pointer-events on the whole article — tabs must stay reachable. */
 .folder-card--future {
   transform: translateY(105%);
+  will-change: transform;
+}
+
+.folder-card--future .folder-card__content {
+  pointer-events: none;
+}
+
+.folder-card--future .folder-card__chrome,
+.folder-card--future .folder-card__tab {
+  pointer-events: auto;
 }
 
 /* Inactive bodies can't be clicked / focused — tabs in chrome stay interactive */
@@ -6642,11 +6668,6 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card--active .folder-card__content {
-  pointer-events: auto;
-}
-
-.folder-card--future .folder-card__chrome,
-.folder-card--future .folder-card__tab {
   pointer-events: auto;
 }
 
@@ -6704,7 +6725,7 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__tab-slope {
   flex-shrink: 0;
   align-self: stretch;
-  width: 40px;
+  width: min(40px, 4vw);
   margin-right: -1px;
   background: var(--folder-fill);
   clip-path: polygon(0 0, 0 100%, 100% 100%);
@@ -6762,12 +6783,12 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__progress {
-  margin: 0 0 var(--space-1);
+  margin: 0 0 0.35rem;
   font-family: var(--font-sans);
-  font-size: max(var(--text-meta-xs), 0.75rem);
-  letter-spacing: 0.12em;
+  font-size: max(var(--text-meta-xs), 0.6875rem);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--folder-ink) 72%, transparent);
+  color: color-mix(in srgb, var(--folder-ink) 68%, transparent);
 }
 
 .folder-card__content {
@@ -6775,7 +6796,8 @@ body:has(.folio--fullgrid) .site-footer {
   z-index: 1;
   display: grid;
   gap: clamp(1.25rem, 3vw, 4.5rem);
-  flex: 1;
+  flex: 1 1 auto;
+  align-self: stretch;
   min-height: 0;
   margin-top: -2px;
   padding: var(--card-pad-block) var(--card-pad-inline);
@@ -6783,7 +6805,8 @@ body:has(.folio--fullgrid) .site-footer {
   color: var(--folder-ink);
   border: 0;
   outline: none;
-  border-radius: var(--radius-folder-body);
+  /* Square bottoms in the sticky stage — radius left a paper “boundary box” */
+  border-radius: 0;
   overflow: hidden;
   box-shadow: none;
   /* Avoid compositing seam that reads as a white hairline on the grid */
@@ -6807,7 +6830,7 @@ body:has(.folio--fullgrid) .site-footer {
     /* Fill the sticky viewport — never hug content (that left an empty paper “box”) */
     flex: 1 1 auto;
     min-height: 0;
-    height: 100%;
+    height: auto;
   }
 
   .folder-card__text {
@@ -6815,7 +6838,7 @@ body:has(.folio--fullgrid) .site-footer {
     gap: 0;
     padding: 0;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .folder-card__title {
@@ -6895,11 +6918,11 @@ body:has(.folio--fullgrid) .site-footer {
   .folder-card__content {
     flex: 1 1 auto;
     min-height: 0;
-    align-items: start;
+    align-items: stretch;
   }
 
   .folder-card__text {
-    align-self: start;
+    align-self: stretch;
     min-height: 0;
   }
 
@@ -6972,11 +6995,10 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-stack--desktop .folder-card__blurb {
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
 }
 
 .folder-card__text-head {
@@ -7051,7 +7073,9 @@ body:has(.folio--fullgrid) .site-footer {
   letter-spacing: 0.02em;
   line-height: 1.35;
   color: color-mix(in srgb, var(--folder-ink) 88%, transparent);
-  text-wrap: balance;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .folder-card__meta--sub {
@@ -8164,7 +8188,8 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .folder-stack {
+  .folder-stack,
+  .folder-stack--static {
     height: auto;
     padding-bottom: var(--space-5);
   }
@@ -8193,8 +8218,10 @@ body:has(.folio--fullgrid) .site-footer {
     inset: auto;
     top: auto;
     transform: none !important;
+    transition: none !important;
     pointer-events: auto;
     will-change: auto;
+    height: auto;
   }
 
   .folder-card__indent,
@@ -8218,6 +8245,14 @@ body:has(.folio--fullgrid) .site-footer {
 
   .folder-card__content {
     margin-top: 0;
+    border-radius: var(--radius-folder-body);
+    flex: none;
+    height: auto;
+    pointer-events: auto !important;
+  }
+
+  .folder-card__content[hidden] {
+    display: grid !important;
   }
 }
 

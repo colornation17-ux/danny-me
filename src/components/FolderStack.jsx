@@ -1,6 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
 import ProjectMotionPreview, { hasMotionPreview } from './motion/ProjectMotionPreview'
 import {
   projectCaseCtaLabel,
@@ -169,7 +168,7 @@ function FolderCard({
         className="folder-card__content"
         role="region"
         aria-labelledby={triggerId}
-        hidden={!isActive}
+        hidden={!(isActive || reduceMotion)}
       >
         <div className="folder-card__text">
           <div className="folder-card__text-head">
@@ -351,13 +350,6 @@ function FolderCard({
                 {isAudioOn ? 'Audio on' : 'Play audio'}
               </button>
             )}
-
-            <div className="folder-card__corners" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
           </div>
         </div>
       </div>
@@ -450,7 +442,7 @@ export default function FolderStack({ projects }) {
 
   useEffect(() => {
     // Scroll-scrubbed index only for desktop overlapping stack
-    if (layoutMode !== 'desktop') return undefined
+    if (reduceMotion || layoutMode !== 'desktop') return undefined
 
     const stack = stackRef.current
     if (!stack) return undefined
@@ -472,7 +464,11 @@ export default function FolderStack({ projects }) {
           return
         }
         const progress = Math.max(0, Math.min(1, scrolled / scrollRange))
-        const idx = Math.round(progress * (total - 1))
+        // Floor-biased so cards don't flicker at midpoints while scrolling
+        const idx = Math.min(
+          total - 1,
+          Math.max(0, Math.floor(progress * total - 1e-6)),
+        )
         if (idx !== activeIndexRef.current) {
           activeIndexRef.current = idx
           setActiveIndex(idx)
@@ -490,41 +486,18 @@ export default function FolderStack({ projects }) {
       window.visualViewport?.removeEventListener('resize', onScroll)
       if (raf) window.cancelAnimationFrame(raf)
     }
-  }, [total, navH, layoutMode])
-
-  const prevActive = useRef(0)
-  useLayoutEffect(() => {
-    if (reduceMotion || layoutMode !== 'desktop') return
-    const prev = prevActive.current
-    prevActive.current = activeIndex
-    if (activeIndex <= prev) return
-    const stack = stackRef.current
-    if (!stack) return
-    const card = stack.querySelector(`[data-index="${activeIndex}"]`)
-    if (!card) return
-    gsap.killTweensOf(card)
-    gsap.fromTo(
-      card,
-      { y: '105%' },
-      { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
-    )
-  }, [activeIndex, reduceMotion, layoutMode])
-
-  useEffect(() => {
-    if (layoutMode === 'desktop') return undefined
-    const stack = stackRef.current
-    if (!stack) return undefined
-    const cards = stack.querySelectorAll('.folder-card')
-    gsap.killTweensOf(cards)
-    gsap.set(cards, { clearProps: 'transform' })
-    return undefined
-  }, [layoutMode])
+  }, [total, navH, layoutMode, reduceMotion])
 
   const jumpTo = useCallback(
     (index) => {
-      if (layoutMode !== 'desktop') {
+      if (reduceMotion || layoutMode !== 'desktop') {
         activeIndexRef.current = index
         setActiveIndex(index)
+        if (reduceMotion) {
+          document
+            .getElementById(`project-${projects[index]?.slug}`)
+            ?.scrollIntoView({ behavior: 'auto', block: 'nearest' })
+        }
         return
       }
       const stack = stackRef.current
@@ -536,15 +509,17 @@ export default function FolderStack({ projects }) {
       const targetScroll = stackAbsTop - navH + progress * scrollRange
       window.scrollTo({
         top: targetScroll,
-        behavior: reduceMotion ? 'auto' : 'smooth',
+        behavior: 'smooth',
       })
     },
-    [total, navH, reduceMotion, layoutMode],
+    [total, navH, reduceMotion, layoutMode, projects],
   )
 
   return (
     <div
-      className={`folder-stack folder-stack--${layoutMode}`}
+      className={`folder-stack folder-stack--${layoutMode}${
+        reduceMotion ? ' folder-stack--static' : ''
+      }`}
       ref={stackRef}
       style={{
         '--folder-count': total,
@@ -552,8 +527,9 @@ export default function FolderStack({ projects }) {
     >
       <div className="folder-sticky">
         {projects.map((project, index) => {
-          const cardState =
-            index < activeIndex
+          const cardState = reduceMotion
+            ? 'active'
+            : index < activeIndex
               ? 'past'
               : index === activeIndex
                 ? 'active'
