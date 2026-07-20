@@ -78,6 +78,7 @@ function FolderCard({
   cardState,
   onJump,
   reduceMotion,
+  isInitialCard,
 }) {
   const mediaVideoRef = useRef(null)
   const [isAudioOn, setIsAudioOn] = useState(false)
@@ -101,19 +102,34 @@ function FolderCard({
   const liveLabel = projectLiveCtaLabel(project)
   const hasAudioControl = Boolean(project.reelAudioControl && project.reel)
   const isActive = cardState === 'active'
+  const contentId = `project-content-${project.slug}`
+  const buttonId = `project-button-${project.slug}`
+  const poster = project.reelPoster || project.cover || project.hero || undefined
 
   useEffect(() => {
     const video = mediaVideoRef.current
-    if (!video) return
+    if (!video) return undefined
 
-    if (isActive && !reduceMotion) {
-      video.play().catch(() => {})
-      return
+    if (!isActive) {
+      video.pause()
+      video.muted = true
+      if (isAudioOn) setIsAudioOn(false)
+      return undefined
     }
 
-    video.pause()
-    video.muted = true
-    if (isAudioOn) setIsAudioOn(false)
+    if (reduceMotion) {
+      video.pause()
+      return undefined
+    }
+
+    video.muted = !isAudioOn
+    video.play().catch(() => {
+      /* Poster remains if autoplay is blocked */
+    })
+
+    return () => {
+      video.pause()
+    }
   }, [isActive, reduceMotion, isAudioOn])
 
   const toggleAudio = useCallback(async () => {
@@ -145,17 +161,21 @@ function FolderCard({
     ? {
         href: to,
         target: '_blank',
-        rel: 'noreferrer',
+        rel: 'noopener noreferrer',
+        'aria-label': `${cta} for ${title} (opens in a new tab)`,
       }
-    : { to }
+    : { to, 'aria-label': `${cta}: ${title}` }
+
+  const showLive =
+    Boolean(project.liveUrl) &&
+    to !== project.liveUrl &&
+    !/^https?:\/\/wa\.me\//i.test(project.liveUrl || '')
 
   return (
     <article
-      className={`folder-card folder-card--${cardState}`}
-      id={`pj${index + 1}`}
+      className={`folder-card folder-card--${cardState}${isActive ? '' : ' folder-card--inactive'}`}
+      id={`project-${project.slug}`}
       data-index={index}
-      aria-label={`Project ${label}: ${title}`}
-      aria-hidden={!reduceMotion && cardState === 'future' ? 'true' : undefined}
       style={{
         '--folder-fill': tone.fill,
         '--folder-ink': tone.ink,
@@ -170,10 +190,12 @@ function FolderCard({
         )}
         <button
           type="button"
+          id={buttonId}
           className="folder-card__tab"
           aria-label={`Project ${label}: ${title}`}
+          aria-expanded={isActive}
+          aria-controls={contentId}
           onClick={() => onJump(index)}
-          tabIndex={!reduceMotion && cardState === 'future' ? -1 : 0}
         >
           <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
           <span className="folder-card__tab-label">{title}</span>
@@ -182,7 +204,13 @@ function FolderCard({
         <div className="folder-card__ledge" aria-hidden="true" />
       </div>
 
-      <div className="folder-card__content">
+      <div
+        id={contentId}
+        className="folder-card__content"
+        aria-labelledby={buttonId}
+        aria-hidden={!isActive}
+        {...(!isActive ? { inert: true } : {})}
+      >
         <div className="folder-card__text">
           <p className="folder-card__progress" aria-hidden="true">
             {label} / {String(total).padStart(2, '0')}
@@ -193,9 +221,11 @@ function FolderCard({
               <span>{project.folderDate || project.year || '2026'}</span>
             </div>
             <h3
-            className="folder-card__title"
-            data-font={project.folderTitleFont || ''}
-          >{title}</h3>
+              className="folder-card__title"
+              data-font={project.folderTitleFont || ''}
+            >
+              {title}
+            </h3>
             {(role || company || status) && (
               <p className="folder-card__meta">
                 {[role, company, status].filter(Boolean).join(' · ')}
@@ -225,48 +255,44 @@ function FolderCard({
                 : ''
             }`}
           >
-            <CtaEl
-              {...ctaProps}
-              className="folder-card__cta"
-              tabIndex={reduceMotion || isActive ? 0 : -1}
-            >
+            <CtaEl {...ctaProps} className="folder-card__cta">
               <span>{cta}</span>
               <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
             </CtaEl>
-            {project.liveUrl && to !== project.liveUrl && (
+            {showLive && (
               <a
                 href={project.liveUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="folder-card__live"
-                tabIndex={reduceMotion || isActive ? 0 : -1}
+                aria-label={`${liveLabel} for ${title} (opens in a new tab)`}
                 onClick={(e) => e.stopPropagation()}
               >
-                {liveLabel} ↗
+                {liveLabel} <span aria-hidden="true">↗</span>
               </a>
             )}
             {project.whatsappUrl && (
               <a
                 href={project.whatsappUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="folder-card__live folder-card__live--secondary"
-                tabIndex={reduceMotion || isActive ? 0 : -1}
+                aria-label={`Try ${title} on WhatsApp (opens in a new tab)`}
                 onClick={(e) => e.stopPropagation()}
               >
-                Try on WhatsApp ↗
+                Try on WhatsApp <span aria-hidden="true">↗</span>
               </a>
             )}
             {project.connectUrl && (
               <a
                 href={project.connectUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="folder-card__live folder-card__live--secondary"
-                tabIndex={reduceMotion || isActive ? 0 : -1}
+                aria-label={`${project.connectCta || 'Lola Connect'} (opens in a new tab)`}
                 onClick={(e) => e.stopPropagation()}
               >
-                {project.connectCta || 'Lola Connect'} ↗
+                {project.connectCta || 'Lola Connect'} <span aria-hidden="true">↗</span>
               </a>
             )}
           </div>
@@ -292,33 +318,37 @@ function FolderCard({
               <div className="folder-card__portrait-wrap">
                 <video
                   ref={mediaVideoRef}
-                  src={project.reel}
-                  autoPlay={isActive && !reduceMotion}
-                  muted={!isAudioOn}
+                  muted
                   loop
                   playsInline
                   preload={isActive ? 'metadata' : 'none'}
-                />
+                  poster={poster}
+                  aria-hidden="true"
+                >
+                  <source src={project.reel} type="video/mp4" />
+                </video>
               </div>
             ) : project.reel ? (
               <video
                 ref={mediaVideoRef}
-                src={project.reel}
-                autoPlay={isActive && !reduceMotion}
-                muted={!isAudioOn}
+                muted
                 loop
                 playsInline
                 preload={isActive ? 'metadata' : 'none'}
-              />
+                poster={poster}
+                aria-hidden="true"
+              >
+                <source src={project.reel} type="video/mp4" />
+              </video>
             ) : motion ? (
               <ProjectMotionPreview slug={project.slug} size="card" />
             ) : project.cover ? (
               <img
                 src={project.cover}
                 alt={mediaAlt}
-                loading={cardState === 'active' ? 'eager' : 'lazy'}
+                loading={isInitialCard ? 'eager' : 'lazy'}
                 decoding="async"
-                fetchPriority={cardState === 'active' ? 'high' : 'auto'}
+                fetchPriority={isInitialCard ? 'high' : 'auto'}
               />
             ) : (
               <div className="folder-card__placeholder" aria-hidden="true">
@@ -343,11 +373,11 @@ function FolderCard({
                   <figure key={clip.label} className="folder-card__connect-clip">
                     <video
                       src={clip.src}
-                      autoPlay={isActive && !reduceMotion}
                       muted
                       loop
                       playsInline
                       preload={isActive ? 'metadata' : 'none'}
+                      aria-hidden="true"
                     />
                     <figcaption>{clip.label}</figcaption>
                   </figure>
@@ -408,8 +438,9 @@ export default function FolderStack({ projects }) {
         setTabW(Math.max(24, Math.floor(usable / total)))
         return
       }
-      const usable = Math.max(300, width * 0.85)
-      setTabW(Math.floor(Math.min(180, Math.max(100, usable / total))))
+      const usable = Math.max(300, width * 0.88)
+      // Prefer wider tabs so longer titles truncate less (indent math still uses --folder-tab-w)
+      setTabW(Math.floor(Math.min(168, Math.max(112, usable / total))))
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -545,6 +576,7 @@ export default function FolderStack({ projects }) {
               cardState={cardState}
               onJump={jumpTo}
               reduceMotion={reduceMotion}
+              isInitialCard={index === 0}
             />
           )
         })}

@@ -39,7 +39,6 @@ export function projectLiveCtaLabel(project) {
     return project.whatsappUrl ? 'Open live site' : 'Open live app'
   }
   if (project.slug === 'competitor-watch') return 'Open live app'
-  if (project.slug === 'lola') return 'Full interactive story'
   return 'Open live site'
 }
 

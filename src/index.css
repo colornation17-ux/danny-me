@@ -6504,10 +6504,24 @@ body:has(.folio--fullgrid) .site-footer {
   transform: translateY(0);
 }
 
-/* Future cards wait below viewport; slide up when activated */
+/* Future cards wait below viewport; slide up when activated.
+   Do NOT disable pointer-events on the whole article — tabs must stay reachable. */
 .folder-card--future {
   transform: translateY(105%);
+}
+
+/* Inactive bodies can't be clicked / focused — tabs in chrome stay interactive */
+.folder-card:not(.folder-card--active) .folder-card__content {
   pointer-events: none;
+}
+
+.folder-card--active .folder-card__content {
+  pointer-events: auto;
+}
+
+.folder-card--future .folder-card__chrome,
+.folder-card--future .folder-card__tab {
+  pointer-events: auto;
 }
 
 .folder-card__chrome {
@@ -6595,7 +6609,9 @@ body:has(.folio--fullgrid) .site-footer {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  overflow-wrap: anywhere;
   white-space: nowrap;
+  line-height: 1.1;
   font: inherit;
   letter-spacing: inherit;
   text-transform: inherit;
