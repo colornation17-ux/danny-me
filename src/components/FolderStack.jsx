@@ -69,6 +69,16 @@ function FolderTag({ label }) {
   )
 }
 
+function resolveLayoutMode() {
+  if (typeof window === 'undefined') return 'desktop'
+  const w = window.innerWidth
+  const h = window.innerHeight
+  // Short laptop windows also get accordion — sticky scrub clips media
+  if (w < 768 || h < 680) return 'mobile'
+  if (w < 1200) return 'tablet'
+  return 'desktop'
+}
+
 function FolderCard({
   project,
   index,
@@ -79,6 +89,7 @@ function FolderCard({
   onJump,
   reduceMotion,
   isInitialCard,
+  layoutMode,
 }) {
   const mediaVideoRef = useRef(null)
   const [isAudioOn, setIsAudioOn] = useState(false)
@@ -91,6 +102,10 @@ function FolderCard({
   const motion = hasMotionPreview(project.slug)
   const cta = projectCaseCtaLabel(project)
   const title = projectNavLabel(project)
+  const tabTitle =
+    layoutMode === 'desktop'
+      ? project.tabLabel || title
+      : project.tabLabelCompact || project.tabLabel || title
   const label = project.index || String(index + 1).padStart(2, '0')
   const tags = project.tags || project.skills?.slice(0, 2) || []
   const mediaAlt = project.coverAlt || `${title} preview`
@@ -105,6 +120,7 @@ function FolderCard({
   const contentId = `project-content-${project.slug}`
   const buttonId = `project-button-${project.slug}`
   const poster = project.reelPoster || project.cover || project.hero || undefined
+  const isStacked = layoutMode !== 'desktop'
 
   useEffect(() => {
     const video = mediaVideoRef.current
@@ -198,7 +214,7 @@ function FolderCard({
           onClick={() => onJump(index)}
         >
           <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
-          <span className="folder-card__tab-label">{title}</span>
+          <span className="folder-card__tab-label">{tabTitle}</span>
         </button>
         <div className="folder-card__tab-slope" aria-hidden="true" />
         <div className="folder-card__ledge" aria-hidden="true" />
@@ -206,9 +222,10 @@ function FolderCard({
 
       <div
         id={contentId}
-        className="folder-card__content"
+        className={`folder-card__content${isActive ? '' : ' folder-card__content--inactive'}`}
         aria-labelledby={buttonId}
         aria-hidden={!isActive}
+        hidden={isStacked && !isActive ? true : undefined}
         {...(!isActive ? { inert: true } : {})}
       >
         <div className="folder-card__text">
@@ -400,13 +417,9 @@ function FolderCard({
 }
 
 /**
- * Single sticky container holds all N cards at the same viewport position.
- * Scroll tracking advances the active card index; past cards stay visible
- * under the active card so their tab buttons show through indent holes,
- * building the full tab row naturally. Future cards wait off-screen below.
- *
- * Index mapping uses round(progress * (N-1)) so first/last cards land cleanly
- * on tab jumps (avoids floor(progress * N) starving the last card).
+ * Desktop (≥1200px, tall): sticky overlapping folder scrub.
+ * Tablet / short windows: tab rail + one open panel.
+ * Mobile: accordion — tap a named tab, no scroll scrub, media never clips.
  */
 export default function FolderStack({ projects }) {
   const stackRef = useRef(null)
@@ -414,7 +427,9 @@ export default function FolderStack({ projects }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [navH, setNavH] = useState(NAV_H)
   const [reduceMotion, setReduceMotion] = useState(false)
+  const [layoutMode, setLayoutMode] = useState('desktop')
   const total = projects.length
+  const isDesktop = layoutMode === 'desktop'
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -425,31 +440,35 @@ export default function FolderStack({ projects }) {
   }, [])
 
   useEffect(() => {
+    const read = () => setLayoutMode(resolveLayoutMode())
+    read()
+    window.addEventListener('resize', read, { passive: true })
+    window.visualViewport?.addEventListener('resize', read)
+    return () => {
+      window.removeEventListener('resize', read)
+      window.visualViewport?.removeEventListener('resize', read)
+    }
+  }, [])
+
+  useEffect(() => {
     const el = stackRef.current
     if (!el) return
     const measure = () => {
       const sticky = el.querySelector('.folder-sticky')
       const width = sticky?.clientWidth || el.clientWidth
-      const compact = width < 700 || window.innerWidth < 700
-      if (compact) {
-        // Leave room for slope so past tabs stay visible through the indent
-        const slope = 16
-        const safety = 4
-        const usable = Math.max(180, width - slope - safety)
-        setTabW(Math.max(24, Math.floor(usable / total)))
+      if (layoutMode !== 'desktop') {
+        setTabW(Math.max(72, Math.floor(width / Math.min(total, 4))) )
         return
       }
       const usable = Math.max(300, width * 0.88)
-      // Prefer wider tabs so longer titles truncate less (indent math still uses --folder-tab-w)
       setTabW(Math.floor(Math.min(168, Math.max(112, usable / total))))
     }
     measure()
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [total])
+  }, [total, layoutMode])
 
-  // Measure real nav height (mobile can differ from the 74px desktop assumption)
   useEffect(() => {
     const nav = document.querySelector('.site-nav--folio, .site-nav')
     if (!nav) return undefined
@@ -471,8 +490,10 @@ export default function FolderStack({ projects }) {
   }, [])
 
   const activeIndexRef = useRef(0)
+  activeIndexRef.current = activeIndex
 
   useEffect(() => {
+    if (!isDesktop) return undefined
     const stack = stackRef.current
     if (!stack) return undefined
 
@@ -511,11 +532,14 @@ export default function FolderStack({ projects }) {
       window.visualViewport?.removeEventListener('resize', onScroll)
       if (raf) window.cancelAnimationFrame(raf)
     }
-  }, [total, navH])
+  }, [total, navH, isDesktop])
 
   const prevActive = useRef(0)
   useLayoutEffect(() => {
-    if (reduceMotion) return
+    if (!isDesktop || reduceMotion) {
+      prevActive.current = activeIndex
+      return
+    }
     const prev = prevActive.current
     prevActive.current = activeIndex
     if (activeIndex <= prev) return
@@ -529,12 +553,24 @@ export default function FolderStack({ projects }) {
       { y: '105%' },
       { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
     )
-  }, [activeIndex, reduceMotion])
+  }, [activeIndex, reduceMotion, isDesktop])
 
   const jumpTo = useCallback(
     (index) => {
       const stack = stackRef.current
       if (!stack || total <= 0) return
+
+      if (!isDesktop) {
+        setActiveIndex(index)
+        activeIndexRef.current = index
+        const card = stack.querySelector(`[data-index="${index}"]`)
+        card?.scrollIntoView({
+          block: 'nearest',
+          behavior: reduceMotion ? 'auto' : 'smooth',
+        })
+        return
+      }
+
       const stackAbsTop = stack.getBoundingClientRect().top + window.scrollY
       const stickyH = window.innerHeight - navH
       const scrollRange = Math.max(0, stack.offsetHeight - stickyH)
@@ -545,12 +581,12 @@ export default function FolderStack({ projects }) {
         behavior: reduceMotion ? 'auto' : 'smooth',
       })
     },
-    [total, navH, reduceMotion],
+    [total, navH, reduceMotion, isDesktop],
   )
 
   return (
     <div
-      className="folder-stack"
+      className={`folder-stack folder-stack--${layoutMode}`}
       ref={stackRef}
       style={{
         '--folder-count': total,
@@ -578,6 +614,7 @@ export default function FolderStack({ projects }) {
               onJump={jumpTo}
               reduceMotion={reduceMotion}
               isInitialCard={index === 0}
+              layoutMode={layoutMode}
             />
           )
         })}

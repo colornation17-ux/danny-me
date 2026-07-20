@@ -7687,17 +7687,17 @@ body:has(.folio--fullgrid) .site-footer {
 
 @media (max-width: 699px) {
   /*
-   * Numbers-only tabs on phones — name lives in the card body.
-   * Keep slope + ledge so past project tabs stay visible (folder overlap).
+   * Sticky-scrub fallback (no layout-mode class yet / mid resize):
+   * numbers-only tabs. Accordion mode (.folder-stack--mobile) restores names.
    */
-  .folder-card__chrome {
+  .folder-stack:not(.folder-stack--mobile):not(.folder-stack--tablet) .folder-card__chrome {
     min-height: 48px;
     width: 100%;
     max-width: 100%;
     overflow: hidden;
   }
 
-  .folder-card__tab {
+  .folder-stack:not(.folder-stack--mobile):not(.folder-stack--tablet) .folder-card__tab {
     justify-content: center;
     gap: 0;
     padding: 0 0.35rem;
@@ -7706,20 +7706,12 @@ body:has(.folio--fullgrid) .site-footer {
     overflow: hidden;
   }
 
-  .folder-card__tab-num {
-    opacity: 1;
-  }
-
-  .folder-card__tab-label {
+  .folder-stack:not(.folder-stack--mobile):not(.folder-stack--tablet) .folder-card__tab-label {
     display: none;
   }
 
-  .folder-card__tab-slope {
+  .folder-stack:not(.folder-stack--mobile):not(.folder-stack--tablet) .folder-card__tab-slope {
     width: 16px;
-  }
-
-  .folder-card--active .folder-card__tab-label {
-    display: none;
   }
 }
 
@@ -7740,7 +7732,7 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__meta--sub {
-    display: none;
+    display: block;
   }
 
   .folder-card__img {
@@ -7751,7 +7743,6 @@ body:has(.folio--fullgrid) .site-footer {
     display: flex;
   }
 
-  /* Keep the shared 16:10 well — stretching taller crops status bars in reels */
   .folder-card__image,
   .folder-card__image--fill,
   .folder-card__image--portrait {
@@ -7871,7 +7862,8 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__meta--sub {
-    display: none;
+    display: block;
+    font-size: max(var(--text-meta-xs), 0.75rem);
   }
 
   .folder-card__blurb {
@@ -8102,20 +8094,12 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-stack--mobile .folder-card--active .folder-card__content {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: none;
   height: auto;
   flex: none;
   pointer-events: auto;
-}
-
-.folder-stack--mobile .folder-card__text {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto auto;
-  gap: 0;
-  padding: 0;
-  min-width: 0;
-  overflow: visible;
 }
 
 .folder-stack--mobile .folder-card__cta-row,
@@ -8138,16 +8122,61 @@ body:has(.folio--fullgrid) .site-footer {
   justify-content: center;
 }
 
-.folder-stack--mobile .folder-card__img {
-  order: -1;
-  padding: 0;
-}
-
 .folder-stack--mobile .folder-card__image,
 .folder-stack--mobile .folder-card__image--fill,
 .folder-stack--mobile .folder-card__image--portrait {
   max-height: none;
   height: auto;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-xs);
+}
+
+.folder-stack--mobile .folder-card__meta--sub {
+  display: block;
+}
+
+.folder-stack--mobile .folder-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem 1rem;
+  min-width: 0;
+  overflow: visible;
+}
+
+.folder-stack--mobile .folder-card__text-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.folder-stack--mobile .folder-card__img {
+  order: -1;
+  padding: 0.85rem 1rem 0;
+}
+
+.folder-stack--mobile .folder-card__content {
+  border-radius: 0 0 var(--radius-folder-body) var(--radius-folder-body);
+  overflow: hidden;
+}
+
+.folder-stack--mobile {
+  padding-inline: clamp(0.5rem, 2vw, 1rem);
+}
+
+.folder-stack--tablet .folder-card__meta--sub {
+  display: block;
+}
+
+.folder-stack--tablet .folder-card__img {
+  padding: 0.85rem 1.15rem 1.15rem;
+}
+
+.folder-stack--tablet .folder-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem 1.15rem 1.15rem;
 }
 
 /* Tablet: scrollable tab rail + one active panel */
