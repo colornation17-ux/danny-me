@@ -6820,8 +6820,8 @@ body:has(.folio--fullgrid) .site-footer {
 
 @media (min-width: 900px) {
   .folder-card__content {
-    grid-template-columns: minmax(13rem, 0.95fr) minmax(17rem, 1.35fr);
-    align-items: stretch;
+    grid-template-columns: minmax(12.5rem, 0.88fr) minmax(16rem, 1.22fr);
+    align-items: start;
     flex: 1 1 auto;
     min-height: 0;
   }
@@ -6830,70 +6830,78 @@ body:has(.folio--fullgrid) .site-footer {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-self: stretch;
-    gap: 0.65rem;
-    padding: clamp(1rem, 2.2vh, 1.65rem) clamp(1rem, 2vw, 1.75rem)
-      clamp(0.85rem, 1.8vh, 1.25rem);
+    align-self: start;
+    gap: 0.5rem;
+    padding: 1rem 1.15rem 1rem 1.25rem;
     min-height: 0;
     overflow: visible;
   }
 
   .folder-card__text-main {
-    gap: 0.25rem;
+    gap: 0.2rem;
+  }
+
+  .folder-card__text-main .folder-card__meta,
+  .folder-card__text-main .folder-card__blurb {
+    margin-top: 0;
   }
 
   .folder-card__title {
-    font-size: clamp(2rem, 3.2vw, 3.4rem);
+    font-size: clamp(1.85rem, 2.8vw, 2.85rem);
+    line-height: 1.05;
   }
 
   .folder-card__blurb {
-    max-width: 36ch;
+    max-width: 34ch;
     display: block;
     overflow: visible;
     -webkit-line-clamp: unset;
     line-clamp: unset;
+    font-size: 1rem;
+    line-height: 1.4;
   }
 
   .folder-card__metric {
-    margin-top: 0.35rem;
+    margin-top: 0.15rem;
   }
 
   .folder-card__cta-row {
-    margin-top: 0.35rem;
+    margin-top: 0.15rem;
+    gap: 0.45rem 0.65rem;
   }
 
+  /* Pack tags under CTAs — auto was creating a tall dead band */
   .folder-card__tags {
-    margin-top: auto;
-    padding-top: 0.5rem;
+    margin-top: 0.35rem;
+    padding-top: 0;
   }
 
   .folder-card__img {
     min-height: 0;
-    align-items: center;
-    align-self: stretch;
+    align-items: flex-start;
+    align-self: start;
     height: auto;
-    padding: clamp(0.85rem, 2vh, 1.15rem) clamp(0.85rem, 1.8vw, 1.15rem)
-      clamp(0.85rem, 2vh, 1.15rem) clamp(0.45rem, 1vw, 0.75rem);
+    padding: 1rem 1.15rem 1rem 0.5rem;
   }
 
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    max-height: min(100%, 32rem);
+    max-height: min(52vh, 26rem);
     height: auto;
     width: 100%;
-    align-self: center;
+    align-self: start;
   }
 }
 
 /* Short desktop windows — pack copy, keep media */
 @media (min-width: 900px) and (max-height: 820px) {
   .folder-card__text {
-    gap: 0.45rem;
-    padding: 0.85rem 1rem 0.65rem;
+    gap: 0.4rem;
+    padding: 0.75rem 0.9rem 0.65rem;
   }
 
   .folder-card__title {
-    font-size: clamp(1.75rem, 3vw, 2.6rem);
+    font-size: clamp(1.6rem, 2.6vw, 2.25rem);
   }
 
   .folder-card__meta--sub {
@@ -6901,48 +6909,52 @@ body:has(.folio--fullgrid) .site-footer {
   }
 
   .folder-card__blurb {
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: 0.9rem;
+    line-height: 1.35;
   }
 
   .folder-card__tags {
-    margin-top: 0.45rem;
+    margin-top: 0.25rem;
     padding-top: 0;
+  }
+
+  .folder-card__img {
+    padding: 0.75rem 0.9rem 0.75rem 0.4rem;
   }
 
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    max-height: min(100%, 22rem);
+    max-height: min(42vh, 18rem);
   }
 }
 
-/* Mid desktop — same two-column density */
+/* Mid desktop — same packed density */
 @media (min-width: 900px) and (max-width: 1600px) {
   .folder-card__content {
     flex: 1 1 auto;
     min-height: 0;
-    align-items: stretch;
+    align-items: start;
   }
 
   .folder-card__image--fill,
   .folder-card__image--portrait {
-    max-height: min(100%, 28rem);
+    max-height: min(48vh, 24rem);
   }
 }
 
 /* Narrow laptop two-column */
 @media (min-width: 900px) and (max-width: 1180px) {
   .folder-card__content {
-    grid-template-columns: minmax(12rem, 0.95fr) minmax(14rem, 1.2fr);
+    grid-template-columns: minmax(11.5rem, 0.92fr) minmax(13rem, 1.15fr);
   }
 
   .folder-card__text {
-    padding-inline: 0.9rem;
-    gap: 0.55rem;
+    padding: 0.85rem 0.85rem 0.75rem;
+    gap: 0.45rem;
   }
 
   .folder-card__title {
-    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    font-size: clamp(1.55rem, 2.8vw, 2.2rem);
   }
 
   .folder-card__cta-row--split {
@@ -6970,15 +6982,15 @@ body:has(.folio--fullgrid) .site-footer {
   flex-direction: column;
   justify-content: flex-start;
   align-content: start;
-  gap: clamp(0.75rem, 1.5vh, 1.15rem);
-  padding: clamp(1.15rem, 3vw, 2rem);
+  gap: 0.55rem;
+  padding: 1rem 1.1rem;
   min-width: 0;
 }
 
 .folder-card__text-main {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.2rem;
   min-width: 0;
 }
 
@@ -7027,10 +7039,10 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__title {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--text-folder);
+  font-size: clamp(1.85rem, 2.8vw, 2.85rem);
   font-weight: 700;
   letter-spacing: -0.035em;
-  line-height: 1.02;
+  line-height: 1.05;
   text-wrap: balance;
 }
 
@@ -7056,7 +7068,7 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__meta {
-  margin: var(--space-2) 0 0;
+  margin: 0;
   font-family: var(--font-sans);
   font-size: max(var(--text-meta), 0.8125rem);
   font-weight: 600;
@@ -7069,27 +7081,27 @@ body:has(.folio--fullgrid) .site-footer {
 }
 
 .folder-card__meta--sub {
-  margin-top: 0.2rem;
+  margin-top: 0.15rem;
   font-weight: 500;
   color: color-mix(in srgb, var(--folder-ink) 78%, transparent);
 }
 
 .folder-card__blurb {
-  margin: var(--space-2) 0 0;
-  max-width: 36ch;
+  margin: 0;
+  max-width: 34ch;
   font-family: var(--font-sans);
   font-size: max(var(--text-body), 1rem);
   font-weight: 400;
-  line-height: 1.45;
+  line-height: 1.4;
   color: color-mix(in srgb, var(--folder-ink) 96%, transparent);
 }
 
 .folder-card__metric {
   display: grid;
   gap: 0.15rem;
-  margin: 0.65rem 0 0;
+  margin: 0.15rem 0 0;
   min-height: 0;
-  max-width: 36ch;
+  max-width: 34ch;
   font-family: var(--font-sans);
   font-size: max(var(--text-meta), 0.8125rem);
   font-weight: 600;
@@ -7222,8 +7234,8 @@ body:has(.folio--fullgrid) .site-footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.65rem 1.15rem;
-  margin-top: var(--folder-space-4, 1.5rem);
+  gap: 0.45rem 0.65rem;
+  margin-top: 0.25rem;
 }
 
 .folder-card__secondary-links {
@@ -7326,9 +7338,9 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-card__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
   list-style: none;
-  margin: var(--folder-space-4, 1.5rem) 0 0;
+  margin: 0.35rem 0 0;
   padding: 0;
 }
 
