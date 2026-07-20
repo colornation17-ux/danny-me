@@ -239,6 +239,13 @@ function FolderCard({
                 {[project.timeline, project.team].filter(Boolean).join(' · ')}
               </p>
             )}
+            {tags.length > 0 && (
+              <div className="folder-card__tags folder-card__tags--identity">
+                {tags.map((tag) => (
+                  <FolderTag key={tag} label={tag} />
+                ))}
+              </div>
+            )}
             <p className="folder-card__blurb">
               {project.blurb || project.outcome}
             </p>
@@ -275,14 +282,6 @@ function FolderCard({
               </a>
             ))}
           </div>
-
-          {tags.length > 0 && (
-            <div className="folder-card__tags">
-              {tags.map((tag) => (
-                <FolderTag key={tag} label={tag} />
-              ))}
-            </div>
-          )}
         </div>
 
         <div className="folder-card__img">

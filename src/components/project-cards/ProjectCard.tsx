@@ -95,6 +95,13 @@ export default function ProjectCard({
                 {project.timeline}
               </p>
             )}
+            <ul className="folder-card__tags folder-card__tags--identity" aria-label="Project skills">
+              {project.tags.map((tag) => (
+                <li className="folder-card__tag" key={tag}>
+                  <span className="folder-card__tag-label">{tag}</span>
+                </li>
+              ))}
+            </ul>
             <p className="folder-card__blurb">{project.summary}</p>
             <ProjectMetric metric={project.metric} />
           </div>
@@ -104,14 +111,6 @@ export default function ProjectCard({
             secondary={project.secondaryActions}
             compact={compact}
           />
-
-          <ul className="folder-card__tags" aria-label="Project skills">
-            {project.tags.map((tag) => (
-              <li className="folder-card__tag" key={tag}>
-                <span className="folder-card__tag-label">{tag}</span>
-              </li>
-            ))}
-          </ul>
         </div>
 
         <ProjectMedia
