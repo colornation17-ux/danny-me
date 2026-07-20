@@ -72,9 +72,9 @@ function FolderTag({ label }) {
 function resolveLayoutMode() {
   if (typeof window === 'undefined') return 'desktop'
   const w = window.innerWidth
-  const h = window.innerHeight
-  // Short laptop windows also get accordion — sticky scrub clips media
-  if (w < 768 || h < 680) return 'mobile'
+  // Width-only: short laptop height must NOT drop desktop sticky stack
+  // (that made past cards “disappear” while scrubbing).
+  if (w < 768) return 'mobile'
   if (w < 1200) return 'tablet'
   return 'desktop'
 }
@@ -536,18 +536,24 @@ export default function FolderStack({ projects }) {
 
   const prevActive = useRef(0)
   useLayoutEffect(() => {
-    if (!isDesktop || reduceMotion) {
+    if (!isDesktop) {
       prevActive.current = activeIndex
       return
     }
-    const prev = prevActive.current
-    prevActive.current = activeIndex
-    if (activeIndex <= prev) return
     const stack = stackRef.current
     if (!stack) return
-    const card = stack.querySelector(`[data-index="${activeIndex}"]`)
+
+    const cards = [...stack.querySelectorAll('.folder-card')]
+    cards.forEach((card) => gsap.killTweensOf(card))
+    // Drop any leftover inline transforms so CSS past/active/future classes win
+    cards.forEach((card) => gsap.set(card, { clearProps: 'transform' }))
+
+    const prev = prevActive.current
+    prevActive.current = activeIndex
+    if (reduceMotion || activeIndex <= prev) return
+
+    const card = cards[activeIndex]
     if (!card) return
-    gsap.killTweensOf(card)
     gsap.fromTo(
       card,
       { y: '105%' },

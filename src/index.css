@@ -6571,11 +6571,11 @@ body:has(.folio--fullgrid) .site-footer {
   --card-pad-inline: clamp(1.25rem, 3vw, 3rem);
   --card-pad-block: clamp(1.5rem, 4vw, 3.5rem);
   position: relative;
-  /* Side inset like the saved reference — cards sit in the grid, not edge-to-edge */
+  /* Match nav column — inset so graph paper shows on both sides (not full-bleed) */
   width: 100%;
-  max-width: none;
+  max-width: var(--max);
   margin-inline: auto;
-  padding-inline: clamp(0.5rem, 2vw, 1.25rem);
+  padding-inline: clamp(0.75rem, 2.5vw, 1.5rem);
   /* Each card gets 70dvh of scroll; sticky fills (100dvh − nav) — dvh avoids mobile URL-bar jank */
   height: calc(var(--folder-count) * 70dvh + (var(--folder-vh) - var(--folder-nav-h)));
 }
@@ -6601,7 +6601,32 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-stack--desktop {
   /* Fit all six tabs inside the sticky frame — never clip tab 06 */
-  --folder-tab-w: clamp(5rem, 9.5vw, 7.25rem);
+  --folder-tab-w: clamp(4.75rem, 8.5vw, 6.5rem);
+  max-width: var(--max);
+}
+
+/*
+ * Desktop sticky stack: past cards must stay mounted under the active one.
+ * Never collapse with [hidden]/display:none — that kills the folder overlap.
+ */
+.folder-stack--desktop .folder-card--past,
+.folder-stack--desktop .folder-card--active {
+  transform: translateY(0);
+}
+
+.folder-stack--desktop .folder-card--future {
+  transform: translateY(105%);
+}
+
+.folder-stack--desktop .folder-card__content--inactive {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.folder-stack--desktop .folder-card__content[hidden] {
+  display: grid !important;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* Single sticky viewport holding all cards at the same position */
@@ -6663,19 +6688,6 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card--active .folder-card__content {
   pointer-events: auto;
-}
-
-/*
- * Desktop: never collapse inactive panels with display:none.
- * Keep flex shell measurements; hide visually + inert (set in JSX).
- */
-.folder-stack--desktop .folder-card__content--inactive {
-  visibility: hidden;
-}
-
-.folder-stack--desktop .folder-card__content[hidden] {
-  display: grid !important;
-  visibility: hidden;
 }
 
 .folder-card__chrome {
