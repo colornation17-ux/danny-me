@@ -82,7 +82,7 @@ export const work = [
       {
         eyebrow: 'Decision 2 · Diagnose',
         title: 'Barcode format mismatch — not four broken scanners',
-        body: 'Hours 10–36. Floor audit, invoice-to-catalog comparison, and cross-terminal tests. Failures followed barcode/catalog format, not individual registers: the same affected items failed everywhere on one shared Odoo database. Datalogic scales output EAN-13; codes reaching the catalog often did not match that contract. Rejected: postpone opening, replace Odoo, hand-key every item, or “fix” one register at a time. Hypothesis matrix and confidence labels are in the research appendix.',
+        body: 'Hours 10–36. Floor audit, invoice-to-catalog comparison, and cross-terminal tests. Failures followed barcode/catalog format, not individual registers: the same affected items failed everywhere on one shared Odoo database. Datalogic scales/scanners output EAN-13; catalog codes mixed digit lengths, missing barcodes, and inconsistent leading-zero handling. A prior Odoo export showed 6,890 records with heavy format mix (pending export-date confirm) — composition context, not the active-assortment recognition denominator. Rejected: postpone opening, replace Odoo, hand-key every item, or “fix” one register at a time. Full hypothesis matrix is in the research appendix.',
       },
       {
         eyebrow: 'Decision 3 · Fix upstream',
@@ -101,7 +101,7 @@ export const work = [
       {
         eyebrow: 'Results',
         title: 'What was measured vs what was observed',
-        body: 'Until appendix sample Ns are locked: recognition on the active launch assortment is an ops estimate of roughly ~60% workable scans pre-fix, then near-complete success on the revalidated assortment after EAN-13-aligned import — not “~100%.” Affected lines moved from multi-minute stalls (observed 2–5 min) toward sub-30-second identification (observed). Observed, not counted: fewer manager escalations and price disputes; staff running onboarding without designer presence after Day 3. Loyalty and retention are out of scope for this case.',
+        body: 'Until active-assortment sample Ns are locked: recognition remains an ops estimate of roughly ~60% workable scans pre-fix → near-complete on the revalidated active set after EAN-13-aligned import — not “~100%,” and not “of 6,890 catalog rows.” Affected lines moved from multi-minute stalls (observed 2–5 min) toward sub-30-second identification (observed; N TODO). Observed: fewer manager escalations and price disputes; staff teaching staff by Day 3 (operational transfer, not a formal usability study). Loyalty is out of scope.',
         metrics: [
           { value: '~60% → near-complete', label: 'Recognition (ops est. · active assortment)' },
           { value: '2–5 min → <30s', label: 'Lookup stall (observed)' },
