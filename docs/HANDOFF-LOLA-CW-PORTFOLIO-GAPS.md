@@ -22,7 +22,7 @@ Resume mirror: `C:\Users\danny\.proficiently\resume\` (`build_spd_ga.py`, `resum
 Use these La Bodega bullets (do not weaken back to “shipped / designed dashboards only”):
 
 1. **Loyalty/CRM** — discount 0.29%→0.09%, 13% revenue lift (keep; separate from Lola/CW cases)
-2. **Lola** — *Designed bilingual WhatsApp guest flows and built Lola Connect (staff PWA) solo — deals Q&A, pickup orders, reminders, and staff handoff; 96.3% of conversations closed without staff.*
+2. **Lola** — *Designed bilingual WhatsApp guest flows and built Lola Connect (staff PWA) solo — deals Q&A, pickup orders, reminders, and staff handoff; 96.3% of conversations did not require staff escalation.*
 3. **Competitor Watch** — *Designed and built Competitor Watch solo (React + Python) — competitor ads, weekend playbook, store pulse, demand forecast, and WhatsApp→POS visit attribution for Thursday merchandising decisions.*
 4. **Ops PWA** — shift/approvals/vendor (separate product)
 5. Partnered with store leadership…
@@ -46,7 +46,7 @@ Use these La Bodega bullets (do not weaken back to “shipped / designed dashboa
 | P0 | **Lola Connect spine** — Home · Inbox · Orders · Tickets · Reminders | “Built staff PWA” needs UI proof beyond generic “inbox” | `wacrm` staff nav |
 | P0 | **Two-tier alerts** (draft buzz → confirm; pickup-soon) | Distinguishes ops design from chatbot portfolio spam | Shop-orders / alert code in wacrm |
 | P1 | **Craft / safety** — flyer-grounded answers, no invented prices, pause when human owns thread | Interview defense | Case study Reference appendix |
-| P1 | **Metrics honesty block** | Trust | 96.3% closed without staff · 97.7% first reply &lt;2m · **Still Measuring:** pickup lead-time, escalate solve/expire (filter test traffic) |
+| P1 | **Metrics honesty block** | Trust | 96.3% did not require staff escalation · 97.7% first reply &lt;2m · **Still Measuring:** pickup lead-time, escalate solve/expire (filter test traffic) |
 | P1 | **Buttons-first** pickup (not `#order`-first) | Fix product grammar vs old stub | Meta templates / FLOW_TABS |
 | P2 | Voice constraints (text-first TTS; remonder EN-only cron gap) | Honest craft | CS `PRODUCTION_GAPS` |
 | P2 | Clarify ownership: Lola = flows + Connect spine; **not** entire CRM (Broadcasts / Pipelines / Automations) | Avoid overclaim | Eng handoff in wacrm |
