@@ -3624,10 +3624,14 @@ body:has(.folio--fullgrid) .app {
   background: var(--white);
 }
 
-/* Let folder strip use the full viewport width inside .main */
+/* Let folder strip use the full viewport width inside .main.
+   Must beat Lola adp-tokens `#main-content { padding-left }` (ID specificity leak). */
+body:has(.folio--fullgrid) #main-content,
 .main:has(.folio--fullgrid) {
   max-width: none;
   padding-inline: 0;
+  padding-left: 0;
+  padding-right: 0;
   overflow: visible;
   background: var(--white);
 }

@@ -2387,7 +2387,9 @@ h2:focus-visible,
     opacity: 1;
   }
 
-  #main-content {
+  /* Phase-rail inset — scoped to Lola case study only (was leaking onto homepage) */
+  .lola-cs #main-content,
+  body:has(.lola-cs) #main-content {
     padding-left: min(6.5rem, 9vw);
   }
 }

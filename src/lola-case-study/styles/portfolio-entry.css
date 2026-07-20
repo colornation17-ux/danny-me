@@ -68,10 +68,15 @@ body {
 
 /* ── Folio shell: kill double inset + global side-effects from adp-tokens ── */
 
-/* adp-tokens pads #main-content whenever Lola CSS loads — restore folio gutter */
+/* adp-tokens pads #main-content for Lola's phase rail — keep that ONLY on Lola pages.
+   Never re-gutter the homepage full-bleed grid. */
 @media (min-width: 1024px) {
-  #main-content {
+  body:has(.lola-cs) #main-content {
     padding-left: var(--gutter);
+  }
+
+  body:has(.folio--fullgrid) #main-content {
+    padding-left: 0;
   }
 }
 
