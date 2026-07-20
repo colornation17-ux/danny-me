@@ -6602,6 +6602,8 @@ body:has(.folio--fullgrid) .site-footer {
 .folder-stack .folder-card {
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
+  /* Keep radius clip while GPU-composited transforms run */
+  backface-visibility: hidden;
 }
 
 .folder-stack .folder-card--past,
@@ -6619,7 +6621,9 @@ body:has(.folio--fullgrid) .site-footer {
   }
 }
 
-/* Single sticky viewport holding all cards at the same position */
+/* Single sticky viewport holding all cards at the same position.
+ * Bottom radius + overflow clip so incoming cards can’t flash square edges
+ * through the rounded corners during scrub transitions. */
 .folder-sticky {
   position: sticky;
   top: var(--folder-nav-h);
@@ -6627,9 +6631,12 @@ body:has(.folio--fullgrid) .site-footer {
   overflow: hidden;
   background: transparent;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--radius-folder-body);
   box-shadow: none;
   outline: none;
+  /* Create a stacking context so transforms stay clipped to the radius */
+  isolation: isolate;
+  transform: translateZ(0);
 }
 
 .folder-card {
@@ -6642,6 +6649,9 @@ body:has(.folio--fullgrid) .site-footer {
   color: var(--folder-ink);
   z-index: calc(var(--folder-index) + 1);
   transition: none;
+  /* Match body radius so each layer clips the same way while sliding */
+  border-radius: var(--radius-folder-body);
+  overflow: hidden;
 }
 
 /* Past / active sit in place; future wait below (desktop overrides above) */
@@ -6656,6 +6666,17 @@ body:has(.folio--fullgrid) .site-footer {
 
 .folder-card--future {
   transform: translate3d(0, 105%, 0);
+}
+
+/* Hide incoming chrome while off-screen / sliding in — square tab tops
+   were flashing through the rounded bottom corners of the card above */
+.folder-card--future .folder-card__chrome {
+  opacity: 0;
+}
+
+.folder-card--past .folder-card__chrome,
+.folder-card--active .folder-card__chrome {
+  opacity: 1;
 }
 
 .folder-card--future .folder-card__content {
@@ -6686,6 +6707,7 @@ body:has(.folio--fullgrid) .site-footer {
   min-height: 58px;
   /* Kill subpixel hairlines between tab / slope / ledge */
   transform: translateZ(0);
+  transition: opacity 0.18s ease;
 }
 
 /* Hole for earlier sticky tabs — clicks pass through to those tabs */
