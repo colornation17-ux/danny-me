@@ -74,11 +74,11 @@ function FolderCard({
   index,
   total,
   tone: baseTone,
-  tabW,
   cardState,
   onJump,
   reduceMotion,
   isInitialCard,
+  layoutMode,
 }) {
   const mediaVideoRef = useRef(null)
   const [isAudioOn, setIsAudioOn] = useState(false)
@@ -91,6 +91,7 @@ function FolderCard({
   const motion = hasMotionPreview(project.slug)
   const cta = projectCaseCtaLabel(project)
   const title = projectNavLabel(project)
+  const tabLabel = project.tabLabel || title
   const label = project.index || String(index + 1).padStart(2, '0')
   const tags = project.tags || project.skills?.slice(0, 2) || []
   const mediaAlt = project.coverAlt || `${title} preview`
@@ -105,6 +106,7 @@ function FolderCard({
   const contentId = `project-content-${project.slug}`
   const buttonId = `project-button-${project.slug}`
   const poster = project.reelPoster || project.cover || project.hero || undefined
+  const compactCtas = layoutMode !== 'desktop'
 
   useEffect(() => {
     const video = mediaVideoRef.current
@@ -153,8 +155,7 @@ function FolderCard({
 
   // Past cards sit underneath the active card — their tab buttons stay visible
   // through the transparent indent holes in the active card's chrome row.
-  // Active card sits on top. Future cards are hidden off-screen below.
-  const zIndex = cardState === 'active' ? total + 10 : index + 1
+  // z-index comes from CSS (--folder-index + active state), not inline scroll math.
 
   const CtaEl = isExternalCase ? 'a' : Link
   const ctaProps = isExternalCase
@@ -171,6 +172,29 @@ function FolderCard({
     to !== project.liveUrl &&
     !/^https?:\/\/wa\.me\//i.test(project.liveUrl || '')
 
+  const secondaryLinks = []
+  if (showLive) {
+    secondaryLinks.push({
+      href: project.liveUrl,
+      label: liveLabel,
+      aria: `${liveLabel} for ${title} (opens in a new tab)`,
+    })
+  }
+  if (project.whatsappUrl) {
+    secondaryLinks.push({
+      href: project.whatsappUrl,
+      label: project.whatsappCta || 'Try Lola',
+      aria: `Try ${title} on WhatsApp (opens in a new tab)`,
+    })
+  }
+  if (project.connectUrl) {
+    secondaryLinks.push({
+      href: project.connectUrl,
+      label: project.connectCta || 'Open staff app',
+      aria: `${project.connectCta || 'Open staff app'} (opens in a new tab)`,
+    })
+  }
+
   return (
     <article
       className={`folder-card folder-card--${cardState}${isActive ? '' : ' folder-card--inactive'}`}
@@ -180,8 +204,6 @@ function FolderCard({
         '--folder-fill': tone.fill,
         '--folder-ink': tone.ink,
         '--folder-index': index,
-        '--folder-tab-w': `${tabW}px`,
-        zIndex,
       }}
     >
       <div className="folder-card__chrome">
@@ -198,7 +220,7 @@ function FolderCard({
           onClick={() => onJump(index)}
         >
           <span className="folder-card__tab-num" aria-hidden="true">{label}</span>
-          <span className="folder-card__tab-label">{title}</span>
+          <span className="folder-card__tab-label">{tabLabel}</span>
         </button>
         <div className="folder-card__tab-slope" aria-hidden="true" />
         <div className="folder-card__ledge" aria-hidden="true" />
@@ -239,6 +261,9 @@ function FolderCard({
             <p className="folder-card__blurb">
               {project.outcome || project.blurb}
             </p>
+            {project.metric && (
+              <p className="folder-card__metric">{project.metric}</p>
+            )}
             {project.connectSpine?.length > 0 && (
               <ul className="folder-card__spine" aria-label="Lola Connect navigation">
                 {project.connectSpine.map((item) => (
@@ -250,50 +275,48 @@ function FolderCard({
 
           <div
             className={`folder-card__cta-row${
-              project.whatsappUrl && project.connectUrl
-                ? ' folder-card__cta-row--split'
-                : ''
+              secondaryLinks.length > 1 ? ' folder-card__cta-row--split' : ''
             }`}
           >
             <CtaEl {...ctaProps} className="folder-card__cta">
               <span>{cta}</span>
               <span className="folder-card__cta-arrow" aria-hidden="true">↗</span>
             </CtaEl>
-            {showLive && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="folder-card__live"
-                aria-label={`${liveLabel} for ${title} (opens in a new tab)`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                {liveLabel} <span aria-hidden="true">↗</span>
-              </a>
-            )}
-            {project.whatsappUrl && (
-              <a
-                href={project.whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="folder-card__live folder-card__live--secondary"
-                aria-label={`Try ${title} on WhatsApp (opens in a new tab)`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                Try on WhatsApp <span aria-hidden="true">↗</span>
-              </a>
-            )}
-            {project.connectUrl && (
-              <a
-                href={project.connectUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="folder-card__live folder-card__live--secondary"
-                aria-label={`${project.connectCta || 'Lola Connect'} (opens in a new tab)`}
-                onClick={(e) => e.stopPropagation()}
-              >
-                {project.connectCta || 'Lola Connect'} <span aria-hidden="true">↗</span>
-              </a>
+            {compactCtas && secondaryLinks.length > 1 ? (
+              <details className="folder-card__more">
+                <summary>
+                  {project.whatsappUrl || project.connectUrl
+                    ? 'Live experiences'
+                    : 'More actions'}
+                </summary>
+                {secondaryLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="folder-card__live folder-card__live--secondary"
+                    aria-label={link.aria}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {link.label} <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </details>
+            ) : (
+              secondaryLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="folder-card__live folder-card__live--secondary"
+                  aria-label={link.aria}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {link.label} <span aria-hidden="true">↗</span>
+                </a>
+              ))
             )}
           </div>
 
@@ -409,10 +432,17 @@ function FolderCard({
  */
 export default function FolderStack({ projects }) {
   const stackRef = useRef(null)
-  const [tabW, setTabW] = useState(100)
   const [activeIndex, setActiveIndex] = useState(0)
   const [navH, setNavH] = useState(NAV_H)
   const [reduceMotion, setReduceMotion] = useState(false)
+  const [layoutMode, setLayoutMode] = useState(() => {
+    if (typeof window === 'undefined') return 'desktop'
+    const width = window.innerWidth
+    const height = window.innerHeight
+    if (width < 768 || height < 680) return 'mobile'
+    if (width < 1200) return 'tablet'
+    return 'desktop'
+  })
   const total = projects.length
 
   useEffect(() => {
@@ -425,30 +455,33 @@ export default function FolderStack({ projects }) {
 
   useEffect(() => {
     const el = stackRef.current
-    if (!el) return
-    const measure = () => {
-      const sticky = el.querySelector('.folder-sticky')
-      const width = sticky?.clientWidth || el.clientWidth
-      const compact = width < 700 || window.innerWidth < 700
-      if (compact) {
-        // Leave room for slope so past tabs stay visible through the indent
-        const slope = 16
-        const safety = 4
-        const usable = Math.max(180, width - slope - safety)
-        setTabW(Math.max(24, Math.floor(usable / total)))
-        return
-      }
-      const usable = Math.max(300, width * 0.88)
-      // Prefer wider tabs so longer titles truncate less (indent math still uses --folder-tab-w)
-      setTabW(Math.floor(Math.min(168, Math.max(112, usable / total))))
-    }
-    measure()
-    const ro = new ResizeObserver(measure)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [total])
+    if (!el) return undefined
 
-  // Measure real nav height (mobile can differ from the 74px desktop assumption)
+    const syncMode = () => {
+      const width = el.clientWidth || window.innerWidth
+      const height = window.innerHeight
+      if (width < 768 || height < 680) {
+        setLayoutMode('mobile')
+      } else if (width < 1200) {
+        setLayoutMode('tablet')
+      } else {
+        setLayoutMode('desktop')
+      }
+    }
+
+    syncMode()
+    const ro = new ResizeObserver(syncMode)
+    ro.observe(el)
+    window.addEventListener('resize', syncMode, { passive: true })
+    window.visualViewport?.addEventListener('resize', syncMode)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', syncMode)
+      window.visualViewport?.removeEventListener('resize', syncMode)
+    }
+  }, [])
+
+  // Measure real nav height for sticky offset (data value — not tab width)
   useEffect(() => {
     const nav = document.querySelector('.site-nav--folio, .site-nav')
     if (!nav) return undefined
@@ -472,6 +505,9 @@ export default function FolderStack({ projects }) {
   const activeIndexRef = useRef(0)
 
   useEffect(() => {
+    // Scroll-scrubbed index only for desktop overlapping stack
+    if (layoutMode !== 'desktop') return undefined
+
     const stack = stackRef.current
     if (!stack) return undefined
 
@@ -510,11 +546,11 @@ export default function FolderStack({ projects }) {
       window.visualViewport?.removeEventListener('resize', onScroll)
       if (raf) window.cancelAnimationFrame(raf)
     }
-  }, [total, navH])
+  }, [total, navH, layoutMode])
 
   const prevActive = useRef(0)
   useLayoutEffect(() => {
-    if (reduceMotion) return
+    if (reduceMotion || layoutMode !== 'desktop') return
     const prev = prevActive.current
     prevActive.current = activeIndex
     if (activeIndex <= prev) return
@@ -528,10 +564,25 @@ export default function FolderStack({ projects }) {
       { y: '105%' },
       { y: 0, duration: 0.55, ease: 'power3.out', clearProps: 'transform' },
     )
-  }, [activeIndex, reduceMotion])
+  }, [activeIndex, reduceMotion, layoutMode])
+
+  useEffect(() => {
+    if (layoutMode === 'desktop') return undefined
+    const stack = stackRef.current
+    if (!stack) return undefined
+    const cards = stack.querySelectorAll('.folder-card')
+    gsap.killTweensOf(cards)
+    gsap.set(cards, { clearProps: 'transform' })
+    return undefined
+  }, [layoutMode])
 
   const jumpTo = useCallback(
     (index) => {
+      if (layoutMode !== 'desktop') {
+        activeIndexRef.current = index
+        setActiveIndex(index)
+        return
+      }
       const stack = stackRef.current
       if (!stack || total <= 0) return
       const stackAbsTop = stack.getBoundingClientRect().top + window.scrollY
@@ -544,20 +595,18 @@ export default function FolderStack({ projects }) {
         behavior: reduceMotion ? 'auto' : 'smooth',
       })
     },
-    [total, navH, reduceMotion],
+    [total, navH, reduceMotion, layoutMode],
   )
 
   return (
     <div
-      className="folder-stack"
+      className={`folder-stack folder-stack--${layoutMode}`}
       ref={stackRef}
       style={{
         '--folder-count': total,
-        '--folder-tab-w': `${tabW}px`,
-        '--folder-nav-h': `${navH}px`,
       }}
     >
-      <div className="folder-sticky">
+      <div className="folder-sticky" role={layoutMode === 'desktop' ? undefined : 'tablist'}>
         {projects.map((project, index) => {
           const cardState =
             index < activeIndex
@@ -572,11 +621,11 @@ export default function FolderStack({ projects }) {
               index={index}
               total={total}
               tone={FOLDER_TONES[index % FOLDER_TONES.length]}
-              tabW={tabW}
               cardState={cardState}
               onJump={jumpTo}
               reduceMotion={reduceMotion}
               isInitialCard={index === 0}
+              layoutMode={layoutMode}
             />
           )
         })}

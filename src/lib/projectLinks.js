@@ -28,6 +28,7 @@ export function projectNavBlurb(project) {
 export function projectCaseCtaLabel(project) {
   if (!project) return 'View case study'
   if (project.placeholder) return 'Case study soon'
+  if (project.caseCta) return project.caseCta
   if (project.conceptOnly) return 'View in Lab'
   return project.liveCta || 'View case study'
 }
