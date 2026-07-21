@@ -64,7 +64,7 @@ export default function Project() {
   const embedUrl =
     project?.embedUrl ||
     (project?.slug === 'bodega-ops'
-      ? 'https://mattjr21.github.io/La-Bodega-game/?embed=1'
+      ? 'https://la-bodega-game-preview.vercel.app/?embed=1'
       : null)
   const isGameCase = Boolean(embedUrl) && !isLolaCase
   const railSteps = useMemo(() => {
