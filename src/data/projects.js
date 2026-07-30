@@ -28,7 +28,7 @@ export const work = [
   },
   {
     slug: 'competitor-watch',
-    outcome: 'Thursday merchandising decision loop with visit attribution',
+    outcome: 'Thursday order app for La Bodega: ads, weekend plan, WhatsApp→register',
     title: 'Competitor Watch',
     meta: 'La Bodega · Shipped 2026',
     status: 'Shipped',
@@ -36,11 +36,11 @@ export const work = [
     domain: 'Product design',
     layer: 'Ops + analytics product',
     blurb:
-      'Solo React + Python decision-support product for the Thursday planning call: competitor deals + shelf-vs-floor pricing → weekend playbook → demand buy/hold/reduce bands → RFM visit-rhythm nudges → WhatsApp outreach → POS visit match (2,088 visits within 7 days via CRM phone). Engagement stays with loyalty/Lola; this product owns visibility and proof.',
+      'Solo React + Python for La Bodega’s Thursday order. Chain ads and shelf gaps, weekend weather targets, buy/hold/reduce from POS, WhatsApp matched to the register. Guest chat stays in Lola.',
     role: 'Design technologist · Solo design & build',
     timeline: 'MVP in ~2 weeks · ongoing production',
     team: 'Solo design & build',
-    skills: ['Product design', 'React', 'Python', 'Demand forecast', 'CRM', 'Ops'],
+    skills: ['Product design', 'React', 'Python', 'Order guidance', 'CRM', 'Ops'],
     accent: '#166534',
     liveUrl: 'https://competitor-watch-1.onrender.com',
     cover: '/work/competitor-watch/motion/CW-02-CompetitorDeals.png',
@@ -48,6 +48,9 @@ export const work = [
     layout: 'product',
     caseStudyBody: 'competitor-watch',
     sections: [],
+    problem:
+      'La Bodega prices and orders on Thursday against chain circulars. Before CW: Flipp tabs, Excel exports, WhatsApp blasts with no register link.',
+    heroProofKey: 'waPosVisits',
   },
   {
     slug: 'bodega-ops',
@@ -153,7 +156,7 @@ export const work = [
       {
         eyebrow: 'Overview',
         title: 'A platform for four audiences, not one brochure site',
-        body: 'CODE19 Racing set out to reimagine the digital experience for autonomous motorsports by designing a user-centered platform for fans, sponsors, engineers, and drivers. The goal: transform the website into an engaging hub that delivers real-time value and strengthens brand leadership in a fast-moving category.',
+        body: 'CODE19 needed one site that served fans, sponsors, engineers, and drivers — not a brochure. I redesigned IA, content, SEO, and UI so each audience could find a real reason to stay.',
         image: '/work/code19/screen-2.png',
         caption: 'Previous CODE19 website (before redesign)',
       },
@@ -203,7 +206,7 @@ export const work = [
       {
         eyebrow: 'What I learned',
         title: 'The hard constraint was data integration, not design',
-        body: 'Real-time feeds from multiple third-party sources required demanding technical coordination. Serving four audiences on one platform meant real IA trade-offs, not just responsive breakpoints. Next: broader usability testing across user segments, and gradually introducing interactive analytics and AR/VR fan experience modules.',
+        body: 'Real-time feeds from third-party sources were the hard constraint — coordination, not decoration. Four audiences on one IA meant trade-offs at every nav level. What I would do next: more usability tests across segments before adding heavier interactive modules.',
         image: '/work/code19/final-screens.png',
         caption: 'Shipped platform, multi-audience navigation',
       },

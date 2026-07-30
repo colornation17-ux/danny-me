@@ -24,7 +24,7 @@ export const CW_SLIDES = [
   {
     id: 'forecast',
     src: '/work/competitor-watch/owner-forecast.png',
-    label: 'Demand forecast',
+    label: 'Order guidance',
     caption: 'Buy / hold / reduce from POS',
     access: 'owner',
     overlay: 'forecast',

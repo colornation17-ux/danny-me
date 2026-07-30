@@ -384,14 +384,12 @@
 .nav-mobile-menu {
   display: none;
   overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.25s ease;
   background: #fff;
   border-top: 1px solid #e8e8e8;
 }
 
 .nav-mobile-menu--open {
-  max-height: 400px;
+  display: block;
 }
 
 .nav-mobile-links {

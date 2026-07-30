@@ -1,123 +1,152 @@
 /**
- * Competitor Watch motion assets — clean clips for case study (no baked chrome).
- * Drop files into public/work/competitor-watch/motion/
+ * Competitor Watch motion assets.
+ * Numbers come from cwMockFixtures (frozen CW cache extract).
  */
 
+import { CW_MOCK, CW_MOCK_META } from './cwMockFixtures'
+
 const BASE = '/work/competitor-watch/motion'
+
+const pulseKpi = (label) => CW_MOCK.pulse.kpis.find((k) => k.label === label)
+const waStat = (label) => CW_MOCK.whatsapp.stats.find((s) => s.label === label)
+const adsCount = (() => {
+  const m = String(CW_MOCK.deals.subtitle || '').match(/(\d+)\s+ads/i)
+  return m ? m[1] : '144'
+})()
+const merchantCount = (() => {
+  const m = String(CW_MOCK.deals.scanNote || '').match(/(\d+)\s+merchants/i)
+  return m ? m[1] : '15'
+})()
+const hotFoodLift = (() => {
+  const t =
+    CW_MOCK.weather.targets.find((x) => /hot/i.test(x.label)) ||
+    CW_MOCK.weather.targets.find((x) => !x.down)
+  if (!t) return '↑30%'
+  if (!t.down && t.width) return `↑${Math.max(0, t.width - 70)}%`
+  return t.amount || '↑30%'
+})()
 
 export const CW_REEL = {
   src: `${BASE}/CompetitorWatch-Reel.mp4`,
   poster: `${BASE}/still-reel.png`,
-  label: 'Competitor Watch system reel',
+  label: 'Competitor Watch reel',
   durationLabel: '~31s',
 }
 
-/** Clean clips — captions live in HTML, not in the video. */
 export const CW_CLIPS = [
   {
     id: 'sales-summary',
     file: 'CW-01-SalesSummary',
     n: '01',
     label: 'Sales pulse',
-    job: 'Is this week good or not?',
-    problem: 'Store heartbeat: revenue, orders, and movers at a glance.',
-    signature: '+19.2%',
-    signatureLabel: 'Week over week',
-    proof: ['$46,091 week', '1,582 orders', 'Daily bars'],
-    caption: 'Sales pulse: store heartbeat at a glance.',
-    decision:
-      'Lead with the week pulse, not a report dump; operators need a yes/no in seconds before the order call.',
+    job: 'Was this week up or down?',
+    problem: 'Week revenue, orders, basket, and movers on one screen.',
+    signature: pulseKpi('Week revenue')?.delta || '+19.2%',
+    signatureLabel: 'vs last week',
+    proof: [
+      `${pulseKpi('Week revenue')?.value || '$46,091'} week`,
+      `${pulseKpi('Orders')?.value || '1,582'} orders`,
+      CW_MOCK_META.store,
+    ],
+    caption: `${CW_MOCK_META.store}, ${CW_MOCK_META.market}`,
+    decision: 'First screen before the Thursday order. Yes/no on the week without opening Excel.',
   },
   {
     id: 'competitor-deals',
     file: 'CW-02-CompetitorDeals',
     n: '02',
     label: 'Competitor deals',
-    job: 'What are the chains advertising?',
-    problem:
-      'Live Flipp index across ZIP markets: meat winners first, plus combo packs and national ranking for Thursday merchandising.',
-    signature: '144',
+    job: 'What are nearby chains advertising?',
+    problem: `Flipp index for the home ZIP. Meat ads first. ${adsCount} ads across ${merchantCount} merchants.`,
+    signature: adsCount,
     signatureLabel: 'Ads indexed',
-    proof: ['ZIP markets / chains', 'Meat winners', 'Combo packs', 'National rank'],
-    caption: 'Competitor deals: winners, combo packs, and national rank — not a flat price dump.',
-    decision:
-      'Surface meat winners first: the category where independents lose weekends to mainstream and Latino competitors.',
+    proof: [
+      `${merchantCount} merchants`,
+      CW_MOCK.deals.deals[0]?.merchant || 'ALDI',
+      CW_MOCK.deals.deals[0]?.price || 'Live ads',
+      CW_MOCK_META.market,
+    ],
+    caption: `${adsCount} ads · ${merchantCount} retailers · ${CW_MOCK_META.market}`,
+    decision: 'Meat leads the list because that is where La Bodega loses weekends to chains.',
   },
   {
     id: 'weekend-playbook',
     file: 'CW-03-WeekendPlaybook',
     n: '03',
     label: 'Weekend playbook',
-    job: 'What do we push this weekend?',
-    problem: 'Weather-tied category targets operators can act on.',
-    signature: '↑30%',
-    signatureLabel: 'Hot food lift',
-    proof: ['Rain weekend', 'Push / skip', 'Category targets'],
-    caption: 'Weekend playbook: weather-tied category targets.',
-    decision:
-      'Turn the forecast into push/skip language, not another weather widget operators ignore.',
+    job: 'What should we feature this weekend?',
+    problem: '3-day weather with category targets for push and ease.',
+    signature: hotFoodLift,
+    signatureLabel: 'Hot food target',
+    proof: [
+      CW_MOCK.weather.days[0] ? `${CW_MOCK.weather.days[0].rain} rain` : 'Rain weekend',
+      CW_MOCK.weather.days[0]?.push?.[0] || 'Hot food',
+      CW_MOCK.weather.targets[0]?.label || 'Grocery',
+    ],
+    caption: CW_MOCK.weather.alert || 'Rain plan: hot food and grocery up, grill down.',
+    decision: 'Writes push / ease language from the forecast so the weekend buy list is obvious.',
   },
   {
     id: 'competitive-pricing',
     file: 'CW-07-CompetitivePricing',
     ext: 'webm',
     n: '04',
-    label: 'Competitive pricing',
-    job: 'Are we above or below the ad floor?',
-    problem:
-      'Shelf / checkout averages vs live competitor ad lows — the pricing call that Thursday ads force.',
-    signature: 'Shelf vs ad',
-    signatureLabel: 'Checkout vs market floor',
-    proof: ['Avg vs floor', 'Meat basket risk', 'Same-day price calls'],
-    caption: 'Competitive pricing: shelf avg vs live ad floor before the order window.',
-    decision:
-      'Problem #1 was pricing blindness — this surface is the proof, not another deals scrape.',
+    label: 'Shelf vs ads',
+    job: 'Are we above the nearby ad price?',
+    problem: 'Category shelf average next to market median from weekly ads.',
+    signature: CW_MOCK.pricing.rows[0]?.gap || '—',
+    signatureLabel: CW_MOCK.pricing.rows[0]?.item || 'Meat',
+    proof: CW_MOCK.pricing.rows.slice(0, 3).map((r) => `${r.item} ${r.gap}`),
+    caption: CW_MOCK.pricing.insight || 'Shelf averages vs ad medians',
+    decision: 'Built for the pricing question first. Deals alone do not show the gap.',
     posterOverride: `${BASE}/CW-02-CompetitorDeals.png`,
   },
   {
     id: 'demand-forecast',
     file: 'CW-04-SalesForecast',
     n: '05',
-    label: 'Demand forecast',
-    job: 'How much will we sell?',
-    problem:
-      'Live 7-day outlook with per-SKU buy / hold / reduce (StatsForecast ensemble).',
-    signature: '80%',
-    signatureLabel: 'Prediction band',
-    proof: ['$42.4K next week', 'Buy · Hold · Reduce', 'Live in prod'],
-    caption: 'Demand forecast: live bands and buy/hold/reduce, not a fake-precise single number.',
-    decision:
-      'Designed for the model’s real output shape (buy / hold / reduce + bands). Shipped for that contract so the ensemble could go live and stay honest, with no fake-precise single number.',
+    label: 'Order guidance',
+    job: 'What should we reorder?',
+    problem: 'Buy / hold / reduce from POS movers for the next week.',
+    signature: 'Buy',
+    signatureLabel: CW_MOCK.forecast.buy[0] || 'POS movers',
+    proof: [
+      `Buy · ${CW_MOCK.forecast.buy[0] || '—'}`,
+      `Hold · ${CW_MOCK.forecast.hold[0] || '—'}`,
+      `Reduce · ${CW_MOCK.forecast.reduce[0] || '—'}`,
+    ],
+    caption: 'Buy / hold / reduce from POS movers',
+    decision: 'Three buckets match what the model can support. No single invented weekly total.',
   },
   {
     id: 'customers-rfm',
     file: 'CW-05-CustomersRetention',
     n: '06',
-    label: 'Customers · RFM · Retention',
-    job: 'Who are my shoppers & who’s slipping?',
-    problem:
-      'K-means RFM tiers (Champion, Loyal, Potential, At risk, Hibernating) plus visit-rhythm / replenishment nudges — not ML next-visit forecasts.',
-    signature: '277',
-    signatureLabel: 'Due for a replenishment nudge',
-    proof: ['1,469 customers', 'Champion → Hibernating', 'Win-back'],
-    caption: 'Customers: labeled RFM tiers and who is due a visit-rhythm nudge.',
-    decision:
-      'Win-back starts with who is slipping, not another anonymous coupon blast.',
+    label: 'Customers · RFM',
+    job: 'Who shops here, and who is cooling off?',
+    problem: 'RFM tiers from POS. Champions through new visitors.',
+    signature: String(CW_MOCK.customers.rfm.find((t) => /champion/i.test(t.label))?.count ?? 65),
+    signatureLabel: 'Champions',
+    proof: CW_MOCK.customers.rfm.slice(0, 3).map((t) => `${t.label.split('(')[0].trim()} ${t.count}`),
+    caption: `${CW_MOCK.customers.rfm.reduce((n, t) => n + (t.count || 0), 0).toLocaleString('en-US')} shoppers in RFM tiers`,
+    decision: 'Win-back lists start from who already shops, then who stopped showing up.',
   },
   {
     id: 'whatsapp-crm',
     file: 'CW-06-WhatsAppCrm',
     n: '07',
-    label: 'WhatsApp attribution',
-    job: 'Did the outreach work?',
-    problem:
-      'Match outreach to POS visits within seven days — proof on the channel the store already runs.',
-    signature: '2,088',
-    signatureLabel: '7-day POS matches',
-    proof: ['8,369 sent', '65.9% read', '7-day match'],
-    caption: 'WhatsApp match: CRM phone → POS visit within 7 days, not vanity sends.',
-    decision:
-      'Attribution is the product: close the loop with loyalty/Lola outreach, don’t rebuild CRM from scratch.',
+    label: 'WhatsApp → register',
+    job: 'Did a blast show up at the register?',
+    problem: 'CRM phone matched to POS within seven days of a send.',
+    signature: waStat('7-day POS')?.value || '2,086',
+    signatureLabel: 'Visits matched',
+    proof: [
+      `${waStat('Sent')?.value || '—'} sent`,
+      `${waStat('Read')?.value || '—'} read`,
+      `${waStat('7-day POS')?.value || '—'} at register`,
+    ],
+    caption: `${CW_MOCK.whatsapp.matches[0]?.campaign || 'Campaign'} · ${CW_MOCK.whatsapp.matches[0]?.visits || 'visits'}`,
+    decision: 'Visit match sits here. Message threads stay in Lola.',
   },
 ].map((clip) => {
   const ext = clip.ext || 'mp4'
@@ -129,7 +158,6 @@ export const CW_CLIPS = [
   }
 })
 
-/** Case-study proof order — pricing early so problem #1 has visible proof. */
 export const CW_GALLERY_ORDER = [
   'competitor-deals',
   'competitive-pricing',
@@ -146,13 +174,18 @@ export function clipById(id) {
 
 export const CW_GALLERY_CLIPS = CW_GALLERY_ORDER.map(clipById).filter(Boolean)
 
-/** All proofs in module number order for deep-dives. */
 export const CW_PROOF_CLIPS = [...CW_CLIPS].sort((a, b) => a.n.localeCompare(b.n))
 
-/** @deprecated */
-export const CW_HERO_CLIPS = CW_CLIPS.filter((c) =>
-  ['competitor-deals', 'competitive-pricing', 'demand-forecast', 'whatsapp-crm'].includes(c.id),
-)
+export const CW_HERO_CLIPS = [
+  'sales-summary',
+  'competitor-deals',
+  'competitive-pricing',
+  'demand-forecast',
+  'whatsapp-crm',
+]
+  .map((id) => CW_CLIPS.find((c) => c.id === id))
+  .filter(Boolean)
+
 export const CW_SUPPORT_CLIPS = CW_CLIPS.filter((c) =>
   ['weekend-playbook', 'customers-rfm'].includes(c.id),
 )

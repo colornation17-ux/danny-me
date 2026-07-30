@@ -1,40 +1,93 @@
 import { useId, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
-import { CW_CLIPS } from '../../data/competitorWatchMotion'
 
-const TONE = {
-  'sales-summary': 'green',
-  'competitor-deals': 'blue',
-  'weekend-playbook': 'orange',
-  'competitive-pricing': 'violet',
-  'demand-forecast': 'violet',
-  'customers-rfm': 'teal',
-  'whatsapp-crm': 'green',
-}
-
-const ICON = {
-  'sales-summary': 'bars',
-  'competitor-deals': 'scan',
-  'weekend-playbook': 'weather',
-  'competitive-pricing': 'pricing',
-  'demand-forecast': 'forecast',
-  'customers-rfm': 'users',
-  'whatsapp-crm': 'chat',
-}
-
-/** Modules pull title/job/metrics from CW_CLIPS (fixture-backed). Numbers follow grid order. */
-const MODULES = CW_CLIPS.map((clip, i) => ({
-  id: clip.id,
-  n: String(i + 1).padStart(2, '0'),
-  title: clip.label,
-  body: clip.job,
-  metricLabel: clip.signatureLabel,
-  metricDisplay: clip.signature,
-  metric: 78,
-  tags: clip.proof.slice(0, 3),
-  tone: TONE[clip.id] || 'green',
-  icon: ICON[clip.id] || 'bars',
-}))
+/** Competitor Watch proof jump cards — mirrors CW_PROOF_CLIPS surfaces. */
+const MODULES = [
+  {
+    id: 'sales-summary',
+    n: '01',
+    title: 'Sales pulse',
+    body: 'Is this week good or not? Store heartbeat: revenue, orders, and movers at a glance.',
+    metricLabel: 'Week over week',
+    metricDisplay: '+19.2%',
+    metric: 88,
+    tags: ['$46,091 week', '1,582 orders', 'Daily bars'],
+    tone: 'green',
+    icon: 'bars',
+  },
+  {
+    id: 'competitor-deals',
+    n: '02',
+    title: 'Competitor deals',
+    body: 'What are the chains advertising? ZIP-market Flipp index — meat winners, combo packs, national rank.',
+    metricLabel: 'Ads indexed',
+    metricDisplay: '144',
+    metric: 90,
+    tags: ['ZIP markets', 'Combos', 'National rank'],
+    tone: 'blue',
+    icon: 'scan',
+  },
+  {
+    id: 'weekend-playbook',
+    n: '03',
+    title: 'Weekend playbook',
+    body: 'What do we push this weekend? Weather-tied category targets operators can act on.',
+    metricLabel: 'Hot food lift',
+    metricDisplay: '↑30%',
+    metric: 78,
+    tags: ['Rain wknd', 'Push / skip', 'Category targets'],
+    tone: 'orange',
+    icon: 'weather',
+  },
+  {
+    id: 'competitive-pricing',
+    n: '04',
+    title: 'Competitive pricing',
+    body: 'Are we above or below the ad floor? Shelf / checkout avg vs live competitor lows.',
+    metricLabel: 'Shelf vs ad',
+    metricDisplay: 'Floor',
+    metric: 84,
+    tags: ['Avg vs floor', 'Meat basket', 'Same-day calls'],
+    tone: 'violet',
+    icon: 'pricing',
+  },
+  {
+    id: 'demand-forecast',
+    n: '05',
+    title: 'Demand forecast',
+    body: 'How much will we sell? Live 7-day outlook with per-SKU buy / hold / reduce.',
+    metricLabel: 'Prediction band',
+    metricDisplay: '80%',
+    metric: 80,
+    tags: ['$42.4K next wk', 'Buy · Hold · Reduce'],
+    tone: 'violet',
+    icon: 'forecast',
+  },
+  {
+    id: 'customers-rfm',
+    n: '06',
+    title: 'Customers · RFM · Retention',
+    body: 'Who’s slipping? Labeled RFM tiers plus visit-rhythm / replenishment nudges — not next-visit ML forecasts.',
+    metricLabel: 'Due for a nudge',
+    metricDisplay: '277',
+    metric: 74,
+    tags: ['Champion→Hibernating', '1,469 shoppers', 'Win-back'],
+    tone: 'teal',
+    icon: 'users',
+  },
+  {
+    id: 'whatsapp-crm',
+    n: '07',
+    title: 'WhatsApp attribution',
+    body: 'Did the outreach work? Match each message to a POS visit within seven days.',
+    metricLabel: '7-day POS matches',
+    metricDisplay: '2,088',
+    metric: 66,
+    tags: ['8,369 sent', '65.9% read', '7-day match'],
+    tone: 'green',
+    icon: 'chat',
+  },
+]
 
 const EASE = [0.22, 1, 0.36, 1]
 
@@ -104,19 +157,24 @@ function ModuleIcon({ name }) {
 }
 
 function focusFeature(id) {
-  window.dispatchEvent(new CustomEvent('cw:focus-feature', { detail: { id } }))
+  const el = document.getElementById(`cw-feature-${id}`)
+  if (!el) return
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  el.classList.add('cw-feature--flash')
   window.history.replaceState(null, '', `#cw-feature-${id}`)
+  el.focus({ preventScroll: true })
+  window.setTimeout(() => el.classList.remove('cw-feature--flash'), 1200)
 }
 
 export default function CwModulesGrid() {
   const reduceMotion = useReducedMotion()
-  const [active, setActive] = useState(MODULES[1]?.id || MODULES[0]?.id)
+  const [active, setActive] = useState(MODULES[1].id)
   const labelId = useId()
 
   return (
     <div className="cw-modules-wrap">
       <p className="cw-modules-hint" id={labelId}>
-        Open a screen
+        Click a module to jump to its proof clip
       </p>
       <motion.div
         className="cw-modules cw-modules--seven"
@@ -139,7 +197,7 @@ export default function CwModulesGrid() {
               key={mod.id}
               type="button"
               className={`cw-module cw-module--${mod.tone}${isActive ? ' cw-module--active' : ''}`}
-              aria-current={isActive ? 'true' : undefined}
+              aria-pressed={isActive}
               onClick={() => {
                 setActive(mod.id)
                 focusFeature(mod.id)
@@ -164,6 +222,7 @@ export default function CwModulesGrid() {
                 <span className="cw-module__n">{mod.n}</span>
               </header>
               <h3>{mod.title}</h3>
+              <p>{mod.body}</p>
               <div className="cw-module__metric">
                 <div className="cw-module__metric-row">
                   <span>{mod.metricLabel}</span>
@@ -190,7 +249,14 @@ export default function CwModulesGrid() {
                   />
                 </div>
               </div>
-              <span className="cw-module__cta">{isActive ? 'Open ↓' : 'Open ↓'}</span>
+              <ul className="cw-module__tags">
+                {mod.tags.map((tag) => (
+                  <li key={tag}>{tag}</li>
+                ))}
+              </ul>
+              <span className="cw-module__cta">
+                {isActive ? 'Viewing proof ↓' : 'View proof ↓'}
+              </span>
             </motion.button>
           )
         })}

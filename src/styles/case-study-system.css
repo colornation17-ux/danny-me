@@ -17,7 +17,7 @@
   --cs-line: var(--line);
   --cs-line-strong: var(--folio-line);
   --cs-bg: var(--bg);
-  --cs-surface: var(--bg-elevated);
+  --cs-surface: var(--white);
   --cs-mono: var(--font-label, var(--font-mono));
   --cs-display: var(--font-display);
   --cs-sans: var(--font-sans);

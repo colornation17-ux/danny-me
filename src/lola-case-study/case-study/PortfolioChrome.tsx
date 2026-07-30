@@ -188,7 +188,7 @@ export function PortfolioContact() {
             something real.
           </h2>
           <p className="folio-contact__body">
-            Open to contract work, full-time roles, and hard design problems. I read every note.
+            Open to full-time product design roles.
           </p>
         </div>
         <div className="folio-contact__right">

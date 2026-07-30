@@ -1,4 +1,6 @@
 import { lab, work } from './projects'
+import { CW_HERO_PROOF } from './cwMetrics'
+import { CW_CASE_STUDY_PATH } from './cwCaseStudyAb'
 import {
   assertFeaturedProjectCard,
   type FeaturedProjectCard,
@@ -120,13 +122,12 @@ export const featuredProjects: FeaturedProjectCard[] = [
     team: 'Solo product design and development',
     date: 'Jun 10, 2026',
     summary:
-      'Turns competitor promos and basket patterns into pricing moves and win-back outreach.',
+      'Thursday order app for La Bodega: chain ads, weekend plan, WhatsApp→register.',
     metric: {
-      kind: 'Pilot signal',
-      value:
-        '102+ customers recaptured in the first month via segmentation and basket analysis.',
+      kind: 'Usage signal',
+      value: CW_HERO_PROOF,
     },
-    primaryAction: primary('View case study', '/projects/competitor-watch'),
+    primaryAction: primary('View case study', CW_CASE_STUDY_PATH),
     secondaryActions: [
       secondary('Open live app', bySlug['competitor-watch'].liveUrl),
     ],
@@ -138,7 +139,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     ),
     theme: { fill: '#166534', ink: '#ffffff' },
     variant: 'production',
-    caseStudyPath: '/projects/competitor-watch',
+    caseStudyPath: CW_CASE_STUDY_PATH,
   },
   {
     id: 'code19',

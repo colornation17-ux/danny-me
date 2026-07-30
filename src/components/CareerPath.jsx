@@ -6,13 +6,13 @@ import { track } from '../lib/track'
 gsap.registerPlugin(ScrollTrigger)
 
 const PATH_D =
-  // Original dramatic column S-curve. Last leg bows into NOW below Bodega.
-  'M 200 20 Q 160 110 90 180 Q -40 270 310 360 Q 440 450 90 540 Q -40 630 310 720 Q 440 810 90 900 Q -40 990 310 1080 Q 440 1170 90 1260 Q 40 1335 200 1385'
+  // Compressed S-curve (~0.7× prior Y) so stops sit closer on scroll.
+  'M 200 14 Q 160 77 90 126 Q -40 189 310 252 Q 440 315 90 378 Q -40 441 310 504 Q 440 567 90 630 Q -40 693 310 756 Q 440 819 90 882 Q 40 935 200 970'
 
 const STOPS = [
   {
     id: 'civil',
-    cx: 90, cy: 180,
+    cx: 90, cy: 126,
     year: '2017 – 2021',
     title: 'B.S. Civil Engineering',
     desc: 'Foundational engineering degree',
@@ -22,7 +22,7 @@ const STOPS = [
   },
   {
     id: 'sprazzo',
-    cx: 310, cy: 360,
+    cx: 310, cy: 252,
     year: 'Nov 2019 – Jun 2021',
     title: 'Motion Designer · Sprazzo',
     desc: 'Kerala, India',
@@ -32,7 +32,7 @@ const STOPS = [
   },
   {
     id: 'digitel',
-    cx: 90, cy: 540,
+    cx: 90, cy: 378,
     year: 'Aug 2021 – Aug 2023',
     title: 'UX Designer · Make It Digitel',
     desc: 'Kerala, India',
@@ -41,7 +41,7 @@ const STOPS = [
   },
   {
     id: 'iu-hci',
-    cx: 310, cy: 720,
+    cx: 310, cy: 504,
     year: 'Aug 2023 – May 2025',
     title: 'M.S. Human-Computer Interaction',
     desc: 'Indiana University Indianapolis',
@@ -54,14 +54,14 @@ const STOPS = [
         src: '/timeline/graduation.jpg',
         alt: 'Danny at his Indiana University HCI graduation',
         x: 155,
-        y: 695,
+        y: 486,
         rot: -4,
       },
     ],
   },
   {
     id: 'scaling-nature',
-    cx: 90, cy: 900,
+    cx: 90, cy: 630,
     year: 'May 2024 – Jun 2024',
     title: 'UX Designer · Scaling Nature',
     desc: 'Finland',
@@ -70,7 +70,7 @@ const STOPS = [
   },
   {
     id: 'code19',
-    cx: 310, cy: 1080,
+    cx: 310, cy: 756,
     year: 'Sep 2024 – Dec 2025',
     title: 'UX Engineer · Code19 Racing',
     desc: 'Indianapolis, Indiana',
@@ -82,7 +82,7 @@ const STOPS = [
         src: '/timeline/code19-track.jpg',
         alt: 'CODE19 Racing trackside work',
         x: 145,
-        y: 1045,
+        y: 732,
         rot: 6,
       },
       {
@@ -90,14 +90,14 @@ const STOPS = [
         src: '/timeline/code19-poster.jpg',
         alt: 'CODE19 Racing project poster',
         x: 175,
-        y: 1120,
+        y: 784,
         rot: -7,
       },
     ],
   },
   {
     id: 'bodega',
-    cx: 90, cy: 1260,
+    cx: 90, cy: 882,
     year: 'Feb 2026 – Present',
     title: 'Service & Ops UX Lead · La Bodega',
     desc: 'Calhoun, Georgia',
@@ -290,7 +290,7 @@ export default function CareerPath() {
 
       <svg
         ref={svgRef}
-        viewBox="-140 0 680 1420"
+        viewBox="-140 0 680 1000"
         fill="none"
         aria-hidden="true"
         className="career-path__svg"
@@ -312,7 +312,7 @@ export default function CareerPath() {
         </defs>
 
         {/* Start dot */}
-        <circle cx="200" cy="20" r="4" fill="#d5dde5" />
+        <circle cx="200" cy="14" r="4" fill="#d5dde5" />
 
         {/* Ghost base path */}
         <path
@@ -456,8 +456,8 @@ export default function CareerPath() {
         })}
 
         {/* End dot */}
-        <circle cx="200" cy="1385" r="5" fill="#111212" />
-        <text x="200" y="1405" fontSize="11" fontFamily="DM Sans, sans-serif" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
+        <circle cx="200" cy="970" r="5" fill="#111212" />
+        <text x="200" y="990" fontSize="11" fontFamily="DM Sans, sans-serif" fill="#888" textAnchor="middle" letterSpacing="0.1em">NOW</text>
       </svg>
     </section>
   )

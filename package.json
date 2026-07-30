@@ -12,12 +12,14 @@
     "axe:cards": "node scripts/axe-folder-cards.mjs",
     "preview": "vite preview",
     "record:cw": "node scripts/record-cw-beats.mjs",
+    "extract:cw-fixtures": "node scripts/extract-cw-mock-fixtures.mjs",
     "deploy:prod": "node scripts/deploy-prod.mjs",
     "astryx": "node node_modules/@astryxdesign/cli/bin/astryx.mjs"
   },
   "dependencies": {
     "@astryxdesign/core": "^0.1.6",
     "@astryxdesign/theme-neutral": "^0.1.6",
+    "@fontsource-variable/dm-sans": "^5.3.0",
     "@fontsource/dm-sans": "^5.2.8",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",

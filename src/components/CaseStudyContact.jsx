@@ -15,7 +15,7 @@ export default function CaseStudyContact({
       something real.
     </>
   ),
-  body = 'Open to contract work, full-time roles, and hard design problems. I read every note.',
+  body = 'Open to full-time product design roles.',
   ctaLabel = 'Send a note',
   className = '',
 }) {

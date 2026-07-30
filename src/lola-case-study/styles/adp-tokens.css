@@ -1019,9 +1019,9 @@ body {
 
 .cs-quote-callout {
   padding: var(--cs-space-4);
-  border-left: 3px solid var(--cs-teal);
+  border: 1px solid color-mix(in srgb, var(--cs-teal) 35%, var(--cs-line, transparent));
   background: var(--cs-teal-soft);
-  border-radius: 0 var(--cs-radius) var(--cs-radius) 0;
+  border-radius: var(--cs-radius);
   margin-bottom: var(--cs-space-6);
 }
 
@@ -1490,9 +1490,9 @@ body {
 
 .cs-transcript {
   padding: 0.875rem 1rem;
-  border-left: 3px solid var(--cs-teal);
+  border: 1px solid color-mix(in srgb, var(--cs-teal) 30%, var(--cs-line, transparent));
   background: var(--cs-bg);
-  border-radius: 0 var(--cs-radius) var(--cs-radius) 0;
+  border-radius: var(--cs-radius);
 }
 
 .cs-transcript-label {
@@ -3531,9 +3531,9 @@ h2:focus-visible,
 }
 
 .cs-staff-callout {
-  border-left: 3px solid #25d366;
-  padding-left: 1rem;
+  padding-left: 0;
   max-width: 52ch;
+  border: 0;
 }
 
 .cs-staff-phone-wrap .cs-wa-phone-wrap {
@@ -3586,15 +3586,18 @@ h2:focus-visible,
 
 .cs-flow-progress-fill {
   height: 100%;
+  width: 100%;
   background: var(--cs-brand);
   border-radius: 999px;
-  transition: width 0.35s ease;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .cs-flow-explorer--chat-first .cs-wa-chat {
   height: var(--wa-phone-chat-h, 14rem);
   max-height: min(var(--wa-phone-chat-h, 14rem), 72vh);
-  transition: height 0.35s ease;
+  /* height changes are discrete; avoid layout-thrash transitions */
 }
 
 @media (min-width: 1024px) {

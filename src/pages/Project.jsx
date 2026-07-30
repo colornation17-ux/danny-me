@@ -4,10 +4,14 @@ import { getProjectBySlug, lab, work } from '../data/projects'
 import { featured } from '../data/featured'
 import { SITE } from '../data/site'
 import ProjectMotionPreview, { hasMotionPreview } from '../components/motion/ProjectMotionPreview'
-import CompetitorWatchCaseStudy, {
-  CW_RAIL_STEPS,
-} from '../components/motion/CompetitorWatchCaseStudy'
-import CwHeroChapters from '../components/motion/CwHeroChapters'
+import CompetitorWatchCaseStudyA, {
+  CW_RAIL_STEPS as CW_RAIL_STEPS_A,
+} from '../components/motion/CompetitorWatchCaseStudyA'
+import CompetitorWatchCaseStudyB, {
+  CW_RAIL_STEPS as CW_RAIL_STEPS_B,
+} from '../components/motion/CompetitorWatchCaseStudyB'
+import CwHeroChaptersA from '../components/motion/CwHeroChaptersA'
+import CwHeroChaptersB from '../components/motion/CwHeroChaptersB'
 import LolaCaseStudy, { LOLA_RAIL_STEPS } from '../components/lola/LolaCaseStudy'
 import {
   CaseStudyNav,
@@ -21,10 +25,18 @@ import {
   projectLiveCtaLabel,
   projectNavLabel,
 } from '../lib/projectLinks'
+import BreathingText from '../components/fancy/BreathingText'
+import { CW_HERO_PROOF, CW_METRICS, cwBlurb } from '../data/cwMetrics'
+import { resolveCwCaseStudyRoute } from '../data/cwCaseStudyAb'
 
 export default function Project() {
   const { slug } = useParams()
-  const project = getProjectBySlug(slug)
+  const cwRoute = resolveCwCaseStudyRoute(slug)
+  const project = cwRoute
+    ? getProjectBySlug('competitor-watch')
+    : getProjectBySlug(slug)
+  const cwVariant = cwRoute?.variant ?? null
+  const isCwB = cwVariant === 'b'
   /** Frame visible in the page flow */
   const [gameVisible, setGameVisible] = useState(true)
   /** Iframe only mounts after Play — keeps first paint light on phones */
@@ -59,7 +71,7 @@ export default function Project() {
     return { prev: work[(i - 1 + len) % len], next: work[(i + 1) % len] }
   }, [project, isLab, featuredIndex, featuredBySlug, featuredOrder])
 
-  const isCwCase = project?.caseStudyBody === 'competitor-watch'
+  const isCwCase = Boolean(cwRoute)
   const isLolaCase = project?.caseStudyBody === 'lola'
   const embedUrl =
     project?.embedUrl ||
@@ -69,9 +81,9 @@ export default function Project() {
   const isGameCase = Boolean(embedUrl) && !isLolaCase
   const railSteps = useMemo(() => {
     if (!project) return []
-    if (isCwCase) return CW_RAIL_STEPS
+    if (isCwCase) return isCwB ? CW_RAIL_STEPS_B : CW_RAIL_STEPS_A
     return stepsFromSections(project.sections)
-  }, [project, isCwCase])
+  }, [project, isCwCase, isCwB])
 
   // External full case studies (e.g. Lola) — never keep the short on-site stub.
   const externalHref =
@@ -272,9 +284,21 @@ export default function Project() {
           <header className="cs-hero cs-hero--default">
             <div className="cs-hero__copy">
               <p className="cs-hero__meta">{project.meta}</p>
-              <h1>{projectNavLabel(project)}</h1>
+              <h1 className="cs-hero__title">{projectNavLabel(project)}</h1>
               {project.outcome && project.outcome !== project.title ? (
-                <p className="cs-hero__outcome">{project.outcome}</p>
+                <p className="cs-hero__outcome">
+                  <BreathingText
+                    as="span"
+                    className="cs-hero__breathe"
+                    staggerDuration={0.05}
+                    staggerFrom="first"
+                    repeat={2}
+                    fromFontVariationSettings="'wght' 450"
+                    toFontVariationSettings="'wght' 720"
+                  >
+                    {project.outcome}
+                  </BreathingText>
+                </p>
               ) : null}
               <p className="cs-hero__blurb">{project.blurb}</p>
               <dl className="cs-meta-row">
@@ -360,14 +384,51 @@ export default function Project() {
         </Link>
       )}
 
-      <header className={`cs-hero cs-hero--${layout}`}>
+      <header
+        className={`cs-hero cs-hero--${layout}${isCwB ? ' cs-hero--cw195' : ''}`}
+      >
         <div className="cs-hero__copy">
           <p className="cs-hero__meta">{project.meta}</p>
-          <h1>{projectNavLabel(project)}</h1>
+          {isCwB ? (
+            <h1 className="cs-hero__title">{projectNavLabel(project)}</h1>
+          ) : (
+            <h1>{projectNavLabel(project)}</h1>
+          )}
           {project.outcome && project.outcome !== project.title ? (
-            <p className="cs-hero__outcome">{project.outcome}</p>
+            isCwCase ? (
+              <p className="cs-hero__outcome">{project.outcome}</p>
+            ) : (
+              <p className="cs-hero__outcome">
+                <BreathingText
+                  as="span"
+                  className="cs-hero__breathe"
+                  staggerDuration={0.05}
+                  staggerFrom="first"
+                  repeat={2}
+                  fromFontVariationSettings="'wght' 450"
+                  toFontVariationSettings="'wght' 720"
+                >
+                  {project.outcome}
+                </BreathingText>
+              </p>
+            )
           ) : null}
-          <p className="cs-hero__blurb">{project.blurb}</p>
+          {isCwB && project.problem ? (
+            <p className="cs-hero__problem">{project.problem}</p>
+          ) : null}
+          {isCwB ? (
+            <p className="cs-hero__proof">
+              <strong>{CW_HERO_PROOF}</strong>
+              <span>
+                {CW_METRICS.store} · {CW_METRICS.market}
+              </span>
+            </p>
+          ) : null}
+          {isCwB ? (
+            <p className="cs-hero__blurb">{cwBlurb()}</p>
+          ) : (
+            <p className="cs-hero__blurb">{project.blurb}</p>
+          )}
           <dl className="cs-meta-row">
             <div>
               <dt>Role</dt>
@@ -386,51 +447,70 @@ export default function Project() {
               <dd>{project.skills.join(' · ')}</dd>
             </div>
           </dl>
-          <div className="cs-actions">
-            <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>
-              Discuss this project
-            </a>
-            {project.evidenceDoc && (
-              <a className="folio-btn" href={project.evidenceDoc} target="_blank" rel="noopener noreferrer">
-                {project.evidenceDocLabel || 'Research appendix'} ↗
-              </a>
-            )}
-            {project.liveUrl && (
+          <div className={`cs-actions${isCwB ? ' cs-actions--cw195' : ''}`}>
+            {isCwB && project.liveUrl ? (
               <a
-                className="folio-btn"
+                className="folio-btn folio-btn--solid"
                 href={project.liveUrl}
                 target="_blank"
                 rel="noreferrer"
-                title={
-                  project.slug === 'competitor-watch'
-                    ? 'First load on Render can take about 60 seconds'
-                    : undefined
-                }
+                title="First load can take about 60 seconds on free hosting"
               >
                 {projectLiveCtaLabel(project)}
               </a>
-            )}
-            {project.connectUrl && (
-              <a
-                className="folio-btn"
-                href={project.connectUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {project.connectCta || 'Lola Connect'} ↗
-              </a>
-            )}
-            {project.whatsappUrl && (
-              <a
-                className="folio-btn"
-                href={project.whatsappUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Try on WhatsApp ↗
-              </a>
+            ) : (
+              <>
+                <a className="folio-btn folio-btn--solid" href={`mailto:${SITE.email}`}>
+                  Discuss this project
+                </a>
+                {project.evidenceDoc && (
+                  <a className="folio-btn" href={project.evidenceDoc} target="_blank" rel="noopener noreferrer">
+                    {project.evidenceDocLabel || 'Research appendix'} ↗
+                  </a>
+                )}
+                {project.liveUrl && (
+                  <a
+                    className="folio-btn"
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={
+                      project.slug === 'competitor-watch'
+                        ? 'First load on Render can take about 60 seconds'
+                        : undefined
+                    }
+                  >
+                    {projectLiveCtaLabel(project)}
+                  </a>
+                )}
+                {project.connectUrl && (
+                  <a
+                    className="folio-btn"
+                    href={project.connectUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {project.connectCta || 'Lola Connect'} ↗
+                  </a>
+                )}
+                {project.whatsappUrl && (
+                  <a
+                    className="folio-btn"
+                    href={project.whatsappUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Try on WhatsApp ↗
+                  </a>
+                )}
+              </>
             )}
           </div>
+          {isCwB && (
+            <p className="cs-hero__note">
+              Live app on free hosting — first load can take ~60s
+            </p>
+          )}
         </div>
 
         {hasMedia && (
@@ -438,7 +518,7 @@ export default function Project() {
             className={`cs-banner cs-banner--${layout}${motion || isCwCase ? ' cs-banner--motion' : ''}${isCwCase ? ' cs-banner--reel' : ''}`}
           >
             {isCwCase ? (
-              <CwHeroChapters />
+              isCwB ? <CwHeroChaptersB /> : <CwHeroChaptersA />
             ) : motion ? (
               <ProjectMotionPreview slug={project.slug} size="hero" />
             ) : project.reel ? (
@@ -459,7 +539,7 @@ export default function Project() {
         )}
       </header>
 
-      {isCwCase && <CompetitorWatchCaseStudy />}
+      {isCwCase && (isCwB ? <CompetitorWatchCaseStudyB /> : <CompetitorWatchCaseStudyA />)}
 
       {project.sections.map((section, index) => (
         <section

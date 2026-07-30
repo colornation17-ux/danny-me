@@ -544,7 +544,10 @@ export function FlowExplorer() {
             aria-valuenow={visible.length}
             aria-valuetext={`Turn ${visible.length} of ${allSteps.length}${currentStep ? `: ${currentStep.label}` : ""}`}
           >
-            <div className="cs-flow-progress-fill" style={{ width: `${progressPct}%` }} />
+            <div
+              className="cs-flow-progress-fill"
+              style={{ transform: `scaleX(${Math.max(progressPct, 0) / 100})` }}
+            />
           </div>
 
           {currentStep ? (
