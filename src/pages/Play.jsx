@@ -5,58 +5,60 @@ import { projectCaseCtaLabel, projectDestination } from '../lib/projectLinks'
 
 export default function Play() {
   return (
-    <div className="page-hero folio--fullgrid">
-      <h1>I lose sleep to prototypes, race weekends, and silly side quests.</h1>
-      <p className="about-lead" style={{ color: 'var(--muted)', marginBottom: '2rem' }}>
-        Work stays curated to four shipped proof cases. Explorations live here: WING concepts,
-        pitch prototypes, student projects, design systems, branding, and motion.
-      </p>
-      <div className="play-grid">
-        {play.map((item) => {
-          const dest = projectDestination(item)
-          const cta = `${projectCaseCtaLabel(item)} →`
-          const inner = (
-            <>
-              {item.cover && (
-                <div className="play-card__media">
-                  <img src={item.cover} alt="" />
-                </div>
-              )}
-              <p className="play-card__meta">{item.meta}</p>
-              <h2>{item.title}</h2>
-              <p>{item.blurb}</p>
-              {dest && <span className="play-card__cta">{cta}</span>}
-            </>
-          )
-
-          if (!dest) {
-            return (
-              <article className="play-card" key={item.slug}>
-                {inner}
-              </article>
+    <div className="page-hero folio--fullgrid play-page">
+      <div className="play-page__content">
+        <h1>I lose sleep to prototypes, race weekends, and silly side quests.</h1>
+        <p className="play-lead">
+          Work stays curated to four shipped proof cases. Explorations live here: WING concepts,
+          pitch prototypes, student projects, design systems, branding, and motion.
+        </p>
+        <div className="play-grid">
+          {play.map((item) => {
+            const dest = projectDestination(item)
+            const cta = `${projectCaseCtaLabel(item)} →`
+            const inner = (
+              <>
+                {item.cover && (
+                  <div className="play-card__media">
+                    <img src={item.cover} alt="" />
+                  </div>
+                )}
+                <p className="play-card__meta">{item.meta}</p>
+                <h2>{item.title}</h2>
+                <p>{item.blurb}</p>
+                {dest && <span className="play-card__cta">{cta}</span>}
+              </>
             )
-          }
 
-          if (dest.external) {
+            if (!dest) {
+              return (
+                <article className="play-card" key={item.slug}>
+                  {inner}
+                </article>
+              )
+            }
+
+            if (dest.external) {
+              return (
+                <a
+                  className="play-card play-card--link"
+                  href={dest.to}
+                  target="_blank"
+                  rel="noreferrer"
+                  key={item.slug}
+                >
+                  {inner}
+                </a>
+              )
+            }
+
             return (
-              <a
-                className="play-card play-card--link"
-                href={dest.to}
-                target="_blank"
-                rel="noreferrer"
-                key={item.slug}
-              >
+              <Link className="play-card play-card--link" to={dest.to} key={item.slug}>
                 {inner}
-              </a>
+              </Link>
             )
-          }
-
-          return (
-            <Link className="play-card play-card--link" to={dest.to} key={item.slug}>
-              {inner}
-            </Link>
-          )
-        })}
+          })}
+        </div>
       </div>
       <CaseStudyContact />
     </div>
