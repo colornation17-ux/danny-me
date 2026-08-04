@@ -117,21 +117,21 @@ export const featuredProjects: FeaturedProjectCard[] = [
     title: 'La Bodega Ops',
     role: 'Product designer',
     organization: 'La Bodega',
-    status: 'Live · UI ~85%',
+    status: 'Live pilot',
     timeline: 'Q1–Q2 2026',
-    team: 'Solo design & build · Mercado',
+    team: 'Solo product design and development',
     date: 'Jul 15, 2026',
     summary:
-      'La Bodega Ops: Store Pulse + Purchasing (Walk · Door) + budgets — Excel exports, not the system.',
+      'Designed the floor system that replaced spreadsheet ops at the supermarket — purchasing, receiving, and shift control on phone.',
     metric: {
       kind: 'Pilot signal',
-      value: 'Live event record · three role homes · Excel as export only.',
+      value: 'Live at the supermarket. One store. Solo design and build.',
     },
     primaryAction: primary('View case study', '/projects/la-bodega-ops'),
     secondaryActions: [
       secondary('Try the live app', bySlug['la-bodega-ops'].liveUrl),
     ],
-    tags: ['Product design', 'Retail ops', 'PWA'],
+    tags: ['Product design', 'Service design', 'PWA'],
     media: mediaImage(
       '/work/la-bodega-ops/cover.png',
       'La Bodega Ops — staff home on phone with app icon',

@@ -390,19 +390,11 @@ export default function LaBodegaOpsCaseStudy() {
             ))}
           </ul>
 
-          <div className="lbd-ops__uxr-meta lbd-ops__uxr-meta--compact" aria-label="Validation and limitations">
+          <div className="lbd-ops__uxr-meta lbd-ops__uxr-meta--compact" aria-label="Validation">
             <div>
               <p className="lbd-ops__po-label">Validation</p>
               <ul className="lbd-ops__uxr-list">
                 {APPROACH.validation.map((v) => (
-                  <li key={v}>{v}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="lbd-ops__po-label">Limitations</p>
-              <ul className="lbd-ops__uxr-list">
-                {APPROACH.limitations.map((v) => (
                   <li key={v}>{v}</li>
                 ))}
               </ul>
@@ -769,12 +761,6 @@ export default function LaBodegaOpsCaseStudy() {
           <h3 className="lbd-ops__appendix-h">Still measuring</h3>
           <ul className="lbd-ops__caveat-list">
             {IMPACT.stillMeasuring.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <h3 className="lbd-ops__appendix-h">Limitations</h3>
-          <ul className="lbd-ops__caveat-list">
-            {IMPACT.limitations.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>

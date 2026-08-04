@@ -59,7 +59,7 @@ export const SUMMARY = {
   facts: [
     { label: 'Client', value: 'La Bodega · Mercado' },
     { label: 'Duration', value: 'Q1–Q2 2026' },
-    { label: 'Status', value: 'Live · UI ~85%' },
+    { label: 'Status', value: 'Live pilot' },
     { label: 'My role', value: 'Solo design + build' },
     { label: 'Scope', value: 'IA · flows · PWA' },
     { label: 'Tools', value: 'Figma · Next.js · Azure DI · voice' },
@@ -426,11 +426,6 @@ export const APPROACH = {
     'Door OCR + voice for missed lines.',
     'Excel still exports — not a full P&L rebuild.',
   ],
-  limitations: [
-    'One store · solo build · UI ~85%.',
-    'No A/B or findability score.',
-    '“Bleeding money” is the owner’s frame — not a loss %.',
-  ],
 }
 
 /** Structure + PO strip — skim: ship + success; loops in details */
@@ -735,7 +730,7 @@ export const LESSONS = [
   'Show last price and budget on the aisle if purchase control has to stick.',
   'Set department caps from contribution, then enforce them where the buy happens — an hourly P&L pass does not tighten the store by itself.',
   'Ship the door trail before inventory theater. A chat photo is not a record.',
-  'Claim only what the live build can show. Leave ROI until you have a baseline — “bleeding money” is the problem frame, not a published loss %.',
+  'Keep CW, Lola, and Ops as separate products — shared roles, clear owners, not a mega-app.',
 ]
 
 export const IMPACT = {
@@ -776,14 +771,6 @@ export const IMPACT = {
     'Receive cost-mismatch catch rate on live invoices',
     'Purchase hold / qty-cut rate on Walk with vendor',
     'Cooler waste trend after prep logging',
-  ],
-  limitations: [
-    'UI ~85% at one store — not a multi-store product claim.',
-    'No findability score for Ops IA yet.',
-    'Quotes are paraphrased from floor partners.',
-    'Cannot isolate Ops alone for revenue or labor dollars.',
-    'Dept caps follow P&L contribution — Ops owns the live hold, not a full finance rebuild.',
-    'Checkout Ops metrics stay on chapter 01 — not smeared onto Ops.',
   ],
 }
 
