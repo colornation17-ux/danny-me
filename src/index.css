@@ -6,10 +6,10 @@
   --black: #111212;
 
   /* ── Semantic: surface & text ───────────────────── */
-  --bg: #fdfdfd;
+  --bg: var(--white);
   --bg-elevated: var(--white);
   --bg-paper: var(--white);
-  --bg-folio: #f4f7fa;
+  --bg-folio: var(--white);
   --ink: #0d0d0d;
   --ink-soft: #12151a;
   /* Reference: #807e7e measured off madhurima.me — only 3.97:1 on this bg,
@@ -18,8 +18,9 @@
   --muted-cool: #5c6670;
   --line: #e4e9ee;
   --line-cool: #d5dde5;
-  --grid: #d7e0ea;
-  --grid-light: #e2e7ee;
+  /* Soft graph paper on white */
+  --grid: #f0f4f8;
+  --grid-light: #f4f7fa;
 
   /* ── Semantic: accent ───────────────────────────── */
   --accent: #e65f2e;
@@ -31,6 +32,8 @@
   --accent-cool: #4f7cff;
   --accent-cool-ink: #2952cc;
   --ok: #2f9b7a;
+  /* Redaction highlighter (Resource Boy marks) */
+  --mark-neon: #cfff04;
   --tone-forest: #166534;
   --tone-slate: #0f172a;
   --tone-navy: #0b1220;
@@ -1881,6 +1884,87 @@ button {
   color: var(--muted);
 }
 
+/* ── Case skim: visual story strip ───────────────── */
+.cs-pack {
+  padding: var(--space-6) 0 var(--space-7);
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 5.5rem;
+}
+
+.cs-pack__line {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  max-width: 28ch;
+  margin: 0 0 var(--space-5);
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.cs-pack__beats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 720px) {
+  .cs-pack__beats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 719px) {
+  .cs-pack__beats {
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: var(--space-2);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cs-pack__beat {
+    flex: 0 0 min(78vw, 18rem);
+    scroll-snap-align: start;
+  }
+}
+
+.cs-pack__beat {
+  margin: 0;
+  min-width: 0;
+}
+
+.cs-pack__media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.cs-pack__media img,
+.cs-pack__media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cs-pack__caption {
+  margin: var(--space-2) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-meta-xs);
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
 .cs-metrics {
   display: grid;
   grid-template-columns: 1fr;
@@ -2391,7 +2475,7 @@ body.game-embed .main { padding: 0; overflow: visible; }
 #cw-product,
 #cw-proof,
 #cw-impact,
-#cw-close,
+#contact,
 [id^='cs-'] {
   scroll-margin-top: 5.5rem;
 }
@@ -2403,14 +2487,30 @@ body.game-embed .main { padding: 0; overflow: visible; }
 /* ── Footer ──────────────────────────────────────── */
 
 .site-footer {
-  border-top: 1px solid var(--line);
   margin-top: auto;
+  background: #ffffff;
+}
+
+/* Get in touch sits above the copyright bar — modest padding, not a full section */
+.site-footer > .folio-contact,
+.site-footer > .cs-folio-contact {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--space-6) var(--gutter) var(--space-5);
+  border: 0;
+  border-top: 0;
+  background: #ffffff;
+}
+
+.site-footer__bar {
+  border-top: 1px solid var(--line);
+  background: #ffffff;
 }
 
 .site-footer__inner {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 1.5rem var(--gutter) 2rem;
+  padding: 1rem var(--gutter) 1.25rem;
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -2501,6 +2601,18 @@ body.game-embed .main { padding: 0; overflow: visible; }
  */
 h1[tabindex='-1']:focus,
 h1[tabindex='-1']:focus-visible {
+  outline: none;
+}
+
+/*
+ * Same for in-page hash targets (case sections, Failures board, etc.).
+ * ScrollManager sets tabindex=-1 and focuses them — a 2px ring reads as a
+ * stray “black stroke box” around the whole section.
+ */
+section[tabindex='-1']:focus,
+section[tabindex='-1']:focus-visible,
+.lbd-ops__section[tabindex='-1']:focus,
+.lbd-ops__section[tabindex='-1']:focus-visible {
   outline: none;
 }
 
@@ -4158,13 +4270,9 @@ h1[tabindex='-1']:focus-visible {
   line-height: 1.5;
 }
 
-/* Contact target for CW timeline — room to scroll into view */
-.cs--cw .cs-folio-contact#cw-close {
+/* Contact lives in the site footer — keep scroll margin only */
+.site-footer > .folio-contact#contact {
   scroll-margin-top: 5.5rem;
-  min-height: min(52vh, 28rem);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 @media (min-width: 1100px) {
@@ -4187,6 +4295,8 @@ h1[tabindex='-1']:focus-visible {
 .folio--fullgrid {
   /* impeccable-disable-next-line codex-grid-background -- intentional folio graph paper */
   /* Full-bleed graph paper — gutters live on cards, not the page shell */
+  position: relative;
+  isolation: isolate;
   width: 100%;
   max-width: 100%;
   margin-left: 0;
@@ -4196,14 +4306,76 @@ h1[tabindex='-1']:focus-visible {
   min-height: 100vh;
   /* Must not clip — overflow-x:clip was cutting spring wires at the edges */
   overflow-x: visible;
-  /* Graph paper: line layers use transparent cells so both axes show.
-     Paper color comes only from background-color (keeps fill uniform). */
+  /* Paper fill only — texture (::before) then grid (::after) */
   background-color: var(--folio-paper);
+  background-image: none;
+}
+
+/* Clean white + soft grid only (no paper grain tint) */
+.folio--fullgrid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* impeccable-disable-next-line codex-grid-background -- brand graph paper */
   background-image:
-    /* impeccable-disable-next-line codex-grid-background -- brand graph paper */
     linear-gradient(to bottom, var(--folio-grid-light) 1px, transparent 1px),
     linear-gradient(to right, var(--folio-grid-light) 1px, transparent 1px);
   background-size: 56px 56px;
+}
+
+.folio--fullgrid > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Redaction accents — mask fill: ink / muted / neon */
+.folio-hero__lead,
+.folio-work__head {
+  position: relative;
+}
+
+.folio-mark {
+  position: absolute;
+  z-index: 0;
+  display: block;
+  width: min(22vw, 9rem);
+  height: 2.5rem;
+  pointer-events: none;
+  user-select: none;
+  background-color: var(--black);
+  -webkit-mask: var(--folio-mark-src) center / contain no-repeat;
+  mask: var(--folio-mark-src) center / contain no-repeat;
+  opacity: 0.88;
+}
+
+.folio-mark--ink {
+  background-color: var(--black);
+}
+
+.folio-mark--muted {
+  background-color: var(--muted);
+  opacity: 0.72;
+}
+
+.folio-mark--neon {
+  background-color: var(--mark-neon);
+  opacity: 1;
+  mix-blend-mode: multiply;
+}
+
+.folio-mark--underline {
+  left: 50%;
+  bottom: -0.15rem;
+  width: min(11rem, 55%);
+  height: 0.65rem;
+  transform: translateX(-18%);
+}
+
+.folio-hero__lead .folio-lead__impact {
+  position: relative;
+  z-index: 1;
 }
 
 /* Keep page chrome the same paper white as the grid — no var(--bg) / var(--bg-folio) seams */
@@ -4227,7 +4399,9 @@ body:has(.folio--fullgrid) #main-content,
 
 .site-nav--folio {
   border-bottom: 0;
-  background: var(--white);
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .site-nav--folio .site-nav__inner {
@@ -5039,6 +5213,7 @@ body:has(.folio--fullgrid) #main-content,
   font-family: var(--font-featured);
   font-size: var(--text-h1);
   font-weight: 400;
+  font-style: normal;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   margin-bottom: var(--space-4);
@@ -5053,8 +5228,9 @@ body:has(.folio--fullgrid) #main-content,
   max-width: 34rem;
   color: #4a5560;
   margin-bottom: 0;
-  font-size: var(--text-script);
-  font-family: var(--font-script);
+  font-size: var(--text-body-lg);
+  font-family: var(--font-sans);
+  font-style: normal;
   font-weight: 400;
   line-height: 1.45;
   position: relative;
@@ -5080,6 +5256,10 @@ body:has(.folio--fullgrid) #main-content,
   text-decoration: none;
   box-shadow: 5px 5px 0 var(--black);
   transform: rotate(-1.5deg);
+  /* Opaque fill — grid must never show through the sticker */
+  isolation: isolate;
+  position: relative;
+  z-index: 1;
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
@@ -5101,9 +5281,11 @@ body:has(.folio--fullgrid) #main-content,
   font-family: var(--font-brand);
   font-size: var(--text-h3);
   font-weight: 400;
+  font-style: normal;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   line-height: 1;
+  font-synthesis: none;
 }
 
 .folio-contact__cta-sub {
@@ -5967,7 +6149,7 @@ body:has(.folio--fullgrid) #main-content,
   z-index: 0;
 }
 
-.folio-work__head > *:not(.folio-watermark) {
+.folio-work__head > *:not(.folio-watermark):not(.folio-mark) {
   position: relative;
   z-index: 1;
 }
@@ -6214,7 +6396,7 @@ body:has(.folio--fullgrid) #main-content,
   margin: 0;
   /* Tall hit band — hover anywhere along the line pulls it */
   padding: 0.85rem 0;
-  background-color: var(--folio-paper, var(--white));
+  background-color: transparent;
   background-image: none;
   touch-action: none;
   user-select: none;
@@ -6658,7 +6840,6 @@ body.game-embed .site-radio {
 }
 
 .spring-wire__path--main {
-  /* Graph-paper was swallowing #c8d0da — graphite pencil weight */
   stroke: #3d4652;
   stroke-width: 1.55;
   opacity: 1;
@@ -6777,7 +6958,7 @@ body.game-embed .site-radio {
 }
 
 body:has(.folio--fullgrid) .site-footer {
-  background: var(--white);
+  background: #ffffff;
   border-top-color: var(--folio-line, var(--line-cool));
 }
 
@@ -9758,7 +9939,8 @@ body:has(.folio--fullgrid) .site-footer {
     text-align: center;
   }
 
-  .cs-section {
+  .cs-section,
+  .cs-pack {
     scroll-margin-top: 7.25rem;
   }
 

@@ -14,12 +14,20 @@ import {
   variantFromStatus,
 } from '../src/components/project-cards/project-card.types.ts'
 
-assert.equal(featuredProjects.length, 6, 'six featured projects')
+assert.equal(featuredProjects.length, 7, 'seven featured projects')
 
 assert.deepEqual(
   featuredProjects.map((p) => p.slug),
-  ['lola', 'bodega-ops', 'competitor-watch', 'code19', 'wing-hmi', 'edge-ai'],
-  'WING projects included',
+  [
+    'lola',
+    'bodega-ops',
+    'la-bodega-ops',
+    'competitor-watch',
+    'code19',
+    'wing-hmi',
+    'edge-ai',
+  ],
+  'featured order including La Bodega Ops',
 )
 
 for (const [index, card] of featuredProjects.entries()) {

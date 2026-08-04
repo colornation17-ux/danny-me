@@ -11,13 +11,14 @@ import {
 import { featuredProjects } from '../../data/featuredProjects'
 
 export function runProjectCardContractChecks() {
-  if (featuredProjects.length !== 6) {
-    throw new Error(`expected 6 cards, got ${featuredProjects.length}`)
+  if (featuredProjects.length !== 7) {
+    throw new Error(`expected 7 cards, got ${featuredProjects.length}`)
   }
   const slugs = featuredProjects.map((p) => p.slug)
   const expected = [
     'lola',
     'bodega-ops',
+    'la-bodega-ops',
     'competitor-watch',
     'code19',
     'wing-hmi',

@@ -13,13 +13,16 @@ import CompetitorWatchCaseStudyB, {
 import CwHeroChaptersA from '../components/motion/CwHeroChaptersA'
 import CwHeroChaptersB from '../components/motion/CwHeroChaptersB'
 import LolaCaseStudy, { LOLA_RAIL_STEPS } from '../components/lola/LolaCaseStudy'
+import LaBodegaOpsCaseStudy, {
+  LBD_OPS_RAIL_STEPS,
+} from '../components/ops/LaBodegaOpsCaseStudy'
 import {
   CaseStudyNav,
   sectionAnchorId,
   stepsFromSections,
 } from '../components/CaseStudyRail'
-import CaseStudyContact from '../components/CaseStudyContact'
 import CaseStudyNext from '../components/CaseStudyNext'
+import CaseStudyPackaging from '../components/CaseStudyPackaging'
 import CaseStudyVideo from '../components/CaseStudyVideo'
 import {
   projectLiveCtaLabel,
@@ -28,6 +31,7 @@ import {
 import BreathingText from '../components/fancy/BreathingText'
 import { CW_HERO_PROOF, CW_METRICS, cwBlurb } from '../data/cwMetrics'
 import { resolveCwCaseStudyRoute } from '../data/cwCaseStudyAb'
+import { getCaseStudyPackaging } from '../data/caseStudyPackaging'
 
 export default function Project() {
   const { slug } = useParams()
@@ -73,17 +77,28 @@ export default function Project() {
 
   const isCwCase = Boolean(cwRoute)
   const isLolaCase = project?.caseStudyBody === 'lola'
+  const isLbdOpsCase = project?.caseStudyBody === 'la-bodega-ops'
   const embedUrl =
     project?.embedUrl ||
     (project?.slug === 'bodega-ops'
       ? 'https://la-bodega-game-preview.vercel.app/?embed=1'
       : null)
-  const isGameCase = Boolean(embedUrl) && !isLolaCase
+  const isGameCase = Boolean(embedUrl) && !isLolaCase && !isLbdOpsCase
   const railSteps = useMemo(() => {
     if (!project) return []
     if (isCwCase) return isCwB ? CW_RAIL_STEPS_B : CW_RAIL_STEPS_A
-    return stepsFromSections(project.sections)
-  }, [project, isCwCase, isCwB])
+    if (isLbdOpsCase) return LBD_OPS_RAIL_STEPS
+    const sectionSteps = stepsFromSections(project.sections)
+    const packSlug = project.slug === 'competitor-watch' ? 'competitor-watch' : project.slug
+    if (!getCaseStudyPackaging(packSlug)) return sectionSteps
+    return [
+      { id: 'cs-pack', num: '00', label: 'Story' },
+      ...sectionSteps.map((step, index) => ({
+        ...step,
+        num: String(index + 1).padStart(2, '0'),
+      })),
+    ]
+  }, [project, isCwCase, isCwB, isLbdOpsCase])
 
   // External full case studies (e.g. Lola) — never keep the short on-site stub.
   const externalHref =
@@ -146,14 +161,14 @@ export default function Project() {
   const railBrand =
     project.slug === 'competitor-watch'
       ? 'CW'
-      : project.slug === 'wing-hmi'
-        ? 'Wing'
-        : project.slug === 'edge-ai'
-          ? 'Edge'
-          : project.title?.split(' ')[0] || project.title
+      : project.slug === 'la-bodega-ops'
+        ? 'Ops'
+        : project.slug === 'wing-hmi'
+          ? 'Wing'
+          : project.slug === 'edge-ai'
+            ? 'Edge'
+            : project.title?.split(' ')[0] || project.title
   const showRail = railSteps.length >= 2
-  const contactId = isCwCase ? 'cw-close' : 'contact'
-  const contactHeadingId = isCwCase ? 'cw-contact-heading' : 'contact-heading'
 
   if (isLolaCase) {
     return (
@@ -167,7 +182,26 @@ export default function Project() {
           backTo={backTo}
           backLabel={backLabel}
         />
+        <CaseStudyPackaging slug="lola" className="cs-pack--lola" />
         <LolaCaseStudy />
+        <CaseStudyNext prev={prev} next={next} />
+      </article>
+    )
+  }
+
+  if (isLbdOpsCase) {
+    return (
+      <article
+        className="cs cs--lbd-ops cs--with-rail"
+        style={{ '--cs-accent': project.accent || '#9F1239' }}
+      >
+        <CaseStudyNav
+          brand="Ops"
+          steps={LBD_OPS_RAIL_STEPS}
+          backTo={backTo}
+          backLabel={backLabel}
+        />
+        <LaBodegaOpsCaseStudy />
         <CaseStudyNext prev={prev} next={next} />
       </article>
     )
@@ -318,6 +352,8 @@ export default function Project() {
             </div>
           </header>
 
+          <CaseStudyPackaging slug={project.slug} />
+
           {project.sections.map((section, index) => (
             <section
               id={sectionAnchorId(section.eyebrow, index)}
@@ -356,7 +392,6 @@ export default function Project() {
             </section>
           ))}
 
-          <CaseStudyContact />
           <CaseStudyNext prev={prev} next={next} />
         </div>
       </article>
@@ -539,6 +574,11 @@ export default function Project() {
         )}
       </header>
 
+      <CaseStudyPackaging
+        slug={isCwCase ? 'competitor-watch' : project.slug}
+        className={isCwCase ? 'cs-pack--cw' : undefined}
+      />
+
       {isCwCase && (isCwB ? <CompetitorWatchCaseStudyB /> : <CompetitorWatchCaseStudyA />)}
 
       {project.sections.map((section, index) => (
@@ -583,7 +623,6 @@ export default function Project() {
         </section>
       )}
 
-      <CaseStudyContact id={contactId} headingId={contactHeadingId} />
       <CaseStudyNext prev={prev} next={next} />
     </article>
   )

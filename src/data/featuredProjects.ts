@@ -39,7 +39,7 @@ function secondary(label: string, href: string): ProjectAction {
 }
 
 /**
- * Frozen featured-card content (six projects).
+ * Frozen featured-card content (seven projects).
  * Case-study bodies still live in projects.js / lab; this is the card contract.
  */
 export const featuredProjects: FeaturedProjectCard[] = [
@@ -109,9 +109,41 @@ export const featuredProjects: FeaturedProjectCard[] = [
     caseStudyPath: '/projects/bodega-ops',
   },
   {
+    id: 'la-bodega-ops',
+    slug: 'la-bodega-ops',
+    indexLabel: '03',
+    tabLabel: 'La Bodega Ops',
+    tabLabelCompact: 'Ops',
+    title: 'La Bodega Ops',
+    role: 'Product designer',
+    organization: 'La Bodega',
+    status: 'Live · UI ~85%',
+    timeline: 'Q1–Q2 2026',
+    team: 'Solo design & build · Mercado',
+    date: 'Jul 15, 2026',
+    summary:
+      'La Bodega Ops: Store Pulse + Purchasing (Walk · Door) + budgets — Excel exports, not the system.',
+    metric: {
+      kind: 'Pilot signal',
+      value: 'Live event record · three role homes · Excel as export only.',
+    },
+    primaryAction: primary('View case study', '/projects/la-bodega-ops'),
+    secondaryActions: [
+      secondary('Try the live app', bySlug['la-bodega-ops'].liveUrl),
+    ],
+    tags: ['Product design', 'Retail ops', 'PWA'],
+    media: mediaImage(
+      '/work/la-bodega-ops/cover.png',
+      'La Bodega Ops — staff home on phone with app icon',
+    ),
+    theme: { fill: '#9F1239', ink: '#ffffff' },
+    variant: 'pilot',
+    caseStudyPath: '/projects/la-bodega-ops',
+  },
+  {
     id: 'competitor-watch',
     slug: 'competitor-watch',
-    indexLabel: '03',
+    indexLabel: '04',
     tabLabel: 'Competitor Watch',
     tabLabelCompact: 'CW',
     title: 'Competitor Watch',
@@ -144,7 +176,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
   {
     id: 'code19',
     slug: 'code19',
-    indexLabel: '04',
+    indexLabel: '05',
     tabLabel: 'CODE19',
     title: 'CODE19 Racing',
     role: 'Product designer and UX engineer',
@@ -173,7 +205,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
   {
     id: 'wing-hmi',
     slug: 'wing-hmi',
-    indexLabel: '05',
+    indexLabel: '06',
     tabLabel: 'HMI',
     title: 'WING HMI',
     role: 'Product designer',
@@ -203,7 +235,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
   {
     id: 'edge-ai',
     slug: 'edge-ai',
-    indexLabel: '06',
+    indexLabel: '07',
     tabLabel: 'Edge AI',
     title: 'WING Edge AI',
     role: 'Product designer',
