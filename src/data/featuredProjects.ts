@@ -165,9 +165,9 @@ export const featuredProjects: FeaturedProjectCard[] = [
     ],
     tags: ['Decision support', 'Retail intelligence', 'Full-stack'],
     media: mediaVideo(
-      '/work/competitor-watch/motion/CompetitorWatch-Reel.mp4',
+      '/work/competitor-watch/motion/CW-02-CompetitorDeals.mp4',
       '/work/competitor-watch/motion/CW-02-CompetitorDeals.png',
-      'Competitor Watch preview',
+      'Competitor Watch — competitor deals preview',
     ),
     theme: { fill: '#166534', ink: '#ffffff' },
     variant: 'production',
