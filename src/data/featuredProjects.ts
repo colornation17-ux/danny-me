@@ -133,8 +133,8 @@ export const featuredProjects: FeaturedProjectCard[] = [
     ],
     tags: ['Product design', 'Service design', 'PWA'],
     media: mediaImage(
-      '/work/la-bodega-ops/cover.png',
-      'La Bodega Ops — staff home on phone with app icon',
+      '/work/la-bodega-ops/hero.png',
+      'La Bodega Ops — role homes on phone for staff, manager, and admin',
     ),
     theme: { fill: '#9F1239', ink: '#ffffff' },
     variant: 'pilot',
