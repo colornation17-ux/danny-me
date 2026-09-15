@@ -2038,6 +2038,58 @@ button {
   letter-spacing: 0.02em;
 }
 
+/* Click-to-zoom case-study shots (gallery + inline) */
+.cs-shot-zoom {
+  appearance: none;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  border-radius: inherit;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.cs-shot-zoom:focus-visible {
+  outline: 3px solid var(--ink, var(--black));
+  outline-offset: 3px;
+}
+
+.cs-shot-zoom img {
+  transition: transform 0.28s var(--ease-out, ease), filter 0.28s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cs-shot-zoom:hover img {
+    transform: scale(1.035);
+    filter: brightness(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-shot-zoom img {
+    transition: none;
+  }
+
+  .cs-shot-zoom:hover img {
+    transform: none;
+  }
+}
+
+.cs-inline-shot .cs-shot-zoom,
+.cs-inline-shot .cs-shot-zoom img {
+  border-radius: var(--radius-md);
+}
+
+.cs-mobile-mockup .cs-shot-zoom img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Mobile app mockup gallery — 9:16 aspect ratio, readable size */
 .cs-mobile-gallery {
   display: flex;

@@ -1,5 +1,5 @@
 ﻿import { Link, useParams } from 'react-router-dom'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { getProjectBySlug, lab, work } from '../data/projects'
 import { featured } from '../data/featured'
 import { SITE } from '../data/site'
@@ -24,6 +24,7 @@ import {
 import CaseStudyNext from '../components/CaseStudyNext'
 import CaseStudyPackaging from '../components/CaseStudyPackaging'
 import CaseStudyVideo from '../components/CaseStudyVideo'
+import ImageLightbox from '../components/ImageLightbox'
 import {
   projectLiveCtaLabel,
   projectNavLabel,
@@ -45,6 +46,19 @@ export default function Project() {
   const [gameVisible, setGameVisible] = useState(true)
   /** Iframe only mounts after Play — keeps first paint light on phones */
   const [gameStarted, setGameStarted] = useState(false)
+  /** Full-size viewer for gallery / inline shots */
+  const [lightbox, setLightbox] = useState(null)
+
+  const openLightbox = useCallback((item) => {
+    if (!item?.src) return
+    setLightbox({
+      src: item.src,
+      caption: item.caption || '',
+      alt: item.alt || item.caption || '',
+    })
+  }, [])
+
+  const closeLightbox = useCallback(() => setLightbox(null), [])
 
   const isLab = project?.collection === 'lab'
   const featuredBySlug = useMemo(
@@ -377,7 +391,18 @@ export default function Project() {
                 <div className="cs-mobile-gallery">
                   {section.mobileGallery.map((item) => (
                     <figure key={item.src} className="cs-mobile-mockup">
-                      <img src={item.src} alt={item.caption || ''} loading="lazy" decoding="async" />
+                      <button
+                        type="button"
+                        className="cs-shot-zoom"
+                        onClick={() => openLightbox(item)}
+                        aria-label={
+                          item.caption
+                            ? `View larger: ${item.caption}`
+                            : 'View larger image'
+                        }
+                      >
+                        <img src={item.src} alt={item.caption || ''} loading="lazy" decoding="async" />
+                      </button>
                       {item.caption && <figcaption>{item.caption}</figcaption>}
                     </figure>
                   ))}
@@ -385,7 +410,23 @@ export default function Project() {
               )}
               {section.image && (
                 <figure className="cs-inline-shot">
-                  <img src={section.image} alt="" loading="lazy" decoding="async" />
+                  <button
+                    type="button"
+                    className="cs-shot-zoom"
+                    onClick={() =>
+                      openLightbox({
+                        src: section.image,
+                        caption: section.caption || '',
+                      })
+                    }
+                    aria-label={
+                      section.caption
+                        ? `View larger: ${section.caption}`
+                        : 'View larger image'
+                    }
+                  >
+                    <img src={section.image} alt="" loading="lazy" decoding="async" />
+                  </button>
                   {section.caption && <figcaption>{section.caption}</figcaption>}
                 </figure>
               )}
@@ -393,6 +434,13 @@ export default function Project() {
           ))}
 
           <CaseStudyNext prev={prev} next={next} />
+          <ImageLightbox
+            open={Boolean(lightbox)}
+            src={lightbox?.src}
+            caption={lightbox?.caption}
+            alt={lightbox?.alt}
+            onClose={closeLightbox}
+          />
         </div>
       </article>
     )
@@ -602,7 +650,23 @@ export default function Project() {
           )}
           {section.image && (
             <figure className="cs-inline-shot">
-              <img src={section.image} alt="" />
+              <button
+                type="button"
+                className="cs-shot-zoom"
+                onClick={() =>
+                  openLightbox({
+                    src: section.image,
+                    caption: section.caption || '',
+                  })
+                }
+                aria-label={
+                  section.caption
+                    ? `View larger: ${section.caption}`
+                    : 'View larger image'
+                }
+              >
+                <img src={section.image} alt="" loading="lazy" decoding="async" />
+              </button>
               {section.caption && <figcaption>{section.caption}</figcaption>}
             </figure>
           )}
@@ -615,7 +679,18 @@ export default function Project() {
           <div className="cs-gallery__grid">
             {project.gallery.map((item) => (
               <figure key={item.src} className="cs-gallery__item">
-                <img src={item.src} alt={item.caption || ''} loading="lazy" />
+                <button
+                  type="button"
+                  className="cs-shot-zoom"
+                  onClick={() => openLightbox(item)}
+                  aria-label={
+                    item.caption
+                      ? `View larger: ${item.caption}`
+                      : 'View larger image'
+                  }
+                >
+                  <img src={item.src} alt={item.caption || ''} loading="lazy" decoding="async" />
+                </button>
                 {item.caption && <figcaption>{item.caption}</figcaption>}
               </figure>
             ))}
@@ -624,6 +699,13 @@ export default function Project() {
       )}
 
       <CaseStudyNext prev={prev} next={next} />
+      <ImageLightbox
+        open={Boolean(lightbox)}
+        src={lightbox?.src}
+        caption={lightbox?.caption}
+        alt={lightbox?.alt}
+        onClose={closeLightbox}
+      />
     </article>
   )
 }
