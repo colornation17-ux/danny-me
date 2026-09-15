@@ -179,6 +179,11 @@ export const work = [
       { src: '/work/code19/design-system.png', caption: 'Red-and-black design system, racing DNA visual identity' },
       { src: '/work/code19/screen-1.jpg', caption: 'Final shipped platform, sponsor and fan flows' },
       { src: '/work/code19/sponsor-page.png', caption: 'Sponsor partnership page, B2B conversion layer' },
+      {
+        src: '/work/code19/hifi-wireframes.png',
+        caption: 'Hi-fi wireframes across key pages — home, news, tech, contact, partners, and team',
+        wide: true,
+      },
     ],
     sections: [
       {
