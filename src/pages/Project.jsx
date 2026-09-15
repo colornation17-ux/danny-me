@@ -678,10 +678,7 @@ export default function Project() {
           <p className="cs-section__eyebrow">Gallery</p>
           <div className="cs-gallery__grid">
             {project.gallery.map((item) => (
-              <figure
-                key={item.src}
-                className={`cs-gallery__item${item.wide ? ' cs-gallery__item--wide' : ''}`}
-              >
+              <figure key={item.src} className="cs-gallery__item">
                 <button
                   type="button"
                   className="cs-shot-zoom"

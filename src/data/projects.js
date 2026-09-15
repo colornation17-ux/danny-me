@@ -182,7 +182,6 @@ export const work = [
       {
         src: '/work/code19/hifi-wireframes.png',
         caption: 'Hi-fi wireframes across key pages — home, news, tech, contact, partners, and team',
-        wide: true,
       },
     ],
     sections: [

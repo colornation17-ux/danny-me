@@ -2030,18 +2030,6 @@ button {
   display: block;
 }
 
-.cs-gallery__item--wide {
-  grid-column: 1 / -1;
-}
-
-.cs-gallery__item--wide img {
-  height: auto;
-  max-height: min(70vh, 720px);
-  object-fit: contain;
-  object-position: top center;
-  background: var(--bg-elevated, var(--white));
-}
-
 .cs-gallery__item figcaption {
   padding: 0.5rem 0.75rem;
   font-size: var(--text-meta);
