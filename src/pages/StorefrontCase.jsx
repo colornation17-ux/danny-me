@@ -73,8 +73,8 @@ const COMPETITORS = [
 
 /** The app, flow by flow. */
 const FLOWS = [
-  { title: 'Shop', note: 'For people who know what they want: departments, search, prices by the pound.', shots: [
-    ['2-aisle', 'Meat & Seafood'], ['2-search', 'Search: tortillas'], ['2-deals', 'Deals'] ] },
+  { title: 'Shop', note: 'Home first, then departments, search and prices by the pound.', shots: [
+    ['2-home', 'Home: delivery time, brands, this week’s deals'], ['2-aisle', 'Meat & Seafood'], ['2-search', 'Search: tortillas'], ['2-deals', 'Deals'] ] },
   { title: 'Pay', note: 'Free-delivery progress, store credit and the weighed-item hold, each explained once.', shots: [
     ['3-cart', 'Cart: close the gap to free delivery'], ['3-paybtn', 'Checkout with Apple’s own Pay button'], ['3-applepay', 'The Apple Pay sheet'], ['3-placed', 'Order placed, with an edit window'] ] },
   { title: 'After you pay', note: 'Delivered to the door, or picked up with a register code and “I’m here”.', shots: [
@@ -469,14 +469,10 @@ export default function StorefrontCase() {
         </div>
 
         <Row title="Information architecture">
-          <p>The October sitemap had ten columns: departments, regional flavours, meal plans, party orders, a club and help, every page in Spanish with an English mirror. Right for a website, too much for a phone.</p>
-          <p>The shipped app has four tabs: Home, Shop, Deals, Account. Search, Cart, Ask Lola and sign-in open as sheets over any screen. Checkout and order pages open from the cart, a text or a notification. Staff use a separate handheld app.</p>
+          <p>Four tabs: Home, Shop, Deals, Account. Search, Cart, Ask Lola and sign-in open as sheets over any screen. Checkout and order pages open from the cart, a text or a notification. Staff use a separate handheld app. Every box on the map is a screen in the app.</p>
         </Row>
         <div className="cx-panel">
-          <div className="cx-grid">
-            <ZFig size="f" src="p-sitemap-oct.jpg" alt="October 4 sitemap: ten columns from Home, in Spanish, including shop departments, regional flavours, meal plans, deals, account, help, special and party orders, club and store" cap="Oct 4: ten columns, built for a website." />
-            <ZFig size="f" narrow src="p-sitemap.jpg" alt="Shipped sitemap with real app screens: four tabs, Home, Shop with aisle and product, Deals and Account with history, preferences, wallet and delete account; sheets over any screen for search, cart, Ask Lola and sign-in; checkout and orders; first open; and the staff handheld" cap="Shipped: four tabs, sheets over any screen." />
-          </div>
+          <ZFig size="f" narrow src="p-sitemap.jpg" alt="Sitemap of the shipped app with real screens: four tabs, Home, Shop with aisle and product, Deals and Account with purchase history, preferences, wallet and delete account; sheets over any screen for search, cart, Ask Lola and sign-in; checkout and orders; first open; and the staff handheld" cap="The shipped app: four tabs, sheets over any screen." />
         </div>
 
         <Row title="User flows">
