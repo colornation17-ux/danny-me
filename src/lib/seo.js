@@ -57,6 +57,15 @@ export function applyPageMeta({
 }
 
 export function metaForPath(pathname) {
+  if (pathname.replace(/\/$/, '') === '/projects/la-bodega-storefront') {
+    return {
+      title: 'La Bodega online store — Product design case study',
+      description: 'A neighborhood grocery’s own delivery and pickup app, grown from a WhatsApp ordering pilot and a community of local drivers: research, six decisions, and the shipped screens.',
+      path: '/projects/la-bodega-storefront',
+      image: '/work/la-bodega-storefront/og-cover.jpg',
+      type: 'article',
+    }
+  }
   if (pathname === '/') {
     return {
       title: `${SITE.name} — Product Designer`,

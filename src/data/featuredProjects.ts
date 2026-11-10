@@ -39,7 +39,7 @@ function secondary(label: string, href: string): ProjectAction {
 }
 
 /**
- * Frozen featured-card content (seven projects).
+ * Frozen featured-card content (nine projects).
  * Case-study bodies still live in projects.js / lab; this is the card contract.
  */
 export const featuredProjects: FeaturedProjectCard[] = [
@@ -79,9 +79,69 @@ export const featuredProjects: FeaturedProjectCard[] = [
     caseStudyPath: '/projects/lola',
   },
   {
+    id: 'la-bodega-storefront',
+    slug: 'la-bodega-storefront',
+    indexLabel: '02',
+    tabLabel: 'Online store',
+    tabLabelCompact: 'Store',
+    title: 'La Bodega online store',
+    role: 'Sole designer and front-end engineer',
+    organization: 'La Bodega',
+    status: 'In production',
+    timeline: 'Aug – Nov 2026',
+    team: 'Web, iPhone and Android on Odoo',
+    date: 'Nov 10, 2026',
+    summary:
+      'The store’s own delivery and pickup app, grown from a WhatsApp pilot and a community of local drivers.',
+    metric: {
+      kind: 'Pilot signal',
+      value: 'Chat orders averaged $58.41, about twice a $28.41 register basket.',
+    },
+    primaryAction: primary('View case study', '/projects/la-bodega-storefront'),
+    secondaryActions: [secondary('Open the live store', 'https://shop.labodegacalhoun.com')],
+    tags: ['Product design', 'Service design', 'Mobile'],
+    media: mediaImage(
+      '/work/la-bodega-storefront/card-16x9.jpg',
+      'Three app screens on cherry: shop, pick a delivery time, track the order',
+    ),
+    theme: { fill: '#8E0029', ink: '#ffffff' },
+    variant: 'production',
+    caseStudyPath: '/projects/la-bodega-storefront',
+  },
+  {
+    id: 'produce-kiosk',
+    slug: 'produce-kiosk',
+    indexLabel: '03',
+    tabLabel: 'Produce kiosk',
+    tabLabelCompact: 'Kiosk',
+    title: 'Produce kiosk',
+    role: 'Sole designer and developer',
+    organization: 'La Bodega',
+    status: 'In-store pilot',
+    timeline: 'Nov 2026',
+    team: 'Odoo, scale and label printer',
+    date: 'Nov 9, 2026',
+    summary:
+      'A self-service scale that suggests the item, prices it from Odoo and prints a label the register already reads.',
+    metric: {
+      kind: 'Testing result',
+      value: 'The right item was in the six suggestions every time; first 88% of the time.',
+    },
+    primaryAction: primary('View case study', '/projects/produce-kiosk'),
+    secondaryActions: [],
+    tags: ['Interaction design', 'Retail operations', 'On-device AI'],
+    media: mediaImage(
+      '/work/produce-kiosk/card-16x9.jpg',
+      'The produce kiosk on pine: which one is in your bag, bananas on the scale',
+    ),
+    theme: { fill: '#265245', ink: '#ffffff' },
+    variant: 'pilot',
+    caseStudyPath: '/projects/produce-kiosk',
+  },
+  {
     id: 'bodega-ops',
     slug: 'bodega-ops',
-    indexLabel: '02',
+    indexLabel: '04',
     tabLabel: 'Checkout Ops',
     tabLabelCompact: 'Checkout',
     title: 'Checkout Ops',
@@ -111,7 +171,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
   {
     id: 'la-bodega-ops',
     slug: 'la-bodega-ops',
-    indexLabel: '03',
+    indexLabel: '05',
     tabLabel: 'La Bodega Ops',
     tabLabelCompact: 'Ops',
     title: 'La Bodega Ops',
@@ -136,14 +196,14 @@ export const featuredProjects: FeaturedProjectCard[] = [
       '/work/la-bodega-ops/hero.png',
       'La Bodega Ops — role homes on phone for staff, manager, and admin',
     ),
-    theme: { fill: '#9F1239', ink: '#ffffff' },
+    theme: { fill: '#1D4E89', ink: '#ffffff' },
     variant: 'pilot',
     caseStudyPath: '/projects/la-bodega-ops',
   },
   {
     id: 'competitor-watch',
     slug: 'competitor-watch',
-    indexLabel: '04',
+    indexLabel: '06',
     tabLabel: 'Competitor Watch',
     tabLabelCompact: 'CW',
     title: 'Competitor Watch',
@@ -176,7 +236,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
   {
     id: 'code19',
     slug: 'code19',
-    indexLabel: '05',
+    indexLabel: '07',
     tabLabel: 'CODE19',
     title: 'CODE19 Racing',
     role: 'Product designer and UX engineer',
@@ -205,7 +265,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
   {
     id: 'wing-hmi',
     slug: 'wing-hmi',
-    indexLabel: '06',
+    indexLabel: '08',
     tabLabel: 'HMI',
     title: 'WING HMI',
     role: 'Product designer',
@@ -235,7 +295,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
   {
     id: 'edge-ai',
     slug: 'edge-ai',
-    indexLabel: '07',
+    indexLabel: '09',
     tabLabel: 'Edge AI',
     title: 'WING Edge AI',
     role: 'Product designer',

@@ -287,6 +287,26 @@ export const work = [
       },
     ],
   },
+  {
+    slug: 'produce-kiosk',
+    outcome: 'Self-service produce scale: weigh, tap, sticker; the register scans it',
+    title: 'Produce kiosk',
+    meta: 'La Bodega · In store 2026',
+    status: 'Pilot',
+    year: '2026',
+    domain: 'Design engineering · Field deployment',
+    layer: 'In-store hardware + Odoo',
+    blurb:
+      'A self-service produce scale: weigh the bag, tap what’s in it, print a label the register scans.',
+    role: 'Sole designer and developer',
+    team: 'Solo design and build',
+    skills: ['Odoo', 'C#', 'Hardware', 'Computer vision', 'Kiosk UX'],
+    accent: '#265245',
+    cover: '/work/produce-kiosk/card-16x9.jpg',
+    hero: '/work/produce-kiosk/card-16x9.jpg',
+    caseStudyBody: 'produce-kiosk',
+    sections: [],
+  },
 ]
 
 /** Lab case studies (not in curated Work). Linked from /play. */

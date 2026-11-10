@@ -33,6 +33,7 @@ import BreathingText from '../components/fancy/BreathingText'
 import { CW_HERO_PROOF, CW_METRICS, cwBlurb } from '../data/cwMetrics'
 import { resolveCwCaseStudyRoute } from '../data/cwCaseStudyAb'
 import { getCaseStudyPackaging } from '../data/caseStudyPackaging'
+import ProduceKioskCaseStudy from '../components/kiosk/ProduceKioskCaseStudy'
 
 export default function Project() {
   const { slug } = useParams()
@@ -183,6 +184,9 @@ export default function Project() {
             ? 'Edge'
             : project.title?.split(' ')[0] || project.title
   const showRail = railSteps.length >= 2
+
+  // Its own case-study layout (components/cx).
+  if (project.caseStudyBody === 'produce-kiosk') return <ProduceKioskCaseStudy />
 
   if (isLolaCase) {
     return (

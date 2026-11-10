@@ -1,0 +1,349 @@
+/* Fonts this system uses, self-contained so the page works on any branch (Geist, SIL OFL: /fonts/Geist-LICENSE.txt). */
+@font-face { font-family: "Geist Portfolio"; src: url("/fonts/Geist-Variable.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Geist Mono Portfolio"; src: url("/fonts/GeistMono-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+
+/* ==========================================================================
+   Case-study system (.cx) — one layout and type system for portfolio case studies.
+   First used by /projects/la-bodega-storefront. Scoped to .cx so other pages are untouched.
+
+   Rules it encodes (Apple HIG + Nielsen heuristics + laws of UX):
+   - Deference / content first (HIG): neutral surfaces, one accent (brand cherry) used only for
+     links and the main action (Von Restorff), screens carry the colour.
+   - Clarity (HIG): system type ramp (Large Title, Title 1, Title 3, Body 17, Subhead 15, Footnote 13),
+     body text never wider than ~68 characters, AA contrast for every text size.
+   - Consistency (Nielsen #4) + similarity: every visual is a .cx-fig on one 12-column grid, in
+     four sizes only (quarter, third, half, full). Same border, radius and caption everywhere.
+   - Recognition over recall / Jakob's law: numbered chapters that match the floating section nav,
+     section titles in a left column, text in a right column — the familiar article layout.
+   - Proximity: caption 8px under its image, rows 64px apart, chapters 128px apart.
+   - Hick's / Miller: five chapters, each with at most ~5 rows.
+   - Fitts: links and buttons at least 44px tall.
+   - Responsive: phone 4 columns (< 600px), tablet 8 (600–1023px), desktop 12 (1024px+).
+     Full screen width, with side margins that grow with the screen; capped at 1680px on huge screens.
+   - Respects reduced motion and dark mode.
+   ========================================================================== */
+
+.cx {
+  /* colour (light) */
+  --cx-bg: #fbfbfd;
+  --cx-surface: #ffffff;
+  --cx-fill: #f5f5f7;
+  --cx-label: #1d1d1f;
+  --cx-label-2: #6e6e73;      /* 4.9:1 on white: body-size and caption text */
+  --cx-sep: #d2d2d7;
+  --cx-accent: #8e0029;       /* La Bodega cherry: links, main action */
+  --cx-accent-ink: #ffffff;
+
+  /* type (HIG ramp; titles scale with the screen) */
+  --cx-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --cx-large: clamp(34px, 2.2rem + 1.6vw, 56px);
+  --cx-title1: clamp(26px, 1.4rem + 1.1vw, 40px);
+  --cx-title3: 20px;
+  --cx-body: 17px;
+  --cx-sub: 15px;
+  --cx-foot: 13px;
+  --cx-measure: 68ch;
+
+  /* space (8-point grid) */
+  --cx-1: 4px; --cx-2: 8px; --cx-3: 12px; --cx-4: 16px; --cx-5: 24px; --cx-6: 32px;
+  --cx-7: 48px; --cx-8: 64px; --cx-9: 96px; --cx-10: 128px;
+
+  /* layout */
+  --cx-margin: 20px;
+  --cx-gap: 16px;
+  --cx-cols: 4;
+  --cx-max: 1680px;
+  --cx-radius: 12px;
+
+  background: var(--cx-bg);
+  color: var(--cx-label);
+  font-family: var(--cx-font);
+  font-size: var(--cx-body);
+  line-height: 1.53;
+  -webkit-font-smoothing: antialiased;
+  padding: 88px 0 160px;
+}
+@media (min-width: 600px) { .cx { --cx-margin: 32px; --cx-gap: 20px; --cx-cols: 8; } }
+@media (min-width: 1024px) { .cx { --cx-margin: clamp(48px, 5vw, 96px); --cx-gap: 24px; --cx-cols: 12; } }
+/* Always light, like the rest of the portfolio (owner, Nov 10): no dark theme for case studies.
+   Also pins the older .pk / .sf colours, which have their own dark-mode rules. */
+.pk.cx {
+  color-scheme: light;
+  --pk-bg: #fcfcfc; --pk-ink: #111; --pk-text: #6f6f6f; --pk-line: #e8e8e8; --pk-card: #fff;
+}
+.cx .sf-nav { background: rgba(255,255,255,.92); }
+.cx .sf-nav a.is-at { background: #111; color: #fff; }
+
+/* ---------- layout ---------- */
+.cx-wrap { max-width: var(--cx-max); margin: 0 auto; padding: 0 var(--cx-margin); }
+.cx-grid { display: grid; grid-template-columns: repeat(var(--cx-cols), minmax(0, 1fr)); gap: var(--cx-6) var(--cx-gap); align-items: start; margin-top: var(--cx-6); }
+
+/* figure sizes: phone / tablet / desktop columns */
+.cx-q { grid-column: span 2; }                         /* quarter: 2-up, 2-up, 4-up */
+.cx-t { grid-column: span 2; }                         /* third:   2-up, 2-up, 3-up */
+.cx-h { grid-column: span 4; }                         /* half:    1-up, 1-up, 2-up */
+.cx-f { grid-column: 1 / -1; }                         /* full */
+@media (min-width: 600px) { .cx-q, .cx-t { grid-column: span 4; } .cx-h { grid-column: span 8; } }
+@media (min-width: 1024px) { .cx-q { grid-column: span 3; } .cx-t { grid-column: span 4; } .cx-h { grid-column: span 6; } }
+
+/* ---------- chapter ---------- */
+.cx-chapter { padding-top: var(--cx-10); scroll-margin-top: 72px; }
+.cx-chapter + .cx-chapter > .cx-wrap { border-top: 1px solid var(--cx-sep); padding-top: var(--cx-8); }
+.cx-chapter + .cx-chapter { padding-top: var(--cx-8); }
+.cx-eyebrow { margin: 0 0 var(--cx-3); font-size: var(--cx-foot); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--cx-label-2); }
+.cx-eyebrow b { color: var(--cx-accent); font-weight: 600; margin-right: var(--cx-2); }
+.cx.cx h2.cx-h2 { margin: 0; max-width: 22ch; font-size: var(--cx-title1); line-height: 1.12; font-weight: 700; letter-spacing: -0.015em; color: var(--cx-label); scroll-margin-top: 110px; }
+
+/* ---------- row: title left, text right (desktop); stacked below ---------- */
+.cx-row { display: grid; grid-template-columns: repeat(var(--cx-cols), minmax(0, 1fr)); gap: var(--cx-3) var(--cx-gap); margin-top: var(--cx-8); }
+.cx.cx h3.cx-row__h { grid-column: 1 / -1; margin: 0; font-size: var(--cx-title3); line-height: 1.3; font-weight: 600; color: var(--cx-label); }
+.cx-row__body { grid-column: 1 / -1; max-width: var(--cx-measure); color: var(--cx-label-2); }
+@media (min-width: 1024px) {
+  .cx.cx h3.cx-row__h { grid-column: 1 / span 4; padding-right: var(--cx-5); }
+  .cx-row__body { grid-column: 5 / -1; }
+}
+.cx-row__body p { margin: 0 0 var(--cx-4); }
+.cx-row__body p:last-child { margin-bottom: 0; }
+.cx-row__body strong, .cx-row__body b { color: var(--cx-label); font-weight: 600; }
+.cx-list { margin: 0; padding-left: 1.1em; display: grid; gap: var(--cx-2); }
+.cx-note { font-size: var(--cx-sub); color: var(--cx-label-2); margin-top: var(--cx-3) !important; }
+.cx-cost { display: block; margin-top: var(--cx-3); padding: var(--cx-3) var(--cx-4); border-radius: 10px; background: var(--cx-fill); font-size: var(--cx-sub); color: var(--cx-label); }
+.cx-cost b { margin-right: 6px; }
+
+/* ---------- figure ---------- */
+.cx-fig { margin: 0; }
+.cx-fig img, .cx-fig video { display: block; width: 100%; height: auto; border: 1px solid var(--cx-sep); border-radius: var(--cx-radius); background: var(--cx-surface); }
+.cx-fig figcaption { margin-top: var(--cx-2); max-width: 46ch; font-size: var(--cx-foot); line-height: 1.38; color: var(--cx-label-2); }
+.cx-fig--phone .sf-phone { width: 100%; max-width: 300px; margin: 0 auto; }
+.cx-fig--phone figcaption { margin-left: auto; margin-right: auto; text-align: center; }
+.cx-fig--phone img.sf-phone__frame { border: 0; border-radius: 0; background: none; }
+.cx-fig--phone .sf-phone__screen img, .cx-fig--phone .sf-phone__screen video { border: 0; border-radius: 0; }
+.cx-link { display: inline-flex; align-items: center; min-height: 44px; font-size: var(--cx-foot); color: var(--cx-accent); text-underline-offset: 3px; }
+
+/* ---------- intro ---------- */
+.cx-intro { display: grid; grid-template-columns: repeat(var(--cx-cols), minmax(0, 1fr)); gap: var(--cx-6) var(--cx-gap); align-items: center; }
+.cx-intro__text { grid-column: 1 / -1; }
+.cx-intro__phone { grid-column: 1 / -1; }
+.cx-intro__phone .sf-phone { width: min(260px, 70%); margin: 0 auto; }
+@media (min-width: 1024px) { .cx-intro__text { grid-column: 1 / span 7; } .cx-intro__phone { grid-column: 9 / span 4; } .cx-intro__phone .sf-phone { width: min(300px, 100%); } }
+.cx-back { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: var(--cx-4); font-size: var(--cx-sub); color: var(--cx-label-2); text-decoration: none; }
+.cx-back:hover { color: var(--cx-label); }
+.cx.cx h1.cx-h1 { margin: 0 0 var(--cx-3); font-size: var(--cx-large); line-height: 1.05; font-weight: 700; letter-spacing: -0.02em; color: var(--cx-label); }
+.cx-tag { margin: 0 0 var(--cx-6); max-width: 34ch; font-size: clamp(19px, 1rem + .5vw, 24px); line-height: 1.35; color: var(--cx-label); }
+.cx-snap { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--cx-3); max-width: var(--cx-measure); }
+.cx-snap li { display: grid; grid-template-columns: 84px 1fr; gap: var(--cx-3); font-size: var(--cx-sub); line-height: 1.45; color: var(--cx-label-2); }
+.cx-snap b { color: var(--cx-label); font-weight: 600; }
+.cx-meta { margin: var(--cx-6) 0 0; padding-top: var(--cx-5); border-top: 1px solid var(--cx-sep); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cx-4) var(--cx-5); max-width: var(--cx-measure); }
+@media (min-width: 600px) { .cx-meta { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.cx-meta dt { font-size: var(--cx-foot); color: var(--cx-label-2); }
+.cx-meta dd { margin: 2px 0 0; font-size: var(--cx-sub); color: var(--cx-label); }
+@media (max-width: 599px) { .cx-snap li { grid-template-columns: 1fr; gap: 0; } }
+
+/* ---------- full-bleed band ---------- */
+.cx .sf-hero { margin: var(--cx-8) 0 0; padding: var(--cx-7) var(--cx-margin) 0; }
+.cx .sf-phones { max-width: 1100px; gap: clamp(12px, 3vw, 40px); justify-content: center; overflow: visible; padding: 0; scroll-snap-type: none; }
+.cx .sf-hero .sf-phone { flex: none; }
+.cx .sf-hero .sf-phone { width: clamp(150px, 22vw, 300px); }
+.cx .sf-hero .sf-phone--big { width: clamp(170px, 24vw, 330px); }
+@media (max-width: 599px) { .cx .sf-phones .sf-phone:not(.sf-phone--big) { display: none; } .cx .sf-hero .sf-phone--big { width: 62vw; } }
+.cx-caption { max-width: var(--cx-max); margin: var(--cx-3) auto 0; padding: 0 var(--cx-margin); font-size: var(--cx-foot); color: var(--cx-label-2); text-align: center; }
+
+/* ---------- data ---------- */
+.cx .sf-table { font-size: var(--cx-sub); }
+.cx .sf-table th, .cx .sf-table td { border-bottom-color: var(--cx-sep); color: var(--cx-label-2); }
+.cx .sf-table thead th, .cx .sf-table tbody th, .cx .sf-table td:first-child { color: var(--cx-label); font-weight: 600; }
+.cx .sf-table--wide td:first-child { color: var(--cx-label-2); font-weight: 400; }
+.cx .sf-table--wide tr.is-us th { color: var(--cx-accent); }
+.cx .sf-table--wide tr.is-us td { color: var(--cx-label); font-weight: 600; }
+.cx-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.cx-scroll .sf-table { min-width: 720px; margin: 0; }
+.cx .sf-bars { margin: var(--cx-4) 0 0; }
+.cx .sf-bar__fill { background: var(--cx-accent); }
+.cx-quote { margin: 0; padding: var(--cx-4) var(--cx-5); border-radius: var(--cx-radius); background: var(--cx-surface); border: 1px solid var(--cx-sep); display: grid; gap: var(--cx-1); font-size: var(--cx-sub); color: var(--cx-label-2); }
+.cx-quote span:first-child { color: var(--cx-label); font-weight: 600; }
+.cx-stat { display: grid; gap: var(--cx-1); font-size: var(--cx-sub); color: var(--cx-label-2); }
+.cx-stat b { font-size: clamp(32px, 1.6rem + 1.2vw, 48px); line-height: 1; font-weight: 700; letter-spacing: -0.02em; color: var(--cx-label); font-variant-numeric: tabular-nums; }
+
+/* ---------- end ---------- */
+.cx-end { display: flex; flex-wrap: wrap; gap: var(--cx-3) var(--cx-5); align-items: center; margin-top: var(--cx-8); }
+.cx-end a { display: inline-flex; align-items: center; min-height: 44px; font-size: var(--cx-sub); color: var(--cx-label); text-underline-offset: 3px; }
+.cx-end .cx-end__main { padding: 0 var(--cx-5); border-radius: 999px; background: var(--cx-accent); color: var(--cx-accent-ink); text-decoration: none; font-weight: 600; }
+.cx a:focus-visible { outline: 2px solid var(--cx-accent); outline-offset: 3px; border-radius: 6px; }
+
+/* Full screen width: the site's <main> caps pages at 1152px; a case study breaks out of it.
+   Scoped with :has() so only pages using .cx clip the 100vw overflow. */
+html:has(.cx) { overflow-x: clip; }
+.cx { width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); box-sizing: border-box; }
+.cx.cx :is(h1, h2, h3, h4) { font-family: var(--cx-font); }
+.cx .cx-list { list-style: disc; }
+.cx .cx-list li::marker { color: var(--cx-label-2); }
+
+/* ---------- v2 (Nov 10): smaller flat screens, one text rhythm, band steps, highlights ---------- */
+
+/* Flat screens sit under the text column on desktop, 4 across (~200px); 4 across on tablet; 2 on phones. */
+.cx-grid--body { --cx-cols: 4; }
+.cx-grid--body > .cx-q, .cx-grid--body > .cx-t { grid-column: span 2; }
+.cx-grid--body > .cx-h { grid-column: span 4; }
+@media (min-width: 600px) {
+  .cx-grid--body { --cx-cols: 8; }
+  .cx-grid--body > .cx-q, .cx-grid--body > .cx-t { grid-column: span 2; }
+  .cx-grid--body > .cx-h { grid-column: span 4; }
+}
+@media (min-width: 1024px) {
+  .cx-grid--body { --cx-cols: 8; margin-left: calc(33.3333% + var(--cx-gap) / 3); }
+}
+
+/* One text rhythm (8-pt): blocks inside a section 16px apart, nothing else adds margin. */
+.cx-row__body > * { margin: 0; }
+.cx-row__body > * + * { margin-top: var(--cx-4); }
+.cx .cx-row__body p { margin: 0; }
+.cx .cx-row__body > * + p, .cx .cx-row__body > * + ul, .cx .cx-row__body > * + table, .cx .cx-row__body > * + div,
+.cx .cx-row__body > * + nav, .cx .cx-row__body > * + .cx-cost, .cx .cx-row__body > * + a { margin-top: var(--cx-4); }
+.cx .cx-row__body .cx-note { margin-top: var(--cx-3) !important; }
+.cx .cx-row__body .sf-table, .cx .cx-row__body .sf-bars { margin-bottom: 0; }
+.cx .cx-row__body .cx-end { margin-top: var(--cx-6); }
+.cx-list { gap: var(--cx-2); }
+.cx-cost { margin-top: var(--cx-4); }
+.cx.cx h2.cx-h2 + .cx-row { margin-top: var(--cx-7); }
+.cx-grid + .cx-note { margin: var(--cx-3) 0 0; }
+.cx-row + .cx-grid, .cx-row + .cx-grid--body { margin-top: var(--cx-5); }
+.cx .cx-fig figcaption { margin-top: var(--cx-2); }
+.cx-eyebrow { line-height: 1; }
+
+/* Hero band: three numbered steps, whole phones, labels in cream. Swipe row on phones. */
+.cx .cx-band { padding: var(--cx-8) var(--cx-margin) var(--cx-7); overflow: visible; }
+.cx .cx-band .sf-phones { align-items: flex-end; gap: clamp(16px, 4vw, 64px); }
+.cx .cx-band .sf-phone { margin-bottom: 0; }
+.cx-band__item { margin: 0; display: grid; justify-items: center; gap: var(--cx-4); flex: none; }
+.cx-band__item figcaption { display: flex; align-items: center; gap: var(--cx-2); font-size: var(--cx-sub); font-weight: 600; color: #fff5ea; }
+.cx-band__item figcaption b { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #fff5ea; color: #8e0029; font-size: var(--cx-foot); }
+@media (max-width: 599px) {
+  .cx .cx-band { padding: var(--cx-7) 0 var(--cx-6); }
+  .cx .cx-band .sf-phones { justify-content: flex-start; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 var(--cx-margin); gap: var(--cx-4); scrollbar-width: none; }
+  .cx .cx-band .sf-phones::-webkit-scrollbar { display: none; }
+  .cx .cx-band .sf-phones .sf-phone:not(.sf-phone--big) { display: block; }
+  .cx .cx-band .sf-phone, .cx .cx-band .sf-phone--big { width: 58vw; }
+  .cx-band__item { scroll-snap-align: center; }
+}
+
+/* Highlights right under the band */
+.cx-highlights { padding-top: var(--cx-8); }
+.cx-highlights .cx-row { margin-top: 0; }
+
+/* Band, second row: the four animated details, smaller */
+.cx .cx-band__details { margin-top: var(--cx-8); }
+.cx .cx-band__details .sf-phone { width: clamp(130px, 15vw, 210px); }
+.cx .cx-band__details figcaption { font-weight: 500; }
+@media (max-width: 599px) { .cx .cx-band__details .sf-phone { width: 44vw; } }
+
+/* One frame for the design history: references → directions → chosen → wireframes */
+.cx-journey { margin-top: var(--cx-5); padding: var(--cx-5); border: 1px solid var(--cx-sep); border-radius: 20px; background: var(--cx-surface);
+  display: grid; grid-template-columns: repeat(var(--cx-cols), minmax(0, 1fr)); gap: var(--cx-6) var(--cx-gap); align-items: start; }
+.cx-journey__step { margin: 0; grid-column: 1 / -1; display: grid; gap: var(--cx-3); }
+.cx-journey__step img { display: block; width: 100%; height: auto; border: 1px solid var(--cx-sep); border-radius: 10px; background: #fff; }
+.cx-journey__step figcaption { display: flex; gap: var(--cx-2); align-items: baseline; font-size: var(--cx-sub); font-weight: 600; color: var(--cx-label); }
+.cx-journey__step figcaption span { font-size: var(--cx-foot); font-weight: 600; color: var(--cx-accent); }
+@media (min-width: 600px) {
+  .cx-journey__step--oct6 { grid-column: span 3; }
+  .cx-journey__step--wire { grid-column: span 5; }
+}
+@media (min-width: 1024px) {
+  .cx-journey { padding: var(--cx-6); }
+  .cx-journey__step--refs { grid-column: span 5; }
+  .cx-journey__step--early { grid-column: span 7; }
+  .cx-journey__step--oct6 { grid-column: span 4; }
+  .cx-journey__step--wire { grid-column: span 8; }
+}
+.cx .cx-row__body .cx-end--first { margin-top: 0; }
+@media (min-width: 600px) { .cx-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.cx-scroll .sf-table.cx-move { min-width: 640px; }
+.cx .cx-move tbody th { white-space: normal; width: 18%; }
+.cx-stats2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cx-5); }
+
+/* ---------- v3: portfolio fonts, segmented control, zoomable history ---------- */
+/* Fonts: the portfolio's case-study pairing — Geist (headings), DM Sans (text), Geist Mono (labels). Weights unchanged. */
+.cx { --cx-font: var(--font-sans, "DM Sans", system-ui, sans-serif); --cx-font-head: var(--font-editorial, "Geist Portfolio", system-ui, sans-serif); --cx-font-label: var(--font-detail, "Geist Mono Portfolio", ui-monospace, monospace); }
+.cx.cx :is(h1, h2, h3, h4) { font-family: var(--cx-font-head); }
+.cx-eyebrow, .cx-journey__step figcaption span, .cx-meta dt, .cx-band__item figcaption b { font-family: var(--cx-font-label); }
+.cx-eyebrow { letter-spacing: .04em; }
+
+/* Segmented control (HIG): pill track, selected segment raised */
+.cx-seg { display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 12px; background: var(--cx-fill); width: fit-content; max-width: 100%; }
+.cx-seg button { min-height: 36px; padding: 0 14px; border: 0; border-radius: 9px; background: transparent; color: var(--cx-label-2); font: 500 var(--cx-sub)/1 var(--cx-font); cursor: pointer; }
+.cx-seg button:hover { color: var(--cx-label); }
+.cx-seg button.is-on { background: var(--cx-surface); color: var(--cx-label); box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 0 0 .5px rgba(0,0,0,.06); }
+.cx-seg button:focus-visible { outline: 2px solid var(--cx-accent); outline-offset: 2px; }
+.cx .cx-row__body .cx-seg__note { margin-top: var(--cx-3); }
+@media (max-width: 599px) {
+  .cx-seg { flex-wrap: nowrap; overflow-x: auto; width: 100%; scrollbar-width: none; }
+  .cx-seg::-webkit-scrollbar { display: none; }
+  .cx-seg button { flex: none; min-height: 40px; }
+}
+
+/* History panels open full size */
+.cx-zoom { position: relative; display: block; border-radius: 10px; }
+.cx-zoom__hint { position: absolute; right: 8px; bottom: 8px; padding: 6px 10px; border-radius: 999px; background: rgba(29,29,31,.78); color: #fff; font-size: var(--cx-foot); opacity: 0; transition: opacity .15s ease; }
+.cx-zoom:hover .cx-zoom__hint, .cx-zoom:focus-visible .cx-zoom__hint { opacity: 1; }
+@media (hover: none) { .cx-zoom__hint { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .cx-zoom__hint { transition: none; } }
+
+/* v4 (Nov 10): one family — Geist for headings and text, Geist Mono for labels (option B). */
+.cx { --cx-font: var(--font-editorial, "Geist Portfolio", system-ui, sans-serif); }
+.cx, .cx-seg button, .cx .sf-table, .cx-quote, .cx-stat { font-family: var(--cx-font); }
+
+/* ---------- kiosk variant: one-column intro, pine band with the tablet device ---------- */
+@media (min-width: 1024px) { .cx-intro--solo .cx-intro__text { grid-column: 1 / span 8; } }
+.cx .cx-band--pine { background: #265245; padding: var(--cx-8) var(--cx-margin) var(--cx-7); }
+.cx .cx-band__device { margin: 0 auto; max-width: 980px; }
+.cx .cx-band__device figcaption { margin-top: var(--cx-4); text-align: center; font-size: var(--cx-sub); color: #e9f2ec; }
+.cx .cx-band__device .pk-device__screen img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.cx .cx-demo { margin: 0; max-width: none; }
+.cx .cx-band__device .pk-device__screen img, .cx .cx-band__device .pk-device__screen video { width: 100%; height: 100%; object-fit: cover; border: 0; border-radius: 0; background: #8c0027; }
+.cx .cx-band__device img.pk-device__frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; border-radius: 0; background: none; pointer-events: none; }
+.cx .cx-demo .pk-digit { font-family: var(--cx-font-label); }
+.cx .cx-demo .pk-code__name, .cx .cx-demo .pk-demo__bar { font-size: var(--cx-sub); }
+.cx .cx-demo .pk-code { grid-template-columns: 1fr; gap: 6px; }
+/* The portfolio's shared contact strip closes each case study, like the other case studies and Home */
+.cx { padding-bottom: var(--cx-9); }
+
+/* Kiosk band: the screen recording beside the phone clip of the real scale */
+.cx-band__pair { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: var(--cx-6); align-items: center; }
+.cx .cx-band__pair .cx-band__device { max-width: none; }
+.cx-band__clip { margin: 0 auto; width: min(320px, 70%); }
+.cx-band__clip video, .cx-band__clip img { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 18px; border: 0; }
+.cx-band__clip figcaption { margin-top: var(--cx-4); text-align: center; font-size: var(--cx-sub); color: #e9f2ec; }
+@media (min-width: 1024px) { .cx-band__pair { grid-template-columns: 3fr 1fr; } .cx-band__clip { width: 100%; } }
+.cx .cx-band__pair .cx-band__device { width: 100%; margin: 0; }
+/* No orphaned words in titles ("…kiosk / PC"): balanced line breaks, a little more width */
+.cx.cx h1.cx-h1, .cx.cx h2.cx-h2, .cx.cx h3.cx-row__h { text-wrap: balance; }
+.cx.cx h2.cx-h2 { max-width: 26ch; }
+.cx-row__body p, .cx-list li, .cx-tag { text-wrap: pretty; }
+
+/* ---------- Containers for the work (common region): screens, diagrams, history ---------- */
+.cx { --cx-panel: #f3efeb; --cx-cream: #fff5ea; }
+.cx-panel { margin-top: var(--cx-5); padding: clamp(16px, 2.6vw, 40px); border-radius: 24px; background: var(--cx-panel); border: 0; }
+.cx-panel > .cx-fig img { border-color: rgba(0,0,0,.06); }
+.cx-journey.cx-panel { border: 0; background: var(--cx-panel); }
+.cx-journey.cx-panel .cx-journey__step img { border-color: rgba(0,0,0,.06); }
+
+/* Screens: full-width showcase, switcher in the header, 5–6 compact screens per row */
+.cx-panel--screens { margin-top: var(--cx-8); }
+.cx-panel__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--cx-4); }
+.cx.cx h3.cx-panel__title { margin: 0; font-size: var(--cx-title3); font-weight: 600; color: var(--cx-label); }
+.cx .cx-panel__note { margin: var(--cx-3) 0 0; font-size: var(--cx-sub); color: var(--cx-label-2); max-width: var(--cx-measure); }
+.cx-panel .cx-seg { background: rgba(29,29,31,.07); }
+.cx-screens { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: var(--cx-5) var(--cx-4); margin-top: var(--cx-5); align-items: start; }
+@media (min-width: 1024px) { .cx-screens { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: var(--cx-6) var(--cx-5); } }
+.cx-screens .cx-fig img { border-color: rgba(0,0,0,.06); }
+
+/* Highlight strip: the numbers a skimmer should leave with */
+.cx-highlight { margin-top: var(--cx-6); padding: clamp(20px, 3vw, 40px); border-radius: 24px; background: var(--cx-cream);
+  display: grid; grid-template-columns: 1fr; gap: var(--cx-5); }
+@media (min-width: 600px) { .cx-highlight { grid-template-columns: repeat(3, minmax(0, 1fr)); } .cx-highlight--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cx-highlight .cx-stat b { color: var(--cx-accent); }
+.cx-highlight + .cx-row, .cx-highlight + .cx-note + .cx-row { margin-top: var(--cx-7); }
+.cx-highlight + .cx-note { margin-top: var(--cx-3); }
+/* Labelled list: a bold label, then the line (no bullets) */
+.cx .cx-list--labels { list-style: none; padding-left: 0; gap: var(--cx-3); }
+.cx-list--labels li b { display: inline-block; min-width: 88px; margin-right: var(--cx-2); color: var(--cx-label); font-weight: 600; }
+@media (max-width: 599px) { .cx-list--labels li b { display: block; } }

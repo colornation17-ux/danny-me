@@ -10,6 +10,7 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Play from './pages/Play'
 import Project from './pages/Project'
+import StorefrontCase from './pages/StorefrontCase'
 import NotFound from './pages/NotFound'
 
 /** Scroll to hash targets, or top of page — hash-aware so Work → #projects works.
@@ -71,6 +72,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/play" element={<Play />} />
+            <Route path="/projects/la-bodega-storefront" element={<StorefrontCase />} />
             <Route path="/projects/:slug" element={<Project />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
