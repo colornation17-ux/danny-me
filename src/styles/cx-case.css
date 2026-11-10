@@ -366,3 +366,13 @@ html:has(.cx) { overflow-x: clip; }
 
 /* Square boards (sitemap, single flows) stay readable without filling a whole screen height. */
 .cx-fig--narrow { justify-self: center; width: 100%; max-width: 880px; }
+
+/* Reference screens: equal tiles (screen contained), each captioned with what it shaped. */
+.cx-refs { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cx-5) var(--cx-3); }
+.cx-refs li { margin: 0; display: grid; gap: var(--cx-2); align-content: start; }
+.cx-refs a { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 14px; background: rgba(0,0,0,.035); overflow: hidden; }
+.cx-refs img { position: absolute; inset: var(--cx-3); width: calc(100% - 2 * var(--cx-3)); height: calc(100% - 2 * var(--cx-3)); object-fit: contain; border: 0; border-radius: 0; background: none; }
+.cx-refs p { margin: 0; font-size: var(--cx-foot); line-height: 1.4; color: var(--cx-label-2); }
+.cx-refs p b { display: block; color: var(--cx-label); font-weight: 600; }
+@media (min-width: 600px) { .cx-refs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cx-5) var(--cx-4); } }
+@media (min-width: 1024px) { .cx-refs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }

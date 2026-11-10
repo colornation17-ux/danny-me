@@ -201,6 +201,17 @@ function Fig({ src, alt, cap, size = 'q', base = F }) {
   )
 }
 
+/** Reference screens kept, each with what it shaped in the shipped app. */
+const REFS = [
+  ['r-wolt.jpg', 'Wolt', 'One clear start → the Welcome screen with Lola', 'Wolt welcome screen: a street illustration, Welcome to Wolt, one Get started button'],
+  ['r-target.jpg', 'Target', 'Brand red and a mascot on a working home → Lola on Home', 'Target app home: red header, deals, and the Bullseye mascot in a Circle Week banner'],
+  ['r-glovo.jpg', 'Glovo', 'First delivery free, said up front → first delivery free with Lola Rewards', 'Glovo home: category bubbles and a first delivery free welcome gift'],
+  ['r-instacart-who.jpg', 'Instacart', 'Who you shop for → People you shop for, in preferences', 'Instacart onboarding: who do you usually shop for, with myself, partner, kids, baby, pets'],
+  ['r-instacart-address.jpg', 'Instacart', 'Address errors on the field → the address sheet and outside-the-area step', 'Instacart choose address: the street address does not match the ZIP code, fields outlined in red'],
+  ['r-swapi.jpg', 'Swapi', 'One idea per screen for points → the Lola Rewards explainer', 'Swapi points onboarding: three cards, shop and earn points, exchange for gift cards, swap points'],
+  ['r-menubar.jpg', 'Property app', 'A light pill and a label on the selected tab → the menu bar', 'Property app screens with a bottom bar where only the selected tab shows a light pill and a label'],
+]
+
 /** A figure that opens full size in a new tab: for boards and diagrams too dense to read inline. */
 function ZFig({ src, alt, cap, size = 'f', narrow = false }) {
   const url = `${F}/${src}?v=${V}`
@@ -374,18 +385,24 @@ export default function StorefrontCase() {
 
       <Chapter id="process" n="03" label="Process" title="From references to a phone-first app">
         <Row title="References">
-          <p>Three sets, each for one question. Nine food sites for the look. Wolt, Uber Eats and DoorDash for the first open. Twenty Instacart screens for the grocery flow: who you shop for, address errors, lists, search and checkout.</p>
+          <p>Screens from delivery, grocery, loyalty and property apps, kept only where one answered a question the app had to solve. Seven made it in.</p>
           <ul className="cx-list cx-list--labels">
-            <li><b>Took</b>Product cards without a box, pill buttons, delivery or pickup asked first, Instacart’s deal price, DoorDash’s search motion (measured from a video).</li>
-            <li><b>Refused</b>Checkout on another company’s site and a pop-up on the first screen. Six of the nine sites did each one.</li>
+            <li><b>Also</b>Instacart’s deal price, DoorDash’s search sheet (motion measured from a video), Uber’s two-step address sheet.</li>
+            <li><b>Refused</b>Checkout on another company’s site and a pop-up on the first screen. Six of nine food sites we walked did each one.</li>
           </ul>
         </Row>
         <div className="cx-panel">
-          <div className="cx-grid">
-            <ZFig size="h" src="p-nine.jpg" alt="Research board: nine food brand sites, Paput, Gourou, Shawarmaz, Pop Up Grocer, Superette, Delli, Snacklins, Tacos My Guey and Big Mamma, first screen of each" cap="Oct 4: nine food sites, walked as a shopper." />
-            <ZFig size="h" src="h-refs.jpg" alt="First-open references from Wolt, Uber Eats and DoorDash, each annotated with what to take" cap="First open: Wolt, Uber Eats, DoorDash." />
-            <ZFig size="f" src="p-instacart.jpg" alt="Twenty Instacart phone screens from store picker and shopping preferences through address, product, cart, lists, search, recipes and checkout" cap="Instacart, 20 screens from first open to checkout." />
-          </div>
+          <ul className="cx-refs">
+            {REFS.map(([src, app, took, alt]) => (
+              <li key={src}>
+                <a href={`${F}/${src}?v=${V}`} target="_blank" rel="noopener noreferrer" className="cx-zoom">
+                  <img src={`${F}/${src}?v=${V}`} alt={alt} loading="lazy" />
+                  <span className="sr-only"> (opens full size in a new tab)</span>
+                </a>
+                <p><b>{app}</b>{took}</p>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <Row title="Five directions">
