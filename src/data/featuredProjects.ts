@@ -92,7 +92,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     team: 'Web, iOS, Android',
     date: 'Nov 10, 2026',
     summary:
-      'The store’s own delivery and pickup app.',
+      'Delivery and pickup at store prices, 0% commission.',
     metric: {
       kind: 'Pilot signal',
       value: '2× basket: $58 by chat vs. $28 in store.',
