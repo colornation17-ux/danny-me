@@ -383,9 +383,54 @@ export default function StorefrontCase() {
         <p className="cx-note">Sources: each app’s Calhoun listings and merchant pricing; US Census ACS 2020–2024; Pew Research Center, 2026.</p>
       </Chapter>
 
-      <Chapter id="process" n="03" label="Process" title="From references to a phone-first app">
+      <Chapter id="process" n="03" label="Process" title="From the problem to a phone-first app">
+        <Row title="The problem, defined">
+          <ul className="cx-list cx-list--labels">
+            <li><b>Problem</b>Families who cook in Spanish plan the weekend around the butcher counter. Getting it means queueing, or texting back and forth to learn prices. Big delivery apps lose their trust with wrong items and surprise prices.</li>
+            <li><b>Done means</b>Weekend meat orders ready before Saturday, at register prices, with no queue.</li>
+          </ul>
+        </Row>
+
+        <Row title="What the numbers changed">
+          <table className="sf-table">
+            <thead><tr><th>Register data, 90 days to Sep 30</th><th>What it changed</th></tr></thead>
+            <tbody>
+              <tr><td>Average basket $28.41 across 17,010 sales</td><td>Quick add, no order minimum</td></tr>
+              <tr><td>Baskets with meat $51.87; without, $17.96</td><td>Meat leads the menu</td></tr>
+              <tr><td>Weekend day $7,759; weekday $3,651</td><td>Order ahead, pick a weekend pickup time</td></tr>
+              <tr><td>62% of customers back within 90 days</td><td>Buy again from the last order</td></tr>
+            </tbody>
+          </table>
+        </Row>
+
+        <Row title="Who it’s for">
+          <p>Four people, in priority order, drafted from the chats and the register data and marked provisional.</p>
+          <table className="sf-table">
+            <thead><tr><th>Who</th><th>Wants</th><th>Gets in the way</th></tr></thead>
+            <tbody>
+              <tr><td><b>Weekend cook</b></td><td>Saturday’s cuts ready, without the queue</td><td>Counter queues, not knowing the final meat price, the wrong cut</td></tr>
+              <tr><td><b>WhatsApp customer</b></td><td>To send a list the usual way and know it’s handled</td><td>Waiting for a price, not knowing the store understood, forms</td></tr>
+              <tr><td><b>American neighbour</b></td><td>Good meat at a good price, picked up fast</td><td>Spanish-only labels, unfamiliar cuts</td></tr>
+              <tr><td><b>Ingredient hunter</b></td><td>To search an item, see stock and price, and take it</td><td>Can’t find it under the name they know, unclear stock</td></tr>
+            </tbody>
+          </table>
+        </Row>
+
+        <Row title="Five frustrations, ranked">
+          <table className="sf-table">
+            <thead><tr><th>Frustration</th><th>Answer in the app</th></tr></thead>
+            <tbody>
+              <tr><td>1. Surprise final price on meat sold by weight</td><td>Fixed-price packs first, then weighed items with a hold (decision 3)</td></tr>
+              <tr><td>2. Wrong item or an unwanted swap</td><td>Swaps listed item by item on the order</td></tr>
+              <tr><td>3. Not knowing when it’s ready</td><td>Tracker with times, notifications, “I’m here” at pickup</td></tr>
+              <tr><td>4. Placing the same order every week</td><td>Buy again from the last order</td></tr>
+              <tr><td>5. Not knowing a cut or product name</td><td>Every screen in English or Spanish, the shopper’s choice</td></tr>
+            </tbody>
+          </table>
+        </Row>
+
         <Row title="References">
-          <p>Screens from delivery, grocery, loyalty and property apps, kept only where one answered a question the app had to solve. Seven made it in.</p>
+          <p>Screens from delivery, grocery, loyalty and property apps, kept only where one answered a frustration above. Seven made it in.</p>
           <ul className="cx-list cx-list--labels">
             <li><b>Also</b>Instacart’s deal price, DoorDash’s search sheet (motion measured from a video), Uber’s two-step address sheet.</li>
             <li><b>Refused</b>Checkout on another company’s site and a pop-up on the first screen. Six of nine food sites we walked did each one.</li>

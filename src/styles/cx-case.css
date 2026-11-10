@@ -345,8 +345,9 @@ html:has(.cx) { overflow-x: clip; }
 .cx-highlight + .cx-note { margin-top: var(--cx-3); }
 /* Labelled list: a bold label, then the line (no bullets) */
 .cx .cx-list--labels { list-style: none; padding-left: 0; gap: var(--cx-3); }
-.cx-list--labels li b { display: inline-block; min-width: 88px; margin-right: var(--cx-2); color: var(--cx-label); font-weight: 600; }
-@media (max-width: 599px) { .cx-list--labels li b { display: block; } }
+.cx-list--labels li b { display: block; color: var(--cx-label); font-weight: 600; }
+/* From tablet up: labels in one column, text hanging beside them so wrapped lines line up. */
+@media (min-width: 600px) { .cx-list--labels li { display: grid; grid-template-columns: 7rem 1fr; column-gap: var(--cx-2); } }
 
 /* Pipeline: a short system flow, one row per step on phones, a strip with arrows from tablet up. */
 .cx-pipe { grid-column: 1 / -1; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--cx-2); counter-reset: pipe; }
