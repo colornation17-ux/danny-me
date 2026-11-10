@@ -125,7 +125,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       'Self-service produce scale that identifies items by camera and prints barcode labels the register already reads.',
     metric: {
       kind: 'Testing result',
-      value: 'Identifies produce in 1.15 seconds on a retired register.',
+      value: 'Identifies produce in 1.15 seconds on a retired register, and in 0.1 seconds on a laptop.',
     },
     primaryAction: primary('View case study', '/projects/produce-kiosk'),
     secondaryActions: [],
