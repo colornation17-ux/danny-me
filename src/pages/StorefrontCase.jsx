@@ -316,7 +316,6 @@ export default function StorefrontCase() {
               <tr><td>Competitor walk-throughs</td><td>23 grocery sites and apps</td><td>Oct</td></tr>
             </tbody>
           </table>
-          <p className="cx-note">No usability sessions yet: the biggest gap, and the next study.</p>
         </Row>
         <Row title="What people ask">
           <p>25 of the 66 threads were about shopping:</p>
