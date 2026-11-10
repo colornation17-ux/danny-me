@@ -183,6 +183,7 @@ export default function ProduceKioskCaseStudy() {
         <Row title="Next">
           <ul className="cx-list">
             <li>Print labels on the Zebra printer and scan them at a live register.</li>
+            <li>Next phase: a dedicated PC for the kiosk, replacing the retired register it runs on today.</li>
             <li>Test with shoppers at peak hours, and count lookups at the register before and after.</li>
           </ul>
         </Row>
