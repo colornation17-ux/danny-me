@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/work/produce-kiosk",
+      "destination": "/projects/produce-kiosk",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/((?!.*\\.).*)",
