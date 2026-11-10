@@ -122,10 +122,10 @@ export const featuredProjects: FeaturedProjectCard[] = [
     team: 'Odoo, scale, printer',
     date: 'Nov 9, 2026',
     summary:
-      'A scale in the aisle that names the produce and prints its label.',
+      'Weigh produce in the aisle, tap the item, print a label the register scans.',
     metric: {
       kind: 'Testing result',
-      value: 'The right item was in the six suggestions every time; first 88% of the time.',
+      value: '88% right on the first suggestion; 100% within six.',
     },
     primaryAction: primary('View case study', '/projects/produce-kiosk'),
     secondaryActions: [],
