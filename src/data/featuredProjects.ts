@@ -92,10 +92,10 @@ export const featuredProjects: FeaturedProjectCard[] = [
     team: 'Web, iOS, Android',
     date: 'Nov 10, 2026',
     summary:
-      'Delivery and pickup at store prices, 0% commission.',
+      'Bilingual delivery and pickup app built on the store’s Odoo catalog, replacing chat-based ordering.',
     metric: {
       kind: 'Pilot signal',
-      value: '2× basket: $58 by chat vs. $28 in store.',
+      value: 'Chat orders averaged $58.41, twice the $28.41 in-store basket.',
     },
     primaryAction: primary('View case study', '/projects/la-bodega-storefront'),
     secondaryActions: [secondary('Open the live store', 'https://shop.labodegacalhoun.com')],
@@ -122,10 +122,10 @@ export const featuredProjects: FeaturedProjectCard[] = [
     team: 'Odoo, scale, printer',
     date: 'Nov 9, 2026',
     summary:
-      'Weigh produce in the aisle, tap the item, print a label the register scans.',
+      'Self-service produce scale that identifies items by camera and prints barcode labels the register already reads.',
     metric: {
       kind: 'Testing result',
-      value: '88% right on the first suggestion; 100% within six.',
+      value: 'Correct item in the top six suggestions in every test; ranked first in 88%.',
     },
     primaryAction: primary('View case study', '/projects/produce-kiosk'),
     secondaryActions: [],
