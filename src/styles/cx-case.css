@@ -347,3 +347,22 @@ html:has(.cx) { overflow-x: clip; }
 .cx .cx-list--labels { list-style: none; padding-left: 0; gap: var(--cx-3); }
 .cx-list--labels li b { display: inline-block; min-width: 88px; margin-right: var(--cx-2); color: var(--cx-label); font-weight: 600; }
 @media (max-width: 599px) { .cx-list--labels li b { display: block; } }
+
+/* Pipeline: a short system flow, one row per step on phones, a strip with arrows from tablet up. */
+.cx-pipe { grid-column: 1 / -1; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--cx-2); counter-reset: pipe; }
+.cx-pipe li { counter-increment: pipe; position: relative; display: grid; gap: 2px; padding: var(--cx-3) var(--cx-4);
+  border: 1px solid var(--cx-sep); border-radius: 12px; background: var(--cx-surface); }
+.cx-pipe li::before { content: counter(pipe); font-size: var(--cx-foot); font-weight: 600; color: var(--cx-accent); }
+.cx-pipe b { font-size: var(--cx-sub); font-weight: 600; color: var(--cx-label); }
+.cx-pipe span { font-size: var(--cx-foot); color: var(--cx-label-2); }
+@media (min-width: 600px) {
+  .cx-pipe { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cx-3); }
+}
+@media (min-width: 1024px) {
+  .cx-pipe { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--cx-4); }
+  .cx-pipe li:not(:last-child)::after { content: '→'; position: absolute; right: calc(-1 * var(--cx-4)); top: 50%;
+    width: var(--cx-4); transform: translateY(-50%); text-align: center; color: var(--cx-sep); font-size: var(--cx-foot); }
+}
+
+/* Square boards (sitemap, single flows) stay readable without filling a whole screen height. */
+.cx-fig--narrow { justify-self: center; width: 100%; max-width: 880px; }

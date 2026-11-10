@@ -92,7 +92,7 @@ const EDGES = [
   ['e-beer', 'Beer: 21+ check at the first add'],
 ]
 
-const SECTIONS = [['problem', 'Problem'], ['research', 'Research'], ['decisions', 'Decisions'], ['work', 'The work'], ['outcome', 'Outcome']]
+const SECTIONS = [['problem', 'Problem'], ['research', 'Research'], ['process', 'Process'], ['decisions', 'Decisions'], ['work', 'The work'], ['outcome', 'Outcome']]
 
 const TABS = [
   { id: 'shop', label: 'Shop', note: FLOWS[0].note, shots: FLOWS[0].shots },
@@ -201,6 +201,21 @@ function Fig({ src, alt, cap, size = 'q', base = F }) {
   )
 }
 
+/** A figure that opens full size in a new tab: for boards and diagrams too dense to read inline. */
+function ZFig({ src, alt, cap, size = 'f', narrow = false }) {
+  const url = `${F}/${src}?v=${V}`
+  return (
+    <figure className={`cx-fig cx-${size}${narrow ? ' cx-fig--narrow' : ''}`}>
+      <a href={url} target="_blank" rel="noopener noreferrer" className="cx-zoom">
+        <img src={url} alt={alt} loading="lazy" />
+        <span className="cx-zoom__hint" aria-hidden="true">Open full size ↗</span>
+        <span className="sr-only"> (opens full size in a new tab)</span>
+      </a>
+      {cap ? <figcaption>{cap}</figcaption> : null}
+    </figure>
+  )
+}
+
 export default function StorefrontCase() {
   const max = Math.max(...ASKS.map((a) => a.n))
   return (
@@ -215,7 +230,7 @@ export default function StorefrontCase() {
             <ul className="cx-snap">
               <li><b>Problem</b><span>Shoppers had to message the store and wait to learn a price or what was in stock; delivery platforms wanted 12–16% of every order.</span></li>
               <li><b>Shipped</b><span>The store’s own app: web store live, iOS submitted, Android in testing.</span></li>
-              <li><b>Proof</b><span>In the WhatsApp pilot, chat orders averaged $58.41, about twice a $28.41 register basket. About $1,800 in September.</span></li>
+              <li><b>Proof</b><span>In the WhatsApp pilot, 22 chat orders matched to register sales averaged $58.41, against a $28.41 register basket. About $1,800 in September. A pilot signal, not proof that delivery grows baskets.</span></li>
             </ul>
             <dl className="cx-meta">
               <div><dt>Role</dt><dd>Sole designer and front-end engineer</dd></div>
@@ -279,7 +294,7 @@ export default function StorefrontCase() {
         </Row>
         <Row title="What the store faced">
           <ul className="cx-list">
-            <li>Every chat order was taken by hand.</li>
+            <li>Lola answered first questions; staff still checked items, packed orders and handled problems.</li>
             <li>A delivery platform would take 12–16% of each order: $7–9 on a $58 basket.</li>
           </ul>
         </Row>
@@ -292,7 +307,7 @@ export default function StorefrontCase() {
           </ul>
         </Row>
         <Row title="Lola, the test run">
-          <p>It proved demand: about $1,800 in September, at twice the register basket. It couldn’t grow, because a person handled every order.</p>
+          <p>It proved paid demand: about $1,800 in September. But staff still checked and packed every order, and WhatsApp limited who we could reach, what shoppers could browse and when we could follow up.</p>
         </Row>
         <Row title="Why WhatsApp alone wasn’t enough">
           <ul className="cx-list cx-list--labels">
@@ -357,29 +372,75 @@ export default function StorefrontCase() {
         <p className="cx-note">Sources: each app’s Calhoun listings and merchant pricing; US Census ACS 2020–2024; Pew Research Center, 2026.</p>
       </Chapter>
 
-      <Chapter id="decisions" n="03" label="Decisions" title="Six decisions, each with a cost">
-        <Row title="How it got here">
-          <p>Real-app references, five directions, a pick on Oct 6 (fixed packs, Zelle at order), then wireframes on Oct 24. Decisions 3 and 4 undid the Oct 6 pick.</p>
+      <Chapter id="process" n="03" label="Process" title="From references to a phone-first app">
+        <Row title="References">
+          <p>Three sets, each for one question. Nine food sites for the look. Wolt, Uber Eats and DoorDash for the first open. Twenty Instacart screens for the grocery flow: who you shop for, address errors, lists, search and checkout.</p>
+          <ul className="cx-list cx-list--labels">
+            <li><b>Took</b>Product cards without a box, pill buttons, delivery or pickup asked first, Instacart’s deal price, DoorDash’s search motion (measured from a video).</li>
+            <li><b>Refused</b>Checkout on another company’s site and a pop-up on the first screen. Six of the nine sites did each one.</li>
+          </ul>
         </Row>
-        <div className="cx-journey cx-panel">
-          {[
-            ['h-refs.jpg', 'Real apps', 'References: Wolt, Uber Eats, DoorDash', 'References board of real shipped apps: Wolt, Uber Eats and DoorDash first-open and welcome screens, each annotated with what to take from it', 'refs'],
-            ['h-early.jpg', 'Before Oct 6', 'Directions A–E', 'Five early directions, A to E: poster-style campaign pages, painted signs, and a plain shop layout', 'early'],
-            ['h-oct6.jpg', 'Oct 6', 'Chosen: fixed packs, Zelle at order', 'October 6 direction in Spanish: deals list with 1, 2 or 5 lb packs, a toast saying meat is paid by Zelle at order, and a product sheet with fixed pack sizes', 'oct6'],
-            ['h-wire.jpg', 'Oct 24', 'Wireframes for every flow', 'October 24 phone wireframes: aisle, product with pack sizes, cart, and checkout', 'wire'],
-          ].map(([src, date, title, alt, key]) => (
-            <figure key={key} className={`cx-journey__step cx-journey__step--${key}`}>
-              <figcaption><span>{date}</span>{title}</figcaption>
-              <a href={`${F}/${src}?v=${V}`} target="_blank" rel="noopener noreferrer" className="cx-zoom">
-                <img src={`${F}/${src}?v=${V}`} alt={alt} loading="lazy" />
-                <span className="cx-zoom__hint" aria-hidden="true">Open full size ↗</span>
-                <span className="sr-only"> (opens full size in a new tab)</span>
-              </a>
-            </figure>
-          ))}
+        <div className="cx-panel">
+          <div className="cx-grid">
+            <ZFig size="h" src="p-nine.jpg" alt="Research board: nine food brand sites, Paput, Gourou, Shawarmaz, Pop Up Grocer, Superette, Delli, Snacklins, Tacos My Guey and Big Mamma, first screen of each" cap="Oct 4: nine food sites, walked as a shopper." />
+            <ZFig size="h" src="h-refs.jpg" alt="First-open references from Wolt, Uber Eats and DoorDash, each annotated with what to take" cap="First open: Wolt, Uber Eats, DoorDash." />
+            <ZFig size="f" src="p-instacart.jpg" alt="Twenty Instacart phone screens from store picker and shopping preferences through address, product, cart, lists, search, recipes and checkout" cap="Instacart, 20 screens from first open to checkout." />
+          </div>
         </div>
 
-        <Row title="1. Our own app on Odoo, not a marketplace">
+        <Row title="Five directions">
+          <p>Same content and type in each, so only the look changed.</p>
+          <table className="sf-table">
+            <thead><tr><th>Direction</th><th>Built on</th><th>What happened</th></tr></thead>
+            <tbody>
+              <tr><td>A · Counter</td><td>Cut-out food on cream</td><td>Kept its product photos</td></tr>
+              <tr><td>B · Print</td><td>Halftone photos, colour blocks</td><td>The most distinctive and the most tiring. Kept only for the weekly deal block</td></tr>
+              <tr><td>C · Painted signs</td><td>The store’s own hand-painted signs and marker price cards</td><td>My recommendation. Became the base</td></tr>
+              <tr><td><b>D · C + A + B</b></td><td>C’s signs, A’s photos, B only in the deal block</td><td><b>Picked, highest score (4.70)</b></td></tr>
+              <tr><td>E · Counter, fuller</td><td>One reference brand, pushed further</td><td>Dropped: it looked like that brand, not the store</td></tr>
+            </tbody>
+          </table>
+          <p>D was then cut down. Six brand colours were competing, so the palette went to three: cherry, pine and marigold, on mostly neutral screens. Red and green never show state alone.</p>
+        </Row>
+        <div className="cx-panel">
+          <ZFig src="p-directions.jpg" alt="Directions A to E on a phone, same carne asada content: A cut-out food on cream, B halftone print, C painted signs, D signs with photos and a printed deal block, E a fuller single-brand take, plus a home example" cap="Directions A–E, same content. D was picked." />
+        </div>
+
+        <Row title="Information architecture">
+          <p>The October sitemap had ten columns: departments, regional flavours, meal plans, party orders, a club and help, every page in Spanish with an English mirror. Right for a website, too much for a phone.</p>
+          <p>The shipped app has four tabs: Home, Shop, Deals, Account. Search, Cart, Ask Lola and sign-in open as sheets over any screen. Checkout and order pages open from the cart, a text or a notification. Staff use a separate handheld app.</p>
+        </Row>
+        <div className="cx-panel">
+          <div className="cx-grid">
+            <ZFig size="f" src="p-sitemap-oct.jpg" alt="October 4 sitemap: ten columns from Home, in Spanish, including shop departments, regional flavours, meal plans, deals, account, help, special and party orders, club and store" cap="Oct 4: ten columns, built for a website." />
+            <ZFig size="f" narrow src="p-sitemap.jpg" alt="Shipped sitemap with real app screens: four tabs, Home, Shop with aisle and product, Deals and Account with history, preferences, wallet and delete account; sheets over any screen for search, cart, Ask Lola and sign-in; checkout and orders; first open; and the staff handheld" cap="Shipped: four tabs, sheets over any screen." />
+          </div>
+        </div>
+
+        <Row title="User flows">
+          <p>Seven flows, each drawn with its decisions and failure branches: first open, delivery, pickup, change or cancel, find a product, Ask Lola, and one order seen by the shopper, the staff and the payment.</p>
+        </Row>
+        <div className="cx-panel">
+          <div className="cx-grid">
+            <ZFig size="f" src="p-flow-sides.jpg" alt="One order from three sides: what the shopper sees, what store staff do on the handheld and at the register, and what happens to the payment hold and final charge" cap="One order, three sides: shopper, staff, payment." />
+            <ZFig size="f" narrow src="p-flow-find.jpg" alt="Find a product flow: search, browse departments, or ask the store to add an item, with branches for no results and sold out" cap="Find a product: search, browse, or ask us to add it." />
+          </div>
+        </div>
+
+        <Row title="Wireframes: the Oct 24 reset">
+          <p>An audit of the October screens found a web catalogue, not a phone app. I re-wireframed every flow at phone, tablet and desktop, staff screens included: the butcher’s ticket, the register and the manager’s queue.</p>
+          <span className="cx-cost"><b>Cost</b>Three weeks of finished screens archived.</span>
+        </Row>
+        <div className="cx-panel">
+          <div className="cx-grid">
+            <ZFig size="f" src="p-wire-phones.jpg" alt="Oct 24 phone wireframes: home, aisle, cart, checkout and order tracker" cap="Shopper: home, aisle, cart, checkout, tracker." />
+            <ZFig size="f" src="p-wire-staff.jpg" alt="Oct 24 staff wireframes: the register with web orders, and the manager's desktop queue for web orders, unpicked items, refunds and no-shows" cap="Staff: the register, and the manager’s queue." />
+          </div>
+        </div>
+      </Chapter>
+
+      <Chapter id="decisions" n="04" label="Decisions" title="Six decisions, each with a cost">
+        <Row title="1. A direct storefront connected to Odoo, not a marketplace">
           <p>Platforms take 12–16% and keep the customer; a hosted shop drifts from the register. An app gives the store its own channel: push, the Wallet pass and Lola Rewards, with no 24-hour window. Odoo keeps the data; I built what shoppers see.</p>
           <span className="cx-cost"><b>Cost</b>One person builds and maintains it, and every release goes through App Store review.</span>
         </Row>
@@ -423,7 +484,7 @@ export default function StorefrontCase() {
         </Row>
       </Chapter>
 
-      <Chapter id="work" n="04" label="The work" title="What I designed">
+      <Chapter id="work" n="05" label="The work" title="What I designed">
         <Row title="Every way a delivery order can fail">
           <p>Diamonds are the app’s questions; red branches are what the shopper sees.</p>
           <a className="cx-link" href={`${F}/dia-delivery.png?v=${V}`} target="_blank" rel="noopener noreferrer">Open the diagram full size ↗<span className="sr-only"> (opens in a new tab)</span></a>
@@ -435,9 +496,9 @@ export default function StorefrontCase() {
         <Screens />
       </Chapter>
 
-      <Chapter id="outcome" n="05" label="Outcome" title="Shipped to production">
+      <Chapter id="outcome" n="06" label="Outcome" title="Shipped to production">
         <div className="cx-highlight cx-highlight--2">
-          <div className="cx-stat"><b>2×</b><span>average order in the pilot: $58.41 by chat against $28.41 at the register</span></div>
+          <div className="cx-stat"><b>2×</b><span>average of 22 chat orders in the pilot: $58.41, against $28.41 at the register. A signal, not proof of cause.</span></div>
           <div className="cx-stat"><b>$1,800</b><span>from WhatsApp orders in September, before the app</span></div>
         </div>
         <p className="cx-note">Signal from the pilot: 22 chat orders matched to register purchases. A small sample; the app will show whether it holds.</p>

@@ -134,7 +134,7 @@ export default function ProduceKioskCaseStudy() {
         <Row title="At the register">
           <ul className="cx-list">
             <li>Every bag is weighed, looked up and priced while the line waits.</li>
-            <li>Suppliers change about every other week, and with them the PLU stickers and barcodes.</li>
+            <li>Vendors and prices change often, and deals have to stay in step with Odoo.</li>
             <li>Specialty produce from Mexico means lookups on a printed chart of 100+ items.</li>
             <li>Deals like 4 limes for $1 are found at the register, too late.</li>
           </ul>
@@ -145,6 +145,19 @@ export default function ProduceKioskCaseStudy() {
         <Row title="Three steps at the scale">
           <p>Weigh, confirm and label next to the produce. Checkout just scans.</p>
         </Row>
+        <Row title="How it works">
+          <p>Six steps from the scale to the register. The register itself doesn’t change.</p>
+        </Row>
+        <div className="cx-grid">
+          <ol className="cx-pipe" aria-label="From the scale to the register">
+            <li><b>Camera + scale</b><span>Photo and weight</span></li>
+            <li><b>On-device recognition</b><span>Six likely items</span></li>
+            <li><b>Shopper confirms</b><span>One tap</span></li>
+            <li><b>Odoo</b><span>Price and deal</span></li>
+            <li><b>C# bridge</b><span>Prints the label</span></li>
+            <li><b>Register</b><span>Scans it as usual</span></li>
+          </ol>
+        </div>
         <div className="cx-grid">
           {FLOW.map(([f, t]) => <Figure key={f} size="t" src={img(f)} alt={t} cap={t} />)}
         </div>
@@ -179,10 +192,9 @@ export default function ProduceKioskCaseStudy() {
         </div>
       </Chapter>
 
-      <Chapter id="next" n="05" label="Status" title="In testing on the store’s kiosk PC">
+      <Chapter id="next" n="05" label="Status" title="Running in the store">
         <Row title="Next">
           <ul className="cx-list">
-            <li>Print labels on the Zebra printer and scan them at a live register.</li>
             <li>Next phase: a dedicated PC for the kiosk, replacing the retired register it runs on today.</li>
             <li>Test with shoppers at peak hours, and count lookups at the register before and after.</li>
           </ul>
