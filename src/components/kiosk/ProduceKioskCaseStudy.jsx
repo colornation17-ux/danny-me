@@ -101,7 +101,7 @@ export default function ProduceKioskCaseStudy() {
             <ul className="cx-snap">
               <li><b>Problem</b><span>Every bag of produce was weighed, looked up and priced at the register while the line waited.</span></li>
               <li><b>Built</b><span>A scale in the aisle that suggests the item and prints a label the register reads.</span></li>
-              <li><b>Proof</b><span>Suggestions appear in under 2 seconds on a retired register. A big-box self-checkout scale we timed takes 3 taps and about 5.5 seconds.</span></li>
+              <li><b>Proof</b><span>Choices appear in about 2 seconds on a retired register; a laptop runs the model in 0.1 seconds. A big-box self-checkout scale we timed takes 3 taps and about 5.5 seconds.</span></li>
             </ul>
             <dl className="cx-meta">
               <div><dt>Role</dt><dd>Sole designer and developer</dd></div>
@@ -121,7 +121,7 @@ export default function ProduceKioskCaseStudy() {
               </div>
               <img className="pk-device__frame" src={`${A}/frame-tablet.png`} alt="" aria-hidden="true" />
             </div>
-            <figcaption>The screen: choices in under 2 seconds.</figcaption>
+            <figcaption>The screen: choices in about 2 seconds.</figcaption>
           </figure>
           <figure className="cx-band__clip">
             <AutoVideo src={`${A}/on-the-scale.mp4`} poster={`${A}/on-the-scale-poster.jpg`} label="Phone video of the kiosk on the real scale and scanner: a bag of cilantro, then bananas, each showing choices" />
@@ -169,7 +169,7 @@ export default function ProduceKioskCaseStudy() {
           <div className="cx-h"><Barcodes /></div>
         </div>
         <Row title="4. One price, on hardware the store owns">
-          <p>Prices come from Odoo, like the registers. It runs on a retired 8 GB register in under 2 seconds.</p>
+          <p>Prices come from Odoo, like the registers. It runs on a retired 8 GB register in about 2 seconds.</p>
         </Row>
       </Chapter>
 
