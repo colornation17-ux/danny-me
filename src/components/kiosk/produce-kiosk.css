@@ -66,19 +66,19 @@
 .cx--kiosk .sf-nav a:focus-visible { outline-color: var(--cx-accent); }
 
 /* At a glance: the snapshot list sits under the demo band (the demo comes right after the title). */
-.cx--kiosk .pk-glance { margin-top: var(--cx-7); }
-.cx--kiosk .pk-glance .cx-snap { margin: 0; max-width: 860px; }
+.cx .pk-glance { margin-top: var(--cx-7); }
+.cx .pk-glance .cx-snap { margin: 0; max-width: 860px; }
 
 /* Chapter 02: Walmart detail tucked into an expander. 44px target, cherry, visible focus. */
-.cx--kiosk .pk-more { margin-top: var(--cx-6); }
-.cx--kiosk .pk-more > summary {
+.cx .pk-more { margin-top: var(--cx-6); }
+.cx .pk-more > summary {
   display: inline-flex; align-items: center; gap: var(--cx-2); min-height: 44px; cursor: pointer;
   font-size: var(--cx-sub); font-weight: 600; color: var(--cx-accent); list-style: none;
 }
-.cx--kiosk .pk-more > summary::-webkit-details-marker { display: none; }
-.cx--kiosk .pk-more > summary::before { content: "+"; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--cx-accent); font-weight: 600; line-height: 1; }
-.cx--kiosk .pk-more[open] > summary::before { content: "\2212"; }
-.cx--kiosk .pk-more > summary:focus-visible { outline: 2px solid var(--cx-accent); outline-offset: 4px; border-radius: 6px; }
+.cx .pk-more > summary::-webkit-details-marker { display: none; }
+.cx .pk-more > summary::before { content: "+"; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--cx-accent); font-weight: 600; line-height: 1; }
+.cx .pk-more[open] > summary::before { content: "\2212"; }
+.cx .pk-more > summary:focus-visible { outline: 2px solid var(--cx-accent); outline-offset: 4px; border-radius: 6px; }
 
 /* Flow compare: numbered = shopper action, dashed = system responds, $ = price shown. */
 .pk-vs__steps li.is-sys .pk-vs__t { color: var(--cx-label-2); }
