@@ -13,7 +13,7 @@ const img = (f) => `${A}/${f}?v=${V}`
 /** The main flow, three screens. "Confirm the item" is the real kiosk on the store PC with bananas on the scale. */
 const FLOW = [
   ['ui-hello.jpg', '1 · Place the bag on the scale'],
-  ['ui-matches.jpg', '2 · Confirm the item'],
+  ['ui-matches.jpg', '2 · Tap the item; the label prints'],
   ['ui-done.jpg', '3 · Print the label and stick it on'],
 ]
 
@@ -44,15 +44,14 @@ const CHAPTERS = [
   ['chains', 'Others'],
   ['approach', 'Approach'],
   ['decisions', 'Decisions'],
-  ['states', 'States'],
+  ['states', 'Recovery'],
   ['next', 'Status'],
 ]
 
+/** States shown small, after the two explained recoveries. */
 const STATES = [
   ['ui-looking.jpg', 'Looking at the produce'],
-  ['ui-nomatch.jpg', 'Not produce: a closed bag'],
-  ['ui-nocam.jpg', 'No camera'],
-  ['ui-printfail.jpg', 'Label didn’t print'],
+  ['ui-nocam.jpg', 'No camera: best sellers and search'],
   ['ui-lookup.jpg', 'Price check, nothing on the scale'],
 ]
 
@@ -102,24 +101,24 @@ function BarcodeDiagram() {
 const VS = [
   {
     name: 'Walmart',
-    sum: '7 steps · price at step 7 · phone, app and Walmart+',
+    sum: '4 shopper actions before the price · needs a phone, the app and Walmart+',
     steps: [
       { t: 'Open the Walmart app', tag: 'Phone' },
       { t: 'Scan the produce barcode in the app', tag: 'Phone' },
       { t: 'Put the produce on the scale' },
-      { t: 'The scale shows the weight only' },
+      { t: 'The scale shows the weight only', sys: true },
       { t: 'Scan the QR code on the screen', tag: 'Phone' },
-      { t: 'Walmart+ membership needed', tag: 'Walmart+' },
+      { t: 'Walmart+ membership needed', tag: 'Walmart+', sys: true },
       { t: 'See the price, in the app', price: true },
     ],
   },
   {
     name: 'La Bodega',
     us: true,
-    sum: '5 steps · price at step 4 · no phone, no account',
+    sum: '2 shopper actions before the price · nothing to install',
     steps: [
       { t: 'Put the bag on the scale' },
-      { t: 'Six choices appear in 0.49 seconds' },
+      { t: 'Six choices appear', sys: true },
       { t: 'Tap the item' },
       { t: 'See the price, and a deal if it saves money', price: true },
       { t: 'Stick on the label; the register scans it' },
@@ -136,8 +135,10 @@ function FlowCompare() {
           <p className="pk-vs__sum">{c.sum}</p>
           <ol className="pk-vs__steps">
             {c.steps.map((s, i) => (
-              <li key={i} className={s.price ? 'is-price' : ''}>
-                <span className="pk-vs__n">{i + 1}</span>
+              <li key={i} className={s.price ? 'is-price' : s.sys ? 'is-sys' : ''}>
+                <span className="pk-vs__n" aria-hidden={s.sys ? 'true' : undefined}>
+                  {s.price ? '$' : s.sys ? '' : c.steps.slice(0, i + 1).filter((x) => !x.sys && !x.price).length}
+                </span>
                 <span className="pk-vs__t">{s.t}</span>
                 {s.tag ? <span className="pk-vs__tag">{s.tag}</span> : null}
               </li>
@@ -145,6 +146,11 @@ function FlowCompare() {
           </ol>
         </section>
       ))}
+      <p className="pk-vs__key">
+        <span className="pk-vs__n" aria-hidden="true">1</span> shopper action
+        <span className="pk-vs__n pk-vs__n--sys" aria-hidden="true" /> the system responds
+        <span className="pk-vs__n pk-vs__n--price" aria-hidden="true">$</span> price shown
+      </p>
     </div>
   )
 }
@@ -159,14 +165,10 @@ export default function ProduceKioskCaseStudy() {
             <Link to="/" className="cx-back">← Work</Link>
             <h1 className="cx-h1">Produce kiosk</h1>
             <p className="cx-tag">Weigh it, confirm it, print the label. Produce priced in the aisle, not at the register.</p>
-            <ul className="cx-snap">
-              <li><b>Problem</b><span>Every bag of produce was weighed, looked up and priced at the register while the line waited.</span></li>
-              <li><b>Built</b><span>A scale in the aisle that suggests the item and prints a label the register reads.</span></li>
-              <li><b>Proof</b><span>Shoppers see the price at the scale, not 2–3 minutes later at the register. Choices appear 0.49 seconds after the bag touches the scale.</span></li>
-            </ul>
             <dl className="cx-meta">
               <div><dt>Role</dt><dd>Sole designer and developer</dd></div>
               <div><dt>Timeline</dt><dd>Nov 2026</dd></div>
+              <div><dt>Status</dt><dd>In-store pilot</dd></div>
             </dl>
           </div>
         </div>
@@ -190,11 +192,21 @@ export default function ProduceKioskCaseStudy() {
         </div>
       </div>
 
+      <div className="cx-wrap pk-glance">
+        <ul className="cx-snap">
+          <li><b>Problem</b><span>Produce was weighed and looked up at the register while the line waited.</span></li>
+          <li><b>Built</b><span>A scale in the aisle that suggests the item and prints a barcode label the register reads.</span></li>
+          <li><b>For shoppers</b><span>The price at the scale, about 2–3 minutes earlier than at the register.</span></li>
+          <li><b>Response time</b><span>Suggestions 0.49 seconds after the bag touches the scale (2 test runs).</span></li>
+        </ul>
+      </div>
+
       <Chapter id="problem" n="01" label="Problem" title="Weighing produce at the register slowed the line">
         <Row title="For the store">
           <ul className="cx-list">
             <li>Vendors and prices change often, and deals have to stay in step with the registers.</li>
             <li>Specialty produce from Mexico means lookups on a printed chart of 100+ items.</li>
+            <li>The line can’t be worked from a handheld: weighed produce needs the register’s scale.</li>
           </ul>
         </Row>
         <Row title="For the shopper">
@@ -205,13 +217,7 @@ export default function ProduceKioskCaseStudy() {
         </Row>
       </Chapter>
 
-      <Chapter id="chains" n="02" label="How others do it" title="Chains buy new hardware, and often need an app">
-        <Row title="Walmart, up close">
-          <p>The scale shows the weight, not the price. The price comes through the Scan &amp; Go app, which needs a paid Walmart+ membership. The scale only says so after you weigh.</p>
-        </Row>
-        <div className="cx-grid cx-grid--body">
-          {CHAINS.map(([f, t]) => <Figure key={f} size="h" src={img(f)} alt={t} cap={t} />)}
-        </div>
+      <Chapter id="chains" n="02" label="How others do it" title="We compared app-based weighing, dedicated AI scales and smart carts">
         <div className="cx-grid">
           <div className="cx-f cx-scroll">
             <table className="sf-table sf-table--wide pk-others">
@@ -225,14 +231,23 @@ export default function ProduceKioskCaseStudy() {
           </div>
         </div>
         <Row title="What we took from it">
-          <p>The flow isn’t new: at Lidl and Tops the camera suggests and the shopper confirms, too. Shoppers take to it: at Tops, a manager says customers “really love the scale.” The difference here is no app, both languages, and hardware the store already owned.</p>
+          <p>The flow isn’t new: at Lidl and Tops the camera suggests and the shopper confirms, too. As precedent, a Tops manager reports customers like a similar scale. The difference here is no app, both languages, and hardware the store already owned.</p>
         </Row>
-        <Row title="Step by step">
-          <p>The same bag of produce, from the scale to knowing the price.</p>
-        </Row>
-        <div className="cx-grid cx-grid--body">
-          <div className="cx-f"><FlowCompare /></div>
-        </div>
+        <details className="pk-more">
+          <summary>Walmart, step by step: photos and shopper actions</summary>
+          <Row title="Walmart, up close">
+            <p>The scale shows the weight, not the price. The price comes through the Scan &amp; Go app, which needs a paid Walmart+ membership. The scale only says so after you weigh.</p>
+          </Row>
+          <div className="cx-grid cx-grid--body">
+            {CHAINS.map(([f, t]) => <Figure key={f} size="h" src={img(f)} alt={t} cap={t} />)}
+          </div>
+          <Row title="Step by step">
+            <p>Shopper actions before the price, counted the same way for both.</p>
+          </Row>
+          <div className="cx-grid cx-grid--body">
+            <div className="cx-f"><FlowCompare /></div>
+          </div>
+        </details>
         <p className="cx-note">Sources: Walmart Help (Scan &amp; Go needs Walmart+); retail-optimiser.de, Nov 2025 (Lidl Germany, Mettler Toledo); DIGI (SM-6000 AI at Tops, Lewiston NY, and its Tops case study, published by DIGI); Kroger (KroGo); Bizerba. Photos: Walmart produce scales, Nov 2026.</p>
       </Chapter>
 
@@ -254,23 +269,35 @@ export default function ProduceKioskCaseStudy() {
           {FLOW.map(([f, t]) => <Figure key={f} size="t" src={img(f)} alt={t} cap={t} />)}
         </div>
         <Row title="How fast">
-          <p>Choices appear 0.49 seconds on average after the bag touches the scale. Recognition takes about 70 ms of that.</p>
+          <p>Suggestions appear 0.49 seconds after the bag touches the scale: the average of 2 test runs with bananas. Recognition itself takes about 70 ms of that.</p>
+          <p>That is the system’s response time. The shopper’s full task, from bag down to label in hand, also includes a tap and the print.</p>
+        </Row>
+        <Row title="Why build it">
+          <p>The kiosk only weighs and labels: no cart, no payment. That was the simplest way to take the work off the register.</p>
+          <p>Recognition runs on the store’s own PC, so it works offline, costs nothing per scan, and no photos leave the store. Any scanner reads the label, including the handheld used to ring up shoppers in line.</p>
         </Row>
       </Chapter>
 
-      <Chapter id="decisions" n="04" label="Decisions" title="Three decisions">
-        <Row title="1. The camera suggests, the shopper confirms">
-          <p>The camera narrows 100+ items to six photos; the shopper taps one. A wrong guess costs a tap, not a wrong price.</p>
-          <p>The risk is picking a cheaper item than the one on the scale, one reason some chains removed self-service label scales. The camera’s picks come first; anything else takes more taps.</p>
+      <Chapter id="decisions" n="04" label="Decisions" title="Five decisions, and what they replaced">
+        <Row title="1. Suggest, then the shopper confirms">
+          <p>We ruled out letting the camera pick on its own: a wrong guess would print a wrong price. Nothing is priced until the shopper taps an item.</p>
+          <p>If they tap the wrong one, by mistake or to pay less, the label shows the item’s name in English and Spanish, so the cashier can catch it and void the line. The camera’s picks come first; anything else takes more taps.</p>
         </Row>
-        <Row title="2. Deals show up at the scale">
+        <Row title="2. Six choices, and a way out">
+          <p>In our test with 115 catalog photos, the right item was always among the six, and six tiles stay big enough to tap on the 15.6-inch screen. “Don’t see your item?” opens search and browse.</p>
+          <p>The kiosk also works without the camera: best sellers and search still get the shopper there. The camera only puts the likely items first.</p>
+        </Row>
+        <Row title="3. One screen fewer">
+          <p>We dropped a separate confirm screen. Tapping a match prints, and “Not this? Change it” on the done screen undoes it.</p>
+        </Row>
+        <Row title="4. Deals show up at the scale">
           <p>Three limes on the scale: “Add 1 more and get 4 for $1.00.” Shown only when it saves money.</p>
         </Row>
         <div className="cx-grid cx-grid--body">
           <Figure size="h" src={img('ui-nudge.jpg')} alt="Three limes on the scale; the kiosk suggests adding one more for 4 for $1" cap="Three limes: the kiosk suggests a fourth." />
           <Figure size="h" src={img('ui-piece.jpg')} alt="Four limes, 4 for $1.00, label ready to print" cap="Four limes: $1.00." />
         </div>
-        <Row title="3. A label that carries the weight">
+        <Row title="5. A label that carries the weight">
           <p>A sticker on a tomato only says what it is. Our label also carries the weight, or the deal price, inside the barcode, so the register charges it in one scan, without weighing or looking anything up.</p>
         </Row>
         <div className="cx-grid cx-grid--body">
@@ -282,18 +309,35 @@ export default function ProduceKioskCaseStudy() {
         </div>
       </Chapter>
 
-      <Chapter id="states" n="05" label="The work" title="Edge states">
+      <Chapter id="states" n="05" label="Recovery" title="When something goes wrong">
+        <Row title="It can’t tell what’s on the scale">
+          <p>A closed bag or an unusual item gives the camera nothing to match. Instead of an error, the kiosk opens search and browse, with the weight still on screen. It plays no error sound, because nothing went wrong.</p>
+        </Row>
+        <div className="cx-grid cx-grid--body">
+          <Figure size="h" src={img('ui-nomatch.jpg')} alt="We couldn't tell what this is: search by name or browse all produce, weight still shown" cap="A closed bag: search and browse, weight kept." />
+        </div>
+        <Row title="The label didn’t print">
+          <p>The device service checks the printer before and after each print. If it fails, the kiosk says: “Take your bag to the register — the cashier will weigh it there. Nothing is lost.”</p>
+        </Row>
+        <div className="cx-grid cx-grid--body">
+          <Figure size="h" src={img('ui-printfail.jpg')} alt="The label didn't print: take your bag to the register, the cashier will weigh it there" cap="Print failed: the register is the fallback." />
+        </div>
+        <Row title="Other states">
+          <p>It never prints without a steady weight; “Espere…” shows while the bag settles.</p>
+        </Row>
         <div className="cx-grid">
-          {STATES.map(([f, t]) => <Figure key={f} size="h" src={img(f)} alt={t} cap={t} />)}
+          {STATES.map(([f, t]) => <Figure key={f} size="t" src={img(f)} alt={t} cap={t} />)}
         </div>
       </Chapter>
 
       <Chapter id="next" n="06" label="Status" title="Running in the store as a pilot">
-        <Row title="Next">
+        <Row title="What we’re measuring">
           <ul className="cx-list">
-            <li>Better accuracy from photos taken at our own scale.</li>
-            <li>App link for lists and points. Optional.</li>
-            <li>Track produce sales and deal uptake, before and after.</li>
+            <li>Share of weighed produce rung up from a kiosk label.</li>
+            <li>Cashier time per weighed item, before and after.</li>
+            <li>Label scan failures per day.</li>
+            <li>How often the right item is among the six, on real bags.</li>
+            <li>Produce sales and deal uptake, before and after.</li>
           </ul>
         </Row>
         <Row title="Built with">
