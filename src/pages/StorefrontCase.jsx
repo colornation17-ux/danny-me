@@ -132,14 +132,92 @@ function Journey() {
 }
 
 /** Design system, applied: each component and the problem it solves. */
-const DS = [
-  ['ds/a-price.png', 'Price', 'The sale price in cherry, the regular price struck through: the saving shows without a sticker on the photo.'],
-  ['ds/m-weight.png', 'Weight', 'Weighed items choose a weight, not a pack: one control for meat and produce.'],
-  ['ds/a-tag.png', 'Tag', 'Deal, Save, SNAP EBT, Fresh daily, Low stock: the word carries the meaning, not the colour alone.'],
-  ['ds/a-add.png', 'Add', 'Add turns into a quantity stepper in place, so the shopper never leaves the list.'],
-  ['ds/m-time.png', 'Delivery time', 'As soon as possible, or schedule: two choices before any calendar.'],
-  ['ds/o-product.png', 'Product card', 'Photo, name, price per pound and Add, the same in every aisle, search and deal.'],
+/**
+ * The design system as shipped, from the storefront code: tokens come from app/tokens.css (generated from the
+ * Figma SF2 variables); components are crops of shipped screens, named after their code component when confirmed.
+ */
+const DS_COLOURS = [
+  ['Brand', '#8e0029'], ['Brand deep', '#69041d'], ['Ink', '#241d1d'], ['Page', '#f6f1ee'], ['Cream', '#fff5ea'],
+  ['Sale', '#0a6f32'], ['Rewards', '#ffc233'], ['Muted', '#6a5953'], ['Border', '#e0d8d9'],
 ]
+const DS_SPACE = [2, 4, 8, 12, 16, 20, 24, 28, 32]
+const DS_RADIUS = [4, 6, 8, 12, 16, 24]
+const DS_LEVELS = [
+  ['Atoms', 'is-atom', [
+    ['a-button.png', 'Primary button', 'Button'],
+    ['a-chip.png', 'Category chip', 'Chip'],
+    ['a-deal.png', 'Deal tag', 'DealChip'],
+    ['a-sale.png', 'Sale price', 'price-sale tokens'],
+    ['a-price.png', 'Price per pound', null],
+    ['a-add.png', 'Quick add', null],
+  ]],
+  ['Molecules', 'is-mol', [
+    ['m-stepper.png', 'Quantity', 'Stepper'],
+    ['m-weight.png', 'Weight', null],
+    ['m-time.png', 'Delivery time', null],
+    ['m-swap.png', 'If something’s out of stock', null],
+    ['m-search.png', 'Search and cart', 'FloatingBars'],
+  ]],
+  ['Organisms', 'is-org', [
+    ['o-card.png', 'Product card', 'ProductCard'],
+    ['o-cartline.png', 'Cart line', null, true],
+    ['o-payment.png', 'Payment', null, true],
+    ['o-status.png', 'Order status', null],
+    ['o-tabs.png', 'Tab bar', 'BottomBar', true],
+  ]],
+]
+
+function SystemSheet() {
+  return (
+    <section className="sf-sheet" aria-labelledby="sf-sheet-t">
+      <div className="sf-sheet__head">
+        <h3 id="sf-sheet-t" className="sf-subhead">The system, from the code</h3>
+        <p>Tokens are generated from the Figma variables; components live in the app’s <code>components/ui</code>. Smallest to largest, each shown at its size on a phone.</p>
+      </div>
+      <div className="sf-sheet__found">
+        <div>
+          <p className="sf-sheet__lvl">Colour</p>
+          <ul className="sf-sheet__sw">
+            {DS_COLOURS.map(([n, hex]) => (<li key={n}><span style={{ background: hex }} /><b>{n}</b><code>{hex}</code></li>))}
+          </ul>
+        </div>
+        <div>
+          <p className="sf-sheet__lvl">Type</p>
+          <p className="sf-sheet__type"><b>Bricolage Grotesque</b> ExtraBold for display</p>
+          <p className="sf-sheet__type"><b>Figtree</b> for text and prices</p>
+          <p className="sf-sheet__type"><b>Buttons</b> 17 semibold, 15 in rows and sheets</p>
+        </div>
+        <div>
+          <p className="sf-sheet__lvl">Space and tap</p>
+          <ul className="sf-sheet__space">
+            {DS_SPACE.map((n) => (<li key={n}><span style={{ width: n * 2 }} />{n}</li>))}
+            <li className="is-tap"><span />48 tap</li>
+          </ul>
+        </div>
+        <div>
+          <p className="sf-sheet__lvl">Radius</p>
+          <ul className="sf-sheet__rad">
+            {DS_RADIUS.map((n) => (<li key={n}><span style={{ borderRadius: n }} />{n}</li>))}
+            <li><span style={{ borderRadius: 999 }} />full</li>
+          </ul>
+        </div>
+      </div>
+      {DS_LEVELS.map(([level, cls, items]) => (
+        <div key={level} className={`sf-sheet__level ${cls}`}>
+          <p className="sf-sheet__lvl">{level}</p>
+          <ul>
+            {items.map(([src, name, code, wide]) => (
+              <li key={src} className={wide ? 'is-wide' : undefined}>
+                <img src={`${F}/ds2/${src}?v=${V}`} srcSet={`${F}/ds2/${src}?v=${V} 2x`} alt={name} loading="lazy" />
+                <p><b>{name}</b>{code ? <code>{code}</code> : null}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+  )
+}
 
 /** The app, flow by flow. */
 const FLOWS = [
@@ -681,17 +759,7 @@ export default function StorefrontCase() {
             <Fig size="f" src="dia-delivery.png" alt="Delivery order flow from cart to doorstep with decisions: in stock, inside the area, delivery time open, signed in, bank approves the hold, prices changed, in stock at packing, handed over; each no branch leads to its screen and back" />
           </div>
         </details>
-        <Row title="The system, applied">
-          <p>Each component, and the problem it solves.</p>
-        </Row>
-        <ul className="sf-ds">
-          {DS.map(([src, name, why]) => (
-            <li key={src}>
-              <img src={`${F}/${src}?v=${V}`} alt={`${name} component`} loading="lazy" />
-              <p><b>{name}</b>{why}</p>
-            </li>
-          ))}
-        </ul>
+        <SystemSheet />
         <Row title="Details">
           <p>After the core service: the order on the Lock Screen, the Wallet pass and Lola Rewards points.</p>
         </Row>

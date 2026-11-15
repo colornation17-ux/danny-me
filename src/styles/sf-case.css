@@ -246,3 +246,60 @@
 .cx .sf-ds p b { display: block; font-size: var(--cx-sub); color: var(--cx-label); margin-bottom: 2px; }
 @media (max-width: 900px) { .cx .sf-ds { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 599px) { .cx .sf-ds { grid-template-columns: 1fr; } }
+
+/* The system, from the code: one sheet, foundations → atoms → molecules → organisms. */
+.cx .sf-sheet { margin-top: var(--cx-6); padding: var(--cx-6); background: var(--cx-surface); border: 1px solid var(--cx-sep); border-radius: var(--cx-radius); display: grid; gap: var(--cx-6); }
+.cx .sf-sheet__head p { margin: var(--cx-1) 0 0; font-size: var(--cx-sub); color: var(--cx-label-2); }
+.cx .sf-sheet code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: var(--cx-caption); color: var(--cx-label-2); }
+.cx .sf-sheet__lvl { margin: 0 0 var(--cx-3); font-size: var(--cx-foot); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--cx-accent); }
+.cx .sf-sheet__found { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: var(--cx-6); padding-bottom: var(--cx-6); border-bottom: 1px solid var(--cx-sep); }
+.cx .sf-sheet ul { list-style: none; margin: 0; padding: 0; }
+.cx .sf-sheet__sw { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cx-3); }
+.cx .sf-sheet__sw li { display: grid; gap: 2px; font-size: var(--cx-caption); color: var(--cx-label); }
+.cx .sf-sheet__sw span { display: block; height: 36px; border-radius: 8px; border: 1px solid rgba(0,0,0,.08); }
+.cx .sf-sheet__type { margin: 0 0 var(--cx-2); font-size: var(--cx-foot); color: var(--cx-label-2); }
+.cx .sf-sheet__type b { color: var(--cx-label); }
+.cx .sf-sheet__space li { display: flex; align-items: center; gap: var(--cx-2); height: 18px; font-size: var(--cx-caption); color: var(--cx-label-2); }
+.cx .sf-sheet__space span { display: block; height: 8px; background: var(--cx-accent); border-radius: 2px; }
+.cx .sf-sheet__space li.is-tap span { width: 48px; height: 16px; background: transparent; border: 1.5px dashed var(--cx-accent); }
+.cx .sf-sheet__rad { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--cx-3); }
+.cx .sf-sheet__rad li { display: grid; justify-items: center; gap: 2px; font-size: var(--cx-caption); color: var(--cx-label-2); }
+.cx .sf-sheet__rad span { display: block; width: 36px; height: 36px; border: 1.5px solid var(--cx-label); background: var(--cx-fill); }
+.cx .sf-sheet__level ul { display: grid; gap: var(--cx-4); align-items: end; }
+.cx .sf-sheet__level.is-atom ul { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.cx .sf-sheet__level.is-mol ul { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.cx .sf-sheet__level.is-org ul { grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: start; }
+.cx .sf-sheet__level li { display: grid; gap: var(--cx-2); align-content: end; }
+.cx .sf-sheet__level img { display: block; width: 100%; object-fit: contain; object-position: left bottom; border-radius: 6px; }
+.cx .sf-sheet__level.is-atom img { height: 56px; }
+.cx .sf-sheet__level.is-mol img { height: 64px; }
+.cx .sf-sheet__level.is-org img { height: 240px; object-position: left top; background: var(--cx-bg); }
+.cx .sf-sheet__level p { margin: 0; display: grid; gap: 2px; font-size: var(--cx-foot); color: var(--cx-label); }
+@media (max-width: 1023px) {
+  .cx .sf-sheet__found { grid-template-columns: 1fr 1fr; }
+  .cx .sf-sheet__level.is-atom ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cx .sf-sheet__level.is-mol ul, .cx .sf-sheet__level.is-org ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 599px) {
+  .cx .sf-sheet { padding: var(--cx-4); }
+  .cx .sf-sheet__found { grid-template-columns: 1fr; }
+  .cx .sf-sheet__level.is-atom ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cx .sf-sheet__level.is-mol ul, .cx .sf-sheet__level.is-org ul { grid-template-columns: 1fr; }
+}
+
+/* Organisms keep their natural proportions; wide ones (cart line, payment, tab bar) get two columns. */
+.cx .sf-sheet__level.is-org ul { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.cx .sf-sheet__level.is-org li.is-wide { grid-column: span 2; }
+.cx .sf-sheet__level.is-org img { height: auto; max-height: 300px; background: transparent; }
+@media (max-width: 599px) { .cx .sf-sheet__level.is-org ul { grid-template-columns: 1fr; } .cx .sf-sheet__level.is-org li.is-wide { grid-column: auto; } }
+
+/* Actual phone size (2x crops via srcSet): every level wraps as a row; nothing is stretched. */
+.cx .sf-sheet__level ul,
+.cx .sf-sheet__level.is-atom ul, .cx .sf-sheet__level.is-mol ul, .cx .sf-sheet__level.is-org ul { display: flex; flex-wrap: wrap; gap: var(--cx-5) var(--cx-6); align-items: flex-end; grid-template-columns: none; }
+.cx .sf-sheet__level.is-org ul { align-items: flex-start; }
+.cx .sf-sheet__level li, .cx .sf-sheet__level.is-org li.is-wide { grid-column: auto; max-width: 100%; }
+.cx .sf-sheet__level img,
+.cx .sf-sheet__level.is-atom img, .cx .sf-sheet__level.is-mol img, .cx .sf-sheet__level.is-org img { width: auto; height: auto; max-width: 100%; max-height: none; background: transparent; }
+/* The floating search bar is masked from its screen; give it back its float. */
+.cx .sf-sheet__level img[src*="m-search"] { filter: drop-shadow(0 2px 6px rgba(36, 29, 29, .14)); }
+.cx .sf-sheet .sf-sheet__head h3 { margin-top: 0; }
