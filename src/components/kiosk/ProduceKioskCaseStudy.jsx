@@ -88,6 +88,57 @@ function BarcodeDiagram() {
   )
 }
 
+/** Side-by-side flow: the shopper's steps at Walmart's scale vs ours, and where the price appears. */
+const VS = [
+  {
+    name: 'Walmart',
+    sum: '7 steps · price at step 7 · phone, app and Walmart+',
+    steps: [
+      { t: 'Open the Walmart app', tag: 'Phone' },
+      { t: 'Scan the produce barcode in the app', tag: 'Phone' },
+      { t: 'Put the produce on the scale' },
+      { t: 'The scale shows the weight only' },
+      { t: 'Scan the QR code on the screen', tag: 'Phone' },
+      { t: 'Walmart+ membership needed', tag: 'Walmart+' },
+      { t: 'See the price, in the app', price: true },
+    ],
+  },
+  {
+    name: 'La Bodega',
+    us: true,
+    sum: '5 steps · price at step 4 · no phone, no account',
+    steps: [
+      { t: 'Put the bag on the scale' },
+      { t: 'Six choices appear in 0.49 seconds' },
+      { t: 'Tap the item' },
+      { t: 'See the price, and a deal if it saves money', price: true },
+      { t: 'Stick on the label; the register scans it' },
+    ],
+  },
+]
+
+function FlowCompare() {
+  return (
+    <div className="pk-vs">
+      {VS.map((c) => (
+        <section key={c.name} className={`pk-vs__col ${c.us ? 'is-us' : ''}`} aria-label={`${c.name}: ${c.sum}`}>
+          <h4 className="pk-vs__name">{c.name}</h4>
+          <p className="pk-vs__sum">{c.sum}</p>
+          <ol className="pk-vs__steps">
+            {c.steps.map((s, i) => (
+              <li key={i} className={s.price ? 'is-price' : ''}>
+                <span className="pk-vs__n">{i + 1}</span>
+                <span className="pk-vs__t">{s.t}</span>
+                {s.tag ? <span className="pk-vs__tag">{s.tag}</span> : null}
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+  )
+}
+
 export default function ProduceKioskCaseStudy() {
   return (
     <>
@@ -167,6 +218,12 @@ export default function ProduceKioskCaseStudy() {
         <Row title="What we took from it">
           <p>The flow isn’t new: at Lidl and Tops the camera suggests and the shopper confirms, too. Shoppers take to it: at Tops, a manager says customers “really love the scale.” The difference here is no app, both languages, and hardware the store already owned.</p>
         </Row>
+        <Row title="Step by step">
+          <p>The same bag of produce, from the scale to knowing the price.</p>
+        </Row>
+        <div className="cx-grid cx-grid--body">
+          <div className="cx-f"><FlowCompare /></div>
+        </div>
         <p className="cx-note">Sources: Walmart Help (Scan &amp; Go needs Walmart+); retail-optimiser.de, Nov 2025 (Lidl Germany, Mettler Toledo); DIGI (SM-6000 AI at Tops, Lewiston NY, and its Tops case study, published by DIGI); Kroger (KroGo); Bizerba. Photos: Walmart produce scales, Nov 2026.</p>
       </Chapter>
 
