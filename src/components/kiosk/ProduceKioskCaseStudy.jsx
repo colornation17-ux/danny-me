@@ -112,7 +112,16 @@ export default function ProduceKioskCaseStudy() {
       </header>
 
       <div className="cx-band cx-band--pine">
-        <div className="cx-band__pair cx-band__pair--solo">
+        <div className="cx-band__pair">
+          <figure className="pk-device cx-band__device">
+            <div className="pk-device__box">
+              <div className="pk-device__screen">
+                <AutoVideo src={`${A}/produce-to-choices.mp4`} poster={`${A}/produce-to-choices-poster.jpg`} label="Kiosk screen recording: cilantro, carrots, cabbage and bananas each recognised on the scale" />
+              </div>
+              <img className="pk-device__frame" src={`${A}/frame-tablet.png`} alt="" aria-hidden="true" />
+            </div>
+            <figcaption>The screen: choices in 0.49 seconds.</figcaption>
+          </figure>
           <figure className="cx-band__clip">
             <AutoVideo src={`${A}/on-the-scale.mp4`} poster={`${A}/on-the-scale-poster.jpg`} label="Phone video of the kiosk on the real scale and scanner: a bag of cilantro, then bananas, each showing choices" />
             <figcaption>On the real scale and scanner.</figcaption>
