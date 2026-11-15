@@ -399,3 +399,36 @@ html:has(.cx) { overflow-x: clip; }
 .cx-vid__btn:hover { background: rgba(29, 29, 31, 0.8); }
 .cx-vid__btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 4px var(--cx-accent); }
 .cx-vid__btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* Case-study pages: contact strip + footer sit on the page's own margins and background, using the cx tokens
+   (cx-case.css passes them to .cs-folio-contact and .site-footer). No divider, no gap from <main>,
+   no repeated links, and colours from the page palette (no blue eyebrow, one grey). */
+body:has(article.cx) main { padding-bottom: 0; }
+body:has(article.cx) article.cx ~ .cs-folio-contact {
+  width: 100vw;
+  max-width: none;
+  margin: 0 0 0 calc(50% - 50vw);
+  padding: var(--cx-8) var(--cx-margin) var(--cx-7);
+  border-top: 0;
+  background: var(--cx-bg);
+  box-sizing: border-box;
+}
+body:has(article.cx) article.cx ~ .cs-folio-contact .folio-contact__inner { max-width: none; margin: 0; }
+body:has(article.cx) .folio-contact__eyebrow { color: var(--cx-accent); }
+body:has(article.cx) .folio-contact__body,
+body:has(article.cx) .folio-contact__links a { color: var(--cx-label-2); }
+body:has(article.cx) .folio-contact__links a:hover { color: var(--cx-label); }
+body:has(article.cx) .site-footer { background: var(--cx-bg); }
+body:has(article.cx) .site-footer__inner {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  padding: 0 var(--cx-margin) var(--cx-6);
+  box-sizing: border-box;
+  color: var(--cx-label-2);
+}
+body:has(article.cx) .site-footer__links { display: none; }
+@media (max-width: 700px) {
+  body:has(article.cx) article.cx ~ .cs-folio-contact { padding: var(--cx-5) var(--cx-margin) var(--cx-6); }
+  body:has(article.cx) .site-footer__inner { padding: 0 var(--cx-margin) var(--cx-5); }
+}
