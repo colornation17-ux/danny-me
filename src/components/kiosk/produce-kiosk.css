@@ -130,3 +130,30 @@
 @media (max-width: 599px) { .pk-bcd__a { font-size: 15px; } .pk-bcd__b { font-size: 14px; } }
 /* Strengths of every chain (incl. ours) in bold ink; La Bodega-only cells stay cherry. */
 .cx .sf-table--wide.pk-others tr td.pk-strong { color: var(--cx-label); font-weight: 600; }
+
+/* Kiosk page: contact strip + footer sit on the page's own margins and background.
+   No divider line, no gap from <main>, no repeated links (the strip already has them). */
+body:has(.cx--kiosk) main { padding-bottom: 0; }
+body:has(.cx--kiosk) .cx--kiosk ~ .cs-folio-contact {
+  width: 100vw;
+  max-width: none;
+  margin: 0 0 0 calc(50% - 50vw);
+  padding: 64px clamp(48px, 5vw, 96px) 48px;
+  border-top: 0;
+  background: #fbfbfd;
+  box-sizing: border-box;
+}
+body:has(.cx--kiosk) .cx--kiosk ~ .cs-folio-contact .folio-contact__inner { max-width: none; margin: 0; }
+body:has(.cx--kiosk) .site-footer { background: #fbfbfd; }
+body:has(.cx--kiosk) .site-footer__inner {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  padding: 0 clamp(48px, 5vw, 96px) 32px;
+  box-sizing: border-box;
+}
+body:has(.cx--kiosk) .site-footer__links { display: none; }
+@media (max-width: 700px) {
+  body:has(.cx--kiosk) .cx--kiosk ~ .cs-folio-contact { padding: 24px 20px 40px; }
+  body:has(.cx--kiosk) .site-footer__inner { padding: 0 20px 24px; }
+}
