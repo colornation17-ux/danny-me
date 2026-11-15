@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import './produce-kiosk.css'
 import '../../styles/sf-case.css' // .sf-table
 import '../../styles/cx-case.css'
-import { Chapter, Row, Figure, AutoVideo } from '../cx/Case'
+import { Chapter, Row, Figure, AutoVideo, SectionNav } from '../cx/Case'
 import CaseStudyContact from '../CaseStudyContact'
 
 const A = '/work/produce-kiosk'
@@ -37,6 +37,16 @@ function OtherCell({ c }) {
   if (typeof c === 'string') return <td>{c}</td>
   return <td className={c.u ? 'pk-unique' : 'pk-strong'}>{c.t}</td>
 }
+
+/** Floating chapter nav labels (ids match the <Chapter> ids below). */
+const CHAPTERS = [
+  ['problem', 'Problem'],
+  ['chains', 'Others'],
+  ['approach', 'Approach'],
+  ['decisions', 'Decisions'],
+  ['states', 'States'],
+  ['next', 'Status'],
+]
 
 const STATES = [
   ['ui-looking.jpg', 'Looking at the produce'],
@@ -171,7 +181,7 @@ export default function ProduceKioskCaseStudy() {
               </div>
               <img className="pk-device__frame" src={`${A}/frame-tablet.png`} alt="" aria-hidden="true" />
             </div>
-            <figcaption>The screen: choices in 0.49 seconds.</figcaption>
+            <figcaption>Cilantro, carrots, cabbage and bananas, each recognized on the scale.</figcaption>
           </figure>
           <figure className="cx-band__clip">
             <AutoVideo src={`${A}/on-the-scale.mp4`} poster={`${A}/on-the-scale-poster.jpg`} label="Phone video of the kiosk on the real scale and scanner: a bag of cilantro, then bananas, each showing choices" />
@@ -183,7 +193,6 @@ export default function ProduceKioskCaseStudy() {
       <Chapter id="problem" n="01" label="Problem" title="Weighing produce at the register slowed the line">
         <Row title="For the store">
           <ul className="cx-list">
-            <li>Every bag is weighed, looked up and priced while the line waits.</li>
             <li>Vendors and prices change often, and deals have to stay in step with the registers.</li>
             <li>Specialty produce from Mexico means lookups on a printed chart of 100+ items.</li>
           </ul>
@@ -229,15 +238,15 @@ export default function ProduceKioskCaseStudy() {
 
       <Chapter id="approach" n="03" label="Approach" title="Price produce where it’s picked">
         <Row title="How it works">
-          <p>Six steps from the scale to the register. The register itself doesn’t change.</p>
+          <p>Behind the screen, from scale to register.</p>
         </Row>
         <div className="cx-grid">
           <ol className="cx-pipe" aria-label="From the scale to the register">
             <li><b>Camera + scale</b><span>Photo and weight</span></li>
-            <li><b>Image recognition</b><span>Six likely items</span></li>
+            <li><b>Image recognition</b><span>Six choices</span></li>
             <li><b>Shopper confirms</b><span>One tap</span></li>
             <li><b>Store prices</b><span>Price and deal</span></li>
-            <li><b>C# bridge</b><span>Prints the label</span></li>
+            <li><b>Device service</b><span>Prints the label</span></li>
             <li><b>Register</b><span>Scans it as usual</span></li>
           </ol>
         </div>
@@ -275,11 +284,11 @@ export default function ProduceKioskCaseStudy() {
 
       <Chapter id="states" n="05" label="The work" title="Edge states">
         <div className="cx-grid">
-          {STATES.map(([f, t]) => <Figure key={f} size="t" src={img(f)} alt={t} cap={t} />)}
+          {STATES.map(([f, t]) => <Figure key={f} size="h" src={img(f)} alt={t} cap={t} />)}
         </div>
       </Chapter>
 
-      <Chapter id="next" n="06" label="Status" title="Running in the store">
+      <Chapter id="next" n="06" label="Status" title="Running in the store as a pilot">
         <Row title="Next">
           <ul className="cx-list">
             <li>Better accuracy from photos taken at our own scale.</li>
@@ -299,6 +308,7 @@ export default function ProduceKioskCaseStudy() {
           </nav>
         </Row>
       </Chapter>
+      <SectionNav sections={CHAPTERS} />
     </article>
     <CaseStudyContact />
     </>

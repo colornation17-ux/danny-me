@@ -23,7 +23,8 @@
    - Respects reduced motion and dark mode.
    ========================================================================== */
 
-.cx {
+/* Tokens. Also reach the contact strip and footer on case-study pages (they sit outside .cx). */
+.cx, body:has(.cx) .cs-folio-contact, body:has(.cx) .site-footer {
   /* colour (light) */
   --cx-bg: #fbfbfd;
   --cx-surface: #ffffff;
@@ -42,6 +43,7 @@
   --cx-body: 17px;
   --cx-sub: 15px;
   --cx-foot: 13px;
+  --cx-caption: 12px;         /* smallest: step numbers, tags, diagram labels */
   --cx-measure: 68ch;
 
   /* space (8-point grid) */
@@ -54,7 +56,8 @@
   --cx-cols: 4;
   --cx-max: 1680px;
   --cx-radius: 12px;
-
+}
+.cx {
   background: var(--cx-bg);
   color: var(--cx-label);
   font-family: var(--cx-font);
@@ -63,13 +66,18 @@
   -webkit-font-smoothing: antialiased;
   padding: 88px 0 160px;
 }
-@media (min-width: 600px) { .cx { --cx-margin: 32px; --cx-gap: 20px; --cx-cols: 8; } }
-@media (min-width: 1024px) { .cx { --cx-margin: clamp(48px, 5vw, 96px); --cx-gap: 24px; --cx-cols: 12; } }
+@media (min-width: 600px) { .cx, body:has(.cx) .cs-folio-contact, body:has(.cx) .site-footer { --cx-margin: 32px; --cx-gap: 20px; --cx-cols: 8; } }
+@media (min-width: 1024px) { .cx, body:has(.cx) .cs-folio-contact, body:has(.cx) .site-footer { --cx-margin: clamp(48px, 5vw, 96px); --cx-gap: 24px; --cx-cols: 12; } }
 /* Always light, like the rest of the portfolio (owner, Nov 10): no dark theme for case studies.
    Also pins the older .pk / .sf colours, which have their own dark-mode rules. */
 .pk.cx {
   color-scheme: light;
   --pk-bg: #fcfcfc; --pk-ink: #111; --pk-text: #6f6f6f; --pk-line: #e8e8e8; --pk-card: #fff;
+}
+/* Kiosk page: one token set. The older --pk names point at the cx tokens. */
+.pk.cx--kiosk {
+  --pk-bg: var(--cx-bg); --pk-ink: var(--cx-label); --pk-text: var(--cx-label-2);
+  --pk-line: var(--cx-sep); --pk-card: var(--cx-surface); --pk-cherry: var(--cx-accent);
 }
 .cx .sf-nav { background: rgba(255,255,255,.92); }
 .cx .sf-nav a.is-at { background: #111; color: #fff; }
@@ -377,3 +385,17 @@ html:has(.cx) { overflow-x: clip; }
 .cx-refs p b { display: block; color: var(--cx-label); font-weight: 600; }
 @media (min-width: 600px) { .cx-refs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--cx-5) var(--cx-4); } }
 @media (min-width: 1024px) { .cx-refs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* Video pause/play (WCAG 2.2.2). 44px target (Fitts), visible focus, sits on the video's corner. */
+.cx-vid { position: relative; display: block; width: 100%; height: 100%; }
+.cx-vid__btn {
+  position: absolute; right: var(--cx-3); bottom: var(--cx-3);
+  width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  display: grid; place-items: center;
+  background: rgba(29, 29, 31, 0.62); color: #fff;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  transition: background .15s;
+}
+.cx-vid__btn:hover { background: rgba(29, 29, 31, 0.8); }
+.cx-vid__btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 4px var(--cx-accent); }
+.cx-vid__btn svg { width: 16px; height: 16px; fill: currentColor; }

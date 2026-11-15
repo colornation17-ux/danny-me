@@ -289,7 +289,7 @@ export const work = [
   },
   {
     slug: 'produce-kiosk',
-    outcome: 'Self-service produce scale: weigh, tap, sticker; the register scans it',
+    outcome: 'Self-service produce scale: weigh, tap, label; the register scans it',
     title: 'Produce kiosk',
     meta: 'La Bodega · In store 2026',
     status: 'Pilot',
