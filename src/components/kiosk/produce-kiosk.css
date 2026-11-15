@@ -113,3 +113,23 @@
 }
 .pk-digit.is-on { background: var(--pk-ink); color: var(--pk-card); border-color: var(--pk-ink); }
 .pk-codes__out { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+/* "Across chains" table: strengths bold; La Bodega-only cells cherry + bold. */
+.cx .sf-table--wide.pk-others tr.is-us td { color: var(--cx-label-2); font-weight: 400; }
+.cx .sf-table--wide.pk-others tr.is-us td.pk-unique { color: var(--cx-accent); font-weight: 600; }
+
+/* Hero band with the real-scale clip only. */
+.cx .cx-band__pair--solo { grid-template-columns: 1fr; }
+.cx .cx-band__pair--solo .cx-band__clip { width: min(340px, 72%); }
+
+/* Decision 3: line diagram of the label barcode (static). Weight group in cherry. */
+.cx .pk-bcd svg { display: block; width: 100%; height: auto; background: var(--cx-surface); border: 1px solid var(--cx-sep); border-radius: var(--cx-radius); padding: 8px 4px; box-sizing: border-box; }
+.pk-bcd__digit { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 24px; font-weight: 600; text-anchor: middle; fill: var(--cx-label); }
+.pk-bcd__line { fill: none; stroke: var(--cx-label-2); stroke-width: 1.25; stroke-linejoin: round; }
+.pk-bcd__a { font-size: 13px; font-weight: 600; text-anchor: middle; fill: var(--cx-label); }
+.pk-bcd__b { font-size: 12px; text-anchor: middle; fill: var(--cx-label-2); }
+.pk-bcd__digit.is-key, .is-key .pk-bcd__a, .is-key .pk-bcd__b { fill: var(--cx-accent); }
+.is-key .pk-bcd__line { stroke: var(--cx-accent); stroke-width: 1.75; }
+@media (max-width: 599px) { .pk-bcd__a { font-size: 15px; } .pk-bcd__b { font-size: 14px; } }
+/* Strengths of every chain (incl. ours) in bold ink; La Bodega-only cells stay cherry. */
+.cx .sf-table--wide.pk-others tr td.pk-strong { color: var(--cx-label); font-weight: 600; }

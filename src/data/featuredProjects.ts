@@ -84,17 +84,17 @@ export const featuredProjects: FeaturedProjectCard[] = [
     organization: 'La Bodega',
     status: 'In-store pilot',
     timeline: 'Nov 2026',
-    team: 'Odoo, scale, printer',
+    team: 'Kiosk, scale, printer',
     date: 'Nov 9, 2026',
     summary:
       'Self-service produce scale that identifies items by camera and prints barcode labels the register already reads.',
     metric: {
       kind: 'Testing result',
-      value: 'Identifies produce in 1.15 seconds on a retired register, and in 0.1 seconds on a laptop.',
+      value: 'Choices on screen 0.49 seconds on average after the bag touches the scale.',
     },
     primaryAction: primary('View case study', '/projects/produce-kiosk'),
     secondaryActions: [],
-    tags: ['Interaction design', 'Retail operations', 'On-device AI'],
+    tags: ['Interaction design', 'Retail operations', 'Computer vision'],
     media: mediaImage(
       '/work/produce-kiosk/card-16x9.jpg',
       'The produce kiosk on pine: which one is in your bag, bananas on the scale',
