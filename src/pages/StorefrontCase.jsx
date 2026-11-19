@@ -641,7 +641,7 @@ const bag = (x, k) => (
 )
 const STORY_DRIVER = [
   {
-    cap: 'Local cab drivers took ride calls around town: a pick-up here, a drop-off there. The delivery apps didn’t pay them enough.',
+    cap: 'Local cab drivers took ride calls around town: a pick-up here, a drop-off there. The drivers we spoke with said the delivery apps paid too little once they counted gas and time.',
     art: (
       <>
         <rect className="st-ln" x="18" y="46" width="66" height="116" rx="12" />
@@ -724,24 +724,17 @@ const STORY_DRIVER = [
 function StoryStrip({ panels, label, quote }) {
   const ref = useRef(null)
   const fid = `st${useId().replace(/[^a-zA-Z0-9]/g, '')}`
+  // Review, Nov 19: the panels used to draw in one after another, so a skimmer saw one panel and three empty frames.
+  // Now every panel and caption is there from the start; only the small step numbers move, after the story is visible.
   useEffect(() => {
     const el = ref.current
     if (!el || REDUCED) return undefined
-    const figs = [...el.querySelectorAll('.st-fig')]
-    figs.forEach((f) => {
-      gsap.set(f.querySelectorAll('.st-ln'), { drawSVG: '0%' })
-      gsap.set(f.querySelectorAll('.st-txt, figcaption'), { opacity: 0, y: 6 })
-    })
+    const nums = el.querySelectorAll('.st-n')
+    gsap.set(nums, { scale: 0.6, opacity: 0 })
     const io = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return
       io.disconnect()
-      const t = gsap.timeline()
-      figs.forEach((f, i) => {
-        const at = i * 0.75
-        t.to(f.querySelectorAll('.st-ln'), { drawSVG: '100%', duration: 0.55, stagger: 0.035, ease: 'power2.inOut' }, at)
-          .to(f.querySelectorAll('.st-txt'), { opacity: 1, y: 0, duration: 0.3, stagger: 0.04 }, at + 0.35)
-          .to(f.querySelector('figcaption'), { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }, at + 0.25)
-      })
+      gsap.to(nums, { scale: 1, opacity: 1, duration: 0.35, stagger: 0.12, ease: 'back.out(2)', delay: 0.2 })
     }, { threshold: 0.3 })
     io.observe(el)
     return () => io.disconnect()
@@ -919,7 +912,7 @@ const ASK_ART = (
 )
 const STORY_OPEN = [
   { cap: 'Customers kept asking on the store’s WhatsApp: do you do pickup or delivery?', art: ASK_ART },
-  { ...STORY_DRIVER[0], cap: 'Meanwhile, local cab drivers, underpaid by the delivery apps, took ride calls around town.' },
+  { ...STORY_DRIVER[0], cap: 'Meanwhile, local cab drivers took ride calls around town. The ones we spoke with said the delivery apps paid too little after gas and time.' },
   { ...STORY_DRIVER[2], cap: 'Families, some without a car, sent them a list. One trip covered several families.' },
   { ...STORY_DRIVER[3], cap: 'At the register, staff saw drivers checking out on other customers’ loyalty numbers.' },
 ]
@@ -1076,11 +1069,12 @@ function TightBody() {
             <p><span className="s2-pin">1</span><span><b>Navigation.</b> The sidebar took a third of the screen; chips give it back.</span></p>
             <p><span className="s2-pin">2</span><span><b>Picking.</b> Tiny tiles became photo cards with the price per pound.</span></p>
           </div>
-          <p className="s2-note">Same task, same size. Revised through critique, not a user test.</p>
+          {/* Review, Nov 19: the two screens aren't the same view, so the note says what is compared (no equivalence claim). */}
+          <p className="s2-note">Not the same screen: the Oct 6 build had no aisle page, so the nearest is its deals page (in Spanish); the shipped one is the meat aisle. Compared: how you move between departments and how a product card reads. Revised through critique, not a user test.</p>
           </div>
           <div className="s2-ba">
-            <figure><Label>Oct 6 · a catalogue on a phone</Label><Screen src="oct6-aisle.jpg" base={HQ} alt="October 6 design: a category sidebar and small product tiles with Agregar buttons"><span className="s2-pin" style={{ left: '1%', top: '71%' }}>1</span><span className="s2-pin" style={{ left: '44%', top: '61%' }}>2</span></Screen></figure>
-            <figure><Label>Shipped · phone first</Label><Screen src="aisle-meat.jpg" base={HQ} alt="Shipped Meat and Seafood aisle: category chips and large product cards with prices by the pound"><span className="s2-pin" style={{ left: '2%', top: '14%' }}>1</span><span className="s2-pin" style={{ left: '44%', top: '34%' }}>2</span></Screen></figure>
+            <figure><Label>Oct 6 · deals page, department sidebar</Label><Screen src="oct6-aisle.jpg" base={HQ} alt="October 6 design: a category sidebar and small product tiles with Agregar buttons"><span className="s2-pin" style={{ left: '1%', top: '71%' }}>1</span><span className="s2-pin" style={{ left: '44%', top: '61%' }}>2</span></Screen></figure>
+            <figure><Label>Shipped · meat aisle, department chips</Label><Screen src="aisle-meat.jpg" base={HQ} alt="Shipped Meat and Seafood aisle: category chips and large product cards with prices by the pound"><span className="s2-pin" style={{ left: '2%', top: '14%' }}>1</span><span className="s2-pin" style={{ left: '44%', top: '34%' }}>2</span></Screen></figure>
           </div>
           </div>
           <div className="dz-split" style={{ marginTop: 48 }}>
@@ -1138,12 +1132,17 @@ function TightBody() {
           </section>
           <section className="s2-decision s2-decision--side" aria-labelledby="d2">
             <div className="s2-chain s2-chain--text"><div>
-              <h3 id="d2" className="s2-h3">Weighed items, with a hold</h3>
+              {/* Review, Nov 19: the shop launched in "charge" mode (owner, Nov 3), so the page says what runs today and
+                  what was built; the checkout line is the shop's own words (labodega-storefront app/checkout). */}
+              <h3 id="d2" className="s2-h3">Weighed items: a hold, then one simple charge</h3>
               <dl>
                 <dt className="s2-label">We saw</dt><dd>Shoppers want the meat price before paying.</dd>
-                <dt className="s2-label">We chose</dt><dd>Pick a weight, not fixed-price packs that drift from the register. The card holds the estimate plus 15%; the register charges the packed total.</dd>
-                <dt className="s2-label">The cost</dt><dd>The hold is bigger than the estimate, so checkout says it once, before they pay:
-                  <p className="s2-copy">“Meat and produce are weighed when packed. We hold $X on your card and charge only the exact total.”</p></dd>
+                <dt className="s2-label">We chose</dt><dd>Pick a weight, not fixed-price packs that drift from the register.</dd>
+                <dt className="s2-label">We built</dt><dd>A card hold of the estimate plus 15%; the register charges the packed weight and releases the rest.</dd>
+                <dt className="s2-label">Then</dt><dd>A hold bigger than the estimate is one more thing to explain. For launch the owner chose to charge the estimate once and refund what comes in lighter. The hold stays built, one setting away.</dd>
+                <dt className="s2-label">Checkout says</dt><dd>
+                  <p className="s2-copy">“Meat and produce are weighed when packed. If they come to less, we refund the difference to your card.”</p></dd>
+                <dt className="s2-label">Not known yet</dt><dd>Whether shoppers read it that way: it hasn’t been tested with shoppers.</dd>
               </dl>
             </div></div>
             <div className="s2-ba" style={{ '--n': 3 }}>
@@ -1202,17 +1201,19 @@ function TightBody() {
           <div className="s2-block">
             <div className="s2-step"><Label>Motion</Label><h3 className="s2-h3">One way to say done, built once</h3>
               <p className="s2-muted">One wait, one stamp, one haptic, for every finished task. Recorded from the app.</p></div>
-            <div className="s2-panel s2-motion s2-motion--six">
+            {/* Review, Nov 19: two examples show the shared pattern; the other four sit under More so motion doesn't
+                compete with the service story. */}
+            <div className="s2-panel s2-motion s2-motion--two">
               <figure><Screen video="motion-signin.mp4" poster="motion-signin-poster.jpg" base={HQ} alt="Sign-in code accepted: the code boxes melt into dots, a stamp lands, Code verified, then Welcome back" /><figcaption><b>Code verified</b></figcaption></figure>
-              <figure><Screen video="motion-cardsaved.mp4" poster="motion-cardsaved-poster.jpg" base={HQ} alt="Card saved: the button rounds into a disc, a ring circles while it saves, the stamp blooms, Card saved" /><figcaption><b>Card saved</b></figcaption></figure>
               <figure><Screen video="motion-placed.mp4" poster="motion-placed-poster.jpg" base={HQ} alt="Order placed: Place order, then Payment approved and Sending order to the store check off, the stamp lands on the order page, then Lola takes its place" /><figcaption><b>Order placed</b></figcaption></figure>
-              <figure><Screen video="motion-alerts.mp4" poster="motion-alerts-poster.jpg" base={HQ} alt="Alerts on: Turn on all becomes a wait ring where it was tapped, the stamp blooms, Order updates and deals are on, then the sheet closes" /><figcaption><b>Alerts on</b></figcaption></figure>
-              <figure><Screen video="motion-delivered.mp4" poster="motion-delivered-poster.jpg" base={HQ} alt="Order delivered: the stamp lands, then Lola takes its place" /><figcaption><b>Delivered</b></figcaption></figure>
-              <figure><Screen video="motion-pickedup.mp4" poster="motion-pickedup-poster.jpg" base={HQ} alt="Picked up: Picked up. Enjoy! fades in, then the stamp lands" /><figcaption><b>Picked up</b></figcaption></figure>
             </div>
           </div>
-          <More title="More screens and motion: every state, the opening, the Lock Screen and points">
+          <More title="More screens and motion: four more moments of done, the opening, the Lock Screen and points">
             <div className="s2-motion s2-motion--more">
+              <figure><Screen video="motion-cardsaved.mp4" poster="motion-cardsaved-poster.jpg" base={HQ} alt="Card saved: the button rounds into a disc, a ring circles while it saves, the stamp blooms, Card saved" /><figcaption><b>Card saved</b>Same stamp, from a button</figcaption></figure>
+              <figure><Screen video="motion-alerts.mp4" poster="motion-alerts-poster.jpg" base={HQ} alt="Alerts on: Turn on all becomes a wait ring where it was tapped, the stamp blooms, Order updates and deals are on, then the sheet closes" /><figcaption><b>Alerts on</b>Same stamp, in a sheet</figcaption></figure>
+              <figure><Screen video="motion-delivered.mp4" poster="motion-delivered-poster.jpg" base={HQ} alt="Order delivered: the stamp lands, then Lola takes its place" /><figcaption><b>Delivered</b>Then Lola takes its place</figcaption></figure>
+              <figure><Screen video="motion-pickedup.mp4" poster="motion-pickedup-poster.jpg" base={HQ} alt="Picked up: Picked up. Enjoy! fades in, then the stamp lands" /><figcaption><b>Picked up</b>The message first, then the stamp</figcaption></figure>
               <figure><Screen video="splash-anim.mp4" poster="splash-anim-poster.jpg" base={A} alt="Opening: the La Bodega wordmark and the arch rise" /><figcaption><b>Opening</b>The wordmark, then the arch rises</figcaption></figure>
               <figure><Screen video="d-live.mp4" poster="d-live-poster.jpg" alt="Live Activity on the Lock Screen: received, preparing, on the way, delivered" /><figcaption><b>Lock Screen</b>The order as a Live Activity</figcaption></figure>
               <figure><Screen video="d-points.mp4" poster="d-points-poster.jpg" alt="Points sheet after delivery: 180 counts up to 222, $5 off ready" /><figcaption><b>Points</b>Counted up after delivery</figcaption></figure>
@@ -1262,6 +1263,14 @@ function TightBody() {
 
 export default function StorefrontCase() {
   const max = Math.max(...ASKS.map(([, n]) => n))
+  /** Tight page: role, timeline and status, shown under the title, before the motion hero (review, Nov 19). */
+  const tightMeta = (
+    <div className="s2-meta">
+      <div><Label>Role</Label><ul><li>Product designer, end to end: research, service design, UI, design system, front-end build</li><li>AI-assisted build under my design ownership; the owner made the final calls</li></ul></div>
+      <div><Label>Timeline</Label><ul><li>Service: May – Nov 2026</li><li>App: Aug – Nov 2026</li></ul></div>
+      <div><Label>Status</Label><ul><li>iPhone in App Store review</li><li>Android approved, held for launch</li></ul></div>
+    </div>
+  )
   const meta = (
           <div className="s2-meta">
             <div><Label>Role</Label><ul><li>Product designer: research, service design, UI, design system, front-end build</li><li>The owner set the business rules and made the final picks</li><li>AI-assisted implementation, under my design ownership</li></ul></div>
@@ -1275,19 +1284,22 @@ export default function StorefrontCase() {
       {/* Intro: statement, role and results, a row of real screens (Goolkasian, Kosas) */}
       <header className="s2-intro s2-intro--v2">
         {TIGHT ? <div className="s2-wide"><Link to="/" className="s2-back">← Work</Link></div> : null}
-        <div className="s2-wide" style={TIGHT ? { order: 2 } : undefined}>
+        {/* Review, Nov 19: the title, the short story and the role come first, the motion hero right after (it used to
+            fill the first screen, so it read as an ad before a recruiter knew what Danny did). */}
+        <div className="s2-wide">
           {TIGHT ? null : <Link to="/" className="s2-back">← Work</Link>}
           <Label>La Bodega online store · Calhoun, Georgia · 2026</Label>
           <div className="s2-headrow">
           <h1 className="s2-title">From WhatsApp orders to the store’s own app</h1>
           <div>
           <p className="s2-sub">{TIGHT
-            ? 'Families were already ordering by text and through local drivers. A WhatsApp pilot paid, then hit its limit, so I designed the store’s own bilingual app: real prices, meat by weight, delivery or pickup.'
+            ? 'Families were already ordering by text and through local drivers. A WhatsApp pilot proved the demand and showed where chat ordering stops working, so I designed the store’s own bilingual app: real prices, meat by weight, delivery or pickup.'
             : 'Families were already ordering by text and through local drivers. I designed the bilingual app that lets them see prices, pick a weight and get it delivered, from the same store.'}</p>
           <ul className="s2-tags" aria-label="Disciplines"><li>Service design</li><li>Mobile</li><li>Design system</li></ul>
           </div>
           </div>
         </div>
+        {TIGHT ? <div className="s2-wide s2-meta-after s2-meta-first">{tightMeta}</div> : null}
         {/* Device wall (Goolkasian / Instacart): breadth of real screens, the store itself, and three phones playing the app's own motion */}
         <div className="s2-wall-band">
           {HERO_MOTION ? <HeroMotion /> : (
@@ -1313,13 +1325,7 @@ export default function StorefrontCase() {
             <div><span className="s2-label">Where it stands</span><p>iPhone app in App Store review; Android approved and held for launch; the website is browse-only until launch.</p></div>
           </div>
         ) : null}
-        <div className="s2-wide s2-meta-after">{TIGHT ? (
-          <div className="s2-meta">
-            <div><Label>Role</Label><ul><li>Product designer, end to end: research, service design, UI, design system, front-end build</li><li>AI-assisted build under my design ownership; the owner made the final calls</li></ul></div>
-            <div><Label>Timeline</Label><ul><li>Service: May – Nov 2026</li><li>App: Aug – Nov 2026</li></ul></div>
-            <div><Label>Status</Label><ul><li>iPhone in App Store review</li><li>Android approved, held for launch</li></ul></div>
-          </div>
-        ) : meta}</div>
+        {TIGHT ? null : <div className="s2-wide s2-meta-after">{meta}</div>}
       </header>
 
       {TIGHT ? <TightBody /> : (<>

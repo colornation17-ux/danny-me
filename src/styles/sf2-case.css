@@ -676,3 +676,10 @@ body:has(.sf2--dark) .site-nav a.nav-cta--contact { color: #5a0019; background: 
 @media (max-width: 1000px) { .sf2 .dz-split { grid-template-columns: minmax(0, 1fr); gap: 24px; } .sf2 .dz-refs { max-width: none; } }
 
 @media (max-width: 760px) { .sf2 .dz-split .s2-ba { --n: 2 !important; } .sf2 .dz-split .s2-ba > figure { padding: 18px 8px 14px; } .sf2 .dz-split .s2-ba .s2-dev { --dev: min(150px, 38vw); } .sf2 .dz-split .s2-ba .s2-label { font-size: 9px; } }
+
+/* Review, Nov 19: two motion examples on the page (the rest under More). */
+.sf2 .s2-motion--two { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 32px; padding: 56px 32px; max-width: 760px; margin-inline: auto; }
+.sf2 .s2-motion--two .s2-dev { --dev: 240px; }
+@media (max-width: 760px) { .sf2 .s2-motion--two { gap: 24px 12px; padding: 32px 12px; } .sf2 .s2-motion--two .s2-dev { --dev: min(200px, 42vw); } }
+/* Review, Nov 19: role, timeline and status under the title, before the motion hero (was order 3, after it). */
+.sf2.sf2--tight .s2-intro .s2-meta-first { order: 0; margin-top: 0; margin-bottom: 32px; }
