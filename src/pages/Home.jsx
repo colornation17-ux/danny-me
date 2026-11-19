@@ -6,6 +6,11 @@ import FolderStack from '../components/FolderStack'
 import SpringWire from '../components/SpringWire'
 import CareerPath from '../components/CareerPath'
 import CaseStudyContact from '../components/CaseStudyContact'
+import HomeV3 from '../components/HomeV3'
+
+/* Nov 18: the new home (components/HomeV3) is the default; ?home=classic keeps the previous editorial home reachable. */
+const HOME_Q = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('home') : null
+const HOME_NEW = HOME_Q !== 'classic'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -59,6 +64,7 @@ export default function Home() {
 
   // Run GSAP animations once the page is visible
   useEffect(() => {
+    if (HOME_NEW) return undefined
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
 
@@ -337,6 +343,7 @@ export default function Home() {
     return () => ctx.revert()
   }, [])
 
+  if (HOME_NEW) return <HomeV3 />
   return (
     <div className="folio folio--rich folio--fullgrid" ref={pageRef}>
       <section className="folio-hero folio-hero--canvas" id="home" aria-labelledby="folio-name">

@@ -51,6 +51,14 @@ function NavIcon({ type }) {
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
+  // Nov 18: once the page scrolls under it, the bar lifts off the page (soft shadow, frosted white)
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 8)
+    on()
+    window.addEventListener('scroll', on, { passive: true })
+    return () => window.removeEventListener('scroll', on)
+  }, [])
   const menuRef = useRef(null)
   const menuButtonRef = useRef(null)
   const firstMobileLinkRef = useRef(null)
@@ -95,7 +103,7 @@ export default function Nav() {
   const close = () => setMenuOpen(false)
 
   return (
-    <header className="site-nav site-nav--folio" ref={menuRef}>
+    <header className={`site-nav site-nav--folio${scrolled ? ' is-scrolled' : ''}`} ref={menuRef}>
       <div className="site-nav__inner">
         <NavLink to="/" className="nav-brand" end aria-label="Danny home" onClick={close}>
           <span className="nav-brand__text nav-brand__text--full">

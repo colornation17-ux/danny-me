@@ -112,7 +112,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     role: 'Design technologist',
     organization: 'La Bodega',
     status: 'Live pilot',
-    timeline: 'May–July 2026',
+    timeline: 'May–Jul 2026',
     team: 'Solo product design and development',
     date: 'Jun 28, 2026',
     summary:
@@ -147,15 +147,15 @@ export const featuredProjects: FeaturedProjectCard[] = [
     title: 'La Bodega Ops',
     role: 'Product designer',
     organization: 'La Bodega',
-    status: 'Live pilot',
-    timeline: 'Q1–Q2 2026',
+    status: 'Live · used daily',
+    timeline: 'Jan–Jun 2026',
     team: 'Solo product design and development',
     date: 'Jul 15, 2026',
     summary:
       'Designed the floor system that replaced spreadsheet ops at the supermarket — purchasing, receiving, and shift control on phone.',
     metric: {
       kind: 'Pilot signal',
-      value: 'Live at the supermarket. One store. Solo design and build.',
+      value: 'Used daily by 26 staff, with 46 vendors set up.',
     },
     primaryAction: primary('View case study', '/projects/la-bodega-ops'),
     secondaryActions: [
@@ -179,8 +179,8 @@ export const featuredProjects: FeaturedProjectCard[] = [
     title: 'Competitor Watch',
     role: 'Design technologist',
     organization: 'La Bodega',
-    status: 'In production',
-    timeline: 'Two-week MVP',
+    status: 'Live · used daily',
+    timeline: 'Jun–Nov 2026',
     team: 'Solo product design and development',
     date: 'Jun 10, 2026',
     summary:
@@ -190,9 +190,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
       value: CW_HERO_PROOF,
     },
     primaryAction: primary('View case study', CW_CASE_STUDY_PATH),
-    secondaryActions: [
-      secondary('Open live app', bySlug['competitor-watch'].liveUrl),
-    ],
+    secondaryActions: [], // runs on the store's own computer; the old cloud link is suspended
     tags: ['Decision support', 'Retail intelligence', 'Full-stack'],
     media: mediaVideo(
       '/work/competitor-watch/motion/CW-02-CompetitorDeals.mp4',
@@ -213,7 +211,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     role: 'Service designer',
     organization: 'La Bodega',
     status: 'Shipped',
-    timeline: '72-hour recovery',
+    timeline: 'Feb 2026',
     team: 'Store operations team',
     date: 'Feb 24, 2026',
     summary:
@@ -242,7 +240,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     role: 'Product designer and UX engineer',
     organization: 'CODE19 Racing',
     status: 'Shipped',
-    timeline: 'Three-month launch',
+    timeline: 'Oct–Dec 2024',
     team: 'Design, engineering and leadership',
     date: 'Dec 2024',
     summary:
@@ -271,7 +269,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     role: 'Product designer',
     organization: 'WING',
     status: 'Independent concept',
-    timeline: 'Two-week design sprint',
+    timeline: 'Aug 2025',
     team: null,
     date: 'Aug 18, 2025',
     summary:
@@ -301,7 +299,7 @@ export const featuredProjects: FeaturedProjectCard[] = [
     role: 'Product designer',
     organization: 'WING',
     status: 'Independent concept',
-    timeline: 'November 2025',
+    timeline: 'Nov 2025',
     team: null,
     date: 'Nov 2025',
     summary:

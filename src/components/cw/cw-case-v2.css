@@ -1,0 +1,24 @@
+/* Competitor Watch case study (?v=2). Layout comes from cx-case.css; this file adds the hero band and results. */
+.cw2-band { background: #f7f7f9; border-block: 1px solid #ececf0; padding: clamp(32px, 6vw, 88px) var(--cx-margin, 24px); }
+.cw2-shot { margin: 0 auto; max-width: 1180px; }
+.cw2-shot img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid rgba(17, 18, 18, .08);
+  box-shadow: 0 1px 2px rgba(17, 18, 18, .06), 0 24px 60px -28px rgba(17, 18, 18, .35); }
+.cw2-shot figcaption { margin-top: 16px; text-align: center; font-size: var(--cx-sub, 15px); color: var(--cx-label-2, #5f5b58); }
+.cw2-glance { padding-top: var(--cx-7, 56px); }
+
+.cw2-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--cx-6, 40px); margin-top: var(--cx-5, 32px); }
+.cw2-two__h { margin: 0 0 var(--cx-3, 16px); font-size: var(--cx-sub, 15px); font-weight: 600; }
+.cw2-nums, .cw2-not { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--cx-sep, #e6e2de); }
+.cw2-nums li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 16px; padding: 14px 0; border-bottom: 1px solid var(--cx-sep, #e6e2de); }
+.cw2-nums span { font-size: var(--cx-sub, 15px); }
+.cw2-nums b { grid-row: span 2; align-self: center; font-size: clamp(22px, 1rem + 1vw, 30px); font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.cw2-nums small { font-size: var(--cx-foot, 13px); color: var(--cx-label-2, #5f5b58); }
+.cw2-not li { display: grid; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--cx-sep, #e6e2de); font-size: var(--cx-sub, 15px); }
+.cw2-not span { color: var(--cx-label-2, #5f5b58); font-size: var(--cx-foot, 13px); line-height: 1.45; }
+@media (max-width: 760px) { .cw2-two { grid-template-columns: minmax(0, 1fr); } }
+
+/* The contact block in the case-study type, not the Chubby display face (this page only for now). */
+.cw2-contact .folio-contact__title { font-family: "Geist Portfolio", var(--font-sans, system-ui), sans-serif; font-weight: 600; letter-spacing: -.03em; text-transform: none; }
+.cw2-contact .folio-contact__cta-label { font-family: "Geist Portfolio", var(--font-sans, system-ui), sans-serif; font-weight: 600; letter-spacing: -.01em; text-transform: none; }
+/* Phone: the three app screens stack full width instead of two plus an orphan. */
+@media (max-width: 599px) { .cw2 #store .cx-t { grid-column: 1 / -1; } }

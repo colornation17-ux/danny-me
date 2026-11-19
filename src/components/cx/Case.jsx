@@ -27,10 +27,11 @@ export function Row({ title, children }) {
 }
 
 /** One figure on the grid. size: q (quarter) · t (third) · h (half) · f (full). */
-export function Figure({ src, alt, cap, size = 'q' }) {
+export function Figure({ src, alt, cap, size = 'q', w, h }) {
   return (
     <figure className={`cx-fig cx-${size}`}>
-      <img src={src} alt={alt} loading="lazy" />
+      {/* w/h reserve the box so a lazy image isn't 1px tall (and never loads) before it arrives */}
+      <img src={src} alt={alt} loading="lazy" width={w} height={h} />
       {cap ? <figcaption>{cap}</figcaption> : null}
     </figure>
   )

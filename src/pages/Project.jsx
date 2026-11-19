@@ -34,6 +34,10 @@ import { CW_HERO_PROOF, CW_METRICS, cwBlurb } from '../data/cwMetrics'
 import { resolveCwCaseStudyRoute } from '../data/cwCaseStudyAb'
 import { getCaseStudyPackaging } from '../data/caseStudyPackaging'
 import ProduceKioskCaseStudy from '../components/kiosk/ProduceKioskCaseStudy'
+import CompetitorWatchCaseV2 from '../components/cw/CompetitorWatchCaseV2'
+
+// Rebuilt Competitor Watch case study (Nov 18) is the default; ?v=1 keeps the previous one reachable.
+const CW_V2 = typeof window === 'undefined' || new URLSearchParams(window.location.search).get('v') !== '1'
 
 export default function Project() {
   const { slug } = useParams()
@@ -187,6 +191,7 @@ export default function Project() {
 
   // Its own case-study layout (components/cx).
   if (project.caseStudyBody === 'produce-kiosk') return <ProduceKioskCaseStudy />
+  if (cwRoute && CW_V2) return <CompetitorWatchCaseV2 />
 
   if (isLolaCase) {
     return (
